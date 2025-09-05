@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Job Order Completed</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            .container {
+                overflow: hidden;
+            }
+
+            .email-form {
+                max-width: 960px;
+                border: 1px solid #f0f0f0;
+                margin: 0 auto;
+            }
+
+            .form-logo {
+                border-bottom: 1px solid #f0f0f0;
+                display: flex;
+                justify-content: right;
+                padding: 14px;
+                background: #f0f0f0;
+            }
+
+            .form-logo img {
+                width: 150px;
+            }
+
+            .header-section h2 {
+                font-size: 30px;
+                margin: 10px 0;
+                text-align: center;
+                border-bottom: 1px solid #f0f0f0;
+                padding-bottom: 10px;
+            }
+
+            .bottom-header {
+                display: flex;
+                justify-content: space-between;
+                padding: 10px 14px;
+                border-bottom: 1px solid #f0f0f0;
+                padding-bottom: 14px;
+            }
+
+            .bottom-header p {
+                margin: 0;
+            }
+
+            .form-list {
+                margin: 20px 14px;
+            }
+
+            .form-list table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            .form-list td {
+                padding: 6px 8px;
+                border: 1px solid #ddd;
+            }
+
+            .footer-section {
+                margin-top: 20px;
+                display: grid;
+                gap: 20px;
+            }
+
+            .footer-bottom {
+                text-align: center;
+            }
+
+            .mail-btn {
+                display: flex;
+                justify-content: right;
+            }
+
+            .footer-top p {
+                margin: 3px 0;
+            }
+
+            .footer-logo img {
+                width: 120px;
+            }
+
+            .btn {
+                display: inline-block;
+                padding: 8px 16px;
+                background-color: #007bff;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 4px;
+            }
+
+            .btn:hover {
+                background-color: #0056b3;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div>
+                <p>Hello,</p>
+                <p>Mail content</p>
+            </div>
+            <div class="email-form">
+                <div class="header-section">
+                    <div class="form-logo">
+                        <img
+                            src="{% static 'assets/img/nirmal_logo.png' %}"
+                            alt=""
+                        />
+                    </div>
+                    <h2>Nirmal Ventures</h2>
+                </div>
+                <div class="bottom-header">
+                    <p>Date:<span>26/08/2025</span></p>
+                </div>
+                <div class="form-list">
+                    <table class="info-table">
+                        {% if date %}
+                        <tr>
+                            <td>Date</td>
+                            <td>{{ date }}</td>
+                        </tr>
+                        {% endif %} {% if Company_Name %}
+                        <tr>
+                            <td>Company Name</td>
+                            <td>{{ Company_Name }}</td>
+                        </tr>
+                        {% endif %} {% if Company_Email %}
+                        <tr>
+                            <td>Company Email</td>
+                            <td>{{ Company_Email }}</td>
+                        </tr>
+                        {% endif %} {% if cdr_job_name %}
+                        <tr>
+                            <td>Job Name</td>
+                            <td>{{ cdr_job_name }}</td>
+                        </tr>
+                        {% endif %} {% if cdr_corrections %}
+                        <tr>
+                            <td>Correction</td>
+                            <td>{{ cdr_corrections }}</td>
+                        </tr>
+                        {% endif %} {% if notes %}
+                        <tr>
+                            <td>Note</td>
+                            <td>{{ notes }}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+            <div class="footer-section">
+                <div class="footer-top">
+                    <p>Best & Regards</p>
+                    <p>Nirmal Tubes and Containers Pvt Ltd</p>
+                    <div class="footer-logo">
+                        <img
+                            src="https://nirmaltubes.com/wp-content/uploads/2024/01/Clip-path-group-1.svg"
+                            alt=""
+                        />
+                    </div>
+                </div>
+                <div class="mail-btn">
+                    <a href="http://localhost:8000/" class="btn"
+                        >Go to Nirmal Ventures</a
+                    >
+                </div>
+                <div class="footer-bottom">
+                    &copy; {{ date|date:"Y" }} Nirmal Ventures |
+                    <a href="http://localhost:8000/">www.nirmal.com</a>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

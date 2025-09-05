@@ -1,0 +1,440 @@
+
+{% load humanize %}
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %} base {% endblock %}</title>
+    <meta
+      content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
+      name="viewport"
+    />
+    {% comment %} <link
+      rel="icon"
+      href="assets/img/kaiadmin/favicon.ico"
+      type="image/x-icon"
+    /> {% endcomment %}
+        <!-- Bootstrap 5.3 CSS -->
+       
+        
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  {% comment %} <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}" />    {% endcomment %}
+    <link rel="icon" type="image/x-icon" href="{% static "assets/img/logo_icon.png" %}">
+    <!-- Fonts and icons -->
+    <script src="{% static 'assets/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+      WebFont.load({
+        google: { families: ["Public Sans:300,400,500,600,700"] },
+        custom: {
+          families: [
+            "Font Awesome 5 Solid",
+            "Font Awesome 5 Regular",
+            "Font Awesome 5 Brands",
+            "simple-line-icons",
+          ],
+          urls: ["{% static 'assets/css/fonts.min.css' %}"],
+        },
+        active: function () {
+          sessionStorage.fonts = true;
+        },
+      });
+    </script>
+
+    <style>
+  /* Remove default margins and force box model */
+
+
+  html, body {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+ 
+  body::-webkit-scrollbar {
+    display: none;
+  }
+
+  body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+<<<<<<< HEAD
+  .pct-input {
+    padding: 8px;
+  }
+  .toast-timeout-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.7);
+    animation: timeout-progress 5s linear forwards;
+    border-radius: 0 0 0.375rem 0.375rem;
+  }
+  
+  @keyframes timeout-progress {
+      from { width: 100%; }
+      to { width: 0%; }
+  }
+  
+  .toast-container-custom {
+      top: 70px !important;
+      z-index: 1050;
+  }
+  
+  .toast {
+      position: relative;
+      overflow: hidden;
+  }
+
+=======
+     .toast-container {
+            z-index: 1050;
+            max-width: 400px;
+        }
+        
+        .toast {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            animation: slideInDown 0.3s ease-out;
+        }
+        
+        .toast.hide {
+            animation: slideOutUp 0.3s ease-in forwards;
+        }
+        
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOutUp {
+            from {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+        }
+        
+        .toast-body {
+            padding: 12px 16px;
+            font-weight: 500;
+        }
+        
+        .toast-progress {
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .toast-progress-bar {
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            width: 100%;
+            animation: progressBar 5s linear forwards;
+        }
+        
+        @keyframes progressBar {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        
+        .btn-close-white {
+            filter: invert(1) grayscale(100%) brightness(200%);
+        }
+        
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+>>>>>>> 663f2b434c95c4bb60e7c0f8ed4c55eb98ef7c1a
+        
+      
+  
+    /* Styling for the entire pagination container */
+nav[aria-label="Page navigation example"] {
+    display: flex; /* Makes the pagination info and page links align horizontally */
+    align-items: center; /* Vertically aligns items in the container */
+    justify-content: space-between; /* Pushes the page info to the left and page links to the right */
+}
+
+/* Custom CSS for Active Pagination Link (from previous response) */
+.pagination .page-item.active .page-link {
+    background-color: #007bff; /* Example: Blue background for active page */
+    color: white; /* Example: White text for active page */
+    border-color: #007bff; /* Example: Matching border color */
+}
+
+/* Optional: Styling for hover effect on inactive pages (from previous response) */
+.pagination .page-item:not(.active) .page-link:hover {
+    background-color: #e9ecef; /* Example: Light gray background on hover */
+}
+
+/* Styling for when a link is actively clicked (pressed down) (from previous response) */
+.pagination .page-link:active {
+    background-color: #6c757d; /* Example: Darker gray background while clicking */
+    border-color: #6c757d;
+}
+
+/* Styling for the pagination-info */
+.pagination-info {
+    font-weight: bold;
+    color: #555;
+    margin-right: 15px; /* Adds some spacing between the info and the pagination links */
+}
+
+
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+           
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #loader-spinner {
+            border: 6px solid #e3e3e3;
+            border-top: 6px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 0.8s linear infinite;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Sticky Left Column (Sr No) */
+        th.sticky-left,
+        td.sticky-left {
+        position: sticky;
+        left: 0;
+        background: white; /* or your table bg */
+        z-index: 2;
+       
+        }
+
+        /* Sticky Right Column (Last Column) */
+        th.sticky-right,
+        td.sticky-right {
+        position: sticky;
+        right: 0;
+        background: white; /* or your table bg */
+        z-index: 2;
+
+        }
+
+        /* Optional: Add shadow to indicate it's sticky */
+        th.sticky-left::after,
+        td.sticky-left::after {
+        content: "";
+        position: absolute;
+        right: -6px;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+        
+        pointer-events: none;
+        }
+
+        th.sticky-right::before,
+        td.sticky-right::before {
+        content: "";
+        position: absolute;
+        left: -6px;
+        top: 0;
+        bottom: 0;
+        width: 6px;
+      
+        pointer-events: none;
+        }
+
+
+     
+</style> 
+
+      {% block styles %}
+      
+      
+      {% endblock styles %}
+
+
+      
+
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/plugins.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/kaiadmin.min.css' %}" />
+    {% comment %} <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}" /> {% endcomment %}
+    {% comment %} <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> {% endcomment %}
+
+
+
+    <!-- CSS Just for demo purpose, don't include it in your project -->
+    <link rel="stylesheet" href="{% static 'assets/css/demo.css' %}" />
+  </head>
+  <body>
+    <div class="wrapper">
+       {% include 'Base/slidebar.html'  %}
+        <!-- ======= Header ======= -->
+        {% include 'Base/navbar.html'  %}
+        <!-- ======= Sidebar ======= -->
+       
+
+
+
+        <div class="container">
+            {% block main_block %}
+           
+            {% endblock main_block %}
+        </div>
+            <div id="loader-overlay" style="display: none;">
+        <div id="loader-spinner"></div> 
+    </div>
+            {% include 'Base/footer.html' %}
+      </div>
+    </div>
+      
+
+    <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" id="toastContainer">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="toast align-items-center text-bg-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} border-0 show" role="alert" data-toast-id="{{ forloop.counter }}">
+                <div class="d-flex">
+                    <div class="toast-body d-flex align-items-center">
+                        {% if message.tags == 'error' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="toast-icon" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                            <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                        </svg>
+                        {% elif message.tags == 'success' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="toast-icon" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.061L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                        </svg>
+                        {% endif %}
+                        <span class="flex-grow-1">{{ message }}</span>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="closeToast({{ forloop.counter }})"></button>
+                </div>
+                <div class="toast-progress">
+                    <div class="toast-progress-bar"></div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <!--   Core JS Files   -->
+    <script src="{% static 'assets/js/core/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
+
+
+   
+    <!-- jQuery Scrollbar -->
+    <script src="{% static 'assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+
+    <!-- Chart JS -->
+    {% comment %} <script src="assets/js/plugin/chart.js/chart.min.js"></script> {% endcomment %}
+
+    <!-- jQuery Sparkline -->
+    <script src="{% static 'assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js' %}"></script>
+
+    <!-- Chart Circle -->
+    <script src="{% static 'assets/js/plugin/chart-circle/circles.min.js' %}"></script>
+
+    <!-- Datatables -->
+    <script src="{% static 'assets/js/plugin/datatables/datatables.min.js' %}"></script>
+
+    <!-- Bootstrap Notify -->
+    <script src="{% static 'assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
+
+    <!-- jQuery Vector Maps -->
+    <script src="{% static 'assets/js/plugin/jsvectormap/jsvectormap.min.js' %}"></script>
+    <script src="{% static 'assets/js/plugin/jsvectormap/world.js' %}"></script>
+
+    <!-- Sweet Alert -->
+     <script src="{% static 'assets/js/plugin/sweetalert/sweetalert.min.js' %}"></script>
+
+    <!-- Kaiadmin JS -->
+    <script src="{% static 'assets/js/kaiadmin.min.js' %}"></script>
+
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js" integrity="sha256-+C0A5Ilqmu4QcSPxrlGpaZxJ04VjsRjKu+G82kl5UJk=" crossorigin="anonymous"></script> {% endcomment %}
+
+
+    <script>
+        // Check internet connectivity on page load
+        if (!navigator.onLine) {
+            window.location.href = "{% url 'offline-page' %}"; // Redirect to offline error page
+        }
+
+        // Listen for online/offline events
+        window.addEventListener('offline', function() {
+            window.location.href = "{% url 'offline-page' %}"; // Redirect on going offline
+        });
+
+        window.addEventListener('online', function() {
+           
+            window.location.href = "{% url "dashboard_page" %}"; 
+        });
+    </script>
+    <script>
+        function closeToast(id) {
+            const toast = document.querySelector(`[data-toast-id="${id}"]`);
+            if (toast) {
+                toast.classList.add('hide');
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);s
+                    }
+                }, 300);
+            }
+        }
+
+        // Auto-close toasts after 5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const toasts = document.querySelectorAll('.toast[data-toast-id]');
+            toasts.forEach((toast, index) => {
+                const id = toast.getAttribute('data-toast-id');
+                setTimeout(() => {
+                    closeToast(id);
+                }, 5000);
+            });
+        });
+    </script>
+
+
+
+    {% block script %}
+
+
+
+
+    {% endblock script %}
+  </body>
+</html>
