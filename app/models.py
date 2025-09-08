@@ -40,6 +40,20 @@ class Job_detail(models.Model):
         def __str__(self):
             return self.company_name
         
+        
+        @property
+        def cdr_file_url(self):
+            
+            cdr = CDRDetail.objects.filter(
+                company_name__iexact=self.company_name,
+                job_name__iexact=self.job_name
+            ).first() 
+     
+            if cdr and cdr.file_url:
+                return cdr.file_url
+            return None
+
+        
 class Jobimage(models.Model):
     job = models.ForeignKey(Job_detail,related_name='image', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='job_images/')

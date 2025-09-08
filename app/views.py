@@ -279,7 +279,8 @@ def update_user(request, user_id):
                 messages.error(request, "Email already exists.", extra_tags="custom-success-style")
                 return redirect('edit_user_page')
 
-    
+        
+                
             required_fields = {
                 'Username': username,
                 'Firstname': first_name,
@@ -315,7 +316,6 @@ def update_user(request, user_id):
         
         
         
-
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)
@@ -336,8 +336,8 @@ def dashboard_page(request):
         
 
         db_sqlite3  = Job_detail.objects.all()
-            
-    
+         
+
         total_purchse_floats = [] 
         total_purchse = Job_detail.objects.values_list('prpc_purchase') 
         for i in total_purchse:
@@ -405,7 +405,7 @@ def dashboard_page(request):
             db_sqlite3 = db_sqlite3.order_by('-job_status', 'date')
         
 
-       
+        print(db_sqlite3)
         p = Paginator(db_sqlite3, 10)
         page = request.GET.get('page')
         datas = p.get_page(page)
@@ -419,22 +419,8 @@ def dashboard_page(request):
         nums = " " * datas.paginator.num_pages  
         
         
-        cdr_Detail = CDRDetail.objects.values('company_email').distinct()
-        results = []
-        for  i in datas:
-            match = CDRDetail.objects.filter(company_name= i.company_name)
-            combined = {
-                'job_detail': i,
-                'cdr_link':[]
-            }
-            if match.exists():
-                for cdr in match:
-                    if cdr.file_url:
-                        combined['cdr_link'].append(cdr.file_url)
-            results.append(combined)
-        demo = results
-        # print(type(demo))
-        # print(type(datas))
+        
+
         
         context = {
             'nums': nums,
@@ -446,7 +432,7 @@ def dashboard_page(request):
             'count_of_cylinder_compnay':count_of_cylinder_compnay,
             'total_sales':b,
             'datas':datas,
-            'cdr_Details':cdr_Detail,
+           
             'total_purchase':a,
             'sorting': sorting,
             'company_name_sorting':company_name_sorting,
@@ -473,10 +459,13 @@ def delete_data(request,delete_id):
     if not request.user.is_authenticated:
         return redirect('login_page')
     try:
-        url = os.environ.get('DELETE_WEBHOOK_JOB')
+        
         folder_url = Job_detail.objects.values('folder_url').all().get(id=delete_id)
-        if folder_url:
-            response = requests.delete(f"http://localhost:5678/webhook/d51a7064-e3b9-41f5-a76f-264e19f60b70/artical/delete/{delete_id}")
+        print(folder_url)
+        if folder_url == '':
+            url = os.environ.get('DELETE_WEBHOOK_JOB')
+           
+            response = requests.delete(f"{url}{delete_id}")
             data = response.json()
             messages.success(request,"Job Deleted successfully ")
             return redirect('dashboard_page')
@@ -1040,15 +1029,13 @@ def  update_job(request,update_id):
             
             pouch_combination = f"{pouch_combination1} + {pouch_combination2} + {pouch_combination3} + {pouch_combination4}"
   
-            # print(prpc_purchase)
-                # Example: Update multiple instances directly in the database
+
 
         demo = Job_detail.objects.values('date').get(id=update_id)
         date_formatte = demo['date'].strftime("%Y-%m-%d")
         
         
         
-       
         required_filed = {
             'Date' :date,
             'Bill no':bill_no,
@@ -1070,28 +1057,39 @@ def  update_job(request,update_id):
             if not  r:
                 messages.error(request,f"This {i} Filed Was Required",extra_tags="custom-success-style")
                 return redirect('dashboard_page')
+            
+    
+        jobs = Job_detail.objects.all().get(id=update_id)  
+        if job_name != jobs.job_name:
+            messages.error(request,"You can't chnage job_name")
+            return redirect('dashboard_page')
+      
         
-        jobs = Job_detail.objects.filter('job_name').get(id=update_id)
-        print(jobs)
-        print(job_name)
-
+        
         if date != date_formatte:
             if Job_detail.objects.filter(date = date, job_name = job_name).exists() :
                 messages.error(request,"Job is Alredy exists from this date ",extra_tags="custom-success-style")
                 return redirect('dashboard_page')
 
-        
         if len(files) > 2:
             messages.error(request, "You can upload only 2 files", extra_tags="custom-error-style")
             return redirect('data_entry')
 
-        valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]
+        valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]  
 
         for file in files:
             ext = os.path.splitext(file.name)[1]
             if ext.lower() not in valid_extension:
                 messages.error(request,"Invalid file  Only .jpg, .jpeg, .png and .ai are allowed." ,extra_tags="custom-success-style")
                 return redirect("dashboard_page")
+
+        get_data =  Job_detail.objects.all().get(id=update_id)
+        get_combinations = get_data.pouch_combination.replace(" ","").split("+")
+        while len(get_combinations) < 4:
+            get_combinations.append('')
+        
+        folder_id = get_data.folder_url
+        
         
         file_dic = {}
         for i, file in enumerate(files):
@@ -1102,13 +1100,6 @@ def  update_job(request,update_id):
             file.name = new_file_name
             file_key = f"{new_file_name}"
             file_dic[file_key] = (file.name, file, file.content_type)
-        
-        get_data =  Job_detail.objects.all().get(id=update_id)
-        get_combinations = get_data.pouch_combination.replace(" ","").split("+")
-        while len(get_combinations) < 4:
-            get_combinations.append('')
-        
-        folder_id = get_data.folder_url
         
         url = os.environ.get('UPDATE_WEBHOOK_JOB')
         if folder_id :
@@ -1127,24 +1118,26 @@ def  update_job(request,update_id):
             'pouch_open_size':pouch_open_size,
             'pouch_combination':pouch_combination,
             'correction':correction
-        }
+            }
   
-            
-            response = requests.post(f'{url}{update_id}',
-                    data=data,files=file_dic
-                
-            )
-            if response.status_code == 200:
-                cylinder_data = Job_detail.objects.all().get(id=update_id)
-                cylinder_data.cylinder_date = cylinder_date
-                cylinder_data.cylinder_bill_no = cylinder_bill_no
-                cylinder_data.job_status = job_status
-                cylinder_data.save()
-                messages.success(request,'Data Updated successfully',)
-                return redirect('dashboard_page')
-            else:
+            try:
+                response = requests.post(f'{url}{update_id}',
+                        data=data,files=file_dic  
+                )
+                if response.status_code == 200:
+                    cylinder_data = Job_detail.objects.all().get(id=update_id)
+                    cylinder_data.cylinder_date = cylinder_date
+                    cylinder_data.cylinder_bill_no = cylinder_bill_no
+                    cylinder_data.job_status = job_status
+                    cylinder_data.save()
+                    messages.success(request,'Data Updated successfully',)
+                    return redirect('dashboard_page')
+                else:
+                    messages.warning(request,"Your Credentials will Expire")
+                    return redirect('dashboard_pag')
+            except Exception as e:
                 messages.warning(request,"Your Credentials will Expire")
-                return redirect('company_add_page')
+                return redirect('dashboard_pag')
         else:
             try:
                 
@@ -1169,11 +1162,6 @@ def  update_job(request,update_id):
                 update_job_data.job_status = job_status
                 update_job_data.pouch_combination = pouch_combination
                 
-                # for file in file_dic:
-                #     Jobimage.objects.create(
-                #         job=update_job_data,
-                #         image = file
-                #     )
                 for file_key, file_data in file_dic.items():
                     file_obj = file_data[1]  
                     Jobimage.objects.create(
@@ -1189,6 +1177,7 @@ def  update_job(request,update_id):
            
     except Exception as e:
         messages.error(request,f'Something went wrong try again {e}')
+        print(e)
         return redirect('dashboard_page')
 
 @never_cache

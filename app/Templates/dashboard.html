@@ -288,11 +288,13 @@
                                               <span style="color: #039855; background: #ecfdf3; padding: 5px 6px; border-radius: 6px">{{i.job_status}}</span>
                                             {% endif %}
                                             </td> 
-                                            <td>
-                               
-                                          No CDR available
-                           
-                                  </td>
+                                              <td>
+                                                    {% if i.cdr_file_url %}
+                                                        <a class="icon-link" href="{{ i.cdr_file_url }}" target="_blank">CDR</a>
+                                                    {% else %}
+                                                        -
+                                                    {% endif %}
+                                                </td>
                                             <td class="text-truncate  sticky-right">
                                                 <form method="post" action="{% url "delete_data" delete_id=i.id %}" class="d-inline">
                                                 {% csrf_token %}
