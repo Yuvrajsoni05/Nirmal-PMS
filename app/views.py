@@ -116,12 +116,15 @@ def login_page(request):
 #     if len(username) < 3 or len(username) > 12:
 #         return "Username must be between 3 and 12 character"
 
-# def email_validator(email):
-#     try:
-#         EmailValidator()(email)
-#         return "Invalid Email format"
-#     except ValidationError:
-#         return "Invalid email formatsss"
+
+
+
+def email_validator(email):
+    email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    if not re.match(email_regex,email):       
+        return "Enter a Valid email Address"
+
+ 
 
 def validator_password(password):
     if len(password) < 8:
@@ -168,10 +171,10 @@ def register_page(request):
                 messages.error(request,f" {i} field is Required",extra_tags="custom-success-style")
                 return redirect('register_page')
         
-        email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        if not re.match(email_regex, email):
-            messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style") 
-            return redirect('register_page')
+        # email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+        # if not re.match(email_regex, email):
+        #     messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style") 
+        #     return redirect('register_page')
        
         if Registration.objects.filter(username=username).exists():
                 messages.error(request,'Username Alredy Exist',extra_tags="custom-success-style")
@@ -181,6 +184,10 @@ def register_page(request):
             messages.error(request,"Email is Alredy Exist",extra_tags="custom-success-style")
             return redirect('register_page')
         
+        email_error  = email_validator(email)
+        if email_error:
+            messages.error(request,email_error,extra_tags="custom-success-style")
+            return redirect('register-page')
         
         password_error = validator_password(password)
         if password_error:
@@ -336,7 +343,6 @@ def dashboard_page(request):
         
 
         db_sqlite3  = Job_detail.objects.all()
-         
 
         total_purchse_floats = [] 
         total_purchse = Job_detail.objects.values_list('prpc_purchase') 
@@ -345,9 +351,8 @@ def dashboard_page(request):
             cleaned_string = data_string.replace(",", "")
             float_value = float(cleaned_string)
             total_purchse_floats.append(float_value)
+        total_purchase = sum(total_purchse_floats)
 
-        a = sum(total_purchse_floats)
-  
         total_sell_floats = []
         total_sell = Job_detail.objects.values_list('prpc_sell')
         for  i in total_sell:
@@ -356,7 +361,7 @@ def dashboard_page(request):
             sell_float = float(cleaned_data)
             total_sell_floats.append(sell_float)
         
-        b =  sum(total_sell_floats)
+        total_sales =  sum(total_sell_floats)
       
         filters = Q()
         if get_q:
@@ -376,7 +381,19 @@ def dashboard_page(request):
         db_sqlite3 = Job_detail.objects.filter(filters)
         
         job_status = Job_detail.objects.values('job_status').distinct()
-   
+        
+        
+        columns = {
+            'job_name_sorting':job_name_sorting,
+            'date_sorting':date_sorting,
+            'cylinder_date_sorting':cylinder_date_sorting,
+            'company_name_sorting':company_name_sorting,
+            'cylinder_made_in_sorting':cylinder_made_in_sorting,
+            'sorting':sorting
+            
+        }
+
+        
         if job_name_sorting == 'asc':
             db_sqlite3 = db_sqlite3.order_by('job_name')
         elif job_name_sorting == 'desc':
@@ -403,9 +420,6 @@ def dashboard_page(request):
             db_sqlite3 = db_sqlite3.order_by('-id')
         else:
             db_sqlite3 = db_sqlite3.order_by('-job_status', 'date')
-        
-
-        print(db_sqlite3)
         p = Paginator(db_sqlite3, 10)
         page = request.GET.get('page')
         datas = p.get_page(page)
@@ -417,11 +431,7 @@ def dashboard_page(request):
         totla_active_job = Job_detail.objects.filter(job_status='In Progress').count()
         count_of_cylinder_compnay = cylinder_company_names.count() 
         nums = " " * datas.paginator.num_pages  
-        
-        
-        
-
-        
+      
         context = {
             'nums': nums,
             'venues': datas,
@@ -430,10 +440,9 @@ def dashboard_page(request):
             'cylinder_company_names': cylinder_company_names,
             'count_of_company':count_of_company,
             'count_of_cylinder_compnay':count_of_cylinder_compnay,
-            'total_sales':b,
-            'datas':datas,
-           
-            'total_purchase':a,
+            'total_sales':total_sales,
+            'datas':datas,                                                                                                              
+            'total_purchase':total_purchase,
             'sorting': sorting,
             'company_name_sorting':company_name_sorting,
             'job_name_sorting':job_name_sorting,
@@ -442,9 +451,7 @@ def dashboard_page(request):
             'cylinder_made_in_sorting':cylinder_made_in_sorting,
             'totla_active_job':totla_active_job,
             'job_status':job_status,
-          
         }
-    
     except Exception as e:
         print(f"Error: {e}")
         return redirect('dashboard_page')
@@ -461,7 +468,6 @@ def delete_data(request,delete_id):
     try:
         
         folder_url = Job_detail.objects.values('folder_url').all().get(id=delete_id)
-        print(folder_url)
         if folder_url == '':
             url = os.environ.get('DELETE_WEBHOOK_JOB')
            
@@ -537,6 +543,14 @@ def data_entry(request):
     
 #     folders = result.get('files',[])
     
+# rows = 5  
+    # for i in range(1, rows + 1):
+    #     for j in range(rows - i):
+    #         print(" ", end=" ")
+    #     for k in range(2 * i - 1):
+    #         print("*", end="")
+    #     print()
+    
     
 #     if folders:
 #         job_id  = folders[0]['id']
@@ -599,23 +613,9 @@ def data_entry(request):
 #         return folder_id, folder_url
 
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
-def normalize_job_name(job_name):
-    return re.sub(r'\s+', ' ', job_name.strip()).lower()
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
-def check_company_name(company_name):
-    return re.sub(r'\s+',' ',company_name.strip()).lower()
           
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)  
-def normalize_cylinder_company_name(cylinder_company_name):
-    return re.sub(r'\s+',' ',cylinder_company_name.strip()).lower()
+
 
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
@@ -651,17 +651,7 @@ def add_job(request):
             pouch_combination_total  = f"{pouch_combination_1} + {pouch_combination_2} + {pouch_combination_3} + {pouch_combination_4}"
             
             
-            # num_str = prpc_purchase
-            # num_str_cleaned = num_str.replace(",", "")  # Remove commas using replace()
-            # num_int = int(num_str_cleaned)
-            # print(num_int)
-            
-            # normalized_name = normalize_job_name(job_name)
-            # exsting_job_name = Job_detail.objects.all()
-            # for i in exsting_job_name:
-            #     if normalize_job_name(i.job_name) == normalized_name:
-            #         messages.error(request,"Job Name Alredy Exsits",extra_tags="custom-success-style")
-            #         return redirect('data_entry')             
+                         
             required_filed = {
                     'Date' :date,
                     'Bill no':bill_no,
@@ -708,13 +698,7 @@ def add_job(request):
             if len(files) > 2:
                 messages.error(request, "You can upload only 2 files", extra_tags="custom-error-style")
                 return redirect('data_entry')
-            # file_dic = []
-            # for idx, file in enumerate(files):
-            #     _, file_extension = os.path.splitext(file.name)
-            #     random_e_number = random.randint(1, 100)
-            #     new_name = f'{date}/{random_e_number}{file_extension}'
-            #     file.name = new_name
-            #     file_dic.append(file)
+
            
             pouch_combination = pouch_combination_total
             
@@ -848,49 +832,13 @@ def add_job(request):
                     image=file_obj
                 )
             job_data.save()
-            messages.success(request,"Data  successfully Add on dbsqlite 3")
+            messages.success(request,"Data  successfully Add ")
             return redirect('dashboard_page')
-
-            # else:
-            #     job_data = Job_detail.objects.create(
-            #         date = date,
-            #         bill_no = bill_no,
-            #         company_name = company_name,
-            #         job_name = job_name,
-            #         job_type = job_type,
-            #         noc = noc ,
-            #         prpc_sell =prpc_sell,
-            #         prpc_purchase = prpc_purchase ,
-            #         cylinder_size = cylinder_size,
-            #         cylinder_made_in = cylinder_made_in_s,
-            #         pouch_size = pouch_size,
-            #         pouch_open_size = pouch_open_size,
-            #         pouch_combination = pouch_combination,
-            #         correction = correction,
-            #         job_status = job_status,
-            #         cylinder_date = cylinder_date,
-            #         cylinder_bill_no = cylinder_bill_no,
-            #     )
-            #     for file in files:
-            #         Jobimage.objects.create(
-            #             job = job_data,
-            #             image = file
-            #         )
-            #     job_data.save()
-            #     messages.success(request,"Data  successfully Add on dbsqlite 3")
-            #     return redirect('dashboard_page')
-        # except Exception as e:
-            
-        
-   
+    
     except Exception as e:
         messages.error(request,f"Something went wrong {e}")
         print(e)
         return redirect('data_entry')
-            
-          
-                 
-
             # print(cylinder_made_in_s)
         
             # from django.shortcuts import render, redirect
@@ -990,9 +938,6 @@ def add_job(request):
             #     uploaded_file_ids.append(uploaded_file.get('id'))
             #     os.remove(temp_file.name) 
             # Gauth=GoogleAuth()
-            
-        
-                
 
 
 @never_cache
@@ -1002,13 +947,12 @@ def  update_job(request,update_id):
     if not request.user.is_authenticated:
         return redirect('login_page')
     try:
-        
         if request.method == 'POST':
             date =  request.POST.get('date')
             bill_no = request.POST.get('bill_no')
             company_name = request.POST.get('company_name')
-            job_name = request.POST.get('job_name')
-            job_type = request.POST.get('job_type')
+            job_name = request.POST.get('job_name','')
+            job_type = request.POST.get('job_type','')
             noc = request.POST.get('noc')
             prpc_purchase = request.POST.get('prpc_purchase')
             prpc_sell = request.POST.get('prpc_sell')
@@ -1026,14 +970,10 @@ def  update_job(request,update_id):
             correction = request.POST.get('correction')
             job_status = request.POST.get('job_status')
             files = request.FILES.getlist('files')
-            
             pouch_combination = f"{pouch_combination1} + {pouch_combination2} + {pouch_combination3} + {pouch_combination4}"
   
-
-
         demo = Job_detail.objects.values('date').get(id=update_id)
         date_formatte = demo['date'].strftime("%Y-%m-%d")
-        
         
         
         required_filed = {
@@ -1087,13 +1027,12 @@ def  update_job(request,update_id):
         get_combinations = get_data.pouch_combination.replace(" ","").split("+")
         while len(get_combinations) < 4:
             get_combinations.append('')
-        
+        print(get_combinations)
         folder_id = get_data.folder_url
         
         
         file_dic = {}
         for i, file in enumerate(files):
-            # Get the original file extension
             _, file_extension = os.path.splitext(file.name)
             random_number = random.randint(1, 100)
             new_file_name = f'{date}_{random_number}{file_extension}'
@@ -1119,7 +1058,6 @@ def  update_job(request,update_id):
             'pouch_combination':pouch_combination,
             'correction':correction
             }
-  
             try:
                 response = requests.post(f'{url}{update_id}',
                         data=data,files=file_dic  
@@ -1224,19 +1162,15 @@ def update_profile(request,users_id):
             'Username':username
         } 
         
-        print(users_id)
+      
         for filed,required in required_filed.items():
             if not required:
                 messages.error(request,f"{filed} is Required" ,extra_tags="custom-success-style")
                 return redirect('profile_page')
             
-            
         if email !=  update_profile.email and Registration.objects.filter(email=email).exists():
             messages.error(request,"Email alredy exists" ,extra_tags="custom-success-style")
             return redirect('profile_page')
-        
-        
-        
         
         if username !=  update_profile.username and Registration.objects.filter(username=username).exists():
             messages.error(request,"Username alredy exists",extra_tags="custom-success-style")
@@ -1290,7 +1224,6 @@ def user_password(request):
             errors = "Please provide New Password."
             return render (request,'profile.html',context={'errors':errors})
 
-        
         password_error = validator_password(new_password)
         if password_error:
             messages.error(request,password_error,extra_tags="custom-success-style")
@@ -1423,10 +1356,13 @@ def cdr_add(request):
         new_job_name =  request.POST.get('new_job_name','').strip()
         
         
+            
+            
+
         if not job_name or not cdr_upload_date:
             messages.error(request, "Job name and upload date are required.", extra_tags='custom-error-style')
             return redirect('company_add_page')
-        print(new_job_name)
+        
         if new_job_name !='':
             job_name = new_job_name
 
@@ -1434,7 +1370,22 @@ def cdr_add(request):
             company_email = new_company_email 
         if new_company_name != '':
             company_name = new_company_name  
-    
+
+        
+        
+        required_filed = {
+            'Company Name': company_name,
+            'Company Email': company_email,
+            'Upload Date': cdr_upload_date,
+            'Job Name': job_name,
+        }
+
+
+        for filed,required in required_filed.items():
+            if not required:
+                messages.error(request,f"{filed} is Required" ,extra_tags="custom-success-style")
+                return redirect('company_add_page')
+        
         if not cdr_files:
             messages.error(request,"CDR File is Required",extra_tags='custom-success-style')
             return redirect('company_add_page')
@@ -1442,7 +1393,7 @@ def cdr_add(request):
             messages.error(request, "You can upload only 2 files", extra_tags="custom-error-style")
             return redirect('company_add_page')
         
-                
+
         if CDRDetail.objects.filter(company_name = company_name, company_email=company_email).exists():
             print("Valid")
         else:
@@ -1473,18 +1424,7 @@ def cdr_add(request):
             return redirect('company_add_page')
 
         
-        required_filed = {
-            'Company Name': company_name,
-            'Company Email': company_email,
-            'Upload Date': cdr_upload_date,
-            'Job Name': job_name,
-        }
-
-
-        for filed,required in required_filed.items():
-            if not required:
-                messages.error(request,f"{filed} is Required" ,extra_tags="custom-success-style")
-                return redirect('company_add_page')
+      
 
        
         data = {

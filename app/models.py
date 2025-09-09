@@ -34,24 +34,21 @@ class Job_detail(models.Model):
         cylinder_date = models.DateField(blank=True, null=True)
         cylinder_bill_no = models.CharField(blank=True, null=True)
         job_status = models.CharField(max_length=200,blank=True, null=True)
-        
-    
-        
+        created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
+
         def __str__(self):
             return self.company_name
-        
-        
+
         @property
         def cdr_file_url(self):
-            
             cdr = CDRDetail.objects.filter(
                 company_name__iexact=self.company_name,
                 job_name__iexact=self.job_name
             ).first() 
-     
             if cdr and cdr.file_url:
                 return cdr.file_url
             return None
+   
 
         
 class Jobimage(models.Model):
