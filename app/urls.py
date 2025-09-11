@@ -21,8 +21,8 @@ urlpatterns = [
     path('delete_user/<uuid:user_id>/',delete_user,name='delete_user'),
     path('update_user/<uuid:user_id>/',update_user,name="update_user"),
     
-    path('company_add_page',comapny_add_page,name='company_add_page'),
-    path('new_cdr_upload',cdr_add,name='new_cdr_upload'),
+    path('cdr_page',cdr_page,name='company_add_page'),
+    path('cdr_upload',cdr_add,name='new_cdr_upload'),
     path('delete_cdr/<int:delete_id>/',cdr_delete,name='delete_cdr'),
     path('update_cdr/<int:update_id>/',cdr_update,name='update_cdr'),
     

@@ -1,0 +1,13 @@
+ERROR myapp  This is error views.py This is error
+ERROR myapp  This is error views.py This is error
+ERROR myapp  This is error views.py This is error
+ERROR 2025-09-11 18:56:15,056 views %(funcName)s %(filename)s:%(lineno)d Invalid Username and Password
+ERROR myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-11 19:02:05,838 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-11 19:09:26,341 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-11 19:09:26,585 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-11 19:09:26,696 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-11 19:09:26,801 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-11 19:09:27,089 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-11 19:09:27,230 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-11 19:12:53,603 myapp login_page Invalid Username and Password views.py

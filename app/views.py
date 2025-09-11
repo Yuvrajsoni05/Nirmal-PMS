@@ -61,6 +61,8 @@ from django.conf import settings
 
 
 
+#Lecco ai
+#Cokkeies in  Django Ssstion in django
 
 
 class CustomPasswordResetView(PasswordResetView):
@@ -82,16 +84,16 @@ def password_reset_done(request):
     return render(request,'Password/password_update_done.html')
 
     
-    
-    
+import logging
+
+logger = logging.getLogger("myapp")
 # SERVICE_ACCOUNT_FILE = os.path.join(settings.BASE_DIR, 'app', 'Google', 'credentials.json')
 # SCOPES = ['https://www.googleapis.com/auth/drive']
 def login_page(request):    
     if request.method == 'POST':
         username_email = request.POST.get('username')
         password = request.POST.get('password')
-        print(username_email)
-        print(password)
+       
         
         valid = re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',username_email)
         
@@ -108,7 +110,10 @@ def login_page(request):
             return redirect('dashboard_page') 
         else:
             messages.error(request,"Invalid Username and Password ",)
+            logger.error("Invalid Username and Password")
+       
             return redirect('login_page')
+        
     return render(request, 'Registration/login_page.html')  
 
 
@@ -318,7 +323,8 @@ def update_user(request, user_id):
             messages.success(request, "User updated successfully.")
             return redirect('edit_user_page')
     except Exception as e:
-        messages.error(request,f"Something went wrong {e}",extra_tags="custom-success-style")
+        messages.error(request,f"Something went wrong",extra_tags="custom-success-style")
+        logger.error(f"Invalid Username and Password {e}")
         return redirect('edit_user_page')
         
         
@@ -392,8 +398,6 @@ def dashboard_page(request):
             'sorting':sorting
             
         }
-
-        
         if job_name_sorting == 'asc':
             db_sqlite3 = db_sqlite3.order_by('job_name')
         elif job_name_sorting == 'desc':
@@ -453,7 +457,8 @@ def dashboard_page(request):
             'job_status':job_status,
         }
     except Exception as e:
-        print(f"Error: {e}")
+        messages.warning(request,"Something went wrong  try again")
+        logger.error(f"wrong in Dashboard page {e}")
         return redirect('dashboard_page')
 
     return render(request, 'dashboard.html', context)
@@ -468,13 +473,19 @@ def delete_data(request,delete_id):
     try:
         
         folder_url = Job_detail.objects.values('folder_url').all().get(id=delete_id)
-        if folder_url == '':
-            url = os.environ.get('DELETE_WEBHOOK_JOB')
-           
-            response = requests.delete(f"{url}{delete_id}")
-            data = response.json()
-            messages.success(request,"Job Deleted successfully ")
-            return redirect('dashboard_page')
+        print(folder_url)
+        if folder_url != '':
+            try:
+                
+                url = os.environ.get('DELETE_WEBHOOK_JOB')
+                print(url)
+                response = requests.delete(f"{url}{delete_id}")
+                data = response.json()
+                messages.success(request,"Job Deleted successfully ")
+                return redirect('dashboard_page')
+            except Exception as e:
+                messages.warning(request,"Something went wrong try again")
+                return redirect('dashboard_page')
         else:
             delete_data = get_object_or_404(Job_detail,id=delete_id)
             delete_images = delete_data.image.all()
@@ -713,7 +724,7 @@ def add_job(request):
                     job_name = new_job_name
 
             if Job_detail.objects.filter(job_name__icontains = job_name,date__icontains  =date).exists():
-                    messages.error(request,"Job Name are alredy Exsits on this date  kidnly Update job",extra_tags='custom-success-style')
+                    messages.error(request,"Job Name are already Exists on this date kindly Update job",extra_tags='custom-success-style')
                     return redirect('data_entry')
         
             if new_company != '':
@@ -1042,6 +1053,7 @@ def  update_job(request,update_id):
         
         url = os.environ.get('UPDATE_WEBHOOK_JOB')
         if folder_id :
+            
             data  =  {
             'date':date,
             'bill_no':bill_no,
@@ -1192,6 +1204,7 @@ def update_profile(request,users_id):
         return redirect('profile_page')
     except Exception:
         messages.error(request,'Something went wrong  try again')
+        logger.warning("something went wrong in User Profile")
         return redirect('profile_page')
     
     
@@ -1245,10 +1258,12 @@ def user_password(request):
         print("Password Update")
         # update_session_auth_hash(request,user_password)
         return redirect('login_page')
+    
+    
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
-def comapny_add_page(request):
+def cdr_page(request):
     
     search = request.GET.get('search',' ').strip()
     date = request.GET.get('date','').strip()
@@ -1259,18 +1274,7 @@ def comapny_add_page(request):
     date_sorting = request.GET.get('date_sorting','')
     sorting = request.GET.get('sorting','')
     
-    # print(date_sorting)
-    # print(companay_name_sorting)
-    # print(sorting)
-    # date = date.replace('-',',')
-    # print(date)
-    # date_object = datetime.strptime(date, "%Y-%m-%d")
 
-   
-    # one_year_later = date_object + relativedelta(years=1)
-
-   
-    # end_date = one_year_later.strftime("%Y-%m-%d")
     cdr_data = CDRDetail.objects.all()
     if search and date:
         cdr_data = CDRDetail.objects.filter(
@@ -1314,9 +1318,6 @@ def comapny_add_page(request):
         cdr_data = cdr_data.order_by('date')
     
     
-    
-        
- 
     p = Paginator(cdr_data,10)
     
     page =  request.GET.get('page')
@@ -1340,7 +1341,7 @@ def comapny_add_page(request):
         'cdr_job_names':cdr_job_name,
         
     }
-    return render(request,'CDR/add_company.html',context)
+    return render(request,'CDR/cdr_page.html',context)
 
 
 def cdr_add(request):
@@ -1414,7 +1415,7 @@ def cdr_add(request):
             company_add_in.save()        
         
         if CDRDetail.objects.filter(job_name__icontains = job_name,date=cdr_upload_date ).exists():
-            messages.error(request,'Job Name are alredy Exsits on this date  kidnly Update job',extra_tags='custom-success-style')
+            messages.error(request,'Job Name are already Exists on this date kindly Update job',extra_tags='custom-success-style')
             return redirect('company_add_page')
 
         
@@ -1445,28 +1446,46 @@ def cdr_add(request):
             file_dic[file_key] = (file.name, file, file.content_type)
             
             
+        try:
+            url = os.environ.get('CREATE_WEBHOOK_CDR')
+            response = requests.post(f'{url}',data=data,files=file_dic)
+            print(response.status_code)
             
-        url = os.environ.get('CREATE_WEBHOOK_CDR')
-        response = requests.post(f'{url}',data=data,files=file_dic)
-        print(response.status_code)
-        
-        data_string  = response.text
- 
-        print(data_string)
-        
-        if response.status_code  == 200:
-            print("Positive Response : ",response)
-            messages.success(request,"Data Succfully Add ")
-            return redirect('company_add_page')
-        else:
+            data_string  = response.text
+    
+            print(data_string)
+            
+            if response.status_code  == 200:
+                print("Positive Response : ",response)
+                messages.success(request,"Data Successfully Add")
+                return redirect('company_add_page')
+            else:
 
+                cdr_data = CDRDetail.objects.create(
+                    date=cdr_upload_date,
+                    company_name=company_name,
+                    company_email=company_email,
+                    cdr_corrections=cdr_corrections_data,
+                    job_name=job_name
+                )
+
+                for file_key, file_data in file_dic.items():
+                    file_object = file_data[1]  
+                    CDRImage.objects.create(
+                        cdr=cdr_data,
+                        image=file_object,
+                    )
+                cdr_data.save()
+                messages.success(request, 'Data successfully added to SQLite DB')
+                return redirect('company_add_page')
+        except Exception as e:
             cdr_data = CDRDetail.objects.create(
-                date=cdr_upload_date,
-                company_name=company_name,
-                company_email=company_email,
-                cdr_corrections=cdr_corrections_data,
-                job_name=job_name
-            )
+                    date=cdr_upload_date,
+                    company_name=company_name,
+                    company_email=company_email,
+                    cdr_corrections=cdr_corrections_data,
+                    job_name=job_name
+                )
 
             for file_key, file_data in file_dic.items():
                 file_object = file_data[1]  
@@ -1476,8 +1495,8 @@ def cdr_add(request):
                 )
             cdr_data.save()
             messages.success(request, 'Data successfully added to SQLite DB')
-
             return redirect('company_add_page')
+        
     
 
 @never_cache
@@ -1736,9 +1755,6 @@ def send_mail_data(request):
         note  = request.POST.get('note')
         # selected_item = request.POST.getlist('select_item[]',"")
 
-    # if len(attachments) >= 3 :
-    #     messages.error(request,"You can upload only 2 file")
-    #     return redirect('dashboard_page')
     if date_check == None or date_check == '':
         date = ''
     else:
