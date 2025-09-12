@@ -158,11 +158,9 @@ def register_page(request):
         username = request.POST.get('username')
         first_name = request.POST.get('firstName')
         last_name = request.POST.get('lastName')
-
         email = request.POST.get('emailAddress')
         password = request.POST.get('password')
         confirma_password = request.POST.get('confirma_password')
-
         required_filed = {
            
             'First Name':first_name,
@@ -176,10 +174,7 @@ def register_page(request):
                 messages.error(request,f" {i} field is Required",extra_tags="custom-success-style")
                 return redirect('register_page')
         
-        # email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        # if not re.match(email_regex, email):
-        #     messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style") 
-        #     return redirect('register_page')
+
        
         if Registration.objects.filter(username=username).exists():
                 messages.error(request,'Username Alredy Exist',extra_tags="custom-success-style")
