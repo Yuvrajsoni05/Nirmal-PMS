@@ -11,3 +11,52 @@ ERROR 2025-09-11 19:09:26,801 myapp login_page Invalid Username and Password vie
 ERROR 2025-09-11 19:09:27,089 myapp login_page Invalid Username and Password views.py
 ERROR 2025-09-11 19:09:27,230 myapp login_page Invalid Username and Password views.py
 ERROR 2025-09-11 19:12:53,603 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 11:17:29,769 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:01:43,890 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:00,150 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:01,776 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:01,968 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:02,053 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:02,178 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:02,309 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:02,428 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:02,573 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:02,773 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:02,804 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 13:02:14,738 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-15 15:19:59,666 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,696 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,726 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,757 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,781 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,807 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,832 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,858 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,885 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,914 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,940 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,966 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:19:59,991 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:00,018 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:00,043 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:00,071 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:00,103 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:00,128 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:00,154 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:00,181 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,341 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,365 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,391 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,418 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,446 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,475 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,504 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,536 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,566 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,597 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:01,625 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:12,196 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:12,227 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:12,254 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:12,281 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-15 15:20:12,317 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py

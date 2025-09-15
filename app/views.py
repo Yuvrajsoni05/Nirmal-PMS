@@ -1,13 +1,11 @@
 import random
 from django.shortcuts import get_object_or_404, render,redirect
-from django.core.validators import EmailValidator
-from django.core.exceptions import ValidationError
+
 from django.views.decorators.cache import cache_control
 from django.views.decorators.cache import cache_control, never_cache
 from django.db.models.signals import pre_delete
 from datetime import datetime, timedelta
-from dateutil.relativedelta import relativedelta
-from app.templatetags.custom_tags import remove_white
+
 from app.models import Job_detail
 
 # from app.views import update_job
@@ -17,8 +15,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout 
 import requests 
-from django.contrib.auth import update_session_auth_hash
-# from googleapiclient.http import MediaFileUpload
+
+
 import json
 from decimal import Decimal
 from django.core.paginator import Paginator
@@ -27,22 +25,18 @@ from django.contrib.sessions.models import Session
 from django.utils.timezone import now
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+import logging
 
 from django.db.models import Q
 from django.db.models import Sum
-import tempfile
+
 #  google
 from django.core.mail import send_mail
 from django.http import JsonResponse
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-from googleapiclient.http import MediaIoBaseUpload
-import mimetypes
-import io
 import re
-import pickle
-from django.core.mail import EmailMessage
 
+from django.core.mail import EmailMessage
+from .decorators import *
 
 #Password
 
@@ -62,7 +56,7 @@ from django.conf import settings
 
 
 #Lecco ai
-#Cokkeies in  Django Ssstion in django
+#Cookies in  Django Section in django
 
 
 class CustomPasswordResetView(PasswordResetView):
@@ -84,7 +78,6 @@ def password_reset_done(request):
     return render(request,'Password/password_update_done.html')
 
     
-import logging
 
 logger = logging.getLogger("myapp")
 # SERVICE_ACCOUNT_FILE = os.path.join(settings.BASE_DIR, 'app', 'Google', 'credentials.json')
@@ -117,13 +110,6 @@ def login_page(request):
     return render(request, 'Registration/login_page.html')  
 
 
-# def usernmae_validator(username):
-#     if len(username) < 3 or len(username) > 12:
-#         return "Username must be between 3 and 12 character"
-
-
-
-
 def email_validator(email):
     email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     if not re.match(email_regex,email):       
@@ -151,16 +137,14 @@ def validator_password(password):
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
 def register_page(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
-    
+
     if request.method == 'POST':
         username = request.POST.get('username')
         first_name = request.POST.get('firstName')
         last_name = request.POST.get('lastName')
         email = request.POST.get('emailAddress')
         password = request.POST.get('password')
-        confirma_password = request.POST.get('confirma_password')
+        confirm_password = request.POST.get('confirma_password')
         required_filed = {
            
             'First Name':first_name,
@@ -177,11 +161,11 @@ def register_page(request):
 
        
         if Registration.objects.filter(username=username).exists():
-                messages.error(request,'Username Alredy Exist',extra_tags="custom-success-style")
+                messages.error(request,'Username Already Exist',extra_tags="custom-success-style")
                 return redirect('register_page')
             
         if Registration.objects.filter(email=email).exists():
-            messages.error(request,"Email is Alredy Exist",extra_tags="custom-success-style")
+            messages.error(request,"Email is Already Exist",extra_tags="custom-success-style")
             return redirect('register_page')
         
         email_error  = email_validator(email)
@@ -192,7 +176,7 @@ def register_page(request):
         password_error = validator_password(password)
         if password_error:
             messages.error(request,password_error,extra_tags="custom-success-style")
-            if password != confirma_password:
+            if password != confirm_password:
                 messages.error(request,'Password Confirm Password must be same',extra_tags="custom-success-style")
                 return redirect('register_page')
 
@@ -212,9 +196,9 @@ def register_page(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)
+@custom_login_required
 def edit_user_page(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     user_info = Registration.objects.exclude(is_superuser=True).exclude(id=request.user.id).order_by('username')
     context = {
         'users':user_info
@@ -224,9 +208,9 @@ def edit_user_page(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)
+@custom_login_required
 def delete_user(request,user_id):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     if request.method == 'POST':
         
         Delete_user = get_object_or_404(Registration,id = user_id)
@@ -239,9 +223,9 @@ def delete_user(request,user_id):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)    
+@custom_login_required
 def update_user(request, user_id):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     
     try:
         if request.method == 'POST':
@@ -257,7 +241,7 @@ def update_user(request, user_id):
             #     return redirect('edit_user_page')
             
         
-            print(user_id)
+            # print(user_id)
             required_fields = {
                 'Username': username,
                 'Firstname': first_name,
@@ -285,8 +269,6 @@ def update_user(request, user_id):
             if email != update_user.email and Registration.objects.filter(email=email).exists():
                 messages.error(request, "Email already exists.", extra_tags="custom-success-style")
                 return redirect('edit_user_page')
-
-        
                 
             required_fields = {
                 'Username': username,
@@ -311,7 +293,7 @@ def update_user(request, user_id):
             logout_user = Registration.objects.get(id=user_id)
             for session in Session.objects.all():
                 session_data = session.get_decoded()
-                print(session_data)
+                # print(session_data)
                 if str(session_data.get('_auth_user_id')) == str(logout_user.id):
                     session.delete()
             update_user.save()
@@ -319,17 +301,17 @@ def update_user(request, user_id):
             return redirect('edit_user_page')
     except Exception as e:
         messages.error(request,f"Something went wrong",extra_tags="custom-success-style")
-        logger.error(f"Invalid Username and Password {e}")
+        # logger.error(f"Invalid Username and Password {e}")
         return redirect('edit_user_page')
         
         
         
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
+@custom_login_required
 @login_required(redirect_field_name=None)
 def dashboard_page(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     try:
 
         get_q = request.GET.get('q','')
@@ -345,24 +327,25 @@ def dashboard_page(request):
 
         db_sqlite3  = Job_detail.objects.all()
 
-        total_purchse_floats = [] 
-        total_purchse = Job_detail.objects.values_list('prpc_purchase') 
-        for i in total_purchse:
-            data_string = i[0]  
-            cleaned_string = data_string.replace(",", "")
-            float_value = float(cleaned_string)
-            total_purchse_floats.append(float_value)
-        total_purchase = sum(total_purchse_floats)
-
-        total_sell_floats = []
-        total_sell = Job_detail.objects.values_list('prpc_sell')
-        for  i in total_sell:
-            sell_data = i[0]
-            cleaned_data = sell_data.replace(",","")
-            sell_float = float(cleaned_data)
-            total_sell_floats.append(sell_float)
+        # total_purchase_floats = [] 
+        # total_purchse = Job_detail.objects.values_list('prpc_purchase') 
         
-        total_sales =  sum(total_sell_floats)
+        # for i in total_purchse:
+        #     data_string = i[0]  
+        #     cleaned_string = data_string.replace(",", "")
+        #     float_value = float(cleaned_string)
+        #     total_purchase_floats.append(float_value)
+        # total_purchase = sum(total_purchase_floats)
+
+        # total_sell_floats = []
+        # total_sell = Job_detail.objects.values_list('prpc_sell')
+        # for  i in total_sell:
+        #     sell_data = i[0]
+        #     cleaned_data = sell_data.replace(",","")
+        #     sell_float = float(cleaned_data)
+        #     total_sell_floats.append(sell_float)
+        
+        # total_sales =  sum(total_sell_floats)
       
         filters = Q()
         if get_q:
@@ -384,15 +367,7 @@ def dashboard_page(request):
         job_status = Job_detail.objects.values('job_status').distinct()
         
         
-        columns = {
-            'job_name_sorting':job_name_sorting,
-            'date_sorting':date_sorting,
-            'cylinder_date_sorting':cylinder_date_sorting,
-            'company_name_sorting':company_name_sorting,
-            'cylinder_made_in_sorting':cylinder_made_in_sorting,
-            'sorting':sorting
-            
-        }
+   
         if job_name_sorting == 'asc':
             db_sqlite3 = db_sqlite3.order_by('job_name')
         elif job_name_sorting == 'desc':
@@ -427,8 +402,8 @@ def dashboard_page(request):
         count_of_company =  company_name.count()
        
         cylinder_company_names = CylinderMadeIn.objects.all()
-        totla_active_job = Job_detail.objects.filter(job_status='In Progress').count()
-        count_of_cylinder_compnay = cylinder_company_names.count() 
+        total_active_job = Job_detail.objects.filter(job_status='In Progress').count()
+        count_of_cylinder_company = cylinder_company_names.count() 
         nums = " " * datas.paginator.num_pages  
       
         context = {
@@ -438,17 +413,17 @@ def dashboard_page(request):
             'company_name': company_name,
             'cylinder_company_names': cylinder_company_names,
             'count_of_company':count_of_company,
-            'count_of_cylinder_compnay':count_of_cylinder_compnay,
-            'total_sales':total_sales,
+            'count_of_cylinder_company':count_of_cylinder_company,
+            # 'total_sales':total_sales,
             'datas':datas,                                                                                                              
-            'total_purchase':total_purchase,
+            # 'total_purchase':total_purchase,
             'sorting': sorting,
             'company_name_sorting':company_name_sorting,
             'job_name_sorting':job_name_sorting,
             'date_sorting':date_sorting,
             'cylinder_date_sorting':cylinder_date_sorting,
             'cylinder_made_in_sorting':cylinder_made_in_sorting,
-            'totla_active_job':totla_active_job,
+            'total_active_job':total_active_job,
             'job_status':job_status,
         }
     except Exception as e:
@@ -462,9 +437,9 @@ def dashboard_page(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)   
+@custom_login_required
 def delete_data(request,delete_id):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     try:
         
         folder_url = Job_detail.objects.values('folder_url').all().get(id=delete_id)
@@ -505,6 +480,7 @@ def delete_data(request,delete_id):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)  
+@custom_login_required
 def base_html(request):
     return render(request,'Base/base.html')
 
@@ -512,17 +488,17 @@ def base_html(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)
+@custom_login_required
 def data_entry(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     # cdr_company_name = CDRDetail.objects.values('company_name').distinct()
     
-    comapny_name = CompanyName.objects.values('company_name').union(CDRDetail.objects.values('company_name'))
-    print(comapny_name)
+    company_name = CompanyName.objects.values('company_name').union(CDRDetail.objects.values('company_name'))
+    print(company_name)
     cylinder_company_names = CylinderMadeIn.objects.all()
     cdr_job_name = CDRDetail.objects.values('job_name').distinct()
     context =  {
-        'comapany_name':comapny_name ,
+        'company_name':company_name ,
         'cylinder_company_names':cylinder_company_names,
         'cdr_job_name':cdr_job_name
     }
@@ -626,6 +602,7 @@ def data_entry(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)
+@custom_login_required
 def add_job(request):
 
     try:
@@ -713,7 +690,7 @@ def add_job(request):
                     messages.error(request,'Plz Provide Job Name')
                     return redirect('data-entry')
                 if Job_detail.objects.filter(job_name__icontains=new_job_name).exists():
-                    messages.error(request,"Job Name Alredy Exists",extra_tags='custom-success-style')
+                    messages.error(request,"Job Name Already Exists",extra_tags='custom-success-style')
                     return redirect('data_entry')
                 else:
                     job_name = new_job_name
@@ -725,7 +702,7 @@ def add_job(request):
             if new_company != '':
        
                 if CompanyName.objects.filter(company_name__icontains=new_company).exists():
-                    messages.error(request,"Company Name Alredy Exists",extra_tags='custom-success-style')
+                    messages.error(request,"Company Name Already Exists",extra_tags='custom-success-style')
                     return redirect('data_entry')
                 add_company = CompanyName.objects.create(
                     company_name=new_company
@@ -738,7 +715,7 @@ def add_job(request):
 
             if new_cylinder_company_name != '':
                 if CylinderMadeIn.objects.filter(cylinder_made_in__icontains = new_cylinder_company_name).exists():
-                    messages.error(request,"Company Name Alredy Exists",extra_tags='custom-success-style')
+                    messages.error(request,"Company Name Already Exists",extra_tags='custom-success-style')
                     return redirect('data_entry')
                 add_new_cylinder_company = CylinderMadeIn.objects.create(
                     cylinder_made_in = new_cylinder_company_name
@@ -809,7 +786,7 @@ def add_job(request):
                     image = file
                 )
             job_data.save()
-            messages.success(request,"Data  successfully Add on dbsqlite 3")
+            messages.success(request,"Data  successfully Add on sqlite 3")
             return redirect('dashboard_page')
         except Exception :
             job_data = Job_detail.objects.create(
@@ -949,9 +926,9 @@ def add_job(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)    
+@custom_login_required
 def  update_job(request,update_id):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     try:
         if request.method == 'POST':
             date =  request.POST.get('date')
@@ -1014,7 +991,7 @@ def  update_job(request,update_id):
         
         if date != date_formatte:
             if Job_detail.objects.filter(date = date, job_name = job_name).exists() :
-                messages.error(request,"Job is Alredy exists from this date ",extra_tags="custom-success-style")
+                messages.error(request,"Job is Already exists from this date ",extra_tags="custom-success-style")
                 return redirect('dashboard_page')
 
         if len(files) > 2:
@@ -1128,9 +1105,9 @@ def  update_job(request,update_id):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
+@custom_login_required
 def user_logout(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     try:
         logout(request)
         request.session.clear()
@@ -1142,17 +1119,17 @@ def user_logout(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
+@custom_login_required
 def profile_page(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     return render(request,'profile.html')
 
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
+@custom_login_required
 def update_profile(request,users_id):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     try:
         update_profile = get_object_or_404(Registration,id=users_id)
         if request.method == 'POST':
@@ -1176,11 +1153,11 @@ def update_profile(request,users_id):
                 return redirect('profile_page')
             
         if email !=  update_profile.email and Registration.objects.filter(email=email).exists():
-            messages.error(request,"Email alredy exists" ,extra_tags="custom-success-style")
+            messages.error(request,"Email already exists" ,extra_tags="custom-success-style")
             return redirect('profile_page')
         
         if username !=  update_profile.username and Registration.objects.filter(username=username).exists():
-            messages.error(request,"Username alredy exists",extra_tags="custom-success-style")
+            messages.error(request,"Username already exists",extra_tags="custom-success-style")
             return redirect('profile_page')
         
         
@@ -1207,9 +1184,9 @@ def update_profile(request,users_id):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
+@custom_login_required
 def user_password(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     if request.method == 'POST':
         
         old_password = request.POST.get('old_password','').strip()
@@ -1240,11 +1217,11 @@ def user_password(request):
      
                 
         if old_password == new_password:
-            messages.error(request,"Your Current Passsword or New Password will same Add some Diffrent",extra_tags='custom-success-style')
+            messages.error(request,"Your Current Password or New Password will same Add some Different",extra_tags='custom-success-style')
             return redirect('profile_page')
 
         if new_password != confirm_password:
-            messages.error(request,"new password or confirm Passworsd Must be same ",extra_tags='custom-success-style')
+            messages.error(request,"new password or confirm Passwords Must be same ",extra_tags='custom-success-style')
             return redirect("profile_page")
         
         user_password.set_password(new_password)
@@ -1258,13 +1235,14 @@ def user_password(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
+@custom_login_required
 def cdr_page(request):
     
     search = request.GET.get('search',' ').strip()
     date = request.GET.get('date','').strip()
     end_date = request.GET.get('end_date','').strip()
     print(date)
-    companay_name_sorting = request.GET.get('company_name_sorting','')
+    company_name_sorting = request.GET.get('company_name_sorting','')
     job_name_sorting = request.GET.get('job_name_sorting','')
     date_sorting = request.GET.get('date_sorting','')
     sorting = request.GET.get('sorting','')
@@ -1291,9 +1269,9 @@ def cdr_page(request):
         cdr_data = CDRDetail.objects.filter(Q(date__icontains =  end_date))
         
     order_by = ''
-    if companay_name_sorting == 'asc':
+    if company_name_sorting == 'asc':
         order_by = 'company_name'
-    elif companay_name_sorting == 'desc':
+    elif company_name_sorting == 'desc':
         order_by = '-company_name'
     elif job_name_sorting == 'asc':
         order_by = 'job_name'
@@ -1354,7 +1332,7 @@ def cdr_add(request):
         
             
             
-
+        
         if not job_name or not cdr_upload_date:
             messages.error(request, "Job name and upload date are required.", extra_tags='custom-error-style')
             return redirect('company_add_page')
@@ -1364,9 +1342,13 @@ def cdr_add(request):
 
         if new_company_email != '':
             company_email = new_company_email 
+           
+           
         if new_company_name != '':
             company_name = new_company_name  
 
+        
+        
         
         
         required_filed = {
@@ -1402,7 +1384,7 @@ def cdr_add(request):
             
         
         if CompanyName.objects.filter(company_name__icontains = company_name).exists():
-            print("Compnay Alredy Exsits")
+            print("Company Already Exists")
         else:
             company_add_in = CompanyName.objects.create(
                 company_name = company_name
@@ -1497,6 +1479,7 @@ def cdr_add(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
+@custom_login_required
 def cdr_delete(request,delete_id):
     url = os.environ.get('DELETE_WEBHOOK_CDR')
     folder_url = CDRDetail.objects.get(id=delete_id).file_url
@@ -1542,6 +1525,7 @@ def cdr_delete(request,delete_id):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
+@custom_login_required
 def cdr_update(request,update_id):
     
     id = update_id
@@ -1587,7 +1571,7 @@ def cdr_update(request,update_id):
         print(str(email_string))
         
         if company_email ==  email_string:
-            print("No Chnage")
+            print("No Change")
         else:
             CDRDetail.objects.filter(company_email=email_string).update(company_email=company_email)     
         url = os.environ.get('UPDATE_WEBHOOK_CDR')
@@ -1633,7 +1617,7 @@ def cdr_update(request,update_id):
                         image = file
                     )
                 update_details.save()
-                messages.success(request,'Data Update Successfullyss')
+                messages.success(request,'Data Update Successfully')
                 return redirect('company_add_page')
             
     return redirect('company_add_page')
@@ -1645,9 +1629,9 @@ from django.core.mail import EmailMultiAlternatives
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
+@custom_login_required
 def cdr_sendmail_data(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     if request.method == 'POST':
         date = request.POST.get('date'," ")
         cdr_company_name = request.POST.get('cdr_company_name'," ")
@@ -1728,9 +1712,9 @@ def cdr_sendmail_data(request):
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
+@custom_login_required
 def send_mail_data(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
+    
     if request.method == 'POST':
         date_check = request.POST.get('date_check')
         date = request.POST.get('date',"")
@@ -1766,37 +1750,6 @@ def send_mail_data(request):
         prpc_sell = ''
     else:
         prpc_sell = prpc_sell
-    
-    # if 'prpc_sell_check' in request.POST:
-        
-    #     is_checked = True   
-    #     prpc_sell = prpc_sell
-    # else:
-    #     is_checked = False
-    #     prpc_sell = ''
-    
-
-    # print(prpc_sell)
-    # print(date,bill_no,company_name,company_email_address,job_name,noc,prpc_sell,cylinder_size,pouch_size,pouch_open_size,correction)
-    # print(attachments)
-    # required_field = {
-    #                 'Date' :date,
-    #                 'Bill no':bill_no,
-    #                 'Company_Name': company_name,
-    #                 'job name' : job_name,
-    #                 'Noc':noc,
-    #                 'Cylinder Size':cylinder_size,
-    #                 'Pouch size':pouch_size,
-    #                 'Prpc Sell':prpc_sell,
-    #                 'Pouch Open Size':pouch_open_size,
-    #                 'Company Email Address':company_email_address , 
-                    
-    #         }
-    
-    # for i ,r in required_field.items(): 
-    #     if not  r:
-    #         messages.error(request,f"This {i} Field Was Required",extra_tags="custom-success-style")
-    #         return redirect('dashboard_page')
     
     
     if company_email_address == '' or company_email_address == None:
