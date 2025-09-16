@@ -229,50 +229,73 @@ nav[aria-label="Page navigation example"] {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        /* Sticky Left Column (Sr No) */
-        th.sticky-left,
-        td.sticky-left {
-        position: sticky;
-        left: 0;
-        background: white; /* or your table bg */
-        z-index: 2;
-       
-        }
+    /* Sticky Left Column (Sr No) */
+th.sticky-left,
+td.sticky-left {
+    position: sticky;
+    left: 0;
+    background: white; /* Or your table bg */
+    z-index: 2;
+}
 
-        /* Sticky Right Column (Last Column) */
-        th.sticky-right,
-        td.sticky-right {
-        position: sticky;
-        right: 0;
-        background: white; /* or your table bg */
-        z-index: 2;
+/* Sticky Right Column (Last Column) */
+th.sticky-right,
+td.sticky-right {
+    position: sticky;
+    right: 0;
+    background: white; /* Or your table bg */
+    z-index: 2;
+}
 
-        }
+/* Optional: Add shadow to indicate it's sticky */
+th.sticky-left::after,
+td.sticky-left::after {
+    content: "";
+    position: absolute;
+    right: -6px;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+   
+    pointer-events: none;
+}
 
-        /* Optional: Add shadow to indicate it's sticky */
-        th.sticky-left::after,
-        td.sticky-left::after {
-        content: "";
-        position: absolute;
-        right: -6px;
-        top: 0;
-        bottom: 0;
-        width: 6px;
-        
-        pointer-events: none;
-        }
+th.sticky-right::before,
+td.sticky-right::before {
+    content: "";
+    position: absolute;
+    left: -6px;
+    top: 0;
+    bottom: 0;
+    width: 6px;
 
-        th.sticky-right::before,
-        td.sticky-right::before {
-        content: "";
-        position: absolute;
-        left: -6px;
-        top: 0;
-        bottom: 0;
-        width: 6px;
-      
-        pointer-events: none;
-        }
+    pointer-events: none;
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    /* Disable sticky behavior on mobile */
+    th.sticky-left,
+    td.sticky-left,
+    th.sticky-right,
+    td.sticky-right {
+        position: static; /* Disable sticky */
+    }
+
+    /* Optional: Adjust padding for readability */
+    th, td {
+        padding: 10px;
+    }
+    
+    /* You might want to stack columns in a more vertical layout on small screens */
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto; /* Enable horizontal scrolling */
+        white-space: nowrap;
+    }
+}
+
 
 
      

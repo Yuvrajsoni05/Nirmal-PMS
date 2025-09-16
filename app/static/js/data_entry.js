@@ -737,41 +737,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-$("#company_name").change(function () {
-    let companyName = $(this).val();
-    if (companyName) {
-        $.ajax({
-            url: '{% url "company_name_suggestion_job" %}',
-            data: { company_name: companyName },
-            success: function (data) {
-                $("#job_name")
-                    .empty()
-                    .append('<option value="">Select Job</option>');
-                $("#job_name").append('<option value="others">Other</option>');
 
-                $.each(data.jobs, function (index, job) {
-                    $("#job_name").append(
-                        '<option value="' +
-                        
-                            job.job_name +
-                            '">' +
-                            job.job_name +
-                            "</option>"
-                    );
-                });
-                $.each(data.email, function (index, email) {
-                    $("#company_email").append(
-                        '<option value="' +
-                            email.company_email +
-                            '">' +
-                            email.company_email +
-                            "</option>"
-                    );
-                });
-            },
-        });
-    } else {
-        $("#job_name").empty().append('<option value="">Select Job</option>');
-        $("#job_name").empty().append('<option value="others">Other</option>');
-    }
-});

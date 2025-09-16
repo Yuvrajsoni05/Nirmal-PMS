@@ -314,7 +314,41 @@
   {% endblock main_block %}
  {% block script %}
 
+<script>$("#company_name").change(function () {
+    let companyName = $(this).val();
+    if (companyName === "other") {
+        $("#new_company").show();
+    } else {
+        $("#new_company").hide();
+    }
 
+    // Existing AJAX call for company name
+    if (companyName) {
+        $.ajax({
+            url: '{% url "company_name_suggestion_job" %}',
+            data: { company_name: companyName },
+            success: function (data) {
+                $("#job_name")
+                    .empty()
+                    .append('<option value="">Select Job</option>');
+                $("#job_name").append('<option value="others">Other</option>');
+
+                $.each(data.jobs, function (index, job) {
+                    $("#job_name").append(
+                        '<option value="' +
+                            job.job_name +
+                            '">' +
+                            job.job_name +
+                            "</option>"
+                    );
+                });
+            },
+        });
+    } else {
+        $("#job_name").empty().append('<option value="">Select Job</option>');
+        $("#job_name").empty().append('<option value="others">Other</option>');
+    }
+});</script>
 <script src="{% static 'js/data_entry.js' %}"></script>
 
 {% endblock script %}

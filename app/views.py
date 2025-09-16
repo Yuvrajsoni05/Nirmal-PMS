@@ -1839,27 +1839,47 @@ def company_name_suggestion_job(request):
     
     
     if company_name:
-        # jobs = list(
-        #     Job_detail.objects.filter(company_name__iexact=company_name)
-        #     .values('job_name').distinct()
-        # )
+        jobs = list(
+            Job_detail.objects.filter(company_name__iexact=company_name)
+            .values('job_name').distinct()
+        )
         job_detail = Job_detail.objects.filter(company_name__iexact=company_name).values('job_name').distinct()
-        # print(job_detail)
         cdr_job = CDRDetail.objects.filter(company_name__iexact=company_name).values('job_name').distinct()
-        # print(cdr_job)
- 
         jobs = list(job_detail.union(cdr_job))
 
+        return JsonResponse({'jobs': jobs})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
-        # for _ in job_detail:
-        #     if _ not in cdr_job:
-        #         cdr_job.append(job_detail)
-        # print(cdr_job)
+
+# Django Class Base View
+
+def function_name(demo,*args):
+    
+    print(demo)
+
+function_name()
+
 
 
         
-        return JsonResponse({'jobs': jobs})
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         
 # def job_detail_print(request,job_id):
 #     print(job_id)
