@@ -79,70 +79,66 @@
                 </div>
 
                 <!-- Change Password Tab -->
-                <div class="tab-pane fade" id="profile-change-password" role="tabpanel">
-    <form method="post" autocomplete="off" id="password_form" action="{% url 'update_password' %}">
-        {% csrf_token %}
-        <div class="row g-3">
+                    <div class="tab-pane fade" id="profile-change-password" role="tabpanel">
+                        <form method="post" autocomplete="off" id="password_form" action="{% url 'update_password' %}">
+                            {% csrf_token %}
+                            <div class="row g-3">
 
-            <!-- Current Password -->
-            <div class="col-12 position-relative">
-                <label for="old_password" class="form-label fw-semibold text-dark">Current Password</label>
-                <div class="input-group">
-                    <input name="old_password" type="password" class="form-control" id="old_password" placeholder="Old Password" required>
-                    <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('old_password', this)">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                </div>
-                <div style="color:red" id="password_error">{{ error }}</div>
-            </div>
+                                <!-- Current Password -->
+                                <div class="col-12 position-relative">
+                                    <label for="old_password" class="form-label fw-semibold text-dark">Current Password</label>
+                                    <div class="input-group">
+                                        <input name="old_password" type="password" class="form-control" id="old_password" placeholder="Old Password" required>
+                                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('old_password', this)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div style="color:red" id="password_error">{{ error }}</div>
+                                </div>
 
-            <!-- New Password -->
-            <div class="col-12 position-relative">
-                <label for="new_password" class="form-label fw-semibold text-dark">New Password</label><span style="color:red;"> *</span>
-                <div class="input-group">
-                    <input name="new_password" type="password" minlength="8" maxlength="20" class="form-control" id="new_password" placeholder="New Password" >
-                    <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('new_password', this)">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                </div>
-                <div class="invalid-feedback" id="new_password_error">Please provide a First Name.</div>
+                                <!-- New Password -->
+                                <div class="col-12 position-relative">
+                                    <label for="new_password" class="form-label fw-semibold text-dark">New Password</label><span style="color:red;"> *</span>
+                                    <div class="input-group">
+                                        <input name="new_password" type="password" minlength="8" maxlength="20" class="form-control" id="new_password" placeholder="New Password" >
+                                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('new_password', this)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback" id="new_password_error">Please provide a First Name.</div>
 
-            </div>
+                                </div>
 
-            <!-- Confirm Password -->
-            <div class="col-12 position-relative">
-                <label for="confirm_password" class="form-label fw-semibold text-dark">Re-enter New Password</label><span style="color:red;"> *</span>
-                <div class="input-group">
-                    <input name="confirm_password" type="password" minlength="8" maxlength="20" class="form-control" id="confirm_password" placeholder="Confirm Password" >
-                    <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirm_password', this)">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                </div>
-                <div class="invalid-feedback" id="confirm_password_error">Please provide A Confirm Password</div>
+                                <!-- Confirm Password -->
+                                <div class="col-12 position-relative">
+                                    <label for="confirm_password" class="form-label fw-semibold text-dark">Re-enter New Password</label><span style="color:red;"> *</span>
+                                    <div class="input-group">
+                                        <input name="confirm_password" type="password" minlength="8" maxlength="20" class="form-control" id="confirm_password" placeholder="Confirm Password" >
+                                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirm_password', this)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback" id="confirm_password_error">Please provide A Confirm Password</div>
 
-            </div>
+                                </div>
 
-            <!-- Submit Button -->
-            <div class="col-12">
-                <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
-                    <button type="submit" class="btn btn-primary px-4">
-                        <i class="bi bi-key me-2"></i>Change Password
-                    </button>
-                    <a href="{% url 'profile_page' %}">
-                        <button type="button" name="reset" class="btn btn-secondary" data-mdb-ripple-init>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
-                                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
-                            </svg>&nbsp; Reset
-                        </button>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-    </form>
-</div>
-
+                                <!-- Submit Button -->
+                                <div class="col-12">
+                                    <div class="d-flex flex-column flex-sm-row gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-key me-2"></i>Change Password
+                                        </button>
+                                        <a href="{% url 'profile_page' %}">
+                                            <button type="button" name="reset" class="btn btn-secondary" data-mdb-ripple-init>
+                                            <i class="fa fa-undo" aria-hidden="true"></i>
+                                                &nbsp; Reset
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
             </div>
         </div>
     </div>

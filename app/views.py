@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render,redirect
 from django.views.decorators.cache import cache_control
 from django.views.decorators.cache import cache_control, never_cache
 from django.db.models.signals import pre_delete
+from django.template.context_processors import request
 from datetime import datetime, timedelta
 
 from app.models import Job_detail
@@ -1171,7 +1172,6 @@ def update_profile(request,users_id):
         update_profile.first_name = first_name
         update_profile.email = email
         update_profile.save()
-        
         messages.success(request,"Profile Will Updated",)
         return redirect('profile_page')
     except Exception:
@@ -1186,50 +1186,46 @@ def update_profile(request,users_id):
 @login_required(redirect_field_name=None)
 @custom_login_required
 def user_password(request):
-    
-    if request.method == 'POST':
+    try:
         
-        old_password = request.POST.get('old_password','').strip()
-        new_password = request.POST.get('new_password','').strip()
-        confirm_password = request.POST.get('confirm_password','').strip()
-        
-        
-        if old_password == ''  or old_password == None:
-            error = "Please provide Old Password."
-            return render (request,'profile.html',context={'error':error})
+        if request.method == 'POST':
+            old_password = request.POST.get('old_password','').strip()
+            new_password = request.POST.get('new_password','').strip()
+            confirm_password = request.POST.get('confirm_password','').strip()
             
-        user_password = request.user
-        if not user_password.check_password(old_password):
-            messages.error(request,'Old Password is Incorrect',extra_tags='custom-success-style')
-            return redirect('profile_page')
-        
-        
-        
-        if new_password == ''  or new_password == None:
-            errors = "Please provide New Password."
-            return render (request,'profile.html',context={'errors':errors})
-
-        password_error = validator_password(new_password)
-        if password_error:
-            messages.error(request,password_error,extra_tags="custom-success-style")
-            return redirect('profile_page') 
-        
-     
+            if old_password == ''  or old_password == None:
+                error = "Please provide Old Password."
+                return render (request,'profile.html',context={'error':error})
                 
-        if old_password == new_password:
-            messages.error(request,"Your Current Password or New Password will same Add some Different",extra_tags='custom-success-style')
-            return redirect('profile_page')
+            user_password = request.user
+            if not user_password.check_password(old_password):
+                messages.error(request,'Old Password is Incorrect',extra_tags='custom-success-style')
+                return redirect('profile_page')
+            
+            if new_password == ''  or new_password == None:
+                errors = "Please provide New Password."
+                return render (request,'profile.html',context={'errors':errors})
 
-        if new_password != confirm_password:
-            messages.error(request,"new password or confirm Passwords Must be same ",extra_tags='custom-success-style')
-            return redirect("profile_page")
-        
-        user_password.set_password(new_password)
-        user_password.save()
-        # messages.success(request,'Password Updated Successfully',)
-        print("Password Update")
-        # update_session_auth_hash(request,user_password)
-        return redirect('login_page')
+            password_error = validator_password(new_password)
+            if password_error:
+                messages.error(request,password_error,extra_tags="custom-success-style")
+                return redirect('profile_page') 
+                    
+            if old_password == new_password:
+                messages.error(request,"Your Current Password or New Password will same Add some Different",extra_tags='custom-success-style')
+                return redirect('profile_page')
+
+            if new_password != confirm_password:
+                messages.error(request,"new password or confirm Passwords Must be same ",extra_tags='custom-success-style')
+                return redirect("profile_page")
+            
+            user_password.set_password(new_password)
+            user_password.save()
+
+            return redirect('login_page')
+    except Exception as e:
+        messages.warning(request,"Something went wrong")
+        return redirect('profile_page')
     
     
 @never_cache
@@ -1246,7 +1242,6 @@ def cdr_page(request):
     job_name_sorting = request.GET.get('job_name_sorting','')
     date_sorting = request.GET.get('date_sorting','')
     sorting = request.GET.get('sorting','')
-    
 
     cdr_data = CDRDetail.objects.all()
     if search and date:
@@ -1312,7 +1307,6 @@ def cdr_page(request):
         'cdr_email':cdr_emails,
         'cdr_company_name':cdr_company_name,
         'cdr_job_names':cdr_job_name,
-        
     }
     return render(request,'CDR/cdr_page.html',context)
 
@@ -1328,11 +1322,7 @@ def cdr_add(request):
         new_company_name = request.POST.get('new_company_name','').strip()
         new_company_email = request.POST.get('new_company_email','').strip()
         new_job_name =  request.POST.get('new_job_name','').strip()
-        
-        
-            
-            
-        
+
         if not job_name or not cdr_upload_date:
             messages.error(request, "Job name and upload date are required.", extra_tags='custom-error-style')
             return redirect('company_add_page')
@@ -1738,8 +1728,7 @@ def send_mail_data(request):
         date = ''
     else:
         date = date 
-    
-    
+
     
     if correction_check == None or correction_check == '':
         correction = ''
@@ -1760,12 +1749,7 @@ def send_mail_data(request):
     if not re.match(email_regex, company_email_address):
         messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style")
         return redirect('dashboard_page')
-    
-     
-    
-    
-    # ValidateImage = [".jpeg", ".jpg", ".png" ,".ai"]
-    # for file in attachments:
+
     total_attachment_size = sum(f.size for f in attachments)
     print(total_attachment_size)
     MAX_SIZE_MB = 25
@@ -1790,8 +1774,7 @@ def send_mail_data(request):
 
         }
     
-    print(job_info)
-    
+
     receiver_email = company_email_address
     template_name  = "Base/send_email.html"
     convert_to_html_content =  render_to_string(
@@ -1800,7 +1783,7 @@ def send_mail_data(request):
 
     )
     email = EmailMultiAlternatives(
-    subject="Mail From Nirmal Ventuers",
+    subject="Mail From Nirmal Ventures",
     body='plain_message',
     from_email=request.user.email,
     to=[receiver_email],
@@ -1853,11 +1836,11 @@ def company_name_suggestion_job(request):
 
 # Django Class Base View
 
-def function_name(demo,*args):
+# def function_name(demo,*args):
     
-    print(demo)
+#     print(demo)
 
-function_name()
+# function_name()
 
 
 
@@ -2155,4 +2138,6 @@ function_name()
 #             'email': email,
 #             'jobs': jobs
 #         })
-#     return JsonResponse({'error': 'Invalid request'}, status=400)
+#     return JsonResponse({'error': 'Invalid request'}, status=400)import random
+
+# The variable 'items' is provided by n8n and is a list of dicts.
