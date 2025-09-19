@@ -32,6 +32,8 @@ from django.db.models import Q
 from django.db.models import Sum
 
 #  google
+
+#mail
 from django.core.mail import send_mail
 from django.http import JsonResponse
 import re
@@ -744,10 +746,9 @@ def add_job(request):
 
         try:
             url = os.environ.get('CREATE_WEBHOOK_JOB')
-            print(url)
-            print(url)
+   
             response = requests.post(f'{url}',data=data,files=file_dic)
-            print(response.status_code)
+      
      
             
             if response.status_code == 200:
@@ -816,7 +817,7 @@ def add_job(request):
                     image=file_obj
                 )
             job_data.save()
-            messages.success(request,"Data  successfully Add ")
+            messages.success(request,"Data successfully Add ")
             return redirect('dashboard_page')
     
     except Exception as e:

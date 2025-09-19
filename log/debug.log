@@ -60,3 +60,17 @@ ERROR 2025-09-15 15:20:12,227 myapp dashboard_page wrong in Dashboard page name 
 ERROR 2025-09-15 15:20:12,254 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
 ERROR 2025-09-15 15:20:12,281 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
 ERROR 2025-09-15 15:20:12,317 myapp dashboard_page wrong in Dashboard page name 'total_sales' is not defined views.py
+ERROR 2025-09-19 11:25:52,488 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 11:26:05,899 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 11:26:16,139 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 15:23:45,149 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 15:23:54,121 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 15:24:05,688 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 15:24:13,694 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 15:24:21,679 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 16:14:55,730 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 16:15:07,541 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 16:25:52,215 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 16:58:23,231 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 16:58:29,610 myapp login_page Invalid Username and Password views.py
+ERROR 2025-09-19 17:01:32,743 myapp login_page Invalid Username and Password views.py

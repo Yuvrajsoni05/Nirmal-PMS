@@ -142,9 +142,6 @@
                       <p>Please login to your account</p>
                 </div>
 
-                
-              
-
                   <div data-mdb-input-init class="form-outline mb-9">
                     <label class="form-label fw-bold" for="username">Username</label>
                     <input type="username" name="username" id="username" class="form-control"
@@ -154,14 +151,17 @@
 
                   <div data-mdb-input-init class="form-outline mb-4">
                     <label class="form-label fw-bold"  for="password">Password</label>
-                    <input type="password" id="passsword" name="password"  placeholder="Enter Password" class="form-control"  maxlength="20"/>
+                    <input type="password" id="password" name="password"  placeholder="Enter Password" class="form-control"  maxlength="20"/>
                     
                   </div>
 
                   <div class="text-center pt-1 mb-5 pb-1">
                     <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-3" type="submit">Log
                       in Now</button><br>
-                    <a class="text-muted" href="{% url "password_reset" %}">Forgot password?</a>
+                    <a class="text-muted" href="{% url "password_reset" %}">Forgot password?</a><br>
+                    {% load socialaccount %}
+                   <a href="{% provider_login_url 'google' %}">Google Login</a>
+
                   </div>
 
            

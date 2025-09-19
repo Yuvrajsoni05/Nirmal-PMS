@@ -6,14 +6,13 @@ from django.core.validators import validate_email
 # Create your models here.  
 class Registration(AbstractUser):
     
-    id = models.UUIDField(git
+    id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, db_index=True
     )
 
     first_name = models.CharField(max_length=200, blank=True,null=True,)
     last_name = models.CharField(max_length=200,blank=True, null=True)
     email = models.EmailField(max_length=200, unique=True,validators=[validate_email])
-
 
 class Job_detail(models.Model):
         date = models.DateField()
@@ -75,7 +74,7 @@ class CDRDetail(models.Model):
     def __str__(self):
         return f"{self.company_name} - {self.job_name}"
     
-    # in this two table on job_detail :company name have from CDRdeatil db have any file_url are connect or not check how can i do
+    # in this two table on job_detail :company name have from CDRDetail db have any file_url are connect or not check how can i do
     
      
 class CDRImage(models.Model):

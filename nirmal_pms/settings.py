@@ -36,9 +36,9 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = 'login_page'
-LOGIN_REDIRECT_URL = 'dashboard'
+# LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'logout'
-
+LOGIN_REDIRECT_URL = "/dashboard"
 MESSAGE_TAGS = {
     messages.ERROR: 'bg-danger  alert-danger', 
     # messages.SUCCESS: 'bg-primary'
@@ -61,19 +61,40 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
-    'app'
-    
+    'app',
+    "django.contrib.sites",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
 ]
+
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'OAUTH_PKCE_ENABLED': True, 
+    }
+}
+SITE_ID = 2
+
+
+
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'nirmal_pms.urls'
@@ -162,9 +183,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
+ACCOUNT_UNIQUE_EMAIL = True
+# SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
+# SOCIALACCOUNT_ADAPTER = "allauth.socialaccount.adapter.DefaultSocialAccountAdapter"
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_AUTO_SIGNUP = False
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
 MEDIA_URL = '/media/'
+SOCIALACCOUNT_ADAPTER = "app.adapters.MySocialAccountAdapter"
+
 
 
 # Default primary key field type
@@ -227,3 +256,12 @@ LOGGING = {
         },
     },
 }
+
+
+
+AUTHENTICATION_BACKENDS = (
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend"
+    
+)
+
