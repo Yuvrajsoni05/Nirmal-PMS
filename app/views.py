@@ -1391,11 +1391,7 @@ def cdr_add(request):
         if not re.match(email_regex, company_email):
             messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style") 
             return redirect('company_add_page')
-
         
-      
-
-       
         data = {
             'company_name':company_name,
             'company_email':company_email,
@@ -1419,13 +1415,13 @@ def cdr_add(request):
             response = requests.post(f'{url}',data=data,files=file_dic)
             print(response.status_code)
             
-            data_string  = response.text
+            # data_string  = response.text
     
-            print(data_string)
+            # print(data_string)
             
             if response.status_code  == 200:
                 print("Positive Response : ",response)
-                messages.success(request,"Data Successfully Add")
+                messages.success(request,"CDR Upload Successfully ")
                 return redirect('company_add_page')
             else:
 
@@ -1444,7 +1440,7 @@ def cdr_add(request):
                         image=file_object,
                     )
                 cdr_data.save()
-                messages.success(request, 'Data successfully added to SQLite DB')
+                messages.success(request, 'CDR Upload Successfully SQLite DB')
                 return redirect('company_add_page')
         except Exception as e:
             cdr_data = CDRDetail.objects.create(
