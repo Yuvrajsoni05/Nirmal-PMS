@@ -1,18 +1,22 @@
 import random
+# from click import Context
 from django.shortcuts import get_object_or_404, render,redirect
 
 from django.views.decorators.cache import cache_control
 from django.views.decorators.cache import cache_control, never_cache
 from django.db.models.signals import pre_delete
 from django.template.context_processors import request
+from django.views.generic import TemplateView
 from datetime import datetime, timedelta
+
+# from jinja2 import Template
 
 from app.models import Job_detail
 
 # from app.views import update_job
 # from torch import t
 from .models import *
-from django.contrib import messages
+from django.contrib import messages, sessions
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout 
 import requests 
@@ -85,31 +89,40 @@ def password_reset_done(request):
 logger = logging.getLogger("myapp")
 # SERVICE_ACCOUNT_FILE = os.path.join(settings.BASE_DIR, 'app', 'Google', 'credentials.json')
 # SCOPES = ['https://www.googleapis.com/auth/drive']
-def login_page(request):    
-    if request.method == 'POST':
-        username_email = request.POST.get('username')
-        password = request.POST.get('password')
-       
+def login_page(request):
+    try:
         
-        valid = re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',username_email)
-        
-        if valid:
-            user_login = Registration.objects.get(email = username_email.lower()).username
-            user = authenticate(request, username=user_login, password=password)
+        if request.method == 'POST':
+            username_email = request.POST.get('username')
+            password = request.POST.get('password')
+            remember_me = request.POST.get('remember_me')
+            print(remember_me)
+            valid = re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',username_email)
             
-        else:
-            user = authenticate(request,username=username_email,password=password)
-            
-        if user is not None:
-            login(request, user)
-            messages.success(request,'You are Login')
-            return redirect('dashboard_page') 
-        else:
-            messages.error(request,"Invalid Username and Password ",)
-            logger.error("Invalid Username and Password")
-       
-            return redirect('login_page')
-        
+            if valid:
+                user_login = Registration.objects.get(email = username_email.lower()).username
+                user = authenticate(request, username=user_login, password=password)
+                
+            else:
+                user = authenticate(request,username=username_email,password=password)
+                
+            if user is not None:
+                if remember_me == "on":
+                    request.session.set_expiry(None)
+                else:
+                    request.session.set_expiry(0)
+                
+                login(request, user)
+                messages.success(request,'You are Login')
+                return redirect('dashboard_page') 
+            else:
+                messages.error(request,"Invalid Username and Password ",)
+                logger.error("Invalid Username and Password")
+                return redirect('login_page')
+    except Exception as e:
+        messages.warning(request,f'Something went wrong try again {e}')
+        logger.error("Something went wrong try again")
+        return redirect('login_page')
     return render(request, 'Registration/login_page.html')  
 
 
@@ -118,7 +131,6 @@ def email_validator(email):
     if not re.match(email_regex,email):       
         return "Enter a Valid email Address"
 
- 
 
 def validator_password(password):
     if len(password) < 8:
@@ -147,7 +159,7 @@ def register_page(request):
         last_name = request.POST.get('lastName')
         email = request.POST.get('emailAddress')
         password = request.POST.get('password')
-        confirm_password = request.POST.get('confirma_password')
+        confirm_password = request.POST.get('confirm_password')
         required_filed = {
            
             'First Name':first_name,
@@ -160,8 +172,6 @@ def register_page(request):
             if not required:
                 messages.error(request,f" {i} field is Required",extra_tags="custom-success-style")
                 return redirect('register_page')
-        
-
        
         if Registration.objects.filter(username=username).exists():
                 messages.error(request,'Username Already Exist',extra_tags="custom-success-style")
@@ -215,20 +225,16 @@ def edit_user_page(request):
 def delete_user(request,user_id):
     
     if request.method == 'POST':
-        
         Delete_user = get_object_or_404(Registration,id = user_id)
         Delete_user.delete()
-       
         messages.success(request,"User Deleted")
         return redirect('edit_user_page')
-    
     
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)    
 @custom_login_required
 def update_user(request, user_id):
-    
     
     try:
         if request.method == 'POST':
@@ -238,12 +244,6 @@ def update_user(request, user_id):
             first_name = request.POST.get('first_name')
             last_name = request.POST.get('last_name')
             
-            # email_error = email_validator(email)
-            # if email_error:
-            #     messages.error(request,email_error,extra_tags="custom-success-style")
-            #     return redirect('edit_user_page')
-            
-        
             # print(user_id)
             required_fields = {
                 'Username': username,
@@ -307,8 +307,6 @@ def update_user(request, user_id):
         # logger.error(f"Invalid Username and Password {e}")
         return redirect('edit_user_page')
         
-        
-        
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @custom_login_required
@@ -316,7 +314,6 @@ def update_user(request, user_id):
 def dashboard_page(request):
     
     try:
-
         get_q = request.GET.get('q','')
         date_s = request.GET.get('date','')
         date_e = request.GET.get('end_date','')
@@ -327,28 +324,7 @@ def dashboard_page(request):
         cylinder_date_sorting = request.GET.get('cylinder_date_sorting','')
         cylinder_made_in_sorting = request.GET.get('cylinder_made_in_sorting','')
         
-
         db_sqlite3  = Job_detail.objects.all()
-
-        # total_purchase_floats = [] 
-        # total_purchse = Job_detail.objects.values_list('prpc_purchase') 
-        
-        # for i in total_purchse:
-        #     data_string = i[0]  
-        #     cleaned_string = data_string.replace(",", "")
-        #     float_value = float(cleaned_string)
-        #     total_purchase_floats.append(float_value)
-        # total_purchase = sum(total_purchase_floats)
-
-        # total_sell_floats = []
-        # total_sell = Job_detail.objects.values_list('prpc_sell')
-        # for  i in total_sell:
-        #     sell_data = i[0]
-        #     cleaned_data = sell_data.replace(",","")
-        #     sell_float = float(cleaned_data)
-        #     total_sell_floats.append(sell_float)
-        
-        # total_sales =  sum(total_sell_floats)
       
         filters = Q()
         if get_q:
@@ -368,8 +344,7 @@ def dashboard_page(request):
         db_sqlite3 = Job_detail.objects.filter(filters)
         
         job_status = Job_detail.objects.values('job_status').distinct()
-        
-        
+
    
         if job_name_sorting == 'asc':
             db_sqlite3 = db_sqlite3.order_by('job_name')
@@ -506,6 +481,18 @@ def data_entry(request):
         'cdr_job_name':cdr_job_name
     }
     return render(request, 'data_entry.html',context)
+
+
+
+# CBV
+class CDRPageView(TemplateView):
+    template_name = 'CDR/cdr_page.html'
+    
+    def get_context_data(self, **kwargs):
+        context =  super().get_context_data(**kwargs)
+        context['cdr_data'] = CDRDetail.objects.all()
+    
+    
 
 
 # def get_drive_services():
@@ -1338,9 +1325,6 @@ def cdr_add(request):
         if new_company_name != '':
             company_name = new_company_name  
 
-        
-        
-        
         
         required_filed = {
             'Company Name': company_name,

@@ -40,6 +40,11 @@ urlpatterns = [
     path('reset/<uidb64>/<token>',CustomPasswordResetConfirm.as_view(),name="password_reset_confirm"),
     path('reset_done',password_reset_done , name="password_reset_complete"),
     #  path('get-company-data/', get_company_data, name='get_company_data'),
+    
+    
+    
+    #cbv
+    path('cdr_cbv_page',CDRPageView.as_view(),name='cdr_cbv_page')
 ]
     
 
