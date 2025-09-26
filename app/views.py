@@ -1,7 +1,7 @@
 import random
 # from click import Context
 from django.shortcuts import get_object_or_404, render,redirect
-
+import pandas as pd
 from django.views.decorators.cache import cache_control
 from django.views.decorators.cache import cache_control, never_cache
 from django.db.models.signals import pre_delete
@@ -93,10 +93,10 @@ def login_page(request):
     try:
         
         if request.method == 'POST':
-            username_email = request.POST.get('username')
-            password = request.POST.get('password')
-            remember_me = request.POST.get('remember_me')
-            print(remember_me)
+            username_email = request.POST.get('username','')
+            password = request.POST.get('password','')
+            remember_me = request.POST.get('remember_me','')
+    
             valid = re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',username_email)
             
             if valid:
@@ -108,7 +108,7 @@ def login_page(request):
                 
             if user is not None:
                 if remember_me == "on":
-                    request.session.set_expiry(None)
+                    request.session.set_expiry(60 * 60 * 24 * 30)
                 else:
                     request.session.set_expiry(0)
                 
@@ -154,12 +154,12 @@ def validator_password(password):
 def register_page(request):
 
     if request.method == 'POST':
-        username = request.POST.get('username')
-        first_name = request.POST.get('firstName')
-        last_name = request.POST.get('lastName')
-        email = request.POST.get('emailAddress')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
+        username = request.POST.get('username','')
+        first_name = request.POST.get('firstName','')
+        last_name = request.POST.get('lastName','')
+        email = request.POST.get('emailAddress','')
+        password = request.POST.get('password','')
+        confirm_password = request.POST.get('confirm_password','')
         required_filed = {
            
             'First Name':first_name,
@@ -201,8 +201,7 @@ def register_page(request):
             email= email,
         )
         create_user.save()
-        messages.success(request,"New User Will Created",)
-        
+        messages.success(request,"New User Will Created")
         return redirect('edit_user_page')
     return render(request,'Registration/register.html')
 
@@ -239,19 +238,17 @@ def update_user(request, user_id):
     try:
         if request.method == 'POST':
             update_user = get_object_or_404(Registration, id=user_id)
-            username = request.POST.get('username')
-            email = request.POST.get('email')
-            first_name = request.POST.get('first_name')
-            last_name = request.POST.get('last_name')
-            
-            # print(user_id)
+            username = request.POST.get('username','')
+            email = request.POST.get('email','')
+            first_name = request.POST.get('first_name','')
+            last_name = request.POST.get('last_name','')
+ 
             required_fields = {
                 'Username': username,
                 'Firstname': first_name,
                 'Lastname': last_name,
                 'Email': email,
             }
-
             for field_name, value in required_fields.items():
                 if not value:
                     messages.error(request, f"{field_name} is required.",extra_tags="custom-success-style")
@@ -263,11 +260,9 @@ def update_user(request, user_id):
                 messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style") 
                 return redirect('edit_user_page')
                 
-                
             if username != update_user.username and Registration.objects.filter(username=username).exists():
                 messages.error(request, "Username already exists.", extra_tags="custom-success-style")
                 return redirect('edit_user_page')
-
 
             if email != update_user.email and Registration.objects.filter(email=email).exists():
                 messages.error(request, "Email already exists.", extra_tags="custom-success-style")
@@ -304,7 +299,6 @@ def update_user(request, user_id):
             return redirect('edit_user_page')
     except Exception as e:
         messages.error(request,f"Something went wrong",extra_tags="custom-success-style")
-        # logger.error(f"Invalid Username and Password {e}")
         return redirect('edit_user_page')
         
 @never_cache
@@ -421,7 +415,7 @@ def delete_data(request,delete_id):
     try:
         
         folder_url = Job_detail.objects.values('folder_url').all().get(id=delete_id)
-        print(folder_url)
+        # print(folder_url)
         if folder_url != '':
             try:
                 
@@ -1225,7 +1219,7 @@ def cdr_page(request):
     search = request.GET.get('search',' ').strip()
     date = request.GET.get('date','').strip()
     end_date = request.GET.get('end_date','').strip()
-    print(date)
+    # print(date)
     company_name_sorting = request.GET.get('company_name_sorting','')
     job_name_sorting = request.GET.get('job_name_sorting','')
     date_sorting = request.GET.get('date_sorting','')
@@ -1281,7 +1275,7 @@ def cdr_page(request):
     cdr_company_name = CDRDetail.objects.values('company_name').distinct()
     cdr_job_name = CDRDetail.objects.values('job_name').distinct()
     
-    print(cdr_emails)
+    # print(cdr_emails)
     datas = p.get_page(page)
     nums = "a" * datas.paginator.num_pages
     context = {
@@ -1815,6 +1809,48 @@ def company_name_suggestion_job(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
+
+
+
+def import_excel(request):
+    if request.method == 'POST':
+        import_files = request.FILES.get('import_file', '')
+        
+   
+        if not import_files.name.endswith('xlsx'):
+            messages.error(request, 'Wrong Format')
+            return redirect('data_entry')
+        
+        
+        df = pd.read_excel(import_files)
+        for _, i in df.iterrows():
+            date = i['Date']
+            time_obj = pd.Timestamp(date)
+            convert_date = time_obj.date()
+            job_date = convert_date
+            bill_no = i['Bill No.']
+            company_name = i['Company Name']
+            job_name =  i['Job Name']
+            noc = i['No. of Colors']
+            prpc_purchase    = i['Per Rate Per Cylinder (Purchase)']
+            prpc_sell = i['Per Rate Per Cylinder (Sales)']
+            cylinder_size  = i['Cylinder Size']
+            cylinder_made_in = i['Cylinder Made In ']  
+            cylinder_date = i['Cylinder Date']
+            cylinder_bill_no = i['Cylinder Bill No. ']
+            pouch_size    = i['Pouch Size']
+            pouch_open_size = i['Pouch Open Size']
+            pouch_combination = i['Pouch Combination (thickness) ']                    
+            job_status = i['Job Status ']
+            correction = i['Correction']
+            
+            
+            if Job_detail.objects.filter(date=date,job_name=job_name).exists():
+                messages.error(request,'Date is Already Exists')
+                return redirect('data_entry')
+        return redirect('data_entry')
+    
+    
 # Django Class Base View
 
 # def function_name(demo,*args):

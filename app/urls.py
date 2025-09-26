@@ -44,7 +44,9 @@ urlpatterns = [
     
     
     #cbv
-    path('cdr_cbv_page',CDRPageView.as_view(),name='cdr_cbv_page')
+    path('cdr_cbv_page',CDRPageView.as_view(),name='cdr_cbv_page'),
+    
+    path('import_file',import_excel,name='import_file')
 ]
     
 

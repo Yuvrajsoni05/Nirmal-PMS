@@ -43,8 +43,8 @@ MESSAGE_TAGS = {
     messages.ERROR: 'bg-danger  alert-danger', 
     # messages.SUCCESS: 'bg-primary'
 } 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-SESSION_SAVE_EVERY_REQUEST = False
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+# SESSION_SAVE_EVERY_REQUEST = False
   
 
 SESSION_COOKIE_AGE = 3600

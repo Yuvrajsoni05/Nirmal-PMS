@@ -11,8 +11,20 @@
       <div class="page-inner">
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
               <div>
-                <h3 class="fw-bold mb-3">Add New Job</h3>
- 
+                <h3 class="fw-bold mb-3">Add New Job</h3> 
+                <form method='post' action="{% url "import_file" %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div>
+                        <label for="image" class="form-label fw-semibold text-dark">Import File</label>
+                        <div class="border border-dashed rounded-3 text-center bg-light">
+                            <input class="form-control  border-0 bg-transparent" type="file" id="files" name="import_file">
+                            
+                        </div>
+                        
+                    </div>
+                    <button type='submit' class='btn btn-primary'>Import</button>
+
+                </form>
               </div>
               
             </div>
