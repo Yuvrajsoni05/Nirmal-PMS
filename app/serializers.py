@@ -7,7 +7,8 @@ class JobDetailSerializer(serializers.ModelSerializer):
     review_user = serializers.StringRelatedField(read_only=True)
     class Meta:
         model = Job_detail
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ['id' ,'created_at']
         
     # def validate_job_name(self,data):
     #     job_name = data
