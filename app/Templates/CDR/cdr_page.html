@@ -292,7 +292,9 @@ Company New Page
                                                 </div>
                                                 <div class="modal-body form-datas">
                                                     <form method="post" action="{% url "update_cdr" update_id=i.id %}" class="cdr-form" enctype="multipart/form-data">
+
                                                         {% csrf_token %}
+                                                            <input type="hidden" value="{{i.id}}" >
                                                         <div class="row g-4">
                                                             <!-- Event Date -->
                                                             <div class="col-md-6">
@@ -332,7 +334,7 @@ Company New Page
                                                         <!-- Form Actions -->
                                                         <div class="col-12 mt-3">
                                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                                            <button type="submit" onclick="return validateUpdateForm(this.form)" class="btn btn-primary">Save changes</button>
                                                         </div>
                                                     </form>
                                                 </div>
@@ -509,6 +511,33 @@ Company New Page
 <script src="{% static 'js/cdr_page.js' %}"></script>
 
 
+<span class="text-danger d-block mt-2" style="display:none;" id="updateFormError">Please fill all required fields.</span>
+<script>
+function validateUpdateForm(form) {
+    let valid = true;
+    let requiredFields = [
+        form.cdr_upload_date,
+        form.company_email,
+      
+    ];
+    requiredFields.forEach(function(field) {
+        if (field && !field.value.trim()) {
+            field.classList.add('is-invalid');
+            valid = false;
+        } else if(field) {
+            field.classList.remove('is-invalid');
+        }
+    });
+    let errorMsg = form.querySelector('#updateFormError');
+    if (!valid) {
+        if (errorMsg) errorMsg.style.display = 'block';
+        return false;
+    } else {
+        if (errorMsg) errorMsg.style.display = 'none';
+        return true;
+    }
+}
+</script>
 <script>
 $("#company_name").change(function () {
     let companyName = $(this).val();

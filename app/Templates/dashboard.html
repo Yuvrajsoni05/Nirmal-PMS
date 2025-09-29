@@ -43,10 +43,10 @@
        {% block main_block %}
 <div class="page-inner">
   <!-- Header Section -->
- 
+  
     <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
       <div class="page-title">
-        <h3 class="fw-bold mb-3">Dashboard</h3>
+        <h3 class="fw-bold mb-3">Dashboard <h1></h1></h3>
       </div>
       <div class="page-actions ms-md-auto py-2 py-md-0">
         <a href="{% url "data_entry" %}" class="btn btn-primary btn-round">Add New Job</a>
@@ -534,15 +534,15 @@
                                                       <div class="modal-content">
                                                         <div class="modal-header">
                                                           <h5 class="modal-title" id="exampleModalLongTitle">Event Description</h5>
-                                              
                                                         </div>
                                                         <div class="modal-body">
                                                           {{i.correction}}
                                                         </div>
-                                                    
                                                       </div>
                                                     </div>
                                                   </div>
+
+
                                         {% comment %} Model {% endcomment %}
                                           <div class="modal fade"  id="exampleModal{{i.id}}" tabindex="-1" aria-hidden="true">
                                                               <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog modal-xl">
@@ -554,6 +554,7 @@
                                                                   <div class="modal-body form-datas">
                                                                   
                                                                     <form method="post"  action="{% url "update_job" update_id=i.id %}" id="update_form_id" enctype="multipart/form-data">
+                                                                    
                                                                           {% csrf_token %}
                                                                           <div class="row g-4">
 
@@ -605,12 +606,12 @@
                                                                           <!-- PRPC -->
                                                                           <div class="col-md-6">
                                                                               <label for="prpc" class="form-label fw-bold">PRPC Purchase (Per Rate Per Cylinder )</label>
-                                                                              <input type="text" id="prpc" class="form-control" name="prpc_purchase" onkeyup="formatNumberWithCommas(this)" value="{{ i.prpc_purchase|indian_currency_format }}"required>
+                                                                              <input type="text" id="prpc" class="form-control" name="prpc_purchase" onkeyup="formatNumberWithCommas(this)" value="{{ i.prpc_purchase|indian_currency_format }}">
                                                                           </div>
 
                                                                           <div class="col-md-6">
                                                                               <label for="prpc" class="form-label fw-bold">PRPC Sell (Per Rate Per Cylinder )</label>
-                                                                              <input type="text" id="prpc" class="form-control" name="prpc_sell" onkeyup="formatNumberWithCommas(this)" value="{{ i.prpc_sell|indian_currency_format  }}"required>
+                                                                              <input type="text" id="prpc" class="form-control" name="prpc_sell" onkeyup="formatNumberWithCommas(this)" value="{{ i.prpc_sell|indian_currency_format  }}">
                                                                           </div>
 
                                                                           <!-- Cylinder Size -->

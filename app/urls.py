@@ -3,6 +3,7 @@ from django.urls import path,include
 from .views import *
 from django.contrib.auth import views as auth_views
 
+from app.views import JobDetailAV
 urlpatterns = [
     path('',login_page,name='login_page'),
     path('register',register_page,name='register_page'),
@@ -18,7 +19,7 @@ urlpatterns = [
     path('update_profile/<uuid:users_id>/',update_profile,name='update_profile'),
     path('update_password',user_password,name='update_password'),
     
-    path('delete_user/<uuid:user_id>/',delete_user,name='delete_user'),
+    path('delete_user/<uuid:user_id>/',delete_user,name='delete_user'), 
     path('update_user/<uuid:user_id>/',update_user,name="update_user"),
     
     path('cdr_page',cdr_page,name='company_add_page'),
@@ -42,11 +43,16 @@ urlpatterns = [
     #  path('get-company-data/', get_company_data, name='get_company_data'),
     
     
+    # path('user_update_error',user_update_error,name='user_update_error'),
     
     #cbv
     path('cdr_cbv_page',CDRPageView.as_view(),name='cdr_cbv_page'),
     
-    path('import_file',import_excel,name='import_file')
+    path('import_file',import_excel,name='import_file'),
+    
+    #DRF
+    path('job-list/', JobList.as_view(), name='job-list'),
+    path('job-list/<int:pk>/', JobDetailAV.as_view(), name='job-detail'),
 ]
     
 

@@ -1,4 +1,8 @@
+from django.views.decorators.http import require_GET
+from rest_framework.serializers import Serializer, ValidationError
+from rest_framework import serializers, status
 import random
+from urllib import response
 # from click import Context
 from django.shortcuts import get_object_or_404, render,redirect
 import pandas as pd
@@ -7,11 +11,14 @@ from django.views.decorators.cache import cache_control, never_cache
 from django.db.models.signals import pre_delete
 from django.template.context_processors import request
 from django.views.generic import TemplateView
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
+
+
 
 # from jinja2 import Template
 
 from app.models import Job_detail
+from app.serializers import JobDetailSerializer
 
 # from app.views import update_job
 # from torch import t
@@ -105,7 +112,7 @@ def login_page(request):
                 
             else:
                 user = authenticate(request,username=username_email,password=password)
-                
+            print("this Session",request.session.items())
             if user is not None:
                 if remember_me == "on":
                     request.session.set_expiry(60 * 60 * 24 * 30)
@@ -300,6 +307,10 @@ def update_user(request, user_id):
     except Exception as e:
         messages.error(request,f"Something went wrong",extra_tags="custom-success-style")
         return redirect('edit_user_page')
+    
+    
+    
+
         
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
@@ -617,7 +628,7 @@ def add_job(request):
             files = request.FILES.getlist('files') 
             pouch_combination_total  = f"{pouch_combination_1} + {pouch_combination_2} + {pouch_combination_3} + {pouch_combination_4}"
             
-            
+
                          
             required_filed = {
                     'Date' :date,
@@ -682,6 +693,8 @@ def add_job(request):
             if Job_detail.objects.filter(job_name__icontains = job_name,date__icontains  =date).exists():
                     messages.error(request,"Job Name are already Exists on this date kindly Update job",extra_tags='custom-success-style')
                     return redirect('data_entry')
+                
+            
         
             if new_company != '':
        
@@ -913,6 +926,7 @@ def add_job(request):
 def  update_job(request,update_id):
     
     try:
+        error_message = None
         if request.method == 'POST':
             date =  request.POST.get('date')
             bill_no = request.POST.get('bill_no')
@@ -956,21 +970,19 @@ def  update_job(request,update_id):
             'Pouch Open Size':pouch_open_size,
             'Cylinder Bill No':cylinder_bill_no,
             'Cylinder Date':cylinder_date,
-            
-            
+            'Prpc Sell':prpc_sell
+
         }
-        for i ,r in required_filed.items():
-            if not  r:
-                messages.error(request,f"This {i} Filed Was Required",extra_tags="custom-success-style")
+        for i, r in required_filed.items():
+            if not r:
+                messages.error(request, f"This {i} field is required.", extra_tags="custom-success-style")
                 return redirect('dashboard_page')
-            
     
         jobs = Job_detail.objects.all().get(id=update_id)  
         if job_name != jobs.job_name:
             messages.error(request,"You can't chnage job_name")
             return redirect('dashboard_page')
-      
-        
+
         
         if date != date_formatte:
             if Job_detail.objects.filter(date = date, job_name = job_name).exists() :
@@ -1504,6 +1516,8 @@ def cdr_update(request,update_id):
     
         cdr_corrections = request.POST.get('cdr_corrections')
         
+        get_date = CDRDetail.objects.values('date').get(id=id)
+        date_formatte = get_date['date'].strftime("%Y-%m-%d")
         
         if CDRDetail.objects.filter(company_name__icontains = company_name, company_email=company_email).exists():
             print("Valid")
@@ -1512,7 +1526,11 @@ def cdr_update(request,update_id):
             if CDRDetail.objects.filter(company_email__icontains = company_email).exists():
                 messages.error(request,"Choose Another Email",extra_tags='custom-success-style')
                 return redirect('company_add_page')
-
+            
+        if date != date_formatte:   
+            if CDRDetail.objects.filter(job_name__icontains =  job_names ,date=date ).exists():
+                messages.error(request,'CDR Job Name are already Exists on this date kindly Update job',extra_tags='custom-success-style')
+                return redirect('company_add_page')
         
         if len(cdr_files) > 2:
             messages.error(request,"More than 2 file not allowed",extra_tags='custom-success-style')
@@ -1850,7 +1868,93 @@ def import_excel(request):
                 return redirect('data_entry')
         return redirect('data_entry')
     
+
+# API OF ALL Views 
+
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.response import Response
+class JobList(APIView):
+    def get(self,request):
+        if request.method == 'GET':
+            
+            job = Job_detail.objects.all()
+            serializer = JobDetailSerializer(job,many=True)
+            return Response(serializer.data)
+        
+        
+    def post(self,request):
+        job_name = request.data.get('job_name')
+        date = request.data.get('date')
+        
+        
+        if Job_detail.objects.filter(job_name__icontains=job_name, date__icontains=date).exists():
+            return Response(
+                {'Error': 'Job Name already exists on this date. Kindly update the job.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        serializer = JobDetailSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+class JobDetailAV(APIView):
+    def get(self,request,pk):
+        try:
+            job = Job_detail.objects.get(pk=pk)
+        except Job_detail.DoesNotExist:
+            return Response({'Error' : 'Job dose not exist'},status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = JobDetailSerializer(job)
+        return Response(serializer.data)
     
+    def put(self,request,pk):   
+        if request.method == 'PUT':
+            job = Job_detail.objects.get(pk=pk)
+            demo = Job_detail.objects.values('date').get(id=pk)
+            date_formatte  = demo['date'].strftime("%Y-%m-%d")
+            new_date = request.data.get('date')
+            job_name = request.data.get('job_name')
+            
+            if job_name != Job_detail.objects.values('job_name').get(id=pk):
+                return Response({
+                    'Error' : "Job Name You can't Change"
+                })
+
+            if new_date != date_formatte:
+                if Job_detail.objects.filter(date=new_date).exists():
+                    return Response(
+                        {'Error': 'A job with the same date already exists.'},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+            
+            serializer = JobDetailSerializer(job,data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            else:
+                return Response(serializer.errors,status=status.HTTP_404_NOT_FOUND)
+            
+    def delete(self,request,pk):
+        if request.method == 'DELETE':
+            job = Job_detail.objects.get(pk=pk)
+            job.delete()
+            return Response({
+                'Error' : 'Job Deleted Successfully '
+            })
+            
+            
+
+
+
+
+
+
+
+
+
 # Django Class Base View
 
 # def function_name(demo,*args):

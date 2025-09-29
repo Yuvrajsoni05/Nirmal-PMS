@@ -40,7 +40,7 @@
                     <div class="card-body p-4">
                         <form action="{% url 'add_data' %}" id="job_detail_form" method="post" autocomplete="off" enctype="multipart/form-data">
                             {% csrf_token %}
-                            
+                          
                             <!-- Basic Information Section -->
                             <div class="mb-4">
                                 <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Basic Information</h6>
@@ -358,7 +358,8 @@
         $("#job_name").empty().append('<option value="">Select Job</option>');
         $("#job_name").empty().append('<option value="others">Other</option>');
     }
-});</script>
+});
+</script>
 <script src="{% static 'js/data_entry.js' %}"></script>
 
 {% endblock script %}

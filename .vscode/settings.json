@@ -1,4 +1,12 @@
 {
     "python.analysis.autoImportCompletions": true,
-    "cSpell.words": ["allauth", "nbsp", "Nirmal", "prpc", "SOCIALACCOUNT"]
+    "cSpell.words": [
+        "allauth",
+        "chnage",
+        "nbsp",
+        "Nirmal",
+        "prpc",
+        "SOCIALACCOUNT",
+        "succfully"
+    ]
 }
