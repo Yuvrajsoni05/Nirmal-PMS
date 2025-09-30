@@ -17,7 +17,7 @@ class Registration(AbstractUser):
 class Job_detail(models.Model):
         date = models.DateField()
         bill_no = models.CharField(max_length=200)
-        company_name = models.CharField(max_length=300)
+        company_name = models.CharField(max_length=300,blank=True, null=True)
         job_name = models.CharField(max_length=200)
         job_type  = models.CharField(max_length=200)
         noc =  models.TextField(blank=True, null=True)
@@ -48,6 +48,8 @@ class Job_detail(models.Model):
             if cdr and cdr.file_url:
                 return cdr.file_url
             return None
+        
+        
    
 
         
@@ -84,11 +86,8 @@ class CDRImage(models.Model):
     def __str__(self):
         return f"{self.cdr}" 
 class CompanyName(models.Model):
-    # date = models.DateField(auto_now_add=True,blank=True, null=True)
     company_name = models.CharField(max_length=300)
-    # job_name = models.CharField(max_length=200,blank=True, null=True)
-    # file_url = models.models.URLField(max_length=200,blank=True, null=True)
-    
+0
    
     
 class CylinderMadeIn(models.Model):

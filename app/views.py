@@ -1,3 +1,4 @@
+from math import nan
 from django.views.decorators.http import require_GET
 from rest_framework.serializers import Serializer, ValidationError
 from rest_framework import serializers, status
@@ -1883,22 +1884,83 @@ class JobList(APIView):
             return Response(serializer.data)
         
         
-    def post(self,request):
+    def post(self, request):
+        # Extract data
         job_name = request.data.get('job_name')
+        new_job = request.data.get('new_job_name')
+         
         date = request.data.get('date')
+        company_name = request.data.get('company_name')  
+        new_company = request.data.get('new_company')
+        images = request.FILES.getlist('images')
         
+        if company_name and new_company == '' :
+            return Response({
+                'Error' : 'Please provide company Name'
+            },status=status.HTTP_400_BAD_REQUEST)
         
-        if Job_detail.objects.filter(job_name__icontains=job_name, date__icontains=date).exists():
-            return Response(
+        valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]  
+        for i in images:
+            ext = os.path.splitext(i.name)[1]
+            if ext.lower() not in valid_extension:
+                return Response({
+                    'Error':'Invalid file  Only .jpg, .jpeg, .png and .ai are allowed.'
+                },status=status.HTTP_400_BAD_REQUEST)
+                
+        
+        if Job_detail.objects.filter(date=date,job_name=job_name).exists():
+             return Response(
                 {'Error': 'Job Name already exists on this date. Kindly update the job.'},
                 status=status.HTTP_400_BAD_REQUEST
+            )    
+        if not company_name:
+            
+            company_name = new_company
+            if CompanyName.objects.filter(company_name__icontains=company_name).exists():
+                return Response({
+                    'Error' : 'Company name already Exists'
+                })
+            add_company  = CompanyName.objects.create(
+                company_name= company_name
             )
-        serializer = JobDetailSerializer(data=request.data)
+        
+        
+        
+        
+        if not job_name:
+            job_name = new_job
+            
+        
+        file_dic = {}
+        for i,file in enumerate(images):
+            _,file_extension = os.path.splitext(file.name)
+            random_number = random.randint(1,100)
+            new_file_name = f'{date}_{random_number}{file_extension}'
+            file.name = new_file_name
+            file_key  = f"{new_file_name}"
+            file_dic[file_key] = (file.name,file,file.content_type)
+            
+        
+        
+        
+        
+        
+  
+        print(request.data)
+        mutable_data = request.data.copy()
+        mutable_data['company_name'] = company_name
+        mutable_data['job_name'] = job_name
+        
+        
+        serializer = JobDetailSerializer(data=mutable_data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
+            job_instance = serializer.save()
+            for img_key, (filename, image, content_type) in file_dic.items():
+                job_image = Jobimage.objects.create(job=job_instance, image=image)
+                
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class JobDetailAV(APIView):
     def get(self,request,pk):
@@ -1929,6 +1991,9 @@ class JobDetailAV(APIView):
                         {'Error': 'A job with the same date already exists.'},
                         status=status.HTTP_400_BAD_REQUEST
                     )
+            
+            
+            
             
             serializer = JobDetailSerializer(job,data=request.data)
             if serializer.is_valid():
