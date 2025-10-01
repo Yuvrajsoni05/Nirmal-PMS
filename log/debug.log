@@ -12,3 +12,9 @@ ERROR 2025-09-29 11:20:58,914 myapp login_page Invalid Username and Password vie
 ERROR 2025-09-29 11:39:14,017 myapp login_page Something went wrong try again views.py
 ERROR 2025-09-29 13:21:03,871 myapp login_page Invalid Username and Password views.py
 ERROR 2025-09-29 16:02:57,828 myapp login_page Invalid Username and Password views.py
+ERROR 2025-10-01 11:06:04,238 myapp login_page Invalid Username and Password views.py
+ERROR 2025-10-01 12:57:38,178 myapp login_page Something went wrong try again views.py
+ERROR 2025-10-01 12:57:59,048 myapp login_page Something went wrong try again views.py
+ERROR 2025-10-01 12:59:50,864 myapp login_page Something went wrong try again views.py
+ERROR 2025-10-01 13:02:01,161 myapp login_page Something went wrong try again views.py
+ERROR 2025-10-01 13:02:18,061 myapp login_page Something went wrong try again views.py

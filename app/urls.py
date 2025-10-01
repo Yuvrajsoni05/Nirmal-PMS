@@ -4,7 +4,9 @@ from .views import *
 from django.contrib.auth import views as auth_views
 
 from app.views import JobDetailAV
+
 urlpatterns = [
+
     path('',login_page,name='login_page'),
     path('register',register_page,name='register_page'),
     path('logout',user_logout,name='logout'),
@@ -53,6 +55,8 @@ urlpatterns = [
     #DRF
     path('job-list/', JobList.as_view(), name='job-list'),
     path('job-list/<int:pk>/', JobDetailAV.as_view(), name='job-detail'),
+    
+    path('cdr-list',CDRDetailAVS.as_view(),name='cdr-list')
 ]
     
 

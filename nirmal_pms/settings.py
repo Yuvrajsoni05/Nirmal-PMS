@@ -44,7 +44,7 @@ MESSAGE_TAGS = {
     # messages.SUCCESS: 'bg-primary'
 } 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-# SESSION_SAVE_EVERY_REQUEST = False
+
   
 
 SESSION_COOKIE_AGE = 3600
@@ -70,9 +70,17 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+
+    'drf_yasg',
+    # "dbbackup"
+    
 ]
 
-
+# DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+# DBBACKUP_STORAGE_OPTIONS = {
+#     'location': os.path.join(BASE_DIR, 'backup'),
+# }
+# DBBACKUP_DUMP_CMD = r'C:\Program Files\PostgreSQL\16\bin\pg_dump.exe'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {

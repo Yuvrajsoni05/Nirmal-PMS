@@ -1,6 +1,8 @@
+from genericpath import isfile
 from math import nan
 from django.views.decorators.http import require_GET
 from rest_framework.serializers import Serializer, ValidationError
+from django.test import RequestFactory
 from rest_framework import serializers, status
 import random
 from urllib import response
@@ -16,10 +18,11 @@ from datetime import date, datetime, timedelta
 
 
 
+
 # from jinja2 import Template
 
 from app.models import Job_detail
-from app.serializers import JobDetailSerializer
+from app.serializers import CDRDataSerializer, JobDetailSerializer, JobUpdateSerializer
 
 # from app.views import update_job
 # from torch import t
@@ -64,9 +67,18 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView,
 )
 import os
-from django.conf import settings
+from django.conf import Settings, settings
+
+# Swagger Setting
+
+
 # Create your views here.
 
+
+
+# urlpatterns = [
+#     urls(r'^$', schema_view)
+# ]
 
 
 
@@ -99,38 +111,42 @@ logger = logging.getLogger("myapp")
 # SCOPES = ['https://www.googleapis.com/auth/drive']
 def login_page(request):
     try:
-        
         if request.method == 'POST':
-            username_email = request.POST.get('username','')
-            password = request.POST.get('password','')
-            remember_me = request.POST.get('remember_me','')
+            username_email = request.POST.get('username', '')
+            password = request.POST.get('password', '')
+            remember_me = request.POST.get('remember_me', '')
     
-            valid = re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',username_email)
+            valid = re.fullmatch(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', username_email)
             
             if valid:
-                user_login = Registration.objects.get(email = username_email.lower()).username
+                try:
+                    user_login = Registration.objects.get(email=username_email.lower()).username
+                except Registration.DoesNotExist:
+                    messages.error(request, "Email not found.")
+                    return redirect('login_page')
                 user = authenticate(request, username=user_login, password=password)
                 
             else:
-                user = authenticate(request,username=username_email,password=password)
-            print("this Session",request.session.items())
+                user = authenticate(request, username=username_email, password=password)
+            
             if user is not None:
                 if remember_me == "on":
-                    request.session.set_expiry(60 * 60 * 24 * 30)
+                    request.session.set_expiry(60 * 60 * 24 * 30) 
                 else:
-                    request.session.set_expiry(0)
+                    request.session.set_expiry(0) 
                 
                 login(request, user)
-                messages.success(request,'You are Login')
-                return redirect('dashboard_page') 
+                messages.success(request, 'You are logged in')
+                return redirect('dashboard_page')
             else:
-                messages.error(request,"Invalid Username and Password ",)
-                logger.error("Invalid Username and Password")
+                messages.error(request, "Invalid Username or Password")
+                logger.error("Invalid Username or Password")
                 return redirect('login_page')
     except Exception as e:
-        messages.warning(request,f'Something went wrong try again {e}')
-        logger.error("Something went wrong try again")
+        logger.error(f"Something went wrong: {str(e)}", exc_info=True)
+        messages.warning(request, f'Something went wrong, try again.')  
         return redirect('login_page')
+    
     return render(request, 'Registration/login_page.html')  
 
 
@@ -487,6 +503,9 @@ def data_entry(request):
         'cdr_job_name':cdr_job_name
     }
     return render(request, 'data_entry.html',context)
+
+
+
 
 
 
@@ -1878,14 +1897,12 @@ from rest_framework.response import Response
 class JobList(APIView):
     def get(self,request):
         if request.method == 'GET':
-            
             job = Job_detail.objects.all()
             serializer = JobDetailSerializer(job,many=True)
             return Response(serializer.data)
         
         
     def post(self, request):
-        # Extract data
         job_name = request.data.get('job_name')
         new_job = request.data.get('new_job_name')
          
@@ -1924,9 +1941,6 @@ class JobList(APIView):
                 company_name= company_name
             )
         
-        
-        
-        
         if not job_name:
             job_name = new_job
             
@@ -1939,14 +1953,7 @@ class JobList(APIView):
             file.name = new_file_name
             file_key  = f"{new_file_name}"
             file_dic[file_key] = (file.name,file,file.content_type)
-            
-        
-        
-        
-        
-        
-  
-        print(request.data)
+                    
         mutable_data = request.data.copy()
         mutable_data['company_name'] = company_name
         mutable_data['job_name'] = job_name
@@ -1966,10 +1973,11 @@ class JobDetailAV(APIView):
     def get(self,request,pk):
         try:
             job = Job_detail.objects.get(pk=pk)
+            
         except Job_detail.DoesNotExist:
             return Response({'Error' : 'Job dose not exist'},status=status.HTTP_404_NOT_FOUND)
         
-        serializer = JobDetailSerializer(job)
+        serializer = JobUpdateSerializer(job)
         return Response(serializer.data)
     
     def put(self,request,pk):   
@@ -1978,26 +1986,40 @@ class JobDetailAV(APIView):
             demo = Job_detail.objects.values('date').get(id=pk)
             date_formatte  = demo['date'].strftime("%Y-%m-%d")
             new_date = request.data.get('date')
-            job_name = request.data.get('job_name')
+            images = request.FILES.getlist('images')
             
-            if job_name != Job_detail.objects.values('job_name').get(id=pk):
-                return Response({
-                    'Error' : "Job Name You can't Change"
-                })
-
+            
+       
+            valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]  
+            for i in images:
+                ext = os.path.splitext(i.name)[1]
+                if ext.lower() not in valid_extension:
+                    return Response({
+                        'Error':'Invalid file  Only .jpg, .jpeg, .png and .ai are allowed.'
+                    },status=status.HTTP_400_BAD_REQUEST)
+                    
+                    
+            file_dic = {}
+            for i,file in enumerate(images):
+                _,file_extension = os.path.splitext(file.name)
+                random_number = random.randint(1,100)
+                new_file_name = f'{date}_{random_number}{file_extension}'
+                file.name = new_file_name
+                file_key  = f"{new_file_name}"
+                file_dic[file_key] = (file.name,file,file.content_type)
+                
             if new_date != date_formatte:
                 if Job_detail.objects.filter(date=new_date).exists():
                     return Response(
                         {'Error': 'A job with the same date already exists.'},
                         status=status.HTTP_400_BAD_REQUEST
                     )
-            
-            
-            
-            
-            serializer = JobDetailSerializer(job,data=request.data)
+  
+            serializer = JobUpdateSerializer(job,data=request.data)
             if serializer.is_valid():
-                serializer.save()
+                job_instance =  serializer.save()
+                for img_key, (filename, image, content_type) in file_dic.items():
+                    job_image = Jobimage.objects.create(job=job_instance, image=image)
                 return Response(serializer.data)
             else:
                 return Response(serializer.errors,status=status.HTTP_404_NOT_FOUND)
@@ -2005,15 +2027,50 @@ class JobDetailAV(APIView):
     def delete(self,request,pk):
         if request.method == 'DELETE':
             job = Job_detail.objects.get(pk=pk)
+            delete_images = job.image.all()
+            for img in delete_images:
+                path = img.image.path
+                if os.path.isfile(path):
+                    os.remove(path)
+                else:
+                    img.delete()
+                    
             job.delete()
             return Response({
-                'Error' : 'Job Deleted Successfully '
-            })
+                'success' : 'Job Deleted Successfully '
+            },status=status.HTTP_200_OK)
             
             
 
 
-
+class CDRDetailAVS(APIView):
+    def get(self,request):
+        if request.method  == 'GET':
+            cdr = CDRDetail.objects.all()
+            serializer = CDRDataSerializer(cdr,many=True)
+            return Response(serializer.data)
+        
+    def post(self,request):
+        images = request.FILES.getlist('images')
+        
+        file_dic = {}
+        for i,file in enumerate(images):
+            _,file_extension = os.path.splitext(file.name)
+            random_number = random.randint(1,100)
+            new_file_name = f'{date}_{random_number}{file_extension}'
+            file.name = new_file_name
+            file_key  = f"{new_file_name}"
+            file_dic[file_key] = (file.name,file,file.content_type)
+            
+        serializer = CDRDataSerializer(data=request.data)
+        if serializer.is_valid():
+            cdr_instance = serializer.save()
+            for img_key, (filename, image, content_type) in file_dic.items():
+                job_image = CDRImage.objects.create(cdr=cdr_instance, image=image)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
 
 
 
