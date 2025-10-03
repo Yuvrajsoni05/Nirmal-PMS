@@ -1,4 +1,5 @@
 from email.mime import image
+from importlib.util import source_hash
 from pyexpat import model
 from django.db.models import ImageField
 from rest_framework.serializers import ModelSerializer
@@ -83,11 +84,20 @@ class JobUpdateSerializer(serializers.ModelSerializer):
 class CDRImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = CDRImage
-        field = '__all__' 
+        exclude = ['id']
         
         
 class CDRDataSerializer(serializers.ModelSerializer):
     image = CDRImageSerializer(many=True, read_only=True,source='cdr_images')
     class Meta:
         model = CDRDetail
+        exclude = ['id']
+
+
+class CDRUpdateSerializer(serializers.ModelSerializer):
+    image = CDRImageSerializer(many=True, read_only=True, source='image')
+    class Meta:
+        model = CDRDetail
         fields = '__all__'
+        
+        

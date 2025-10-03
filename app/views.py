@@ -1,3 +1,5 @@
+
+from email.mime import image
 from genericpath import isfile
 from math import nan
 from django.views.decorators.http import require_GET
@@ -5,7 +7,7 @@ from rest_framework.serializers import Serializer, ValidationError
 from django.test import RequestFactory
 from rest_framework import serializers, status
 import random
-from urllib import response
+from urllib import response 
 # from click import Context
 from django.shortcuts import get_object_or_404, render,redirect
 import pandas as pd
@@ -326,9 +328,6 @@ def update_user(request, user_id):
         return redirect('edit_user_page')
     
     
-    
-
-        
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @custom_login_required
@@ -336,7 +335,7 @@ def update_user(request, user_id):
 def dashboard_page(request):
     
     try:
-        get_q = request.GET.get('q','')
+        get_q = request.GET.get('q','')     
         date_s = request.GET.get('date','')
         date_e = request.GET.get('end_date','')
         sorting = request.GET.get('sorting', '')
@@ -1889,6 +1888,25 @@ def import_excel(request):
         return redirect('data_entry')
     
 
+
+
+
+
+def file_convert(images):
+    valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
+    for i in images:
+        print(i)
+        ext = os.path.splitext(i.name)[1]
+        if ext.lower() not in valid_extension:
+            return {'Error': 'Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed.'}
+    return None
+
+
+def cdr_job_check(job_name,date):
+    return ('date','demo')
+
+
+
 # API OF ALL Views 
 
 from rest_framework.decorators import api_view
@@ -1950,6 +1968,7 @@ class JobList(APIView):
             _,file_extension = os.path.splitext(file.name)
             random_number = random.randint(1,100)
             new_file_name = f'{date}_{random_number}{file_extension}'
+            
             file.name = new_file_name
             file_key  = f"{new_file_name}"
             file_dic[file_key] = (file.name,file,file.content_type)
@@ -2043,21 +2062,37 @@ class JobDetailAV(APIView):
             
 
 
+
 class CDRDetailAVS(APIView):
-    def get(self,request):
-        if request.method  == 'GET':
+    def get(self, request):
+        if request.method == 'GET':
             cdr = CDRDetail.objects.all()
-            serializer = CDRDataSerializer(cdr,many=True)
+            serializer = CDRDataSerializer(cdr, many=True)
             return Response(serializer.data)
         
-    def post(self,request):
+    def post(self, request):
+        job_name = request.data.get('job_name')
         images = request.FILES.getlist('images')
+        date = request.data.get('date')
+        print(date)
         
+
+        image_error = file_convert(images)
+        print(image_error)
+        if image_error:
+            return Response(image_error, status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        job_error = cdr_job_check(job_name,date)
+        if job_error : 
+            return Response(job_error,status=status.HTTP_400_BAD_REQUEST)
+            
         file_dic = {}
         for i,file in enumerate(images):
             _,file_extension = os.path.splitext(file.name)
             random_number = random.randint(1,100)
             new_file_name = f'{date}_{random_number}{file_extension}'
+            
             file.name = new_file_name
             file_key  = f"{new_file_name}"
             file_dic[file_key] = (file.name,file,file.content_type)
@@ -2066,7 +2101,7 @@ class CDRDetailAVS(APIView):
         if serializer.is_valid():
             cdr_instance = serializer.save()
             for img_key, (filename, image, content_type) in file_dic.items():
-                job_image = CDRImage.objects.create(cdr=cdr_instance, image=image)
+                cdr_image = CDRImage.objects.create(cdr=cdr_instance, image=image)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
@@ -2074,8 +2109,32 @@ class CDRDetailAVS(APIView):
 
 
 
-
-
+class CDRUpdateView(APIView):
+    def get(self,request,pk):
+        try:
+            cdr = CDRDetail.objects.get(pk=pk)
+        except Exception as e:
+            return Response({
+                'error' : 'CDR Dose not exist'
+            })
+        serializer = CDRDataSerializer(cdr)
+        return Response(serializer.data)
+    def put(self, request,pk):
+        if request.method == 'PUT':
+            cdr = CDRDetail.objects.get(pk=pk)
+            date = CDRDetail.objects.values('date').get(pk=pk)
+            date_formatte  = date['date'].strftime("%Y-%m-%d")
+            images  =  request.FILES.getlist('image')
+            
+            
+            image_error = file_convert(images)
+            if image_error:
+                return Response({
+                    'error' : image_error
+                })
+        
+            
+            
 
 # Django Class Base View
 

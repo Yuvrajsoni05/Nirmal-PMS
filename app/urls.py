@@ -56,7 +56,7 @@ urlpatterns = [
     path('job-list/', JobList.as_view(), name='job-list'),
     path('job-list/<int:pk>/', JobDetailAV.as_view(), name='job-detail'),
     
-    path('cdr-list',CDRDetailAVS.as_view(),name='cdr-list')
+    path('cdr-list/',CDRDetailAVS.as_view(),name='cdr-list')
 ]
     
 

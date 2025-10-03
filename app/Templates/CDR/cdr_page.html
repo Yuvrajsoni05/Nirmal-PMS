@@ -207,7 +207,7 @@ Company New Page
                                     <td title="{{i.job_name}}">{{ i.job_name }}</td>
                                     <td>{{ i.company_email }}</td>
                                     <td>{{ i.date }}</td>
-                                    {% if i.file_url == none %}
+                                    {% if i.file_url == none or i.file_url == '' %}
                                     <td>
                                         <div id="carousel-{{ i.id }}" class="carousel slide" data-bs-ride="carousel">
                                             <div class="carousel-inner">
@@ -220,7 +220,7 @@ Company New Page
                                             {% endfor %}
                                             </div>
 
-                                                    <!-- Controls -->
+                                                <!-- Controls -->
                                                 <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ i.id }}" data-bs-slide="prev">
                                                     <span class="previcon" aria-hidden="false"><i class="fa fa-caret-left" aria-hidden="true"></i></span>
                                                 </button>

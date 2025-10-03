@@ -18,3 +18,4 @@ ERROR 2025-10-01 12:57:59,048 myapp login_page Something went wrong try again vi
 ERROR 2025-10-01 12:59:50,864 myapp login_page Something went wrong try again views.py
 ERROR 2025-10-01 13:02:01,161 myapp login_page Something went wrong try again views.py
 ERROR 2025-10-01 13:02:18,061 myapp login_page Something went wrong try again views.py
+ERROR 2025-10-03 10:24:53,215 myapp login_page Invalid Username or Password views.py
