@@ -35,6 +35,7 @@ class Job_detail(models.Model):
         cylinder_bill_no = models.CharField(blank=True, null=True)
         job_status = models.CharField(max_length=200,blank=True, null=True)
         created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
+        # image_upload_date = models.DateTimeField()
 
         def __str__(self):
             return self.company_name
@@ -56,7 +57,7 @@ class Job_detail(models.Model):
 class Jobimage(models.Model):
     job = models.ForeignKey(Job_detail,related_name='image', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='job_images/')
-
+    upload_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
     
     def __str__(self):
         return f"Image for Job ID: {self.job.id}"
