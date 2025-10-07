@@ -1,7 +1,11 @@
+from ast import mod
+from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 from django.core.validators import validate_email
+
+
 
 # Create your models here.  
 class Registration(AbstractUser):
@@ -83,6 +87,8 @@ class CDRDetail(models.Model):
 class CDRImage(models.Model):
     cdr =  models.ForeignKey(CDRDetail,on_delete=models.CASCADE, related_name='cdr_images')
     image = models.ImageField(upload_to='cdr_files/')
+    thumbnail_image = models.FileField(upload_to='cdr_thumbnail_image/',blank=True, null=True)
+    
     
     def __str__(self):
         return f"{self.cdr}" 

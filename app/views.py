@@ -1,7 +1,9 @@
 
+from ast import Import
 from email.mime import image
 from genericpath import isfile
 from math import nan
+from PIL import Image
 from django.views.decorators.http import require_GET
 from rest_framework.serializers import Serializer, ValidationError
 from django.test import RequestFactory
@@ -17,6 +19,8 @@ from django.db.models.signals import pre_delete
 from django.template.context_processors import request
 from django.views.generic import TemplateView
 from datetime import date, datetime, timedelta
+
+# from scipy import optimize
 
 
 
@@ -57,7 +61,7 @@ import re
 
 from django.core.mail import EmailMessage
 from .decorators import *
-
+from django.core.files import File
 #Password
 
 from django.urls import path, reverse_lazy
@@ -86,6 +90,13 @@ from django.conf import Settings, settings
 
 #Lecco ai
 #Cookies in  Django Section in django
+
+
+# def file_check(files,quality_level=85):
+ 
+#         print(img )
+    
+
 
 
 class CustomPasswordResetView(PasswordResetView):
@@ -493,7 +504,7 @@ def data_entry(request):
     # cdr_company_name = CDRDetail.objects.values('company_name').distinct()
     
     company_name = CompanyName.objects.values('company_name').union(CDRDetail.objects.values('company_name'))
-    print(company_name)
+  
     cylinder_company_names = CylinderMadeIn.objects.all()
     cdr_job_name = CDRDetail.objects.values('job_name').distinct()
     context =  {
@@ -673,12 +684,18 @@ def add_job(request):
             
 
             
-            valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]
-            for file in files:
-                ext = os.path.splitext(file.name)[1]
-                if ext.lower() not in valid_extension:
-                    messages.error(request,"Invalid file  Only .jpg, .jpeg, .png and .ai are allowed." ,extra_tags="custom-success-style")
-                    return redirect("data_entry")
+            validation = [".jpeg", ".png", ".ai"] 
+            for i in files:
+                ex = os.path.splitext(i.name)[1].lower()
+                if ex.lower() not in validation:
+                     messages.error(request,"Invalid File")
+                     return redirect('data_entry')
+                    
+                
+                
+            
+            
+            
                 
                 
             file_dic = {}
@@ -803,7 +820,7 @@ def add_job(request):
             job_data.save()
             messages.success(request,"Data  successfully Add on sqlite 3")
             return redirect('dashboard_page')
-        except Exception :
+        except Exception as e:
             job_data = Job_detail.objects.create(
                 date = date,
                 bill_no = bill_no,
@@ -1324,6 +1341,19 @@ def cdr_page(request):
     return render(request,'CDR/cdr_page.html',context)
 
 
+# def image_compress(filepath,cdr):
+#     print(filepath)
+#     rot,ext = os.path.splitext(filepath)
+#     size  = 2 * 1024 * 1024
+#     file_size  = os.path.getsize(filepath)
+#     if file_size < size :
+#         print(filepath)
+#     else:
+#         img = Image.open(filepath)
+#         folder, name = os.path.split(filepath)
+#         base, ext = os.path.splitext(name)
+        
+    
 def cdr_add(request):
     if request.method == 'POST':
         company_name = request.POST.get('company_name','').strip()
@@ -1358,7 +1388,16 @@ def cdr_add(request):
             'Job Name': job_name,
         }
 
+        valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]  
 
+        for file in cdr_files:
+            ext = os.path.splitext(file.name)[1]
+            if ext.lower() not in valid_extension:
+                messages.error(request,"Invalid file  Only .jpg, .jpeg, .png and .ai are allowed." ,extra_tags="custom-success-style")
+                return redirect("company_add_page")
+            
+            
+            
         for filed,required in required_filed.items():
             if not required:
                 messages.error(request,f"{filed} is Required" ,extra_tags="custom-success-style")
@@ -1381,8 +1420,7 @@ def cdr_add(request):
             if CDRDetail.objects.filter(company_email = company_email).exists():
                 messages.error(request,"Choose Another Email",extra_tags='custom-success-style')
                 return redirect('company_add_page')
-            
-        
+
         if CompanyName.objects.filter(company_name__icontains = company_name).exists():
             print("Company Already Exists")
         else:
@@ -1407,8 +1445,47 @@ def cdr_add(request):
             'cdr_upload_date':cdr_upload_date,
             'job_name':job_name,
             'cdr_corrections':cdr_corrections_data,
-            
         }
+        thumbnails_images_folder = os.path.join(settings.BASE_DIR, 'thumbnail_image')
+        if not os.path.exists(thumbnails_images_folder):
+            os.makedirs(thumbnails_images_folder)
+        
+        for i in cdr_files:
+            filename = i.name
+            rot, ext = os.path.splitext(filename)
+            size_limit = 2 * 1024 * 1024  
+            
+        
+            file_size = i.size
+           
+            
+            if file_size < size_limit:
+               
+                continue
+            img = Image.open(i)
+            base, ext = os.path.splitext(filename)
+            quality = 98
+            new_file = os.path.join(thumbnails_images_folder, f"{base}_thumbnail{ext}")
+            
+            for att in range(10):
+                img.save(new_file, optimize=True, quality=quality)
+                new_size = os.path.getsize(new_file)
+              
+                quality -= 5
+        
+        # path = ''
+        # with open(new_file, 'rb') as f:
+        #     thumbnail_file = File(f)
+        #     path = thumbnail_file
+        
+        
+        # print(path)
+        # with open(path, 'rb') as f:
+        #     image_file = File(f, name=os.path.basename(path))
+        with open(new_file, 'rb') as f:
+            thumbnail_file = File(f, name=os.path.basename(new_file))
+            image_file = thumbnail_file
+            
         file_dic = {}
         for i, file in enumerate(cdr_files):
             _, file_extension = os.path.splitext(file.name)
@@ -1417,30 +1494,48 @@ def cdr_add(request):
             file.name = new_file_name
             file_key = f"{new_file_name}"
             file_dic[file_key] = (file.name, file, file.content_type)
-            
-            
-        try:
-            url = os.environ.get('CREATE_WEBHOOK_CDR')
-            response = requests.post(f'{url}',data=data,files=file_dic)
-            print(response.status_code)
-            
-            # data_string  = response.text
-    
-            # print(data_string)
-            
-            if response.status_code  == 200:
-                print("Positive Response : ",response)
-                messages.success(request,"CDR Upload Successfully ")
-                return redirect('company_add_page')
-            else:
 
+            try:
+                url = os.environ.get('CREATE_WEBHOOK_CDR')
+                response = requests.post(f'{url}',data=data,files=file_dic)
+                print(response.status_code)
+                if response.status_code  == 200:
+                    print("Positive Response : ",response)
+                    messages.success(request,"CDR Upload Successfully ")
+                else:
+
+                    cdr_data = CDRDetail.objects.create(
+                        date=cdr_upload_date,
+                        company_name=company_name,
+                        company_email=company_email,
+                        cdr_corrections=cdr_corrections_data,
+                        job_name=job_name
+                    )
+                    for file_key, file_data in file_dic.items():
+                        file_object = file_data[1]
+                        
+                        print(file_object)
+                
+                        cdr_image = CDRImage.objects.create(
+                            cdr=cdr_data,
+                            image=file_object,
+                            thumbnail_image=image_file
+                        
+                        )
+                    
+                        cdr_image.save()
+                    cdr_data.save()
+                    
+                    messages.success(request, 'CDR Upload Successfully SQLite DB')
+                    return redirect('company_add_page')
+            except Exception as e:
                 cdr_data = CDRDetail.objects.create(
-                    date=cdr_upload_date,
-                    company_name=company_name,
-                    company_email=company_email,
-                    cdr_corrections=cdr_corrections_data,
-                    job_name=job_name
-                )
+                        date=cdr_upload_date,
+                        company_name=company_name,
+                        company_email=company_email,
+                        cdr_corrections=cdr_corrections_data,
+                        job_name=job_name
+                    )
 
                 for file_key, file_data in file_dic.items():
                     file_object = file_data[1]  
@@ -1449,27 +1544,9 @@ def cdr_add(request):
                         image=file_object,
                     )
                 cdr_data.save()
-                messages.success(request, 'CDR Upload Successfully SQLite DB')
+                messages.success(request, 'Data successfully added to SQLite DB')
                 return redirect('company_add_page')
-        except Exception as e:
-            cdr_data = CDRDetail.objects.create(
-                    date=cdr_upload_date,
-                    company_name=company_name,
-                    company_email=company_email,
-                    cdr_corrections=cdr_corrections_data,
-                    job_name=job_name
-                )
-
-            for file_key, file_data in file_dic.items():
-                file_object = file_data[1]  
-                CDRImage.objects.create(
-                    cdr=cdr_data,
-                    image=file_object,
-                )
-            cdr_data.save()
-            messages.success(request, 'Data successfully added to SQLite DB')
-            return redirect('company_add_page')
-        
+    
     
 
 @never_cache
@@ -2136,6 +2213,33 @@ class CDRUpdateView(APIView):
             
             
 
+
+
+# def image_compress(filepath):
+#     print("Hello world")
+#     size = 2 * 1024 * 1024 
+#     file_size = os.path.getsize(filepath)
+#     print(file_size)
+#     if file_size < size:
+#         print(filepath)
+#     else:
+#         img  = Image.open(filepath)
+#         folder, name = os.path.split(filepath)
+#         base, ext = os.path.splitext(name)
+#         new_file = os.path.join(folder, f"{base}_compressed{ext}")
+        
+#         while True:
+#             img.save(new_file,optimize=True,quality=95)
+#             new_size = os.path.getsize(new_file)
+#             if new_size < size :
+#                 break
+#         return new_file
+                
+            
+          
+    
+    
+# image_compress("demo.jpg")
 # Django Class Base View
 
 # def function_name(demo,*args):
