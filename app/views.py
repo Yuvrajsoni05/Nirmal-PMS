@@ -2,9 +2,15 @@
 from ast import Import
 from email.mime import image
 from genericpath import isfile
+from io import BytesIO
 from math import nan
+from traceback import print_tb
 from PIL import Image
 from django.views.decorators.http import require_GET
+# from matplotlib.image import thumbnail
+# from matplotlib.widgets import EllipseSelector
+# from matplotlib.image import thumbnail
+from numpy import size
 from rest_framework.serializers import Serializer, ValidationError
 from django.test import RequestFactory
 from rest_framework import serializers, status
@@ -19,7 +25,8 @@ from django.db.models.signals import pre_delete
 from django.template.context_processors import request
 from django.views.generic import TemplateView
 from datetime import date, datetime, timedelta
-
+from django.core.files.base import ContentFile
+# from scipy import optimize
 # from scipy import optimize
 
 
@@ -27,7 +34,7 @@ from datetime import date, datetime, timedelta
 
 # from jinja2 import Template
 
-from app.models import Job_detail
+from app.models import CDRDetail, Job_detail
 from app.serializers import CDRDataSerializer, JobDetailSerializer, JobUpdateSerializer
 
 # from app.views import update_job
@@ -1356,197 +1363,168 @@ def cdr_page(request):
     
 def cdr_add(request):
     if request.method == 'POST':
-        company_name = request.POST.get('company_name','').strip()
-        company_email = request.POST.get('company_email','').strip()
-        cdr_upload_date = request.POST.get('cdr_upload_date','').strip()
-        cdr_files  =  request.FILES.getlist('cdr_files','')
-        job_name = request.POST.get('job_name',)
+        company_name = request.POST.get('company_name', '').strip()
+        company_email = request.POST.get('company_email', '').strip()
+        cdr_upload_date = request.POST.get('cdr_upload_date', '').strip()
+        cdr_files = request.FILES.getlist('cdr_files', '')
+        job_name = request.POST.get('job_name', '')
         cdr_corrections_data = request.POST.get('cdr_corrections')
-        new_company_name = request.POST.get('new_company_name','').strip()
-        new_company_email = request.POST.get('new_company_email','').strip()
-        new_job_name =  request.POST.get('new_job_name','').strip()
+        new_company_name = request.POST.get('new_company_name', '').strip()
+        new_company_email = request.POST.get('new_company_email', '').strip()
+        new_job_name = request.POST.get('new_job_name', '').strip()
 
         if not job_name or not cdr_upload_date:
             messages.error(request, "Job name and upload date are required.", extra_tags='custom-error-style')
             return redirect('company_add_page')
-        
-        if new_job_name !='':
+
+        if new_job_name != '':
             job_name = new_job_name
 
         if new_company_email != '':
-            company_email = new_company_email 
-           
-           
-        if new_company_name != '':
-            company_name = new_company_name  
+            company_email = new_company_email
 
-        
-        required_filed = {
+        if new_company_name != '':
+            company_name = new_company_name
+
+        required_fields = {
             'Company Name': company_name,
             'Company Email': company_email,
             'Upload Date': cdr_upload_date,
             'Job Name': job_name,
         }
 
-        valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]  
+        valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
 
         for file in cdr_files:
             ext = os.path.splitext(file.name)[1]
             if ext.lower() not in valid_extension:
-                messages.error(request,"Invalid file  Only .jpg, .jpeg, .png and .ai are allowed." ,extra_tags="custom-success-style")
+                messages.error(request, "Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed.", extra_tags="custom-success-style")
                 return redirect("company_add_page")
-            
-            
-            
-        for filed,required in required_filed.items():
+
+        for field, required in required_fields.items():
             if not required:
-                messages.error(request,f"{filed} is Required" ,extra_tags="custom-success-style")
+                messages.error(request, f"{field} is Required", extra_tags="custom-success-style")
                 return redirect('company_add_page')
-        
+
         if not cdr_files:
-            messages.error(request,"CDR File is Required",extra_tags='custom-success-style')
+            messages.error(request, "CDR File is Required", extra_tags='custom-success-style')
             return redirect('company_add_page')
         if len(cdr_files) > 2:
             messages.error(request, "You can upload only 2 files", extra_tags="custom-error-style")
             return redirect('company_add_page')
-        
 
-        if CDRDetail.objects.filter(company_name = company_name, company_email=company_email).exists():
+        # Check if company exists
+        if CDRDetail.objects.filter(company_name=company_name, company_email=company_email).exists():
             print("Valid")
         else:
-            if CDRDetail.objects.filter(company_name = company_name).exists():
-                messages.error(request,"Choose Another Company Name",extra_tags='custom-success-style')
+            if CDRDetail.objects.filter(company_name=company_name).exists():
+                messages.error(request, "Choose Another Company Name", extra_tags='custom-success-style')
                 return redirect('company_add_page')
-            if CDRDetail.objects.filter(company_email = company_email).exists():
-                messages.error(request,"Choose Another Email",extra_tags='custom-success-style')
+            if CDRDetail.objects.filter(company_email=company_email).exists():
+                messages.error(request, "Choose Another Email", extra_tags='custom-success-style')
                 return redirect('company_add_page')
 
-        if CompanyName.objects.filter(company_name__icontains = company_name).exists():
+        # Ensure company is added
+        if CompanyName.objects.filter(company_name__icontains=company_name).exists():
             print("Company Already Exists")
         else:
-            company_add_in = CompanyName.objects.create(
-                company_name = company_name
-            )       
-            company_add_in.save()        
-        
-        if CDRDetail.objects.filter(job_name__icontains = job_name,date=cdr_upload_date ).exists():
-            messages.error(request,'Job Name are already Exists on this date kindly Update job',extra_tags='custom-success-style')
+            company_add_in = CompanyName.objects.create(company_name=company_name)
+            company_add_in.save()
+
+        if CDRDetail.objects.filter(job_name__icontains=job_name, date=cdr_upload_date).exists():
+            messages.error(request, 'Job Name already exists on this date. Kindly update job.', extra_tags='custom-success-style')
             return redirect('company_add_page')
 
-        
+        # Email regex validation
         email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         if not re.match(email_regex, company_email):
-            messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style") 
+            messages.error(request, "Enter a valid email address.", extra_tags="custom-success-style")
             return redirect('company_add_page')
+
         
         data = {
-            'company_name':company_name,
-            'company_email':company_email,
-            'cdr_upload_date':cdr_upload_date,
-            'job_name':job_name,
-            'cdr_corrections':cdr_corrections_data,
+            'company_name': company_name,
+            'company_email': company_email,
+            'cdr_upload_date': cdr_upload_date,
+            'job_name': job_name,
+            'cdr_corrections': cdr_corrections_data,
         }
-        thumbnails_images_folder = os.path.join(settings.BASE_DIR, 'thumbnail_image')
-        if not os.path.exists(thumbnails_images_folder):
-            os.makedirs(thumbnails_images_folder)
         
-        for i in cdr_files:
-            filename = i.name
-            rot, ext = os.path.splitext(filename)
-            size_limit = 2 * 1024 * 1024  
-            
-        
-            file_size = i.size
-           
-            
-            if file_size < size_limit:
-               
-                continue
-            img = Image.open(i)
-            base, ext = os.path.splitext(filename)
-            quality = 98
-            new_file = os.path.join(thumbnails_images_folder, f"{base}_thumbnail{ext}")
-            
-            for att in range(10):
-                img.save(new_file, optimize=True, quality=quality)
-                new_size = os.path.getsize(new_file)
-              
-                quality -= 5
-        
-        # path = ''
-        # with open(new_file, 'rb') as f:
-        #     thumbnail_file = File(f)
-        #     path = thumbnail_file
-        
-        
-        # print(path)
-        # with open(path, 'rb') as f:
-        #     image_file = File(f, name=os.path.basename(path))
-        with open(new_file, 'rb') as f:
-            thumbnail_file = File(f, name=os.path.basename(new_file))
-            image_file = thumbnail_file
-            
-        file_dic = {}
-        for i, file in enumerate(cdr_files):
-            _, file_extension = os.path.splitext(file.name)
-            random_number = random.randint(1, 100)
-            new_file_name = f'{cdr_upload_date}_{random_number}{file_extension}'
-            file.name = new_file_name
-            file_key = f"{new_file_name}"
-            file_dic[file_key] = (file.name, file, file.content_type)
-
-            try:
-                url = os.environ.get('CREATE_WEBHOOK_CDR')
-                response = requests.post(f'{url}',data=data,files=file_dic)
-                print(response.status_code)
-                if response.status_code  == 200:
+        url = os.environ.get('CREATE_WEBHOOK_CDR')
+        print(url)
+        if url:
+            file_dic = {}
+            for i, file in enumerate(cdr_files):
+                _, file_extension = os.path.splitext(file.name)
+                random_number = random.randint(1, 100)
+                new_file_name = f'{cdr_upload_date}_{random_number}{file_extension}'
+                file.name = new_file_name
+                file_key = f"{new_file_name}"
+                file_dic[file_key] = (file.name, file, file.content_type) 
+                       
+            url = os.environ.get('CREATE_WEBHOOK_CDR')
+            response = requests.post(f'{url}',data=data,files=file_dic)
+            if response.status_code  == 200:
                     print("Positive Response : ",response)
+                    
                     messages.success(request,"CDR Upload Successfully ")
-                else:
-
-                    cdr_data = CDRDetail.objects.create(
-                        date=cdr_upload_date,
-                        company_name=company_name,
-                        company_email=company_email,
-                        cdr_corrections=cdr_corrections_data,
-                        job_name=job_name
-                    )
-                    for file_key, file_data in file_dic.items():
-                        file_object = file_data[1]
-                        
-                        print(file_object)
-                
-                        cdr_image = CDRImage.objects.create(
-                            cdr=cdr_data,
-                            image=file_object,
-                            thumbnail_image=image_file
-                        
-                        )
-                    
-                        cdr_image.save()
-                    cdr_data.save()
-                    
-                    messages.success(request, 'CDR Upload Successfully SQLite DB')
                     return redirect('company_add_page')
-            except Exception as e:
+            else:
                 cdr_data = CDRDetail.objects.create(
-                        date=cdr_upload_date,
-                        company_name=company_name,
-                        company_email=company_email,
-                        cdr_corrections=cdr_corrections_data,
-                        job_name=job_name
+                    date=cdr_upload_date,
+                    company_name=company_name,
+                    company_email=company_email,
+                    cdr_corrections=cdr_corrections_data,
+                    job_name=job_name
                     )
+                
+                for i in cdr_files:
+                    filename = i.name
+                    size_limit = 2 * 1024 * 1024  
+                    file_size = i.size
+                    thumbnail_file = nan
 
-                for file_key, file_data in file_dic.items():
-                    file_object = file_data[1]  
-                    CDRImage.objects.create(
+        
+                    if file_size > size_limit:
+                        img = Image.open(i)
+                        base, ext = os.path.splitext(filename)
+                        quality = 98
+
+                        for f in range(10):
+                            io = BytesIO()
+                            img.save(io, format='webp', optimize=True, quality=quality)
+                            if io.tell() <= size_limit:
+                                print("this is tell ", io.tell)
+                                io.seek(0)
+                                thumbnail_file = File(io, name=f"{base}_thumbnail.webp")
+                                break
+                            quality -= 5
+                        else:
+                            print("All GooD")
+                    else:
+                        thumbnail_file = File(io, name=f"{base}_thumbnail.webp")
+
+                    file_dic = {}
+                    _, file_extension = os.path.splitext(i.name)
+                    random_number = random.randint(1, 100)
+                    new_file_name = f'{cdr_upload_date}_{random_number}{file_extension}'
+                    i.name = new_file_name
+
+                
+                    file_key = f"{new_file_name}"
+                    file_dic[file_key] = (i.name, i, i.content_type)
+
+                    
+                    cdr_image = CDRImage.objects.create(
                         cdr=cdr_data,
-                        image=file_object,
+                        image=i,
+                        thumbnail_image=thumbnail_file
                     )
+                    cdr_image.save()
+
                 cdr_data.save()
-                messages.success(request, 'Data successfully added to SQLite DB')
+                messages.success(request, 'CDR Upload Successfully SQLite DB')
                 return redirect('company_add_page')
-    
     
 
 @never_cache
@@ -1980,7 +1958,31 @@ def file_convert(images):
 
 
 def cdr_job_check(job_name,date):
-    return ('date','demo')
+    if CDRDetail.objects.filter(job_name__icontains=job_name,date=date).exists():
+        return {
+            'Error' : 'Job Name already exists on this date. Kindly update job'
+        }
+    return None
+
+
+
+def cdr_company_check(company_name,company_email):
+    if CDRDetail.objects.filter(company_name=company_name, company_email=company_email).exists():
+        
+        print("Valid")
+    else:
+        if CDRDetail.objects.filter(company_name=company_name).exists():
+            return {
+             'Error' :  "Choose Another Company Name"  
+             } 
+        if CDRDetail.objects.filter(company_email=company_email).exists():
+            return {
+             'Error' :  "Choose Another Email"  
+            } 
+         
+    
+    
+    
 
 
 
@@ -2141,47 +2143,104 @@ class JobDetailAV(APIView):
 
 
 class CDRDetailAVS(APIView):
+    serializer_class = CDRDataSerializer
     def get(self, request):
         if request.method == 'GET':
             cdr = CDRDetail.objects.all()
             serializer = CDRDataSerializer(cdr, many=True)
             return Response(serializer.data)
-        
+    
+    
+    
+    
+    
     def post(self, request):
         job_name = request.data.get('job_name')
         images = request.FILES.getlist('images')
         date = request.data.get('date')
-        print(date)
+        company_name = request.data.get('company_name')
+        company_email = request.data.get('company_email')
+        
+        
+        
         
 
-        image_error = file_convert(images)
-        print(image_error)
+        # print(images)
+        # print(date)
+        
+        # print(job_name)
+        
+        print(images)
+        image_error =file_convert(images)
         if image_error:
-            return Response(image_error, status=status.HTTP_400_BAD_REQUEST)
+            return Response(image_error,status=status.HTTP_404_NOT_FOUND)
+        
         
         
         job_error = cdr_job_check(job_name,date)
         if job_error : 
             return Response(job_error,status=status.HTTP_400_BAD_REQUEST)
-            
-        file_dic = {}
-        for i,file in enumerate(images):
-            _,file_extension = os.path.splitext(file.name)
-            random_number = random.randint(1,100)
-            new_file_name = f'{date}_{random_number}{file_extension}'
-            
-            file.name = new_file_name
-            file_key  = f"{new_file_name}"
-            file_dic[file_key] = (file.name,file,file.content_type)
-            
-        serializer = CDRDataSerializer(data=request.data)
+        
+        company_name_error = cdr_company_check(company_name,company_email)
+        if company_name_error : 
+            return Response(company_name_error,status=status.HTTP_400_BAD_REQUEST)
+        
+        
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
+            
             cdr_instance = serializer.save()
-            for img_key, (filename, image, content_type) in file_dic.items():
-                cdr_image = CDRImage.objects.create(cdr=cdr_instance, image=image)
+
+            for i in images:
+                print("This Is I  ",i)
+                filename = i.name
+                size_limit = 2 * 1024 * 1024
+                file_size = i.size
+                thumbnail_file = None
+
+                _, file_extension = os.path.splitext(i.name)
+                random_number = random.randint(1, 100)
+                new_file_name = f'{date}_{random_number}{file_extension}'
+                i.name = new_file_name
+
+               
+                if file_size > size_limit:
+                    img = Image.open(i)
+                    base, ext = os.path.splitext(new_file_name)
+                    print(base)
+                    quality = 80
+                    for f in range(10):
+                        io = BytesIO()
+                        img.save(io, format='WEBP', optimize=True, quality=quality)
+                        size = io.tell()
+                        print(f"This is Size of {size:2f}")
+                        
+                        if size <= size_limit:
+                            io.seek(0)
+                            thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
+                            break
+                        quality -= 5
+                else:   
+                    img = Image.open(i)
+                    io = BytesIO()
+                    img.save(io, format='WEBP', optimize=True, quality=40)
+                    io.seek(0)
+                    base, ext = os.path.splitext(filename)
+                    thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
+
+
+                
+                print(thumbnail_file)
+                CDRImage.objects.create(
+                    cdr=cdr_instance,
+                    image=i,
+                    thumbnail_image=thumbnail_file
+                )
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         else:
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
 

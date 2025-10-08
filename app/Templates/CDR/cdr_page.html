@@ -546,31 +546,31 @@ $("#company_name").change(function () {
             url: '{% url "company_name_suggestion" %}',
             data: { company_name: companyName },
             success: function (data) {
-                // Reset Job Name Dropdown
+          
                 $("#job_name")
                     .empty()
                     .append('<option value="">Select Job</option>');
                 $("#job_name").append('<option value="others">Other</option>');
 
-                // Reset Company Email Dropdown
+             
                 $("#company_email")
                     .empty()
                     .append('<option value="">Select Company Email</option>');
                 
-                // Check if emails are available in the response data
+           
                 if (data.email && data.email.length > 0) {
-                    // If emails are available, don't append "Other" option
+              
                     $.each(data.email, function (index, email) {
                         $("#company_email").append(
                             '<option value="' + email.company_email + '">' + email.company_email + "</option>"
                         );
                     });
                 } else {
-                    // If no emails are available, append the "Other" option
+     
                     $("#company_email").append('<option value="other">Other</option>');
                 }
 
-                // Populate Job Name Dropdown with job names
+    
                 $.each(data.jobs, function (index, job) {
                     $("#job_name").append(
                         '<option value="' + job.job_name + '">' + job.job_name + "</option>"
@@ -579,11 +579,11 @@ $("#company_name").change(function () {
             },
         });
     } else {
-        // Reset the job name dropdown when no company name is selected
+     
         $("#job_name").empty().append('<option value="">Select Job</option>');
         $("#job_name").append('<option value="others">Other</option>');
 
-        // Reset the company email dropdown when no company name is selected
+    
         $("#company_email")
             .empty()
             .append('<option value="">Select Company Email</option>');
