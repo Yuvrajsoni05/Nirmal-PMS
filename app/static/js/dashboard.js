@@ -126,103 +126,155 @@ function printJobDetails(btn) {
     const doc = iframe.contentWindow.document;
     doc.open();
     doc.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Job Details - Print</title>
-                    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-                    <style>
-                        body { font-family: Arial, sans-serif; padding: 20px; margin: 0; }
-                        @page { margin: 20px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="text-center mb-4">
-                        <h2 style="color: #0d6efd; margin-bottom: 5px;">Nirmal Group</h2>
-                        <h4 style="margin-bottom: 20px;">Job Details Report</h4>
-                        <hr>
-                    </div>
-                    
-                    <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background-color: #212529; color: white;">
-                                <th style="width: 30%; padding: 12px; border: 1px solid #dee2e6;">Field</th>
-                                <th style="padding: 12px; border: 1px solid #dee2e6;">Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Job ID</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${jobId}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Job Name</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${job_name}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Job Bill No</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${job_bill_no}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Company Name</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${company_name}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>PRPC Purchase</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${prpc_purchase}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>PRPC Sell</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${prpc_sell}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Cylinder Size</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${cylinder_size}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Cylinder Made In</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${cylinder_made_in}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Cylinder Bill No</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${cylinder_bill_no}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Cylinder Date</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${cylinder_date}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Pouch Size</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${pouch_size}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Pouch Open Size</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${pouch_open_size}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Pouch Combination</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${pouch_combination}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Correction</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${correction}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Job Status</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${job_status}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Folder URL</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6; word-break: break-all;">${folder_url}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    
-                    <div class="text-center mt-4">
-                        <small style="color: #6c757d;">Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</small>
-                    </div>
-                </body>
-                </html>
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - Bill Format</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            padding: 20px;
+            margin: 0;
+            color: #333;
+        }
+        @page {
+            margin: 20px;
+        }
+        h2, h4 {
+            color: #0d6efd;
+            margin-bottom: 10px;
+        }
+        .table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .table td, .table th {
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid #dee2e6;
+        }
+        .table th {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-size: 1rem;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .table .section-header {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #6c757d;
+            font-size: 0.875rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="text-center mb-4">
+        <h2>Nirmal Group</h2>
+        <h4>Job Details Bill</h4>
+        <hr>
+    </div>
+
+    <!-- Table for job details -->
+    <table class="table">
+        <!-- Job Information Section -->
+        <tr class="section-header">
+            <th colspan="2">Job Information</th>
+        </tr>
+        <tr>
+            <td><strong>Job ID</strong></td>
+            <td>${jobId}</td>
+        </tr>
+        <tr>
+            <td><strong>Job Name</strong></td>
+            <td>${job_name}</td>
+        </tr>
+        <tr>
+            <td><strong>Job Bill No</strong></td>
+            <td>${job_bill_no}</td>
+        </tr>
+        <tr>
+            <td><strong>Company Name</strong></td>
+            <td>${company_name}</td>
+        </tr>
+
+        <!-- Pricing Information Section -->
+        <tr class="section-header">
+            <th colspan="2">Pricing Information</th>
+        </tr>
+        <tr>
+            <td><strong>PRPC Purchase</strong></td>
+            <td>${prpc_purchase}</td>
+        </tr>
+        <tr>
+            <td><strong>PRPC Sell</strong></td>
+            <td>${prpc_sell}</td>
+        </tr>
+
+        <!-- Cylinder Details Section -->
+        <tr class="section-header">
+            <th colspan="2">Cylinder Details</th>
+        </tr>
+        <tr>
+            <td><strong>Cylinder Size</strong></td>
+            <td>${cylinder_size}</td>
+        </tr>
+        <tr>
+            <td><strong>Cylinder Bill No</strong></td>
+            <td>${cylinder_bill_no}</td>
+        </tr>
+
+        <!-- Pouch Details Section -->
+        <tr class="section-header">
+            <th colspan="2">Pouch Details</th>
+        </tr>
+        <tr>
+            <td><strong>Pouch Size</strong></td>
+            <td>${pouch_size}</td>
+        </tr>
+        <tr>
+            <td><strong>Pouch Open Size</strong></td>
+            <td>${pouch_open_size}</td>
+        </tr>
+        <tr>
+            <td><strong>Pouch Combination</strong></td>
+            <td>${pouch_combination}</td>
+        </tr>
+
+        <!-- Additional Information Section -->
+        <tr class="section-header">
+            <th colspan="2">Additional Information</th>
+        </tr>
+        <tr>
+            <td><strong>Correction</strong></td>
+            <td>${correction}</td>
+        </tr>
+        <tr>
+            <td><strong>Job Status</strong></td>
+            <td>${job_status}</td>
+        </tr>
+        <tr>
+            <td><strong>Folder URL</strong></td>
+            <td style="word-wrap: break-word; max-width: 300px;">${folder_url}</td>
+        </tr>
+    </table>
+
+    <!-- Footer -->
+
+</body>
+</html>
+
+
+
             `);
     doc.close();
 

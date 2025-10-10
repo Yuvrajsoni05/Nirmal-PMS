@@ -5,145 +5,418 @@
         <meta charset="UTF-8" />
         <title>Job Order Completed</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 20px;
-                background: #f5f5f5;
-            }
-
-            .email-container {
-                width: 100%;
-                max-width: none;
-                background: white;
-                padding: 20px;
-                border: 1px solid #ddd;
-            }
-
-            h2 {
-                color: #333;
-                margin-bottom: 20px;
-            }
-
-            p {
-                color: #666;
-                line-height: 1.4;
-                margin-bottom: 15px;
-            }
-
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin: 20px 0;
-            }
-
-            td {
-                padding: 8px;
-                border-bottom: 1px solid #eee;
-            }
-
-            td:first-child {
-                font-weight: bold;
-                color: #333;
-                width: 200px;
-            }
-
-            .btn {
-                display: inline-block;
-                background: #007cba;
-                color: white;
-                padding: 10px 20px;
-                text-decoration: none;
-                margin-top: 20px;
-            }
-
-            .footer {
-                margin-top: 30px;
-                padding-top: 20px;
-                border-top: 1px solid #eee;
-                color: #999;
-                font-size: 12px;
-            }
-        </style>
     </head>
-    <body>
-        <div class="email-container">
-            <h2>Job Order Completed</h2>
+    <body
+        style="
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        "
+    >
+        <table
+            role="presentation"
+            style="width: 100%; background: #f5f5f5; padding: 20px"
+        >
+            <tr>
+                <td align="center">
+                    <table
+                        role="presentation"
+                        style="
+                            background: white;
+                            padding: 30px;
+                            border: 1px solid #ddd;
+                            border-radius: 10px;
+                            max-width: 800px;
+                            width: 100%;
+                        "
+                    >
+                        <tr>
+                            <td>
+                                <h2
+                                    style="
+                                        color: #333;
+                                        font-size: 1.8rem;
+                                        margin-bottom: 20px;
+                                    "
+                                >
+                                    Job Order Completed
+                                </h2>
+                                <p
+                                    style="
+                                        color: #666;
+                                        line-height: 1.6;
+                                        margin-bottom: 20px;
+                                        font-size: 1rem;
+                                    "
+                                >
+                                    Hello,
+                                </p>
+                                <p
+                                    style="
+                                        color: #666;
+                                        line-height: 1.6;
+                                        margin-bottom: 20px;
+                                        font-size: 1rem;
+                                    "
+                                >
+                                    Your job order has been completed
+                                    successfully. Please find the details below:
+                                </p>
 
-            <p>Hello,</p>
-            <p>Your job order has been completed successfully. Kindly check</p>
+                                <table
+                                    role="presentation"
+                                    style="
+                                        width: 100%;
+                                        border-collapse: collapse;
+                                        margin-top: 20px;
+                                    "
+                                >
+                                    {% if date %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Date
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ date }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if bill_no %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Bill Number
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ bill_no }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if company_name %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Company Name
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ company_name }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if company_email_address %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Company Email
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ company_email_address }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if job_name %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Job Name
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ job_name }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if noc %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Number of Colors
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ noc }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if prpc_sell %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            PRPC Sell
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ prpc_sell }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if cylinder_size %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Cylinder Size
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ cylinder_size }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if pouch_size %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Pouch Size
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ pouch_size }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if pouch_open_size %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Pouch Open Size
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ pouch_open_size }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if correction %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Correction
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ correction }}
+                                        </td>
+                                    </tr>
+                                    {% endif %} {% if note %}
+                                    <tr>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                font-weight: bold;
+                                                color: #333;
+                                                width: 220px;
+                                                text-align: left;
+                                            "
+                                        >
+                                            Note
+                                        </td>
+                                        <td
+                                            style="
+                                                padding: 12px;
+                                                border-bottom: 1px solid #eee;
+                                                color: #555;
+                                                text-align: left;
+                                            "
+                                        >
+                                            {{ note }}
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                </table>
 
-            <table>
-                {% if date %}
-                <tr>
-                    <td>Date</td>
-                    <td>{{ date }}</td>
-                </tr>
-                {% endif %} {% if bill_no %}
-                <tr>
-                    <td>Bill Number</td>
-                    <td>{{ bill_no }}</td>
-                </tr>
-                {% endif %} {% if company_name %}
-                <tr>
-                    <td>Company Name</td>
-                    <td>{{ company_name }}</td>
-                </tr>
-                {% endif %} {% if company_email_address %}
-                <tr>
-                    <td>Company Email</td>
-                    <td>{{ company_email_address }}</td>
-                </tr>
-                {% endif %} {% if job_name %}
-                <tr>
-                    <td>Job Name</td>
-                    <td>{{ job_name }}</td>
-                </tr>
-                {% endif %} {% if noc %}
-                <tr>
-                    <td>Number of Colors</td>
-                    <td>{{ noc }}</td>
-                </tr>
-                {% endif %} {% if prpc_sell %}
-                <tr>
-                    <td>PRPC Sell</td>
-                    <td>{{ prpc_sell }}</td>
-                </tr>
-                {% endif %} {% if cylinder_size %}
-                <tr>
-                    <td>Cylinder Size</td>
-                    <td>{{ cylinder_size }}</td>
-                </tr>
-                {% endif %} {% if pouch_size %}
-                <tr>
-                    <td>Pouch Size</td>
-                    <td>{{ pouch_size }}</td>
-                </tr>
-                {% endif %} {% if pouch_open_size %}
-                <tr>
-                    <td>Pouch Open Size</td>
-                    <td>{{ pouch_open_size }}</td>
-                </tr>
-                {% endif %} {% if correction %}
-                <tr>
-                    <td>Correction</td>
-                    <td>{{ correction }}</td>
-                </tr>
-                {% endif %} {% if note %}
-                <tr>
-                    <td>Note</td>
-                    <td>{{ note }}</td>
-                </tr>
-                {% endif %}
-            </table>
+                                <a
+                                    href="http://localhost:8000/"
+                                    style="
+                                        display: inline-block;
+                                        background: #007cba;
+                                        color: white;
+                                        padding: 12px 20px;
+                                        text-decoration: none;
+                                        margin-top: 20px;
+                                        border-radius: 5px;
+                                        font-size: 1.1rem;
+                                        transition: background-color 0.3s;
+                                    "
+                                    >Visit Website</a
+                                >
 
-            <a href="http://localhost:8000/" class="btn">Visit Website</a>
-
-            <div class="footer">
-                © {{ date|date:"Y"|default:"2025" }} Nirmal Ventures |
-                www.nirmal.com
-            </div>
-        </div>
+                                <div
+                                    style="
+                                        margin-top: 30px;
+                                        padding-top: 20px;
+                                        border-top: 1px solid #eee;
+                                        color: #999;
+                                        font-size: 0.9rem;
+                                        text-align: center;
+                                    "
+                                >
+                                    © {{ date|date:"Y"|default:"2025" }} Nirmal
+                                    Ventures |
+                                    <a
+                                        href="http://www.nirmal.com"
+                                        style="
+                                            color: #007cba;
+                                            text-decoration: none;
+                                        "
+                                        >www.nirmal.com</a
+                                    >
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </body>
 </html>

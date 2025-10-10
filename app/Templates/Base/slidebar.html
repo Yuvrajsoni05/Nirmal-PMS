@@ -83,146 +83,20 @@
                         <span class="sub-item">Add & View CDR</span>
                       </a>
                     </li>
-                    {% comment %} <li>
-                      <a href="{% url "edit_user_page" %}">
-                        <span class="sub-item">Edit User</span>
-                      </a>
-                    </li> {% endcomment %}
+               
                   </ul>
                 </div>
               </li>
-{% comment %} 
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarLayouts_">
-                  <i class="fas fa-th-list"></i>
-                  <p>CDR </p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="sidebarLayouts_">
-                  <ul class="nav nav-collapse">
-                    <li>
-                      <a href="{% url "company_add_page" %}">
-                        <span class="sub-item">Add new CDR File</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="{% url "edit_user_page" %}">
-                        <span class="sub-item">manage CDR Files</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li> {% endcomment %}
+
             </ul>
+            
           </div>
+          <div class="mt-auto bottom text-center pt-3" style="position: absolute; bottom: 10%; width: 100%">
+              <a href="{% url 'logout' %}"  class="btn btn-danger btn-sm w-75">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
         </div>
+        
       </div>
-      {% comment %} def dashboard_page(request):
-    if not request.user.is_authenticated:
-        return redirect('login_page')
-    try:
-        
-       
-            
-        get_q = request.GET.get('q')
-        date_s = request.GET.get('date')
-        sort_by = request.GET.get('sort', 'default_field')  
-        order = request.GET.get('order', 'asc')  
-
-        if order == 'desc':
-            sort_by = '-' + sort_by
-        # cylinder_company = request.GET.get('cylinder_company')
-
-        db_sqlite3 = Job_detail.objects.all().order_by(sort_by)
-        db_sqlite3 = Job_detail.objects.all().order_by('id')
-        total_purchse_floats = [] 
-        total_purchse = Job_detail.objects.values_list('prpc_purchase')
-        for i in total_purchse:
-            data_string = i[0]  
-            cleaned_string = data_string.replace(",", "")
-            float_value = float(cleaned_string)
-            total_purchse_floats.append(float_value)
-
-        a = sum(total_purchse_floats)
-        print(a)
-        total_sell_floats = []
-        total_sell = Job_detail.objects.values_list('prpc_sell')
-        for  i in total_sell:
-            sell_data = i[0]
-            cleaned_data = sell_data.replace(",","")
-            sell_float = float(cleaned_data)
-            total_sell_floats.append(sell_float)
-        
-        b =  sum(total_sell_floats)
-        print(b)
-        print(b)
-        
-        
-        filters = Q()
-        
-        if get_q:
-            filters &= (Q(job_name__icontains=get_q) |
-                        Q(company_name__icontains=get_q) |
-                        Q(cylinder_made_in__icontains=get_q))
-        
-        if date_s:
-            filters &= Q(date__icontains=date_s)
-
-        
-        db_sqlite3 = db_sqlite3.filter(filters)
-
-        
-        db_sqlite3 = db_sqlite3.order_by('id')
-            
-        p = Paginator(db_sqlite3, 10)
-        page = request.GET.get('page')
-        datas = p.get_page(page)
-        total_job = db_sqlite3.count()
-        company_name = CompanyName.objects.all()
-        count_of_company =  company_name.count()
-       
-        cylinder_company_names = CylinderMadeIn.objects.all()
-        count_of_cylinder_compnay = cylinder_company_names.count() 
-        nums = "a" * datas.paginator.num_pages  
-        
-        
-        # sessions = Session.objects.filter(expire_date__gte=now())
-    
-        # user_ids = [session.get_decoded().get("_auth_user_id") for session in sessions]
-        # print(user_ids)
-        # active_users = Registration.objects.filter(id__in=user_ids)
-        # print(active_users) 
-
-        # active_user_names = [f"{user.first_name} {user.last_name}" for user in active_users]
-        # active_users_count = Registration.objects.filter(is_active=True).count()
-
-        # active_users_count = active_users.count()
-        # print(user_ids)
-        # print(active_user_names)
-        # print(active_users_count)
-
-        # data = Job_detail.objects.values_list('prpc_sell')
-        # print(data)
-        
-        
-
-
-    
-        context = {
-            'nums': nums,
-            'venues': datas,
-            'total_job': total_job,
-            'company_name': company_name,
-            'cylinder_company_names': cylinder_company_names,
-            'count_of_company':count_of_company,
-            'count_of_cylinder_compnay':count_of_cylinder_compnay,
-            'total_sales':b,
-            'datas':datas,
-            'total_purchase':a
-        }
-
-    except Exception as e:
-        print(f"Error: {e}")
-        return redirect('dashboard_page')
-
-    return render(request, 'dashboard.html', context) {% endcomment %}
+     

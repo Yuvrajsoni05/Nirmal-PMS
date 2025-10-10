@@ -6,172 +6,203 @@
         <title>Job Order Completed</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <style>
+            /* Global styles */
+            body, html {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f4f7fc;
+            }
+
             .container {
+                max-width: 800px;
+                margin: 20px auto;
+                background-color: #fff;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
                 overflow: hidden;
             }
 
-            .email-form {
-                max-width: 960px;
-                border: 1px solid #f0f0f0;
-                margin: 0 auto;
-            }
-
-            .form-logo {
-                border-bottom: 1px solid #f0f0f0;
-                display: flex;
-                justify-content: right;
-                padding: 14px;
-                background: #f0f0f0;
+            /* Header styles */
+            .header-section {
+                background-color: #0066cc;
+                padding: 20px;
+                text-align: center;
+                color: #fff;
+                font-size: 24px;
             }
 
             .form-logo img {
                 width: 150px;
+                margin-bottom: 10px;
             }
 
-            .header-section h2 {
-                font-size: 30px;
-                margin: 10px 0;
-                text-align: center;
-                border-bottom: 1px solid #f0f0f0;
-                padding-bottom: 10px;
-            }
-
+            /* Bottom header */
             .bottom-header {
                 display: flex;
                 justify-content: space-between;
-                padding: 10px 14px;
-                border-bottom: 1px solid #f0f0f0;
-                padding-bottom: 14px;
+                padding: 15px;
+                border-bottom: 1px solid #e0e0e0;
             }
 
             .bottom-header p {
+                font-size: 14px;
                 margin: 0;
             }
 
+            .bottom-header span {
+                font-weight: bold;
+            }
+
+            /* Table styles */
             .form-list {
-                margin: 20px 14px;
+                padding: 20px;
             }
 
             .form-list table {
                 width: 100%;
                 border-collapse: collapse;
+                font-size: 14px;
             }
 
             .form-list td {
-                padding: 6px 8px;
+                padding: 10px;
                 border: 1px solid #ddd;
+                text-align: left;
             }
 
+            .form-list td:first-child {
+                background-color: #f8f8f8;
+                font-weight: bold;
+            }
+
+            /* Footer Section */
             .footer-section {
-                margin-top: 20px;
-                display: grid;
-                gap: 20px;
-            }
-
-            .footer-bottom {
+                padding: 20px;
+                background-color: #f8f8f8;
+                border-top: 1px solid #e0e0e0;
                 text-align: center;
             }
 
-            .mail-btn {
-                display: flex;
-                justify-content: right;
-            }
-
             .footer-top p {
-                margin: 3px 0;
+                font-size: 14px;
+                margin: 5px 0;
             }
 
             .footer-logo img {
                 width: 120px;
+                margin: 10px 0;
             }
 
+            /* Button Styles */
             .btn {
                 display: inline-block;
-                padding: 8px 16px;
-                background-color: #007bff;
+                padding: 12px 25px;
+                background-color: #0066cc;
                 color: #fff;
                 text-decoration: none;
-                border-radius: 4px;
+                font-weight: bold;
+                border-radius: 5px;
+                transition: background-color 0.3s ease;
+                margin-top: 20px;
             }
 
             .btn:hover {
-                background-color: #0056b3;
+                background-color: #004d99;
+            }
+
+            /* Responsive styles */
+            @media screen and (max-width: 600px) {
+                .container {
+                    width: 100%;
+                    padding: 10px;
+                }
+
+                .bottom-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .footer-section {
+                    padding: 10px;
+                }
+
+                .footer-logo img {
+                    width: 100px;
+                }
+
+                .btn {
+                    width: 100%;
+                    text-align: center;
+                }
             }
         </style>
     </head>
     <body>
         <div class="container">
-            <div>
-                <p>Hello,</p>
-                <p>Mail content</p>
+            <div class="header-section">
+                <div class="form-logo">
+                    <img src="{% static 'assets/img/nirmal_logo.png' %}" alt="Nirmal Ventures Logo" />
+                </div>
+                <h2>Nirmal Ventures</h2>
             </div>
-            <div class="email-form">
-                <div class="header-section">
-                    <div class="form-logo">
-                        <img
-                            src="{% static 'assets/img/nirmal_logo.png' %}"
-                            alt=""
-                        />
-                    </div>
-                    <h2>Nirmal Ventures</h2>
-                </div>
-                <div class="bottom-header">
-                    <p>Date:<span>26/08/2025</span></p>
-                </div>
-                <div class="form-list">
-                    <table class="info-table">
-                        {% if date %}
-                        <tr>
-                            <td>Date</td>
-                            <td>{{ date }}</td>
-                        </tr>
-                        {% endif %} {% if Company_Name %}
-                        <tr>
-                            <td>Company Name</td>
-                            <td>{{ Company_Name }}</td>
-                        </tr>
-                        {% endif %} {% if Company_Email %}
-                        <tr>
-                            <td>Company Email</td>
-                            <td>{{ Company_Email }}</td>
-                        </tr>
-                        {% endif %} {% if cdr_job_name %}
-                        <tr>
-                            <td>Job Name</td>
-                            <td>{{ cdr_job_name }}</td>
-                        </tr>
-                        {% endif %} {% if cdr_corrections %}
-                        <tr>
-                            <td>Correction</td>
-                            <td>{{ cdr_corrections }}</td>
-                        </tr>
-                        {% endif %} {% if notes %}
-                        <tr>
-                            <td>Note</td>
-                            <td>{{ notes }}</td>
-                        </tr>
-                        {% endif %}
-                    </table>
-                </div>
+
+            <div class="bottom-header">
+                <p>Date: <span>26/08/2025</span></p>
             </div>
+
+            <div class="form-list">
+                <table class="info-table">
+                    {% if date %}
+                    <tr>
+                        <td>Date</td>
+                        <td>{{ date }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if Company_Name %}
+                    <tr>
+                        <td>Company Name</td>
+                        <td>{{ Company_Name }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if Company_Email %}
+                    <tr>
+                        <td>Company Email</td>
+                        <td>{{ Company_Email }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if cdr_job_name %}
+                    <tr>
+                        <td>Job Name</td>
+                        <td>{{ cdr_job_name }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if cdr_corrections %}
+                    <tr>
+                        <td>Correction</td>
+                        <td>{{ cdr_corrections }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if notes %}
+                    <tr>
+                        <td>Note</td>
+                        <td>{{ notes }}</td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+
             <div class="footer-section">
                 <div class="footer-top">
-                    <p>Best & Regards</p>
+                    <p>Best Regards,</p>
                     <p>Nirmal Tubes and Containers Pvt Ltd</p>
                     <div class="footer-logo">
-                        <img
-                            src="https://nirmaltubes.com/wp-content/uploads/2024/01/Clip-path-group-1.svg"
-                            alt=""
-                        />
+                        <img src="https://nirmaltubes.com/wp-content/uploads/2024/01/Clip-path-group-1.svg" alt="Nirmal Ventures Logo" />
                     </div>
                 </div>
-                <div class="mail-btn">
-                    <a href="http://localhost:8000/" class="btn"
-                        >Go to Nirmal Ventures</a
-                    >
-                </div>
+                <a href="http://localhost:8000/" class="btn">Go to Nirmal Ventures</a>
                 <div class="footer-bottom">
-                    &copy; {{ date|date:"Y" }} Nirmal Ventures |
+                    &copy; {{ date|date:"Y" }} Nirmal Ventures | 
                     <a href="http://localhost:8000/">www.nirmal.com</a>
                 </div>
             </div>

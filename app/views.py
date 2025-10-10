@@ -1,5 +1,6 @@
 
 from ast import Import
+from ctypes import util
 from email.mime import image
 from genericpath import isfile
 from io import BytesIO
@@ -7,7 +8,9 @@ from math import nan
 from traceback import print_tb
 from PIL import Image
 from django.views.decorators.http import require_GET
+from django.db import utils
 # from matplotlib.image import thumbnail
+from app.utils import email_check
 # from matplotlib.widgets import EllipseSelector
 # from matplotlib.image import thumbnail
 from numpy import size
@@ -59,7 +62,6 @@ import logging
 from django.db.models import Q
 from django.db.models import Sum
 
-#  google
 
 #mail
 from django.core.mail import send_mail
@@ -80,10 +82,11 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView,
 )
 import os
-from django.conf import Settings, settings
+# from django.conf import Settings, settings
 
 # Swagger Setting
 
+from .import utils
 
 # Create your views here.
 
@@ -127,8 +130,6 @@ def password_reset_done(request):
     
 
 logger = logging.getLogger("myapp")
-# SERVICE_ACCOUNT_FILE = os.path.join(settings.BASE_DIR, 'app', 'Google', 'credentials.json')
-# SCOPES = ['https://www.googleapis.com/auth/drive']
 def login_page(request):
     try:
         if request.method == 'POST':
@@ -137,7 +138,6 @@ def login_page(request):
             remember_me = request.POST.get('remember_me', '')
     
             valid = re.fullmatch(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', username_email)
-            
             if valid:
                 try:
                     user_login = Registration.objects.get(email=username_email.lower()).username
@@ -156,7 +156,7 @@ def login_page(request):
                     request.session.set_expiry(0) 
                 
                 login(request, user)
-                messages.success(request, 'You are logged in')
+                messages.success(request, f'You are logged in {user.username} ')
                 return redirect('dashboard_page')
             else:
                 messages.error(request, "Invalid Username or Password")
@@ -170,26 +170,6 @@ def login_page(request):
     return render(request, 'Registration/login_page.html')  
 
 
-def email_validator(email):
-    email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    if not re.match(email_regex,email):       
-        return "Enter a Valid email Address"
-
-
-def validator_password(password):
-    if len(password) < 8:
-        return "Password Must be at least 8 characters long"
-    
-    if not any(char.isupper() for char in password):
-        return "Password must contain at least one uppercase "
-    if not any(char.islower() for char in password):
-         return "Password must contain at least one lowercase"
-     
-    if not any(char.isdigit() for char in password):
-        return "Password must contain at least one number"
-    
-    if not any(char in "!@#$%^&*()_+-={}[]\\:;\"'<>,.?/~`" for char in password):
-        return "Password must contain at least one special character."
     
     
 @never_cache
@@ -205,7 +185,6 @@ def register_page(request):
         password = request.POST.get('password','')
         confirm_password = request.POST.get('confirm_password','')
         required_filed = {
-           
             'First Name':first_name,
             'Last Name':last_name, 
             'Username':username,
@@ -221,16 +200,18 @@ def register_page(request):
                 messages.error(request,'Username Already Exist',extra_tags="custom-success-style")
                 return redirect('register_page')
             
-        if Registration.objects.filter(email=email).exists():
-            messages.error(request,"Email is Already Exist",extra_tags="custom-success-style")
-            return redirect('register_page')
-        
-        email_error  = email_validator(email)
+
+        email_error  = utils.email_validator(email)
         if email_error:
             messages.error(request,email_error,extra_tags="custom-success-style")
-            return redirect('register-page')
+            return redirect('register_page')
         
-        password_error = validator_password(password)
+        email_check_error = utils.email_check(email)
+        if email_check_error:
+            messages.error(request,email_check_error,extra_tags="custom-success-style")
+            return redirect('register_page')
+        
+        password_error = utils.validator_password(password)
         if password_error:
             messages.error(request,password_error,extra_tags="custom-success-style")
             if password != confirm_password:
@@ -254,10 +235,9 @@ def register_page(request):
 @login_required(redirect_field_name=None)
 @custom_login_required
 def edit_user_page(request):
-    
-    user_info = Registration.objects.exclude(is_superuser=True).exclude(id=request.user.id).order_by('username')
+    user_details = Registration.objects.exclude(is_superuser=True).exclude(id=request.user.id).order_by('username')
     context = {
-        'users':user_info
+        'users':user_details
     }
     return render(request,'Registration/edit_user.html',context)
 
@@ -266,13 +246,13 @@ def edit_user_page(request):
 @login_required(redirect_field_name=None)
 @custom_login_required
 def delete_user(request,user_id):
-    
     if request.method == 'POST':
         Delete_user = get_object_or_404(Registration,id = user_id)
         Delete_user.delete()
         messages.success(request,"User Deleted")
         return redirect('edit_user_page')
-    
+
+
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)    
@@ -282,10 +262,10 @@ def update_user(request, user_id):
     try:
         if request.method == 'POST':
             update_user = get_object_or_404(Registration, id=user_id)
-            username = request.POST.get('username','')
-            email = request.POST.get('email','')
-            first_name = request.POST.get('first_name','')
-            last_name = request.POST.get('last_name','')
+            username = request.POST.get('username','').strip()
+            email = request.POST.get('email','').strip()
+            first_name = request.POST.get('first_name','').strip()
+            last_name = request.POST.get('last_name','').strip()
  
             required_fields = {
                 'Username': username,
@@ -298,11 +278,11 @@ def update_user(request, user_id):
                     messages.error(request, f"{field_name} is required.",extra_tags="custom-success-style")
                     return redirect('edit_user_page')
                 
-                
-            email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-            if not re.match(email_regex, email):
-                messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style") 
+            email_error = email_error  = utils.email_validator(email)
+            if email_error:
+                messages.error(request,email_error,extra_tags="custom-success-style")
                 return redirect('edit_user_page')
+                
                 
             if username != update_user.username and Registration.objects.filter(username=username).exists():
                 messages.error(request, "Username already exists.", extra_tags="custom-success-style")
@@ -342,10 +322,11 @@ def update_user(request, user_id):
             messages.success(request, "User updated successfully.")
             return redirect('edit_user_page')
     except Exception as e:
+        print(e)
         messages.error(request,f"Something went wrong",extra_tags="custom-success-style")
         return redirect('edit_user_page')
     
-    
+
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @custom_login_required
@@ -353,8 +334,8 @@ def update_user(request, user_id):
 def dashboard_page(request):
     
     try:
-        get_q = request.GET.get('q','')     
-        date_s = request.GET.get('date','')
+        get_q = request.GET.get('q','').strip()  
+        date_s = request.GET.get('date','').strip()
         date_e = request.GET.get('end_date','')
         sorting = request.GET.get('sorting', '')
         date_sorting = request.GET.get('date_sorting','')
@@ -460,10 +441,8 @@ def delete_data(request,delete_id):
     try:
         
         folder_url = Job_detail.objects.values('folder_url').all().get(id=delete_id)
-        # print(folder_url)
         if folder_url != '':
             try:
-                
                 url = os.environ.get('DELETE_WEBHOOK_JOB')
                 print(url)
                 response = requests.delete(f"{url}{delete_id}")
@@ -491,7 +470,7 @@ def delete_data(request,delete_id):
     
     except Exception as e:
         print(e)
-        messages.warning(request,"Something went Wrong")
+        messages.warning(request,"Something went Wrong" ,e)
         return redirect('dashboard_page')
 
 @never_cache
@@ -502,13 +481,12 @@ def base_html(request):
     return render(request,'Base/base.html')
 
 
+
 @never_cache
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
 @login_required(redirect_field_name=None)
 @custom_login_required
 def data_entry(request):
-    
-    # cdr_company_name = CDRDetail.objects.values('company_name').distinct()
     
     company_name = CompanyName.objects.values('company_name').union(CDRDetail.objects.values('company_name'))
   
@@ -522,112 +500,15 @@ def data_entry(request):
     return render(request, 'data_entry.html',context)
 
 
-
-
-
-
-# CBV
-class CDRPageView(TemplateView):
-    template_name = 'CDR/cdr_page.html'
+# # CBV
+# class CDRPageView(TemplateView):
+#     template_name = 'CDR/cdr_page.html'
     
-    def get_context_data(self, **kwargs):
-        context =  super().get_context_data(**kwargs)
-        context['cdr_data'] = CDRDetail.objects.all()
+#     def get_context_data(self, **kwargs):
+#         context =  super().get_context_data(**kwargs)
+#         context['cdr_data'] = CDRDetail.objects.all()
     
     
-
-
-# def get_drive_services():
-#     creds = service_account.Credentials.from_service_account_file(
-#         SERVICE_ACCOUNT_FILE, scopes=SCOPES
-#     )
-#     return build('drive', 'v3', credentials=creds)
-
-
-# def get_job_name_folder(service,job_name,parent_job_id):
-#     query = (
-#     f"name='{job_name}' and mimeType='application/vnd.google-apps.folder'and trashed=false and '{parent_job_id}' in parents"
-# )
-    
-#     result = service.files().list(
-#         q=query,
-#         spaces = 'drive',
-#         fields = 'files(id,name)'
-#     ).execute()
-    
-#     folders = result.get('files',[])
-    
-# rows = 5  
-    # for i in range(1, rows + 1):
-    #     for j in range(rows - i):
-    #         print(" ", end=" ")
-    #     for k in range(2 * i - 1):
-    #         print("*", end="")
-    #     print()
-    
-    
-#     if folders:
-#         job_id  = folders[0]['id']
-#         job_url = f"https://drive.google.com/drive/folders/{job_id}"
-#         return job_id , job_url
-#     else:
-#         folder_metadata = {
-#             'name':job_name,
-#             'parents': [parent_job_id],
-#             'mimeType':'application/vnd.google-apps.folder'
-            
-#         }
-#         job_folder = service.files().create(
-#             body = folder_metadata,
-#             fields = 'id',
-#             supportsAllDrives=True
-#         ).execute()
-        
-        
-#         job_id = job_folder.get('id')
-#         job_url = f"https://drive.google.com/drive/folders/{job_id}"
-#         return job_id,job_url
-        
-
-# def get_create_folder(service, folder_name, parent_folder_id,):
-#     query = (
-#         f"name='{folder_name}' and mimeType='application/vnd.google-apps.folder' "
-#         f"and trashed=false and '{parent_folder_id}' in parents"
-#     )
-#     result = service.files().list(
-#         q=query,
-#         spaces='drive',
-#         fields='files(id, name)'
-#     ).execute()
-
-#     folders = result.get('files', [])
-    
-#     if folders:
-#         folder_id = folders[0]['id']
-#         folder_url = f"https://drive.google.com/drive/folders/{folder_id}"
-        
-#         return folder_id, folder_url
-
-#     else:
-#         # Create new folder
-#         folder_metadata = {
-#             'name': folder_name,
-#             'parents': [parent_folder_id],
-#             'mimeType': 'application/vnd.google-apps.folder'
-#         }
-        
-#         folder = service.files().create(
-#             body=folder_metadata,
-#             fields='id',
-#             supportsAllDrives=True
-#         ).execute()
-        
-#         folder_id = folder.get('id')
-#         folder_url = f"https://drive.google.com/drive/folders/{folder_id}"
-#         return folder_id, folder_url
-
-
-
           
 
 
@@ -664,8 +545,6 @@ def add_job(request):
             job_status = request.POST.get('job_status')
             files = request.FILES.getlist('files') 
             pouch_combination_total  = f"{pouch_combination_1} + {pouch_combination_2} + {pouch_combination_3} + {pouch_combination_4}"
-            
-
                          
             required_filed = {
                     'Date' :date,
@@ -680,7 +559,8 @@ def add_job(request):
                     'Pouch size':pouch_size,
                     'Pouch Open Size':pouch_open_size,
                     'Cylinder Bill No':cylinder_bill_no,
-                    'Cylinder Date':cylinder_date
+                    'Cylinder Date':cylinder_date,
+                    'Prpc Sell':prpc_sell
                     
                     
             }
@@ -688,21 +568,12 @@ def add_job(request):
                 if not  r:
                     messages.error(request,f"This {r} Filed Was Required",extra_tags="custom-success-style")
                     return redirect('data_entry')
-            
-
-            
-            validation = [".jpeg", ".png", ".ai"] 
-            for i in files:
-                ex = os.path.splitext(i.name)[1].lower()
-                if ex.lower() not in validation:
-                     messages.error(request,"Invalid File")
-                     return redirect('data_entry')
-                    
-                
                 
             
-            
-            
+            file_error = utils.file_validation(files)
+            if file_error:
+                messages.error(request,file_error,extra_tags="custom-success-style")
+                return redirect('data_entry')
                 
                 
             file_dic = {}
@@ -714,12 +585,7 @@ def add_job(request):
                 file.name = new_file_name
                 file_key = f"{new_file_name}"
                 file_dic[file_key] = (file.name, file, file.content_type)
-            
-            
-            if len(files) > 2:
-                messages.error(request, "You can upload only 2 files", extra_tags="custom-error-style")
-                return redirect('data_entry')
-
+                
            
             pouch_combination = pouch_combination_total
             
@@ -740,7 +606,6 @@ def add_job(request):
             
         
             if new_company != '':
-       
                 if CompanyName.objects.filter(company_name__icontains=new_company).exists():
                     messages.error(request,"Company Name Already Exists",extra_tags='custom-success-style')
                     return redirect('data_entry')
@@ -783,11 +648,7 @@ def add_job(request):
 
         try:
             url = os.environ.get('CREATE_WEBHOOK_JOB')
-   
             response = requests.post(f'{url}',data=data,files=file_dic)
-      
-     
-            
             if response.status_code == 200:
                 data_string  = response.text
                 data_dict = json.loads(data_string)
@@ -827,6 +688,7 @@ def add_job(request):
             job_data.save()
             messages.success(request,"Data  successfully Add on sqlite 3")
             return redirect('dashboard_page')
+        
         except Exception as e:
             job_data = Job_detail.objects.create(
                 date = date,
@@ -861,105 +723,7 @@ def add_job(request):
         messages.error(request,f"Something went wrong {e}")
         print(e)
         return redirect('data_entry')
-            # print(cylinder_made_in_s)
-        
-            # from django.shortcuts import render, redirect
-            # from .models import Company
-            # from django.core.exceptions import ValidationError
-            # import re
-
-            # def normalize_company_name(name):
-            #     return re.sub(r'\s+', ' ', name.strip()).lower()
-
-            # def add_company(request):
-            #     error = None
-            #     if request.method == 'POST':
-            #         name = request.POST.get('name', '')
-            #         normalized_name = normalize_company_name(name)
-
-            #         # Check for existing company with same normalized name
-            #         existing_companies = Company.objects.all()
-            #         for company in existing_companies:
-            #             if normalize_company_name(company.name) == normalized_name:
-            #                 error = "Company name already exists."
-            #                 break
-
-            #         if not error:
-            #             Company.objects.create(name=name)
-            #             return redirect('success_page')  # replace with your redirect
-
-            #     return render(request, 'add_company.html', {'error': error})
-
             
-            # service = get_drive_services()
-            # n8n_folder_id = '14AUzR7EWGbCGoQ-MnIoSabVALt_qUeRS' 
-
-            # folder_id, folder_url = get_create_folder(service, company_name, n8n_folder_id,)
-            
-            # if folder_id:
-            #     print("Folder found/created:", folder_id)
-            #     print("Folder URL:", folder_url)
-            # else:
-            #     print("Error with folder operation")
-                
-            # job_id , job_url = get_job_name_folder(service,job_name,folder_id)
-            
-            # if job_id:
-            #     print("Job Folder found/created:", job_id)
-            #     print("Job Folder URL:", job_url)
-            # else:
-            #     print("Error with folder operation")
-            
-            
-            # uploaded_file_ids = []
-            # for file in files:
-            #     temp_file = tempfile.NamedTemporaryFile(delete=False)  # Safe temp file creation
-            #     with open(temp_file.name, 'wb+') as destination:
-            #         for chunk in file.chunks():
-            #             destination.write(chunk)
-
-            #     file_metadata = {
-            #         'name': file.name,
-            #         'parents': [job_id]  # Correct key is 'parents' not 'parent'
-            #     }
-            #     media = MediaFileUpload(temp_file.name, mimetype=file.content_type)
-            #     uploaded_file = service.files().create(
-            #         body=file_metadata,
-            #         media_body=media,
-            #         fields='id',
-            #         supportsAllDrives=True
-            #     ).execute()
-            
-            
-            #             data_string = "1 + 1 + 1 + 1"
-
-            # # Split the string by " + " to get a list of number strings
-            # numbers_as_strings = data_string.split(" + ")
-
-            # # Convert each string to an integer and assign to separate variables
-            # # This assumes you know the exact number of elements beforehand
-            # if len(numbers_as_strings) >= 1:
-            #     var1 = int(numbers_as_strings[0])
-            # if len(numbers_as_strings) >= 2:
-            #     var2 = int(numbers_as_strings[1])
-            # if len(numbers_as_strings) >= 3:
-            #     var3 = int(numbers_as_strings[2])
-            # if len(numbers_as_strings) >= 4:
-            #     var4 = int(numbers_as_strings[3])
-
-            # # You can also store them in a list if the number of elements varies
-            # all_numbers = [int(num) for num in numbers_as_strings]
-
-            # # Print the results to verify
-            # print(f"var1: {var1}")
-            # print(f"var2: {var2}")
-            # print(f"var3: {var3}")
-            # print(f"var4: {var4}")
-            # print(f"All numbers in a list: {all_numbers}")
-
-            #     uploaded_file_ids.append(uploaded_file.get('id'))
-            #     os.remove(temp_file.name) 
-            # Gauth=GoogleAuth()
 
 
 @never_cache
@@ -969,7 +733,7 @@ def add_job(request):
 def  update_job(request,update_id):
     
     try:
-        error_message = None
+        
         if request.method == 'POST':
             date =  request.POST.get('date')
             bill_no = request.POST.get('bill_no')
@@ -1032,17 +796,11 @@ def  update_job(request,update_id):
                 messages.error(request,"Job is Already exists from this date ",extra_tags="custom-success-style")
                 return redirect('dashboard_page')
 
-        if len(files) > 2:
-            messages.error(request, "You can upload only 2 files", extra_tags="custom-error-style")
-            return redirect('data_entry')
+        file_error = utils.file_validation(files)
+        if file_error:
+            messages.error(request,file_error,extra_tags="custom-success-style")
+            return redirect('dashboard_page')
 
-        valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]  
-
-        for file in files:
-            ext = os.path.splitext(file.name)[1]
-            if ext.lower() not in valid_extension:
-                messages.error(request,"Invalid file  Only .jpg, .jpeg, .png and .ai are allowed." ,extra_tags="custom-success-style")
-                return redirect("dashboard_page")
 
         get_data =  Job_detail.objects.all().get(id=update_id)
         get_combinations = get_data.pouch_combination.replace(" ","").split("+")
@@ -1063,6 +821,7 @@ def  update_job(request,update_id):
         
         url = os.environ.get('UPDATE_WEBHOOK_JOB')
         if folder_id :
+            
             
             data  =  {
             'date':date,
@@ -1144,8 +903,7 @@ def  update_job(request,update_id):
 @cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
 @login_required(redirect_field_name=None)
 @custom_login_required
-def user_logout(request):
-    
+def user_logout(request): 
     try:
         logout(request)
         request.session.clear()
@@ -1190,18 +948,20 @@ def update_profile(request,users_id):
                 messages.error(request,f"{filed} is Required" ,extra_tags="custom-success-style")
                 return redirect('profile_page')
             
-        if email !=  update_profile.email and Registration.objects.filter(email=email).exists():
-            messages.error(request,"Email already exists" ,extra_tags="custom-success-style")
-            return redirect('profile_page')
+        if email !=  update_profile.email:   
+            email_check_error = utils.email_check(email)
+            if email_check_error:
+                messages.error(request,email_check_error,extra_tags="custom-success-style")
+                return redirect('profile_page')
         
         if username !=  update_profile.username and Registration.objects.filter(username=username).exists():
             messages.error(request,"Username already exists",extra_tags="custom-success-style")
             return redirect('profile_page')
         
         
-        email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        if not re.match(email_regex, email):
-            messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style") 
+        email_error  = utils.email_validator(email)
+        if email_error:
+            messages.error(request,email_error,extra_tags="custom-success-style")
             return redirect('profile_page')
                 
         update_profile.username = username
@@ -1243,7 +1003,7 @@ def user_password(request):
                 errors = "Please provide New Password."
                 return render (request,'profile.html',context={'errors':errors})
 
-            password_error = validator_password(new_password)
+            password_error = utils.validator_password(new_password)
             if password_error:
                 messages.error(request,password_error,extra_tags="custom-success-style")
                 return redirect('profile_page') 
@@ -1413,7 +1173,7 @@ def cdr_add(request):
             messages.error(request, "You can upload only 2 files", extra_tags="custom-error-style")
             return redirect('company_add_page')
 
-        # Check if company exists
+     
         if CDRDetail.objects.filter(company_name=company_name, company_email=company_email).exists():
             print("Valid")
         else:
@@ -1461,14 +1221,15 @@ def cdr_add(request):
                 file.name = new_file_name
                 file_key = f"{new_file_name}"
                 file_dic[file_key] = (file.name, file, file.content_type) 
-                       
+                print("This is File Dic ",file_dic)
             url = os.environ.get('CREATE_WEBHOOK_CDR')
             response = requests.post(f'{url}',data=data,files=file_dic)
             if response.status_code  == 200:
                     print("Positive Response : ",response)
-                    
                     messages.success(request,"CDR Upload Successfully ")
                     return redirect('company_add_page')
+                
+                
             else:
                 cdr_data = CDRDetail.objects.create(
                     date=cdr_upload_date,
@@ -1585,8 +1346,8 @@ def cdr_update(request,update_id):
         
         company_email = request.POST.get('company_email','').strip()
         cdr_files = request.FILES.getlist('files')
-        company_name = request.POST.get('company_name')
-        job_names = request.POST.get('job_name')
+        company_name = request.POST.get('company_name').strip()
+        job_names = request.POST.get('job_name').strip()
     
         cdr_corrections = request.POST.get('cdr_corrections')
         
@@ -1594,9 +1355,8 @@ def cdr_update(request,update_id):
         date_formatte = get_date['date'].strftime("%Y-%m-%d")
         
         if CDRDetail.objects.filter(company_name__icontains = company_name, company_email=company_email).exists():
-            print("Valid")
+            pass
         else:
-        
             if CDRDetail.objects.filter(company_email__icontains = company_email).exists():
                 messages.error(request,"Choose Another Email",extra_tags='custom-success-style')
                 return redirect('company_add_page')
@@ -1788,7 +1548,7 @@ def send_mail_data(request):
         correction = request.POST.get('correction',"")
         correction_check = request.POST.get('correction_check','')
         attachments  = request.FILES.getlist('attachment')
-        note  = request.POST.get('note')
+        note  = request.POST.get('notes','')
         # selected_item = request.POST.getlist('select_item[]',"")
 
     if date_check == None or date_check == '':
@@ -1841,7 +1601,7 @@ def send_mail_data(request):
 
         }
     
-
+    print(job_info)
     receiver_email = company_email_address
     template_name  = "Base/send_email.html"
     convert_to_html_content =  render_to_string(
@@ -1903,50 +1663,6 @@ def company_name_suggestion_job(request):
 
 
 
-
-def import_excel(request):
-    if request.method == 'POST':
-        import_files = request.FILES.get('import_file', '')
-        
-   
-        if not import_files.name.endswith('xlsx'):
-            messages.error(request, 'Wrong Format')
-            return redirect('data_entry')
-        
-        
-        df = pd.read_excel(import_files)
-        for _, i in df.iterrows():
-            date = i['Date']
-            time_obj = pd.Timestamp(date)
-            convert_date = time_obj.date()
-            job_date = convert_date
-            bill_no = i['Bill No.']
-            company_name = i['Company Name']
-            job_name =  i['Job Name']
-            noc = i['No. of Colors']
-            prpc_purchase    = i['Per Rate Per Cylinder (Purchase)']
-            prpc_sell = i['Per Rate Per Cylinder (Sales)']
-            cylinder_size  = i['Cylinder Size']
-            cylinder_made_in = i['Cylinder Made In ']  
-            cylinder_date = i['Cylinder Date']
-            cylinder_bill_no = i['Cylinder Bill No. ']
-            pouch_size    = i['Pouch Size']
-            pouch_open_size = i['Pouch Open Size']
-            pouch_combination = i['Pouch Combination (thickness) ']                    
-            job_status = i['Job Status ']
-            correction = i['Correction']
-            
-            
-            if Job_detail.objects.filter(date=date,job_name=job_name).exists():
-                messages.error(request,'Date is Already Exists')
-                return redirect('data_entry')
-        return redirect('data_entry')
-    
-
-
-
-
-
 def file_convert(images):
     valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
     for i in images:
@@ -1968,7 +1684,6 @@ def cdr_job_check(job_name,date):
 
 def cdr_company_check(company_name,company_email):
     if CDRDetail.objects.filter(company_name=company_name, company_email=company_email).exists():
-        
         print("Valid")
     else:
         if CDRDetail.objects.filter(company_name=company_name).exists():
@@ -2055,7 +1770,6 @@ class JobList(APIView):
         mutable_data = request.data.copy()
         mutable_data['company_name'] = company_name
         mutable_data['job_name'] = job_name
-        
         
         serializer = JobDetailSerializer(data=mutable_data)
         if serializer.is_valid():
@@ -2195,6 +1909,7 @@ class CDRDetailAVS(APIView):
                 print("This Is I  ",i)
                 filename = i.name
                 size_limit = 2 * 1024 * 1024
+                print(size_limit)
                 file_size = i.size
                 thumbnail_file = None
 
@@ -2203,7 +1918,6 @@ class CDRDetailAVS(APIView):
                 new_file_name = f'{date}_{random_number}{file_extension}'
                 i.name = new_file_name
 
-               
                 if file_size > size_limit:
                     img = Image.open(i)
                     base, ext = os.path.splitext(new_file_name)
@@ -2213,10 +1927,11 @@ class CDRDetailAVS(APIView):
                         io = BytesIO()
                         img.save(io, format='WEBP', optimize=True, quality=quality)
                         size = io.tell()
+                        print(size)
                         print(f"This is Size of {size:2f}")
                         
                         if size <= size_limit:
-                            io.seek(0)
+                            
                             thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
                             break
                         quality -= 5
@@ -2228,15 +1943,12 @@ class CDRDetailAVS(APIView):
                     base, ext = os.path.splitext(filename)
                     thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
 
-
-                
                 print(thumbnail_file)
                 CDRImage.objects.create(
                     cdr=cdr_instance,
                     image=i,
                     thumbnail_image=thumbnail_file
                 )
-
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         else:

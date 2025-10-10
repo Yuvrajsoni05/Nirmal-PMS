@@ -4,7 +4,6 @@ from .views import *
 from django.contrib.auth import views as auth_views
 
 from app.views import JobDetailAV
-
 urlpatterns = [
 
     path('',login_page,name='login_page'),
@@ -42,15 +41,15 @@ urlpatterns = [
     path('password_reset_done/',CustomPasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>',CustomPasswordResetConfirm.as_view(),name="password_reset_confirm"),
     path('reset_done',password_reset_done , name="password_reset_complete"),
-    #  path('get-company-data/', get_company_data, name='get_company_data'),
+   
     
     
-    # path('user_update_error',user_update_error,name='user_update_error'),
+
     
     #cbv
-    path('cdr_cbv_page',CDRPageView.as_view(),name='cdr_cbv_page'),
+    # path('cdr_cbv_page',CDRPageView.as_view(),name='cdr_cbv_page'),
     
-    path('import_file',import_excel,name='import_file'),
+
     
     #DRF
     path('job-list/', JobList.as_view(), name='job-list'),

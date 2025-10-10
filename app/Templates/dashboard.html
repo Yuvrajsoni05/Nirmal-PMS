@@ -45,8 +45,10 @@
   <!-- Header Section -->
   
     <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+      
       <div class="page-title">
-        <h3 class="fw-bold mb-3">Dashboard <h1></h1></h3>
+        <h2 class="fw-bold mb-3">Welcome Back  {{ user.first_name }} {{ user.last_name }} !<h1></h1></h2>
+        {% comment %} <h3 class="fw-bold mb-3">Dashboard  {{ user.username }}<h1></h1></h3> {% endcomment %}
       </div>
       <div class="page-actions ms-md-auto py-2 py-md-0">
         <a href="{% url "data_entry" %}" class="btn btn-primary btn-round">Add New Job</a>
@@ -144,7 +146,7 @@
                                           <input type="text" name="q" id="q" class="form-control" value="{{ request.GET.q }}" placeholder="Search Field">
                                         </div>
 
-                                        <div class="button-group">
+                                       
                                           <button type="submit" class="btn btn-primary w-sm-25 w-md-auto me-2 mb-2" data-mdb-ripple-init>
                                             <i class="fa fa-search"></i>
                                           </button>
@@ -153,7 +155,7 @@
                                               Reset
                                             </button>
                                           </a>
-                                        </div>
+                                   
                                       </form>
                                     </div>
                                   </div>

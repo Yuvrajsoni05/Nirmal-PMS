@@ -53,18 +53,6 @@ Company New Page
                     </h5>
                 </div>
 
-                {% comment %} <select id="company" name="company"> {% endcomment %}
-                {% comment %} <option value="">Select Company</option>
-                {% for company in cdr_company_name  %}
-                    <option value="{{ company.company_name }}">{{ company.company_name }}</option>
-                {% endfor %}
-                </select> {% endcomment %}
-
-                
-                {% comment %} <option value="">Select Job</option> {% endcomment %}
-                {% comment %} </select> {% endcomment %}
-
-                {% comment %} <input type="email" placeholder="Company Email" readonly> {% endcomment %}
 
                 <div class="card-body">
                     <form action="{% url "new_cdr_upload" %}" id="cdr_form" method="post" autocomplete="off" enctype="multipart/form-data">
@@ -154,17 +142,17 @@ Company New Page
                         <div class="card-title">CDR Details</div>
                         <div class="card-tools">
                             <form method="get" class="d-flex flex-wrap align-items-center" action="{% url 'company_add_page' %}">
-                                <div class="row g-2">
-                                    <div class="me-2 mb-2 col-12 col-md-auto input-wrapper">
+                                
+                                    <div class="me-1 mb-2 col-12 col-md-auto input-wrapper">
                                         <label for="date">Start Date</label>
                                         <input type="date" class="form-control" id="date" name="date" placeholder="Start Date" value="{{ request.GET.date }}">
                                     </div>
 
-                                    <div class="me-2 mb-2 col-12 col-md-auto input-wrapper">
+                                    <div class="me-1 mb-2 col-12 col-md-auto input-wrapper">
                                         <label for="end_date">End Date</label>
                                         <input type="date" class="form-control" id="end_date" name="end_date" placeholder="End Date" value="{{ request.GET.end_date }}">
                                     </div>
-                                </div>
+                                
 
                                 <div class="form-outline me-2 mb-2 col-12 col-md-auto" data-mdb-input-init>
                                     <input type="text" name="search" id="search" class="form-control" value="{{request.GET.search}}" placeholder="Search Field">
@@ -298,7 +286,7 @@ Company New Page
                                                         <div class="row g-4">
                                                             <!-- Event Date -->
                                                             <div class="col-md-6">
-                                                                <label for="cdr_upload_date" class="form-label fw-bold">CDR Upload Date</label><span style="color:red;"> *</span>
+                                                                <label for="cdr_upload_date" class="form-label fw-bold">CDR Upload Date</label><span style="color:red;">*</span>
                                                                 <input type="date" class="form-control" id="cdr_upload_date" name="cdr_upload_date" value="{{ i.date|date:'Y-m-d' }}" required>
                                                                 <div class="invalid-feedback" id="event_date_error">Please provide an event date.</div>
                                                             </div>
@@ -511,7 +499,7 @@ Company New Page
 <script src="{% static 'js/cdr_page.js' %}"></script>
 
 
-<span class="text-danger d-block mt-2" style="display:none;" id="updateFormError">Please fill all required fields.</span>
+
 <script>
 function validateUpdateForm(form) {
     let valid = true;

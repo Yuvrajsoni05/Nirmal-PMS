@@ -47,24 +47,8 @@
   /* Remove default margins and force box model */
 
 
-  html, body {
-    overflow-x: hidden !important;
-    width: 100% !important;
-  }
-
- 
-  body::-webkit-scrollbar {
-    display: none;
-  }
-
-  body {
-    font-family: 'Poppins', sans-serif;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-  .pct-input {
-    padding: 8px;
-  }
+  
+  
   .toast-timeout-bar {
     position: absolute;
     bottom: 0;
@@ -166,12 +150,12 @@
         
       
   
-    /* Styling for the entire pagination container */
-nav[aria-label="Page navigation example"] {
-    display: flex; /* Makes the pagination info and page links align horizontally */
-    align-items: center; /* Vertically aligns items in the container */
-    justify-content: space-between; /* Pushes the page info to the left and page links to the right */
-}
+   
+    nav[aria-label="Page navigation example"] {
+        display: flex; /* Makes the pagination info and page links align horizontally */
+        align-items: center; /* Vertically aligns items in the container */
+        justify-content: space-between; /* Pushes the page info to the left and page links to the right */
+    }
 
 /* Custom CSS for Active Pagination Link (from previous response) */
 .pagination .page-item.active .page-link {
@@ -346,32 +330,33 @@ td.sticky-right::before {
       
 
     <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3" id="toastContainer">
-        {% if messages %}
-            {% for message in messages %}
-            <div class="toast align-items-center text-bg-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} border-0 show" role="alert" data-toast-id="{{ forloop.counter }}">
-                <div class="d-flex">
-                    <div class="toast-body d-flex align-items-center">
-                        {% if message.tags == 'error' %}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="toast-icon" fill="currentColor" viewBox="0 0 16 16">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="toast align-items-center text-bg-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} border-0 show" role="alert" data-toast-id="{{ forloop.counter }}">
+            <div class="d-flex">
+                <div class="toast-body d-flex align-items-center fs-5"> <!-- fs-5 for larger font size -->
+                    {% if message.tags == 'error' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="toast-icon" fill="currentColor" viewBox="0 0 16 16" width="20" height="20">
                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
                             <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
                         </svg>
-                        {% elif message.tags == 'success' %}
-                        <svg xmlns="http://www.w3.org/2000/svg" class="toast-icon" fill="currentColor" viewBox="0 0 16 16">
+                    {% elif message.tags == 'success' %}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="toast-icon" fill="currentColor" viewBox="0 0 16 16" width="20" height="20">
                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.061L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                         </svg>
-                        {% endif %}
-                        <span class="flex-grow-1">{{ message }}</span>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="closeToast({{ forloop.counter }})"></button>
+                    {% endif %}
+                    <span class="flex-grow-1">{{ message }}</span>
                 </div>
-                <div class="toast-progress">
-                    <div class="toast-progress-bar"></div>
-                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="closeToast({{ forloop.counter }})"></button>
             </div>
-            {% endfor %}
-        {% endif %}
-    </div>
+            <div class="toast-progress">
+                <div class="toast-progress-bar"></div>
+            </div>
+        </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
     <!--   Core JS Files   -->
     <script src="{% static 'assets/js/core/jquery-3.7.1.min.js' %}"></script>
     <script src="{% static 'assets/js/core/popper.min.js' %}"></script>

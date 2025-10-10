@@ -12,19 +12,7 @@
             <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
               <div>
                 <h3 class="fw-bold mb-3">Add New Job</h3> 
-                <form method='post' action="{% url "import_file" %}" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div>
-                        <label for="image" class="form-label fw-semibold text-dark">Import File</label>
-                        <div class="border border-dashed rounded-3 text-center bg-light">
-                            <input class="form-control  border-0 bg-transparent" type="file" id="files" name="import_file">
-                            
-                        </div>
-                        
-                    </div>
-                    <button type='submit' class='btn btn-primary'>Import</button>
-
-                </form>
+            
               </div>
               
             </div>
@@ -68,12 +56,13 @@
                                            <select id="company_name" name="company_name" class="form-control form-select border-1" >
                                             <option value="">Select Company</option>
                                                 {% for company in company_name  %}
-                                                        <option value="{{ company.company_name }}">{{ company.company_name }}  </option>
+                                                        <option value="{{ company.company_name }}">{{ company.company_name }} </option>
                                                 {% endfor %}
-                                             <option value="other">Other</option>
+                                             <option value="other">Other </option>
                                             
                                             <input type="text" name="new_company" class="form-control  border-1" id="new_company" style="display: none;" placeholder="Enter New Company Name">
                                         </select>
+                                        
                                         <div class="invalid-feedback" id="company_name_error">Please provide Company Name.</div>
                                     </div>  
                                 </div>
@@ -321,8 +310,8 @@
   </div>
   
  
-  {% endblock main_block %}
- {% block script %}
+{% endblock main_block %}
+{% block script %}
 
 <script>$("#company_name").change(function () {
     let companyName = $(this).val();

@@ -1,4 +1,4 @@
-from email.mime import image
+
 from importlib.util import source_hash
 from pyexpat import model
 from django.db.models import ImageField

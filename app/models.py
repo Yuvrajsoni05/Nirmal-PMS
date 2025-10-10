@@ -88,6 +88,7 @@ class CDRImage(models.Model):
     cdr =  models.ForeignKey(CDRDetail,on_delete=models.CASCADE, related_name='cdr_images')
     image = models.ImageField(upload_to='cdr_files/')
     thumbnail_image = models.FileField(upload_to='cdr_thumbnail_image/',blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
     
     
     def __str__(self):

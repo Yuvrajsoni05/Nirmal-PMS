@@ -47,8 +47,14 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
   
 
-SESSION_COOKIE_AGE = 3600
 
+# X_FRAME_OPTIONS = 'DENY'  
+
+
+
+
+# Ensure CSRF cookies are only sent with requests originating from the same domain
+# CSRF_COOKIE_SAMESITE = 'Strict'  # 'Strict' or 'Lax' depending on your needs
 
 
 CSRF_COOKIE_SECURE = False  # Set this to True if using HTTPS
@@ -90,9 +96,6 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 SITE_ID = 2
-
-
-
 
 
 
@@ -145,18 +148,6 @@ DATABASES = {
 
 
 
-
-# GOOGLE_OAUTH2_CLIENT_ID = 'your-client-id.apps.googleusercontent.com'
-# GOOGLE_OAUTH2_CLIENT_SECRET = 'your-client-secret'
-# GOOGLE_OAUTH2_REDIRECT_URI = 'http://localhost:8000/oauth2callback/'
-
-
-# GOOGLE_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'config', 'credentials.json')
-# GOOGLE_DRIVE_PARENT_FOLDER_ID = "1px2ebSxnQkJi3_-cszvqWE76Lg2-F6gI"
-# CREDENTIALS_PATH = os.path.join(BASE_DIR, "app", "Google", "credentials.json")
-# TOKEN_PATH = os.path.join(BASE_DIR, "token.pickle")
-
-
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
@@ -173,6 +164,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    
 ]
 
 

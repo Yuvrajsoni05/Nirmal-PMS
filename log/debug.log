@@ -19,3 +19,24 @@ ERROR 2025-10-01 12:59:50,864 myapp login_page Something went wrong try again vi
 ERROR 2025-10-01 13:02:01,161 myapp login_page Something went wrong try again views.py
 ERROR 2025-10-01 13:02:18,061 myapp login_page Something went wrong try again views.py
 ERROR 2025-10-03 10:24:53,215 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-09 11:58:45,324 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-09 14:43:14,601 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-10 16:02:57,232 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-10 16:11:43,933 myapp login_page Something went wrong: 'WSGIRequest' object has no attribute 'username' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 159, in login_page
+    messages.success(request, f'You are logged in {request.username}')
+                                                   ^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'username'
+ERROR 2025-10-10 16:11:53,848 myapp login_page Something went wrong: 'WSGIRequest' object has no attribute 'username' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 159, in login_page
+    messages.success(request, f'You are logged in {request.username}')
+                                                   ^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'username'
+ERROR 2025-10-10 16:12:11,431 myapp login_page Something went wrong: 'WSGIRequest' object has no attribute 'username' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 159, in login_page
+    messages.success(request, f'You are logged in {request.username}')
+                                                   ^^^^^^^^^^^^^^^^
+AttributeError: 'WSGIRequest' object has no attribute 'username'

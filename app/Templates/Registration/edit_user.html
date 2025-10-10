@@ -90,13 +90,13 @@
 
                                                                      
                                                                           <div class="col-md-6">
-                                                                              <label for="user_name" class="form-label text-dark">Username</label><span style="color:red;">*</span>
+                                                                              <label for="user_name" class="form-label fw-bold">Username</label><span style="color:red;">*</span>
                                                                               <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="{{ i.username }}" required>
                                                                               <div class="invalid-feedback" id="user_name_error" >Please provide Username.</div>
                                                                           </div>
 
                                                                           <div class="col-md-6">
-                                                                              <label for="first_name" class="form-label text-dark">First Name</label><span style="color:red;"> *</span>
+                                                                              <label for="first_name" class="form-label fw-bold">First Name</label><span style="color:red;"> *</span>
                                                                               <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enetr First Name" value="{{ i.first_name }}" required>
                                                                               <div class="invalid-feedback" id="firstname_error"  style="display: none;">Please provide an First name.</div>
                                                                           </div>
@@ -104,14 +104,14 @@
                                                                     
 
                                                                           <div class="col-md-6">
-                                                                              <label for="last_name" class="form-label text-dark">Last Name</label><span style="color:red;"> *</span>
+                                                                              <label for="last_name" class="form-label fw-bold">Last Name</label><span style="color:red;"> *</span>
                                                                               <input type="text" id="last_name" class="form-control" name="last_name" placeholder="Enetr Last Name" value="{{ i.last_name }}" required>
                                                                               <div class="invalid-feedback" id="lastname_error"  style="display: none;">Please provide an Last name.</div>
                                                                           </div>
 
                                                                       
                                                                           <div class="col-md-6">
-                                                                              <label for="email" class="form-label text-dark">Email</label><span style="color:red;"> *</span>
+                                                                              <label for="email" class="form-label fw-bold">Email</label><span style="color:red;"> *</span>
                                                                               <input type="email" id="email" class="form-control" name="email" placeholder="Enetr Valid Email Address" value="{{ i.email }}" required >
                                                                                <div class="invalid-feedback"  id="email_error"  style="display: none;">Please provide an Email.</div>
                                                                           </div>
@@ -120,8 +120,8 @@
                                                                           <!-- Form Actions -->
                                                                           <div class="col-12">
                                                                                <a href="{% url "edit_user_page" %}"><button type="button"  name="reset" class="btn btn-secondary" data-mdb-ripple-init>
-                               Reset
-                            </button></a>
+                                                                                Reset
+                                                                              </button></a>
                                                                               <button type="submit" class="btn btn-primary">Save changes</button>
                                                                           </div>
 
