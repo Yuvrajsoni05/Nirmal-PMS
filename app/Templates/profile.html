@@ -1,136 +1,120 @@
 {% extends "Base/base.html" %}
-
-{% block title %}Profile {% endblock %}
+{% block title %}Profile{% endblock %}
 {% load humanize %}
 {% load static %}
-
 {% block main_block %}
-<div class="container-fluid py-4">
-    <!-- Page Title -->
-    <div class="d-flex align-items-center flex-column flex-md-row mb-4">
-        <h3 class="fw-bold mb-0">Profile</h3>
-    </div>
-
-    <!-- Profile Card -->
-    <div class="card shadow-sm">
-        <div class="card-body">
-            
-            <!-- Tab Navigation -->
-            <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="edit-tab" data-bs-toggle="tab" data-bs-target="#profile-edit" type="button" role="tab">
-                        <i class="bi bi-pencil-square me-2"></i>Edit Profile
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#profile-change-password" type="button" role="tab">
-                        <i class="bi bi-key me-2"></i>Change Password
-                    </button>
-                </li>
-            </ul>
-
-            <div class="tab-content row justify-content-center" id="profileTabsContent">
-                <!-- Edit Profile Tab -->
-                <div class="tab-pane fade show active " id="profile-edit" role="tabpanel">
-                    <form method="post" action="{% url "update_profile" users_id=user.id %}" autocomplete="off" id="profile_page" enctype="multipart/form-data">
-                      {% csrf_token %}
-                        <div class="row g-3">
-                            
-                            <div class="col-12 col-md-6">
-                                <label for="firstname" class="form-label fw-semibold text-dark">First Name</label><span style="color:red;"> *</span>
-                                <input name="first_name"  type="text" class="form-control" id="first_name" value="{{ user.first_name }}" maxlength="15" required>
-                                <div class="invalid-feedback" id="firstname_error">Please provide a First Name.</div>
-                            </div>
-
-                            <div class="col-12 col-md-6">
-                                <label for="lastname" class="form-label fw-semibold text-dark">Last Name</label><span style="color:red;"> *</span>
-                                <input name="last_name" maxlength="15" type="text" class="form-control" id="last_name" value="{{user.last_name}}" maxlength="15" required>
-                                <div class="invalid-feedback" id="lastname_error">Please provide a Last Name.</div>
-                            </div>
-
-                            <div class="col-12 col-md-6">
-                                <label for="username" class="form-label fw-semibold text-dark">Username</label><span style="color:red;"> *</span>
-                                <input name="username" type="text" maxlength="20" class="form-control" id="username" value="{{user.username}}"maxlength="15" required>
-                                <div   class="invalid-feedback"  id="username_error">Please provide a Username.</div>
-                            </div>
-
-
-                            <div class="col-12 col-md-6">
-                                <label for="email" class="form-label fw-semibold text-dark">Email</label><span style="color:red;"> *</span>
-                                <input name="email" type="email" maxlength="40" class="form-control" id="email" value="{{user.email}}" maxlength="50" required>
-                                <span class="invalid-feedback" id="email_error">Please provide Valid Email.</span>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="d-flex flex-column flex-sm-row gap-2 ">
-                                    <button type="submit" class="btn btn-primary px-4">
-                                        <i class="bi bi-save me-2"></i>Save Changes
-                                    </button>
-                                        <a href="{% url "profile_page" %}"><button type="button"  name="reset" class="btn btn-secondary" data-mdb-ripple-init>
-                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
-                                          <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
-                                          <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
-                                        </svg>&nbsp; Reset
-                            </button></a>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Change Password Tab -->
-                    <div class="tab-pane fade" id="profile-change-password" role="tabpanel">
-                        <form method="post" autocomplete="off" id="password_form" action="{% url 'update_password' %}">
+    <div class="container-fluid py-4">
+        <!-- Page Title -->
+        <div class="d-flex align-items-center flex-column flex-md-row mb-4">
+            <h3 class="fw-bold mb-0">Profile</h3>
+        </div>
+        <!-- Profile Card -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <!-- Tab Navigation -->
+                <ul class="nav nav-tabs mb-4" id="profileTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active"
+                                id="edit-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#profile-edit"
+                                type="button"
+                                role="tab">
+                            <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link"
+                                id="password-tab"
+                                data-bs-toggle="tab"
+                                data-bs-target="#profile-change-password"
+                                type="button"
+                                role="tab">
+                            <i class="bi bi-key me-2"></i>Change Password
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content row justify-content-center"
+                     id="profileTabsContent">
+                    <!-- Edit Profile Tab -->
+                    <div class="tab-pane fade show active " id="profile-edit" role="tabpanel">
+                        <form method="post"
+                              action="{% url "update_profile" users_id=user.id %}"
+                              autocomplete="off"
+                              id="profile_page"
+                              enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="row g-3">
-
-                                <!-- Current Password -->
-                                <div class="col-12 position-relative">
-                                    <label for="old_password" class="form-label fw-semibold text-dark">Current Password</label>
-                                    <div class="input-group">
-                                        <input name="old_password" type="password" class="form-control" id="old_password" placeholder="Old Password" required>
-                                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('old_password', this)">
-                                            <i class="fa fa-eye"></i>
-                                        </button>
-                                    </div>
-                                    <div style="color:red" id="password_error">{{ error }}</div>
+                                <div class="col-12 col-md-6">
+                                    <label for="firstname" class="form-label fw-semibold text-dark">First Name</label>
+                                    <span style="color:red;">*</span>
+                                    <input name="first_name"
+                                           type="text"
+                                           class="form-control"
+                                           id="first_name"
+                                           value="{{ user.first_name }}"
+                                           maxlength="15"
+                                           required>
+                                    <div class="invalid-feedback" id="firstname_error">Please provide a First Name.</div>
                                 </div>
-
-                                <!-- New Password -->
-                                <div class="col-12 position-relative">
-                                    <label for="new_password" class="form-label fw-semibold text-dark">New Password</label><span style="color:red;"> *</span>
-                                    <div class="input-group">
-                                        <input name="new_password" type="password" minlength="8" maxlength="20" class="form-control" id="new_password" placeholder="New Password" >
-                                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('new_password', this)">
-                                            <i class="fa fa-eye"></i>
-                                        </button>
-                                    </div>
-                                    <div class="invalid-feedback" id="new_password_error">Please provide a First Name.</div>
-
+                                <div class="col-12 col-md-6">
+                                    <label for="lastname" class="form-label fw-semibold text-dark">Last Name</label>
+                                    <span style="color:red;">*</span>
+                                    <input name="last_name"
+                                           maxlength="15"
+                                           type="text"
+                                           class="form-control"
+                                           id="last_name"
+                                           value="{{ user.last_name }}"
+                                           maxlength="15"
+                                           required>
+                                    <div class="invalid-feedback" id="lastname_error">Please provide a Last Name.</div>
                                 </div>
-
-                                <!-- Confirm Password -->
-                                <div class="col-12 position-relative">
-                                    <label for="confirm_password" class="form-label fw-semibold text-dark">Re-enter New Password</label><span style="color:red;"> *</span>
-                                    <div class="input-group">
-                                        <input name="confirm_password" type="password" minlength="8" maxlength="20" class="form-control" id="confirm_password" placeholder="Confirm Password" >
-                                        <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirm_password', this)">
-                                            <i class="fa fa-eye"></i>
-                                        </button>
-                                    </div>
-                                    <div class="invalid-feedback" id="confirm_password_error">Please provide A Confirm Password</div>
-
+                                <div class="col-12 col-md-6">
+                                    <label for="username" class="form-label fw-semibold text-dark">Username</label>
+                                    <span style="color:red;">*</span>
+                                    <input name="username"
+                                           type="text"
+                                           maxlength="20"
+                                           class="form-control"
+                                           id="username"
+                                           value="{{ user.username }}"
+                                           maxlength="15"
+                                           required>
+                                    <div class="invalid-feedback"  id="username_error">Please provide a Username.</div>
                                 </div>
-
-                                <!-- Submit Button -->
+                                <div class="col-12 col-md-6">
+                                    <label for="email" class="form-label fw-semibold text-dark">Email</label>
+                                    <span style="color:red;">*</span>
+                                    <input name="email"
+                                           type="email"
+                                           maxlength="40"
+                                           class="form-control"
+                                           id="email"
+                                           value="{{ user.email }}"
+                                           maxlength="50"
+                                           required>
+                                    <span class="invalid-feedback" id="email_error">Please provide Valid Email.</span>
+                                </div>
                                 <div class="col-12">
-                                    <div class="d-flex flex-column flex-sm-row gap-2">
-                                        <button type="submit" class="btn btn-primary">
-                                            <i class="bi bi-key me-2"></i>Change Password
+                                    <div class="d-flex flex-column flex-sm-row gap-2 ">
+                                        <button type="submit" class="btn btn-primary px-4">
+                                            <i class="bi bi-save me-2"></i>Save Changes
                                         </button>
-                                        <a href="{% url 'profile_page' %}">
-                                            <button type="button" name="reset" class="btn btn-secondary" data-mdb-ripple-init>
-                                            <i class="fa fa-undo" aria-hidden="true"></i>
+                                        <a href="{% url "profile_page" %}">
+                                            <button type="button"
+                                                    name="reset"
+                                                    class="btn btn-secondary"
+                                                    data-mdb-ripple-init>
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="16"
+                                                     height="16"
+                                                     fill="currentColor"
+                                                     class="bi bi-arrow-counterclockwise"
+                                                     viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                                                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                                                </svg>
                                                 &nbsp; Reset
                                             </button>
                                         </a>
@@ -139,21 +123,105 @@
                             </div>
                         </form>
                     </div>
+                    <!-- Change Password Tab -->
+                    <div class="tab-pane fade" id="profile-change-password" role="tabpanel">
+                        <form method="post"
+                              autocomplete="off"
+                              id="password_form"
+                              action="{% url 'update_password' %}">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <!-- Current Password -->
+                                <div class="col-12 position-relative">
+                                    <label for="old_password" class="form-label fw-semibold text-dark">Current Password</label>
+                                    <div class="input-group">
+                                        <input name="old_password"
+                                               type="password"
+                                               class="form-control"
+                                               id="old_password"
+                                               placeholder="Old Password"
+                                               required>
+                                        <button type="button"
+                                                class="btn btn-outline-secondary"
+                                                onclick="togglePassword('old_password', this)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div style="color:red" id="password_error">{{ error }}</div>
+                                </div>
+                                <!-- New Password -->
+                                <div class="col-12 position-relative">
+                                    <label for="new_password" class="form-label fw-semibold text-dark">New Password</label>
+                                    <span style="color:red;">*</span>
+                                    <div class="input-group">
+                                        <input name="new_password"
+                                               type="password"
+                                               minlength="8"
+                                               maxlength="20"
+                                               class="form-control"
+                                               id="new_password"
+                                               placeholder="New Password">
+                                        <button type="button"
+                                                class="btn btn-outline-secondary"
+                                                onclick="togglePassword('new_password', this)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback" id="new_password_error">Please provide A New Password</div>
+                                </div>
+                                <!-- Confirm Password -->
+                                <div class="col-12 position-relative">
+                                    <label for="confirm_password" class="form-label fw-semibold text-dark">Re-enter New Password</label>
+                                    <span style="color:red;">*</span>
+                                    <div class="input-group">
+                                        <input name="confirm_password"
+                                               type="password"
+                                               minlength="8"
+                                               maxlength="20"
+                                               class="form-control"
+                                               id="confirm_password"
+                                               placeholder="Confirm Password">
+                                        <button type="button"
+                                                class="btn btn-outline-secondary"
+                                                onclick="togglePassword('confirm_password', this)">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback" id="confirm_password_error">Please provide A Confirm Password</div>
+                                </div>
+                                <!-- Submit Button -->
+                                <div class="col-12">
+                                    <div class="d-flex flex-column flex-sm-row gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-key me-2"></i>Change Password
+                                        </button>
+                                        <a href="{% url 'profile_page' %}">
+                                            <button type="button"
+                                                    name="reset"
+                                                    class="btn btn-secondary"
+                                                    data-mdb-ripple-init>
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     width="16"
+                                                     height="16"
+                                                     fill="currentColor"
+                                                     class="bi bi-arrow-counterclockwise"
+                                                     viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z" />
+                                                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466" />
+                                                </svg>
+                                                &nbsp; Reset
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock main_block %}
-
-
 {% block script %}
-
-
-<script src="{% static 'js/profile.js' %}"></script>
-
-
-
-
+    <script src="{% static 'js/profile.js' %}"></script>
 {% endblock script %}
-
-

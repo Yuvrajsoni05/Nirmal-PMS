@@ -14,6 +14,7 @@ from app.models import Registration
 
 
 def email_validator(email):
+    print(email)
     email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     if not re.match(email_regex,email):       
         return "Enter a Valid email Address"
@@ -49,6 +50,8 @@ def validator_password(password):
     
 valid_extension = [".jpeg", ".jpg", ".png", ".ai"]  
 def file_validation(files):
+    
+    print(files)
     if len(files) > 2:
         return "You can upload only 2 files"
     

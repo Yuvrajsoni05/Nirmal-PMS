@@ -1,4 +1,3 @@
-
 from ast import Import
 from ctypes import util
 from email.mime import image
@@ -9,18 +8,17 @@ from traceback import print_tb
 from PIL import Image
 from django.views.decorators.http import require_GET
 from django.db import utils
-# from matplotlib.image import thumbnail
+
 from app.utils import email_check
-# from matplotlib.widgets import EllipseSelector
-# from matplotlib.image import thumbnail
+
 from numpy import size
 from rest_framework.serializers import Serializer, ValidationError
 from django.test import RequestFactory
 from rest_framework import serializers, status
 import random
-from urllib import response 
-# from click import Context
-from django.shortcuts import get_object_or_404, render,redirect
+from urllib import response
+
+from django.shortcuts import get_object_or_404, render, redirect
 import pandas as pd
 from django.views.decorators.cache import cache_control
 from django.views.decorators.cache import cache_control, never_cache
@@ -29,25 +27,14 @@ from django.template.context_processors import request
 from django.views.generic import TemplateView
 from datetime import date, datetime, timedelta
 from django.core.files.base import ContentFile
-# from scipy import optimize
-# from scipy import optimize
-
-
-
-
-# from jinja2 import Template
 
 from app.models import CDRDetail, Job_detail
 from app.serializers import CDRDataSerializer, JobDetailSerializer, JobUpdateSerializer
-
-# from app.views import update_job
-# from torch import t
 from .models import *
 from django.contrib import messages, sessions
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate, logout 
-import requests 
-
+from django.contrib.auth import login, authenticate, logout
+import requests
 
 import json
 from decimal import Decimal
@@ -63,7 +50,7 @@ from django.db.models import Q
 from django.db.models import Sum
 
 
-#mail
+# mail
 from django.core.mail import send_mail
 from django.http import JsonResponse
 import re
@@ -71,7 +58,8 @@ import re
 from django.core.mail import EmailMessage
 from .decorators import *
 from django.core.files import File
-#Password
+
+# Password
 
 from django.urls import path, reverse_lazy
 from django.contrib.auth.views import PasswordResetDoneView
@@ -82,14 +70,13 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView,
 )
 import os
-# from django.conf import Settings, settings
+
 
 # Swagger Setting
 
-from .import utils
+from . import utils
 
 # Create your views here.
-
 
 
 # urlpatterns = [
@@ -97,16 +84,8 @@ from .import utils
 # ]
 
 
-
-#Lecco ai
-#Cookies in  Django Section in django
-
-
-# def file_check(files,quality_level=85):
- 
-#         print(img )
-    
-
+# Lecco ai
+# Cookies in  Django Section in django
 
 
 class CustomPasswordResetView(PasswordResetView):
@@ -117,7 +96,7 @@ class CustomPasswordResetView(PasswordResetView):
 
 class CustomPasswordResetDoneView(PasswordResetDoneView):
     template_name = "Password/password_reset_done.html"
-    
+
 
 class CustomPasswordResetConfirm(PasswordResetConfirmView):
     template_name = "Password/password_reset_confirm.html"
@@ -125,190 +104,213 @@ class CustomPasswordResetConfirm(PasswordResetConfirmView):
 
 
 def password_reset_done(request):
-    return render(request,'Password/password_update_done.html')
+    return render(request, "Password/password_update_done.html")
 
-    
 
 logger = logging.getLogger("myapp")
+
+
 def login_page(request):
     try:
-        if request.method == 'POST':
-            username_email = request.POST.get('username', '')
-            password = request.POST.get('password', '')
-            remember_me = request.POST.get('remember_me', '')
-    
-            valid = re.fullmatch(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', username_email)
+        if request.method == "POST":
+            username_email = request.POST.get("username", "")
+            password = request.POST.get("password", "")
+            remember_me = request.POST.get("remember_me", "")
+
+            valid = re.fullmatch(
+                r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", username_email
+            )
             if valid:
                 try:
-                    user_login = Registration.objects.get(email=username_email.lower()).username
+                    user_login = Registration.objects.get(
+                        email=username_email.lower()
+                    ).username
                 except Registration.DoesNotExist:
                     messages.error(request, "Email not found.")
-                    return redirect('login_page')
+                    return redirect("login_page")
                 user = authenticate(request, username=user_login, password=password)
-                
+
             else:
                 user = authenticate(request, username=username_email, password=password)
-            
             if user is not None:
                 if remember_me == "on":
-                    request.session.set_expiry(60 * 60 * 24 * 30) 
+                    request.session.set_expiry(60 * 60 * 24 * 30)
                 else:
-                    request.session.set_expiry(0) 
-                
+                    request.session.set_expiry(0)
+
                 login(request, user)
-                messages.success(request, f'You are logged in {user.username} ')
-                return redirect('dashboard_page')
+                messages.success(request, f"You are logged in {user.username} ")
+                return redirect("dashboard_page")
             else:
                 messages.error(request, "Invalid Username or Password")
                 logger.error("Invalid Username or Password")
-                return redirect('login_page')
+                return redirect("login_page")
     except Exception as e:
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
-        messages.warning(request, f'Something went wrong, try again.')  
-        return redirect('login_page')
-    
-    return render(request, 'Registration/login_page.html')  
+        messages.warning(request, f"Something went wrong, try again.")
+        return redirect("login_page")
+
+    return render(request, "Registration/login_page.html")
 
 
-    
-    
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
+@custom_login_required
 def register_page(request):
-
-    if request.method == 'POST':
-        username = request.POST.get('username','')
-        first_name = request.POST.get('firstName','')
-        last_name = request.POST.get('lastName','')
-        email = request.POST.get('emailAddress','')
-        password = request.POST.get('password','')
-        confirm_password = request.POST.get('confirm_password','')
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        first_name = request.POST.get("firstName", "").strip()
+        last_name = request.POST.get("lastName", "").strip()
+        email = request.POST.get("emailAddress", "").strip()
+        password = request.POST.get("password", "").strip()
+        confirm_password = request.POST.get("confirm_password", "").strip()
         required_filed = {
-            'First Name':first_name,
-            'Last Name':last_name, 
-            'Username':username,
-            'Password':password,
+            "First Name": first_name,
+            "Last Name": last_name,
+            "Username": username,
+            "Password": password,
         }
-    
-        for i , required in required_filed.items():
-            if not required:
-                messages.error(request,f" {i} field is Required",extra_tags="custom-success-style")
-                return redirect('register_page')
-       
-        if Registration.objects.filter(username=username).exists():
-                messages.error(request,'Username Already Exist',extra_tags="custom-success-style")
-                return redirect('register_page')
-            
 
-        email_error  = utils.email_validator(email)
+        for i, required in required_filed.items():
+            if not required:
+                messages.error(
+                    request,
+                    f" {i} field is Required",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("register_page")
+
+        if Registration.objects.filter(username=username).exists():
+            messages.error(
+                request, "Username Already Exist", extra_tags="custom-success-style"
+            )
+            return redirect("register_page")
+
+        email_error = utils.email_validator(email)
         if email_error:
-            messages.error(request,email_error,extra_tags="custom-success-style")
-            return redirect('register_page')
-        
+            messages.error(request, email_error, extra_tags="custom-success-style")
+            return redirect("register_page")
+
         email_check_error = utils.email_check(email)
         if email_check_error:
-            messages.error(request,email_check_error,extra_tags="custom-success-style")
-            return redirect('register_page')
-        
+            messages.error(
+                request, email_check_error, extra_tags="custom-success-style"
+            )
+            return redirect("register_page")
+
         password_error = utils.validator_password(password)
         if password_error:
-            messages.error(request,password_error,extra_tags="custom-success-style")
+            messages.error(request, password_error, extra_tags="custom-success-style")
             if password != confirm_password:
-                messages.error(request,'Password Confirm Password must be same',extra_tags="custom-success-style")
-                return redirect('register_page')
+                messages.error(
+                    request,
+                    "Password Confirm Password must be same",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("register_page")
 
         create_user = Registration.objects.create_user(
-            first_name = first_name,
-            last_name = last_name,
-            username = username,
-            password = password,
-            email= email,
+            first_name=first_name,
+            last_name=last_name,
+            username=username,
+            password=password,
+            email=email,
         )
         create_user.save()
-        messages.success(request,"New User Will Created")
-        return redirect('edit_user_page')
-    return render(request,'Registration/register.html')
+        messages.success(request, "New User Will Created")
+        return redirect("edit_user_page")
+    return render(request, "Registration/register.html")
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
-@login_required(redirect_field_name=None)
+
 @custom_login_required
 def edit_user_page(request):
-    user_details = Registration.objects.exclude(is_superuser=True).exclude(id=request.user.id).order_by('username')
-    context = {
-        'users':user_details
-    }
-    return render(request,'Registration/edit_user.html',context)
+    user_details = (
+        Registration.objects.exclude(is_superuser=True)
+        .exclude(id=request.user.id)
+        .order_by("username")
+    )
+    context = {"users": user_details}
+    return render(request, "Registration/edit_user.html", context)
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
-@login_required(redirect_field_name=None)
+
 @custom_login_required
-def delete_user(request,user_id):
-    if request.method == 'POST':
-        Delete_user = get_object_or_404(Registration,id = user_id)
+def delete_user(request, user_id):
+    if request.method == "POST":
+        Delete_user = get_object_or_404(Registration, id=user_id)
         Delete_user.delete()
-        messages.success(request,"User Deleted")
-        return redirect('edit_user_page')
+        messages.success(request, "User Deleted")
+        return redirect("edit_user_page")
 
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
-@login_required(redirect_field_name=None)    
 @custom_login_required
 def update_user(request, user_id):
-    
     try:
-        if request.method == 'POST':
+        if request.method == "POST":
             update_user = get_object_or_404(Registration, id=user_id)
-            username = request.POST.get('username','').strip()
-            email = request.POST.get('email','').strip()
-            first_name = request.POST.get('first_name','').strip()
-            last_name = request.POST.get('last_name','').strip()
- 
+            username = request.POST.get("username", "").strip()
+            email = request.POST.get("email", "").strip()
+            first_name = request.POST.get("first_name", "").strip()
+            last_name = request.POST.get("last_name", "").strip()
+
             required_fields = {
-                'Username': username,
-                'Firstname': first_name,
-                'Lastname': last_name,
-                'Email': email,
+                "Username": username,
+                "Firstname": first_name,
+                "Lastname": last_name,
+                "Email": email,
             }
             for field_name, value in required_fields.items():
                 if not value:
-                    messages.error(request, f"{field_name} is required.",extra_tags="custom-success-style")
-                    return redirect('edit_user_page')
-                
-            email_error = email_error  = utils.email_validator(email)
+                    messages.error(
+                        request,
+                        f"{field_name} is required.",
+                        extra_tags="custom-success-style",
+                    )
+                    return redirect("edit_user_page")
+
+            email_error = email_error = utils.email_validator(email)
             if email_error:
-                messages.error(request,email_error,extra_tags="custom-success-style")
-                return redirect('edit_user_page')
-                
-                
-            if username != update_user.username and Registration.objects.filter(username=username).exists():
-                messages.error(request, "Username already exists.", extra_tags="custom-success-style")
-                return redirect('edit_user_page')
+                messages.error(request, email_error, extra_tags="custom-success-style")
+                return redirect("edit_user_page")
 
-            if email != update_user.email and Registration.objects.filter(email=email).exists():
-                messages.error(request, "Email already exists.", extra_tags="custom-success-style")
-                return redirect('edit_user_page')
-                
+            if (
+                username != update_user.username
+                and Registration.objects.filter(username=username).exists()
+            ):
+                messages.error(
+                    request,
+                    "Username already exists.",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("edit_user_page")
+
+            if (
+                email != update_user.email
+                and Registration.objects.filter(email=email).exists()
+            ):
+                messages.error(
+                    request, "Email already exists.", extra_tags="custom-success-style"
+                )
+                return redirect("edit_user_page")
+
             required_fields = {
-                'Username': username,
-                'Firstname': first_name,
-                'Lastname': last_name,
-                'Email': email,
+                "Username": username,
+                "Firstname": first_name,
+                "Lastname": last_name,
+                "Email": email,
             }
 
             for field_name, value in required_fields.items():
                 if not value:
-                    messages.error(request, f"{field_name} is required.",extra_tags="custom-success-style")
-                    return redirect('edit_user_page')
+                    messages.error(
+                        request,
+                        f"{field_name} is required.",
+                        extra_tags="custom-success-style",
+                    )
+                    return redirect("edit_user_page")
 
             if username != update_user.username:
                 update_user.username = username
             if email != update_user.email:
                 update_user.email = email
-        
+
             update_user.first_name = first_name
             update_user.last_name = last_name
 
@@ -316,43 +318,40 @@ def update_user(request, user_id):
             for session in Session.objects.all():
                 session_data = session.get_decoded()
                 # print(session_data)
-                if str(session_data.get('_auth_user_id')) == str(logout_user.id):
+                if str(session_data.get("_auth_user_id")) == str(logout_user.id):
                     session.delete()
             update_user.save()
             messages.success(request, "User updated successfully.")
-            return redirect('edit_user_page')
+            return redirect("edit_user_page")
     except Exception as e:
         print(e)
-        messages.error(request,f"Something went wrong",extra_tags="custom-success-style")
-        return redirect('edit_user_page')
-    
+        messages.error(
+            request, f"Something went wrong", extra_tags="custom-success-style"
+        )
+        return redirect("edit_user_page")
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
+
 @custom_login_required
-@login_required(redirect_field_name=None)
 def dashboard_page(request):
-    
     try:
-        get_q = request.GET.get('q','').strip()  
-        date_s = request.GET.get('date','').strip()
-        date_e = request.GET.get('end_date','')
-        sorting = request.GET.get('sorting', '')
-        date_sorting = request.GET.get('date_sorting','')
-        company_name_sorting = request.GET.get('company_name_sorting' ,'')
-        job_name_sorting = request.GET.get('job_name_sorting','')
-        cylinder_date_sorting = request.GET.get('cylinder_date_sorting','')
-        cylinder_made_in_sorting = request.GET.get('cylinder_made_in_sorting','')
-        
-        db_sqlite3  = Job_detail.objects.all()
-      
+        get_q = request.GET.get("q", "").strip()
+        date_s = request.GET.get("date", "").strip()
+        date_e = request.GET.get("end_date", "")
+        sorting = request.GET.get("sorting", "")
+        date_sorting = request.GET.get("date_sorting", "")
+        company_name_sorting = request.GET.get("company_name_sorting", "")
+        job_name_sorting = request.GET.get("job_name_sorting", "")
+        cylinder_date_sorting = request.GET.get("cylinder_date_sorting", "")
+        cylinder_made_in_sorting = request.GET.get("cylinder_made_in_sorting", "")
+
+        db_sqlite3 = Job_detail.objects.all()
+
         filters = Q()
         if get_q:
-            
             filters &= (
-                Q(job_name__icontains=get_q) |
-                Q(company_name__icontains=get_q) |
-                Q(cylinder_made_in__icontains=get_q)
+                Q(job_name__icontains=get_q)
+                | Q(company_name__icontains=get_q)
+                | Q(cylinder_made_in__icontains=get_q)
             )
         if date_s and date_e:
             filters &= Q(date__range=[date_s, date_e])
@@ -360,100 +359,91 @@ def dashboard_page(request):
             filters &= Q(date__icontains=date_s)
         elif date_e:
             filters &= Q(date__icontains=date_e)
-
         db_sqlite3 = Job_detail.objects.filter(filters)
-        
-        job_status = Job_detail.objects.values('job_status').distinct()
-
-   
-        if job_name_sorting == 'asc':
-            db_sqlite3 = db_sqlite3.order_by('job_name')
-        elif job_name_sorting == 'desc':
-            db_sqlite3 = db_sqlite3.order_by('-job_name')
-        elif date_sorting == 'asc':
-            db_sqlite3 = db_sqlite3.order_by('date')
-        elif date_sorting == 'desc':
-            db_sqlite3 = db_sqlite3.order_by('-date')
-        elif cylinder_date_sorting == 'asc':
-            db_sqlite3 = db_sqlite3.order_by('cylinder_date')
-        elif cylinder_date_sorting == 'desc':
-            db_sqlite3 = db_sqlite3.order_by('-cylinder_date')
-        elif company_name_sorting == 'asc':
-            db_sqlite3 = db_sqlite3.order_by('company_name')
-        elif company_name_sorting == 'desc':
-            db_sqlite3 = db_sqlite3.order_by('-company_name')
-        elif cylinder_made_in_sorting == 'asc':
-            db_sqlite3 = db_sqlite3.order_by('cylinder_made_in')
-        elif cylinder_made_in_sorting == 'desc':
-            db_sqlite3 = db_sqlite3.order_by('-cylinder_made_in')
-        elif sorting == 'asc':
-            db_sqlite3 = db_sqlite3.order_by('id')
-        elif sorting == 'desc':
-            db_sqlite3 = db_sqlite3.order_by('-id')
+        job_status = Job_detail.objects.values("job_status").distinct()
+        if job_name_sorting == "asc":
+            db_sqlite3 = db_sqlite3.order_by("job_name")
+        elif job_name_sorting == "desc":
+            db_sqlite3 = db_sqlite3.order_by("-job_name")
+        elif date_sorting == "asc":
+            db_sqlite3 = db_sqlite3.order_by("date")
+        elif date_sorting == "desc":
+            db_sqlite3 = db_sqlite3.order_by("-date")
+        elif cylinder_date_sorting == "asc":
+            db_sqlite3 = db_sqlite3.order_by("cylinder_date")
+        elif cylinder_date_sorting == "desc":
+            db_sqlite3 = db_sqlite3.order_by("-cylinder_date")
+        elif company_name_sorting == "asc":
+            db_sqlite3 = db_sqlite3.order_by("company_name")
+        elif company_name_sorting == "desc":
+            db_sqlite3 = db_sqlite3.order_by("-company_name")
+        elif cylinder_made_in_sorting == "asc":
+            db_sqlite3 = db_sqlite3.order_by("cylinder_made_in")
+        elif cylinder_made_in_sorting == "desc":
+            db_sqlite3 = db_sqlite3.order_by("-cylinder_made_in")
+        elif sorting == "asc":
+            db_sqlite3 = db_sqlite3.order_by("id")
+        elif sorting == "desc":
+            db_sqlite3 = db_sqlite3.order_by("-id")
         else:
-            db_sqlite3 = db_sqlite3.order_by('-job_status', 'date')
+            db_sqlite3 = db_sqlite3.order_by("-job_status", "date")
         p = Paginator(db_sqlite3, 10)
-        page = request.GET.get('page')
+        page = request.GET.get("page")
         datas = p.get_page(page)
         total_job = db_sqlite3.count()
         company_name = CompanyName.objects.all()
-        count_of_company =  company_name.count()
-       
+        count_of_company = company_name.count()
+
         cylinder_company_names = CylinderMadeIn.objects.all()
-        total_active_job = Job_detail.objects.filter(job_status='In Progress').count()
-        count_of_cylinder_company = cylinder_company_names.count() 
-        nums = " " * datas.paginator.num_pages  
-      
+        total_active_job = Job_detail.objects.filter(job_status="In Progress").count()
+        count_of_cylinder_company = cylinder_company_names.count()
+        nums = " " * datas.paginator.num_pages
+
         context = {
-            'nums': nums,
-            'venues': datas,
-            'total_job': total_job,
-            'company_name': company_name,
-            'cylinder_company_names': cylinder_company_names,
-            'count_of_company':count_of_company,
-            'count_of_cylinder_company':count_of_cylinder_company,
+            "nums": nums,
+            "venues": datas,
+            "total_job": total_job,
+            "company_name": company_name,
+            "cylinder_company_names": cylinder_company_names,
+            "count_of_company": count_of_company,
+            "count_of_cylinder_company": count_of_cylinder_company,
             # 'total_sales':total_sales,
-            'datas':datas,                                                                                                              
+            "datas": datas,
             # 'total_purchase':total_purchase,
-            'sorting': sorting,
-            'company_name_sorting':company_name_sorting,
-            'job_name_sorting':job_name_sorting,
-            'date_sorting':date_sorting,
-            'cylinder_date_sorting':cylinder_date_sorting,
-            'cylinder_made_in_sorting':cylinder_made_in_sorting,
-            'total_active_job':total_active_job,
-            'job_status':job_status,
+            "sorting": sorting,
+            "company_name_sorting": company_name_sorting,
+            "job_name_sorting": job_name_sorting,
+            "date_sorting": date_sorting,
+            "cylinder_date_sorting": cylinder_date_sorting,
+            "cylinder_made_in_sorting": cylinder_made_in_sorting,
+            "total_active_job": total_active_job,
+            "job_status": job_status,
         }
     except Exception as e:
-        messages.warning(request,"Something went wrong  try again")
+        messages.warning(request, "Something went wrong  try again")
         logger.error(f"wrong in Dashboard page {e}")
-        return redirect('dashboard_page')
+        return redirect("dashboard_page")
 
-    return render(request, 'dashboard.html', context)
+    return render(request, "dashboard.html", context)
 
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
-@login_required(redirect_field_name=None)   
 @custom_login_required
-def delete_data(request,delete_id):
-    
+def delete_data(request, delete_id):
     try:
-        
-        folder_url = Job_detail.objects.values('folder_url').all().get(id=delete_id)
-        if folder_url != '':
+        folder_url = Job_detail.objects.values("folder_url").all().get(id=delete_id)
+        if folder_url != "":
             try:
-                url = os.environ.get('DELETE_WEBHOOK_JOB')
+                url = os.environ.get("DELETE_WEBHOOK_JOB")
                 print(url)
                 response = requests.delete(f"{url}{delete_id}")
                 data = response.json()
-                messages.success(request,"Job Deleted successfully ")
-                return redirect('dashboard_page')
+                messages.success(request, "Job Deleted successfully ")
+                return redirect("dashboard_page")
             except Exception as e:
-                messages.warning(request,"Something went wrong try again")
-                return redirect('dashboard_page')
+                messages.warning(request, "Something went wrong try again")
+                return redirect("dashboard_page")
         else:
-            delete_data = get_object_or_404(Job_detail,id=delete_id)
+            delete_data = get_object_or_404(Job_detail, id=delete_id)
             delete_images = delete_data.image.all()
             print(delete_images)
             for img in delete_images:
@@ -463,404 +453,393 @@ def delete_data(request,delete_id):
                     os.remove(path)
                 else:
                     img.delete()
-            
             delete_data.delete()
-            messages.success(request,"Job Deleted successfully ")
-            return redirect('dashboard_page')
-    
+            messages.success(request, "Job Deleted successfully ")
+            return redirect("dashboard_page")
     except Exception as e:
         print(e)
-        messages.warning(request,"Something went Wrong" ,e)
-        return redirect('dashboard_page')
+        messages.warning(request, "Something went Wrong", e)
+        return redirect("dashboard_page")
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)  
+
 @custom_login_required
 def base_html(request):
-    return render(request,'Base/base.html')
+    return render(request, "Base/base.html")
 
 
-
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
-@login_required(redirect_field_name=None)
 @custom_login_required
 def data_entry(request):
-    
-    company_name = CompanyName.objects.values('company_name').union(CDRDetail.objects.values('company_name'))
-  
+
+    company_name = CompanyName.objects.values("company_name").union(
+        CDRDetail.objects.values("company_name")
+    )
+
     cylinder_company_names = CylinderMadeIn.objects.all()
-    cdr_job_name = CDRDetail.objects.values('job_name').distinct()
-    context =  {
-        'company_name':company_name ,
-        'cylinder_company_names':cylinder_company_names,
-        'cdr_job_name':cdr_job_name
+    cdr_job_name = CDRDetail.objects.values("job_name").distinct()
+    context = {
+        "company_name": company_name,
+        "cylinder_company_names": cylinder_company_names,
+        "cdr_job_name": cdr_job_name,
     }
-    return render(request, 'data_entry.html',context)
+    return render(request, "data_entry.html", context)
 
 
-# # CBV
-# class CDRPageView(TemplateView):
-#     template_name = 'CDR/cdr_page.html'
-    
-#     def get_context_data(self, **kwargs):
-#         context =  super().get_context_data(**kwargs)
-#         context['cdr_data'] = CDRDetail.objects.all()
-    
-    
-          
-
-
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0)
-@login_required(redirect_field_name=None)
 @custom_login_required
 def add_job(request):
 
     try:
-        if request.method == 'POST':
-            date = request.POST.get('job_date')
-            bill_no = request.POST.get('bill_no')
-            company_name = request.POST.get('company_name','').strip()
-            job_name = request.POST.get('job_name')
-            new_job_name = request.POST.get('new_job_name','').strip()
-            job_type = request.POST.get('job_type')
-            noc = request.POST.get('noc')
-            prpc_purchase = request.POST.get('prpc_purchase')
-            prpc_sell = request.POST.get('prpc_sell')
-            cylinder_size = request.POST.get('cylinder_size')
-            cylinder_made_in_s = request.POST.get('cylinder_select')
-            cylinder_date = request.POST.get('cylinder_date')
-            cylinder_bill_no = request.POST.get('cylinder_bill_no')
-            pouch_size = request.POST.get('pouch_size')
-            pouch_open_size = request.POST.get('pouch_open_size')
-            pouch_combination_1 = request.POST.get('pouch_combination1')
-            pouch_combination_2 = request.POST.get('pouch_combination2')
-            pouch_combination_3 = request.POST.get('pouch_combination3')
-            pouch_combination_4 = request.POST.get('pouch_combination4')
-            new_company = request.POST.get('new_company')
-            new_cylinder_company_name = request.POST.get('cylinder_made_in_company_name')
-            correction = request.POST.get('correction')
-            job_status = request.POST.get('job_status')
-            files = request.FILES.getlist('files') 
-            pouch_combination_total  = f"{pouch_combination_1} + {pouch_combination_2} + {pouch_combination_3} + {pouch_combination_4}"
-                         
+        if request.method == "POST":
+            date = request.POST.get("job_date")
+            bill_no = request.POST.get("bill_no")
+            company_name = request.POST.get("company_name", "").strip()
+            job_name = request.POST.get("job_name")
+            new_job_name = request.POST.get("new_job_name", "").strip()
+            job_type = request.POST.get("job_type")
+            noc = request.POST.get("noc")
+            prpc_purchase = request.POST.get("prpc_purchase")
+            prpc_sell = request.POST.get("prpc_sell")
+            cylinder_size = request.POST.get("cylinder_size")
+            cylinder_made_in_s = request.POST.get("cylinder_select")
+            cylinder_date = request.POST.get("cylinder_date")
+            cylinder_bill_no = request.POST.get("cylinder_bill_no")
+            pouch_size = request.POST.get("pouch_size")
+            pouch_open_size = request.POST.get("pouch_open_size")
+            pouch_combination_1 = request.POST.get("pouch_combination1")
+            pouch_combination_2 = request.POST.get("pouch_combination2")
+            pouch_combination_3 = request.POST.get("pouch_combination3")
+            pouch_combination_4 = request.POST.get("pouch_combination4")
+            new_company = request.POST.get("new_company")
+            new_cylinder_company_name = request.POST.get(
+                "cylinder_made_in_company_name"
+            )
+            correction = request.POST.get("correction")
+            job_status = request.POST.get("job_status")
+            files = request.FILES.getlist("files")
+            pouch_combination_total = f"{pouch_combination_1} + {pouch_combination_2} + {pouch_combination_3} + {pouch_combination_4}"
+
             required_filed = {
-                    'Date' :date,
-                    'Bill no':bill_no,
-                    'Company_Name': company_name,
-                    'job name' : job_name,
-                    'job type':job_type,
-                    'Noc':noc,
-                    'Prpc Purchase':prpc_purchase,
-                    'Cylinder Size':cylinder_size,
-                    'Cylinder Made in':cylinder_made_in_s,
-                    'Pouch size':pouch_size,
-                    'Pouch Open Size':pouch_open_size,
-                    'Cylinder Bill No':cylinder_bill_no,
-                    'Cylinder Date':cylinder_date,
-                    'Prpc Sell':prpc_sell
-                    
-                    
+                "Date": date,
+                "Bill no": bill_no,
+                "Company_Name": company_name,
+                "job name": job_name,
+                "job type": job_type,
+                "Noc": noc,
+                "Prpc Purchase": prpc_purchase,
+                "Cylinder Size": cylinder_size,
+                "Cylinder Made in": cylinder_made_in_s,
+                "Pouch size": pouch_size,
+                "Pouch Open Size": pouch_open_size,
+                "Cylinder Bill No": cylinder_bill_no,
+                "Cylinder Date": cylinder_date,
+                "Prpc Sell": prpc_sell,
             }
-            for i ,r in required_filed.items():
-                if not  r:
-                    messages.error(request,f"This {r} Filed Was Required",extra_tags="custom-success-style")
-                    return redirect('data_entry')
-                
-            
+            for i, r in required_filed.items():
+                if not r:
+                    messages.error(
+                        request,
+                        f"This {r} Filed Was Required",
+                        extra_tags="custom-success-style",
+                    )
+                    return redirect("data_entry")
+
             file_error = utils.file_validation(files)
             if file_error:
-                messages.error(request,file_error,extra_tags="custom-success-style")
-                return redirect('data_entry')
-                
-                
+                messages.error(request, file_error, extra_tags="custom-success-style")
+                return redirect("data_entry")
+
             file_dic = {}
             for i, file in enumerate(files):
                 # Get the original file extension
                 _, file_extension = os.path.splitext(file.name)
                 random_number = random.randint(1, 100)
-                new_file_name = f'{date}_{random_number}{file_extension}'
+                new_file_name = f"{date}_{random_number}{file_extension}"
                 file.name = new_file_name
                 file_key = f"{new_file_name}"
                 file_dic[file_key] = (file.name, file, file.content_type)
-                
-           
+
             pouch_combination = pouch_combination_total
-            
-            if new_job_name != '':
-                if new_job_name == '' or new_job_name == None:
-                    messages.error(request,'Plz Provide Job Name')
-                    return redirect('data-entry')
+
+            if new_job_name != "":
+                if new_job_name == "" or new_job_name == None:
+                    messages.error(request, "Plz Provide Job Name")
+                    return redirect("data-entry")
                 if Job_detail.objects.filter(job_name__icontains=new_job_name).exists():
-                    messages.error(request,"Job Name Already Exists",extra_tags='custom-success-style')
-                    return redirect('data_entry')
+                    messages.error(
+                        request,
+                        "Job Name Already Exists",
+                        extra_tags="custom-success-style",
+                    )
+                    return redirect("data_entry")
                 else:
                     job_name = new_job_name
 
-            if Job_detail.objects.filter(job_name__icontains = job_name,date__icontains  =date).exists():
-                    messages.error(request,"Job Name are already Exists on this date kindly Update job",extra_tags='custom-success-style')
-                    return redirect('data_entry')
-                
-            
-        
-            if new_company != '':
-                if CompanyName.objects.filter(company_name__icontains=new_company).exists():
-                    messages.error(request,"Company Name Already Exists",extra_tags='custom-success-style')
-                    return redirect('data_entry')
-                add_company = CompanyName.objects.create(
-                    company_name=new_company
+            if Job_detail.objects.filter(
+                job_name__icontains=job_name, date__icontains=date
+            ).exists():
+                messages.error(
+                    request,
+                    "Job Name are already Exists on this date kindly Update job",
+                    extra_tags="custom-success-style",
                 )
+                return redirect("data_entry")
+
+            if new_company != "":
+                if CompanyName.objects.filter(
+                    company_name__icontains=new_company
+                ).exists():
+                    messages.error(
+                        request,
+                        "Company Name Already Exists",
+                        extra_tags="custom-success-style",
+                    )
+                    return redirect("data_entry")
+                add_company = CompanyName.objects.create(company_name=new_company)
                 add_company.save()
                 company_name = new_company
-            if company_name == '' or company_name == None:
-                messages.error(request,'Plz Provide Company Name')
-                return redirect('data-entry')
+            if company_name == "" or company_name == None:
+                messages.error(request, "Plz Provide Company Name")
+                return redirect("data-entry")
 
-            if new_cylinder_company_name != '':
-                if CylinderMadeIn.objects.filter(cylinder_made_in__icontains = new_cylinder_company_name).exists():
-                    messages.error(request,"Company Name Already Exists",extra_tags='custom-success-style')
-                    return redirect('data_entry')
+            if new_cylinder_company_name != "":
+                if CylinderMadeIn.objects.filter(
+                    cylinder_made_in__icontains=new_cylinder_company_name
+                ).exists():
+                    messages.error(
+                        request,
+                        "Company Name Already Exists",
+                        extra_tags="custom-success-style",
+                    )
+                    return redirect("data_entry")
                 add_new_cylinder_company = CylinderMadeIn.objects.create(
-                    cylinder_made_in = new_cylinder_company_name
+                    cylinder_made_in=new_cylinder_company_name
                 )
                 add_new_cylinder_company.save()
                 cylinder_made_in_s = new_cylinder_company_name
-                
-             
-            data  =  {
-                'date':date,
-                'bill_no':bill_no,
-                'company_name':company_name,
-                'job_type':job_type,
-                'job_name':job_name,
-                'noc':noc,
-                'prpc_sell':prpc_sell,
-                'prpc_purchase':prpc_purchase,
-                'cylinder_size':cylinder_size,
-                'cylinder_made_in':cylinder_made_in_s,
-                'pouch_size':pouch_size,
-                'pouch_open_size':pouch_open_size,
-                'pouch_combination':pouch_combination,
-                'correction':correction
+
+            data = {
+                "date": date,
+                "bill_no": bill_no,
+                "company_name": company_name,
+                "job_type": job_type,
+                "job_name": job_name,
+                "noc": noc,
+                "prpc_sell": prpc_sell,
+                "prpc_purchase": prpc_purchase,
+                "cylinder_size": cylinder_size,
+                "cylinder_made_in": cylinder_made_in_s,
+                "pouch_size": pouch_size,
+                "pouch_open_size": pouch_open_size,
+                "pouch_combination": pouch_combination,
+                "correction": correction,
             }
 
         try:
-            url = os.environ.get('CREATE_WEBHOOK_JOB')
-            response = requests.post(f'{url}',data=data,files=file_dic)
+            url = os.environ.get("CREATE_WEBHOOK_JOB")
+            response = requests.post(f"{url}", data=data, files=file_dic)
             if response.status_code == 200:
-                data_string  = response.text
+                data_string = response.text
                 data_dict = json.loads(data_string)
-                id_number = data_dict['id']
+                id_number = data_dict["id"]
                 cylinder_data = Job_detail.objects.all().get(id=id_number)
                 cylinder_data.cylinder_date = cylinder_date
                 cylinder_data.cylinder_bill_no = cylinder_bill_no
                 cylinder_data.job_status = job_status
                 cylinder_data.save()
-                messages.success(request,"Job successfully Added")
-                return redirect('dashboard_page')
+                messages.success(request, "Job successfully Added")
+                return redirect("dashboard_page")
             else:
                 job_data = Job_detail.objects.create(
-                date = date,
-                bill_no = bill_no,
-                company_name = company_name,
-                job_name = job_name,
-                job_type = job_type,
-                noc = noc,
-                prpc_sell =prpc_sell,
-                prpc_purchase = prpc_purchase ,
-                cylinder_size = cylinder_size,
-                cylinder_made_in = cylinder_made_in_s,
-                pouch_size = pouch_size,
-                pouch_open_size = pouch_open_size,
-                pouch_combination = pouch_combination,
-                correction = correction,
-                job_status = job_status,
-                cylinder_date = cylinder_date,
-                cylinder_bill_no = cylinder_bill_no,
-            )
-            for file in file_dic:
-                Jobimage.objects.create(
-                    job = job_data,
-                    image = file
+                    date=date,
+                    bill_no=bill_no,
+                    company_name=company_name,
+                    job_name=job_name,
+                    job_type=job_type,
+                    noc=noc,
+                    prpc_sell=prpc_sell,
+                    prpc_purchase=prpc_purchase,
+                    cylinder_size=cylinder_size,
+                    cylinder_made_in=cylinder_made_in_s,
+                    pouch_size=pouch_size,
+                    pouch_open_size=pouch_open_size,
+                    pouch_combination=pouch_combination,
+                    correction=correction,
+                    job_status=job_status,
+                    cylinder_date=cylinder_date,
+                    cylinder_bill_no=cylinder_bill_no,
                 )
+            for file in file_dic:
+                Jobimage.objects.create(job=job_data, image=file)
             job_data.save()
-            messages.success(request,"Data  successfully Add on sqlite 3")
-            return redirect('dashboard_page')
-        
+            messages.success(request, "Data  successfully Add on sqlite 3")
+            return redirect("dashboard_page")
+
         except Exception as e:
             job_data = Job_detail.objects.create(
-                date = date,
-                bill_no = bill_no,
-                company_name = company_name,
-                job_name = job_name,
-                job_type = job_type,
-                noc = noc,
-                prpc_sell =prpc_sell,
-                prpc_purchase = prpc_purchase ,
-                cylinder_size = cylinder_size,
-                cylinder_made_in = cylinder_made_in_s,
-                pouch_size = pouch_size,
-                pouch_open_size = pouch_open_size,
-                pouch_combination = pouch_combination,
-                correction = correction,
-                job_status = job_status,
-                cylinder_date = cylinder_date,
-                cylinder_bill_no = cylinder_bill_no,
+                date=date,
+                bill_no=bill_no,
+                company_name=company_name,
+                job_name=job_name,
+                job_type=job_type,
+                noc=noc,
+                prpc_sell=prpc_sell,
+                prpc_purchase=prpc_purchase,
+                cylinder_size=cylinder_size,
+                cylinder_made_in=cylinder_made_in_s,
+                pouch_size=pouch_size,
+                pouch_open_size=pouch_open_size,
+                pouch_combination=pouch_combination,
+                correction=correction,
+                job_status=job_status,
+                cylinder_date=cylinder_date,
+                cylinder_bill_no=cylinder_bill_no,
             )
             for file_key, file_data in file_dic.items():
-                file_obj = file_data[1]  
-                Jobimage.objects.create(
-                    job=job_data,
-                    image=file_obj
-                )
+                file_obj = file_data[1]
+                Jobimage.objects.create(job=job_data, image=file_obj)
             job_data.save()
-            messages.success(request,"Data successfully Add ")
-            return redirect('dashboard_page')
-    
+            messages.success(request, "Data successfully Add ")
+            return redirect("dashboard_page")
+
     except Exception as e:
-        messages.error(request,f"Something went wrong {e}")
+        messages.error(request, f"Something went wrong {e}")
         print(e)
-        return redirect('data_entry')
-            
+        return redirect("data_entry")
 
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)    
 @custom_login_required
-def  update_job(request,update_id):
-    
-    try:
-        
-        if request.method == 'POST':
-            date =  request.POST.get('date')
-            bill_no = request.POST.get('bill_no')
-            company_name = request.POST.get('company_name')
-            job_name = request.POST.get('job_name','')
-            job_type = request.POST.get('job_type','')
-            noc = request.POST.get('noc')
-            prpc_purchase = request.POST.get('prpc_purchase')
-            prpc_sell = request.POST.get('prpc_sell')
-            cylinder_size = request.POST.get('cylinder_size')
-            cylinder_made_in = request.POST.get('cylinder_made_in')
-            cylinder_date  = request.POST.get('cylinder_date')
-            cylinder_bill_no = request.POST.get('cylinder_bill_no')
-            pouch_size = request.POST.get('pouch_size')
-            pouch_open_size = request.POST.get('pouch_open_size')
-            # pouch_combination = request.POST.get('pouch_combination')
-            pouch_combination1 = request.POST.get('pouch_combination1')
-            pouch_combination2 = request.POST.get('pouch_combination2')
-            pouch_combination3 = request.POST.get('pouch_combination3') 
-            pouch_combination4 = request.POST.get('pouch_combination4')
-            correction = request.POST.get('correction')
-            job_status = request.POST.get('job_status')
-            files = request.FILES.getlist('files')
-            pouch_combination = f"{pouch_combination1} + {pouch_combination2} + {pouch_combination3} + {pouch_combination4}"
-  
-        demo = Job_detail.objects.values('date').get(id=update_id)
-        date_formatte = demo['date'].strftime("%Y-%m-%d")
-        
-        
-        required_filed = {
-            'Date' :date,
-            'Bill no':bill_no,
-            'Company_Name': company_name,
-            'job name' : job_name,
-            'job type':job_type,
-            'Noc':noc,
-            'Prpc Purchase':prpc_purchase,
-            'Cylinder Size':cylinder_size,
-            'Cylinder Made in':cylinder_made_in,
-            'Pouch size':pouch_size,
-            'Pouch Open Size':pouch_open_size,
-            'Cylinder Bill No':cylinder_bill_no,
-            'Cylinder Date':cylinder_date,
-            'Prpc Sell':prpc_sell
+def update_job(request, update_id):
 
+    try:
+        if request.method == "POST":
+            date = request.POST.get("date")
+            bill_no = request.POST.get("bill_no")
+            company_name = request.POST.get("company_name")
+            job_name = request.POST.get("job_name", "")
+            job_type = request.POST.get("job_type", "")
+            noc = request.POST.get("noc")
+            prpc_purchase = request.POST.get("prpc_purchase")
+            prpc_sell = request.POST.get("prpc_sell")
+            cylinder_size = request.POST.get("cylinder_size")
+            cylinder_made_in = request.POST.get("cylinder_made_in")
+            cylinder_date = request.POST.get("cylinder_date")
+            cylinder_bill_no = request.POST.get("cylinder_bill_no")
+            pouch_size = request.POST.get("pouch_size")
+            pouch_open_size = request.POST.get("pouch_open_size")
+            # pouch_combination = request.POST.get('pouch_combination')
+            pouch_combination1 = request.POST.get("pouch_combination1")
+            pouch_combination2 = request.POST.get("pouch_combination2")
+            pouch_combination3 = request.POST.get("pouch_combination3")
+            pouch_combination4 = request.POST.get("pouch_combination4")
+            correction = request.POST.get("correction")
+            job_status = request.POST.get("job_status")
+            files = request.FILES.getlist("files")
+            pouch_combination = f"{pouch_combination1} + {pouch_combination2} + {pouch_combination3} + {pouch_combination4}"
+
+        demo = Job_detail.objects.values("date").get(id=update_id)
+        date_formatte = demo["date"].strftime("%Y-%m-%d")
+
+        required_filed = {
+            "Date": date,
+            "Bill no": bill_no,
+            "Company_Name": company_name,
+            "job name": job_name,
+            "job type": job_type,
+            "Noc": noc,
+            "Prpc Purchase": prpc_purchase,
+            "Cylinder Size": cylinder_size,
+            "Cylinder Made in": cylinder_made_in,
+            "Pouch size": pouch_size,
+            "Pouch Open Size": pouch_open_size,
+            "Cylinder Bill No": cylinder_bill_no,
+            "Cylinder Date": cylinder_date,
+            "Prpc Sell": prpc_sell,
         }
         for i, r in required_filed.items():
             if not r:
-                messages.error(request, f"This {i} field is required.", extra_tags="custom-success-style")
-                return redirect('dashboard_page')
-    
-        jobs = Job_detail.objects.all().get(id=update_id)  
-        if job_name != jobs.job_name:
-            messages.error(request,"You can't chnage job_name")
-            return redirect('dashboard_page')
+                messages.error(
+                    request,
+                    f"This {i} field is required.",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("dashboard_page")
 
-        
+        jobs = Job_detail.objects.all().get(id=update_id)
+        if job_name != jobs.job_name:
+            messages.error(request, "You can't chnage job_name")
+            return redirect("dashboard_page")
+
         if date != date_formatte:
-            if Job_detail.objects.filter(date = date, job_name = job_name).exists() :
-                messages.error(request,"Job is Already exists from this date ",extra_tags="custom-success-style")
-                return redirect('dashboard_page')
+            if Job_detail.objects.filter(date=date, job_name=job_name).exists():
+                messages.error(
+                    request,
+                    "Job is Already exists from this date ",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("dashboard_page")
 
         file_error = utils.file_validation(files)
         if file_error:
-            messages.error(request,file_error,extra_tags="custom-success-style")
-            return redirect('dashboard_page')
+            messages.error(request, file_error, extra_tags="custom-success-style")
+            return redirect("dashboard_page")
 
-
-        get_data =  Job_detail.objects.all().get(id=update_id)
-        get_combinations = get_data.pouch_combination.replace(" ","").split("+")
+        get_data = Job_detail.objects.all().get(id=update_id)
+        get_combinations = get_data.pouch_combination.replace(" ", "").split("+")
         while len(get_combinations) < 4:
-            get_combinations.append('')
-        print(get_combinations)
+            get_combinations.append("")
+
         folder_id = get_data.folder_url
-        
-        
+
         file_dic = {}
         for i, file in enumerate(files):
             _, file_extension = os.path.splitext(file.name)
             random_number = random.randint(1, 100)
-            new_file_name = f'{date}_{random_number}{file_extension}'
+            new_file_name = f"{date}_{random_number}{file_extension}"
             file.name = new_file_name
             file_key = f"{new_file_name}"
             file_dic[file_key] = (file.name, file, file.content_type)
-        
-        url = os.environ.get('UPDATE_WEBHOOK_JOB')
-        if folder_id :
-            
-            
-            data  =  {
-            'date':date,
-            'bill_no':bill_no,
-            'company_name':company_name,
-            'job_type':job_type,
-            'job_name':job_name,
-            'noc':noc,
-            'prpc_purchase':prpc_purchase,
-            'prpc_sell':prpc_sell,
-            'cylinder_size':cylinder_size,
-            'cylinder_made_in':cylinder_made_in,
-            'pouch_size':pouch_size,
-            'pouch_open_size':pouch_open_size,
-            'pouch_combination':pouch_combination,
-            'correction':correction
+
+        url = os.environ.get("UPDATE_WEBHOOK_JOB")
+        if folder_id:
+
+            data = {
+                "date": date,
+                "bill_no": bill_no,
+                "company_name": company_name,
+                "job_type": job_type,
+                "job_name": job_name,
+                "noc": noc,
+                "prpc_purchase": prpc_purchase,
+                "prpc_sell": prpc_sell,
+                "cylinder_size": cylinder_size,
+                "cylinder_made_in": cylinder_made_in,
+                "pouch_size": pouch_size,
+                "pouch_open_size": pouch_open_size,
+                "pouch_combination": pouch_combination,
+                "correction": correction,
             }
             try:
-                response = requests.post(f'{url}{update_id}',
-                        data=data,files=file_dic  
-                )
+                response = requests.post(f"{url}{update_id}", data=data, files=file_dic)
                 if response.status_code == 200:
                     cylinder_data = Job_detail.objects.all().get(id=update_id)
                     cylinder_data.cylinder_date = cylinder_date
                     cylinder_data.cylinder_bill_no = cylinder_bill_no
                     cylinder_data.job_status = job_status
                     cylinder_data.save()
-                    messages.success(request,'Data Updated successfully',)
-                    return redirect('dashboard_page')
+                    messages.success(
+                        request,
+                        "Data Updated successfully",
+                    )
+                    return redirect("dashboard_page")
                 else:
-                    messages.warning(request,"Your Credentials will Expire")
-                    return redirect('dashboard_pag')
+                    messages.warning(request, "Your Credentials will Expire")
+                    return redirect("dashboard_page")
             except Exception as e:
-                messages.warning(request,"Your Credentials will Expire")
-                return redirect('dashboard_pag')
+                messages.warning(request, "Your Credentials will Expire")
+                return redirect("dashboard_page")
         else:
             try:
-                
-                update_job_data = get_object_or_404(Job_detail,id=update_id)
+
+                update_job_data = get_object_or_404(Job_detail, id=update_id)
                 print(update_job_data)
                 update_job_data.company_name = company_name
                 update_job_data.date = date
@@ -877,312 +856,318 @@ def  update_job(request,update_id):
                 update_job_data.cylinder_made_in = cylinder_made_in
                 update_job_data.pouch_size = pouch_size
                 update_job_data.pouch_open_size = pouch_open_size
-                update_job_data.cylinder_date  = cylinder_date
+                update_job_data.cylinder_date = cylinder_date
                 update_job_data.job_status = job_status
                 update_job_data.pouch_combination = pouch_combination
-                
-                for file_key, file_data in file_dic.items():
-                    file_obj = file_data[1]  
-                    Jobimage.objects.create(
-                        job=update_job_data,
-                        image=file_obj
-                    )
-                update_job_data.save()
-                messages.success(request,'Data Update successfully ')
-                return redirect('dashboard_page')
-            except Exception:
-                messages.warning(request,'Something went wrong try again')
-                return redirect('dashboard_page')
-           
-    except Exception as e:
-        messages.error(request,f'Something went wrong try again {e}')
-        print(e)
-        return redirect('dashboard_page')
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
+                for file_key, file_data in file_dic.items():
+                    file_obj = file_data[1]
+                    Jobimage.objects.create(job=update_job_data, image=file_obj)
+                update_job_data.save()
+                messages.success(request, "Data Update successfully ")
+                return redirect("dashboard_page")
+            except Exception:
+                messages.warning(request, "Something went wrong try again")
+                return redirect("dashboard_page")
+
+    except Exception as e:
+        messages.error(request, f"Something went wrong try again {e}")
+        print(e)
+        return redirect("dashboard_page")
+
+
 @custom_login_required
-def user_logout(request): 
+def user_logout(request):
     try:
         logout(request)
         request.session.clear()
-        return redirect('login_page')
+        return redirect("login_page")
     except Exception as e:
-        messages.warning(request,f"Something went Wrong try again {e}")
-        return redirect('dashboard_page')
+        messages.warning(request, f"Something went Wrong try again {e}")
+        return redirect("dashboard_page")
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
+
 @custom_login_required
 def profile_page(request):
-    
-    return render(request,'profile.html')
+    return render(request, "profile.html")
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
+
 @custom_login_required
-def update_profile(request,users_id):
-    
+def update_profile(request, users_id):
+
     try:
-        update_profile = get_object_or_404(Registration,id=users_id)
-        if request.method == 'POST':
-            first_name = request.POST.get('first_name')
-            last_name = request.POST.get('last_name')
-            username = request.POST.get('username')
-            email = request.POST.get('email')
-        
-        
+        update_profile = get_object_or_404(Registration, id=users_id)
+        if request.method == "POST":
+            first_name = request.POST.get("first_name")
+            last_name = request.POST.get("last_name")
+            username = request.POST.get("username")
+            email = request.POST.get("email")
+
         required_filed = {
-            'First Name' :first_name,
-            'Last Name':last_name,
-            'Email':email,
-            'Username':username
-        } 
-        
-      
-        for filed,required in required_filed.items():
+            "First Name": first_name,
+            "Last Name": last_name,
+            "Email": email,
+            "Username": username,
+        }
+
+        for filed, required in required_filed.items():
             if not required:
-                messages.error(request,f"{filed} is Required" ,extra_tags="custom-success-style")
-                return redirect('profile_page')
-            
-        if email !=  update_profile.email:   
+                messages.error(
+                    request, f"{filed} is Required", extra_tags="custom-success-style"
+                )
+                return redirect("profile_page")
+
+        if email != update_profile.email:
             email_check_error = utils.email_check(email)
             if email_check_error:
-                messages.error(request,email_check_error,extra_tags="custom-success-style")
-                return redirect('profile_page')
-        
-        if username !=  update_profile.username and Registration.objects.filter(username=username).exists():
-            messages.error(request,"Username already exists",extra_tags="custom-success-style")
-            return redirect('profile_page')
-        
-        
-        email_error  = utils.email_validator(email)
+                messages.error(
+                    request, email_check_error, extra_tags="custom-success-style"
+                )
+                return redirect("profile_page")
+
+        if (
+            username != update_profile.username
+            and Registration.objects.filter(username=username).exists()
+        ):
+            messages.error(
+                request, "Username already exists", extra_tags="custom-success-style"
+            )
+            return redirect("profile_page")
+
+        email_error = utils.email_validator(email)
         if email_error:
-            messages.error(request,email_error,extra_tags="custom-success-style")
-            return redirect('profile_page')
-                
+            messages.error(request, email_error, extra_tags="custom-success-style")
+            return redirect("profile_page")
         update_profile.username = username
         update_profile.last_name = last_name
         update_profile.first_name = first_name
         update_profile.email = email
         update_profile.save()
-        messages.success(request,"Profile Will Updated",)
-        return redirect('profile_page')
+        messages.success(
+            request,
+            "Profile Will Updated",
+        )
+        return redirect("profile_page")
     except Exception:
-        messages.error(request,'Something went wrong  try again')
+        messages.error(request, "Something went wrong  try again")
         logger.warning("something went wrong in User Profile")
-        return redirect('profile_page')
-    
-    
-    
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
+        return redirect("profile_page")
+
+
 @custom_login_required
 def user_password(request):
     try:
-        
-        if request.method == 'POST':
-            old_password = request.POST.get('old_password','').strip()
-            new_password = request.POST.get('new_password','').strip()
-            confirm_password = request.POST.get('confirm_password','').strip()
-            
-            if old_password == ''  or old_password == None:
+
+        if request.method == "POST":
+            old_password = request.POST.get("old_password", "").strip()
+            new_password = request.POST.get("new_password", "").strip()
+            confirm_password = request.POST.get("confirm_password", "").strip()
+
+            if old_password == "" or old_password == None:
                 error = "Please provide Old Password."
-                return render (request,'profile.html',context={'error':error})
-                
+                return render(request, "profile.html", context={"error": error})
+
             user_password = request.user
             if not user_password.check_password(old_password):
-                messages.error(request,'Old Password is Incorrect',extra_tags='custom-success-style')
-                return redirect('profile_page')
-            
-            if new_password == ''  or new_password == None:
+                messages.error(
+                    request,
+                    "Old Password is Incorrect",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("profile_page")
+
+            if new_password == "" or new_password == None:
                 errors = "Please provide New Password."
-                return render (request,'profile.html',context={'errors':errors})
+                return render(request, "profile.html", context={"errors": errors})
 
             password_error = utils.validator_password(new_password)
             if password_error:
-                messages.error(request,password_error,extra_tags="custom-success-style")
-                return redirect('profile_page') 
-                    
+                messages.error(
+                    request, password_error, extra_tags="custom-success-style"
+                )
+                return redirect("profile_page")
+
             if old_password == new_password:
-                messages.error(request,"Your Current Password or New Password will same Add some Different",extra_tags='custom-success-style')
-                return redirect('profile_page')
+                messages.error(
+                    request,
+                    "Your Current Password or New Password will same Add some Different",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("profile_page")
 
             if new_password != confirm_password:
-                messages.error(request,"new password or confirm Passwords Must be same ",extra_tags='custom-success-style')
+                messages.error(
+                    request,
+                    "new password or confirm Passwords Must be same ",
+                    extra_tags="custom-success-style",
+                )
                 return redirect("profile_page")
-            
+
             user_password.set_password(new_password)
             user_password.save()
 
-            return redirect('login_page')
+            return redirect("login_page")
     except Exception as e:
-        messages.warning(request,"Something went wrong")
-        return redirect('profile_page')
-    
-    
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
+        messages.warning(request, "Something went wrong")
+        return redirect("profile_page")
+
+
 @custom_login_required
 def cdr_page(request):
-    
-    search = request.GET.get('search',' ').strip()
-    date = request.GET.get('date','').strip()
-    end_date = request.GET.get('end_date','').strip()
+    search = request.GET.get("search", " ").strip()
+    date = request.GET.get("date", "").strip()
+    end_date = request.GET.get("end_date", "").strip()
     # print(date)
-    company_name_sorting = request.GET.get('company_name_sorting','')
-    job_name_sorting = request.GET.get('job_name_sorting','')
-    date_sorting = request.GET.get('date_sorting','')
-    sorting = request.GET.get('sorting','')
+    company_name_sorting = request.GET.get("company_name_sorting", "")
+    job_name_sorting = request.GET.get("job_name_sorting", "")
+    date_sorting = request.GET.get("date_sorting", "")
+    sorting = request.GET.get("sorting", "")
 
     cdr_data = CDRDetail.objects.all()
     if search and date:
         cdr_data = CDRDetail.objects.filter(
-            Q(date__icontains=date) &
-            (
-                Q(job_name__icontains=search) |
-                Q(company_name__icontains=search) |
-                Q(company_email__icontains=search)
+            Q(date__icontains=date)
+            & (
+                Q(job_name__icontains=search)
+                | Q(company_name__icontains=search)
+                | Q(company_email__icontains=search)
             )
         )
-    
+
     elif end_date and date:
         cdr_data = CDRDetail.objects.filter(date__range=(date, end_date))
     elif search:
-        cdr_data  = CDRDetail.objects.filter(Q(job_name__icontains = search)| Q(company_name__icontains = search)| Q(company_email__icontains = search))
+        cdr_data = CDRDetail.objects.filter(
+            Q(job_name__icontains=search)
+            | Q(company_name__icontains=search)
+            | Q(company_email__icontains=search)
+        )
     elif date:
-        cdr_data = CDRDetail.objects.filter(Q(date__icontains =  date))
+        cdr_data = CDRDetail.objects.filter(Q(date__icontains=date))
     elif end_date:
-        cdr_data = CDRDetail.objects.filter(Q(date__icontains =  end_date))
-        
-    order_by = ''
-    if company_name_sorting == 'asc':
-        order_by = 'company_name'
-    elif company_name_sorting == 'desc':
-        order_by = '-company_name'
-    elif job_name_sorting == 'asc':
-        order_by = 'job_name'
-    elif job_name_sorting == 'desc':
-        order_by = '-job_name'
-    elif date_sorting == 'asc':
-        order_by = 'date'
-        print  (cdr_data)
-    elif date_sorting == 'desc':   
-        order_by = '-date'
-    elif sorting == 'desc':
-        order_by = '-id'
-        
+        cdr_data = CDRDetail.objects.filter(Q(date__icontains=end_date))
+
+    order_by = ""
+    if company_name_sorting == "asc":
+        order_by = "company_name"
+    elif company_name_sorting == "desc":
+        order_by = "-company_name"
+    elif job_name_sorting == "asc":
+        order_by = "job_name"
+    elif job_name_sorting == "desc":
+        order_by = "-job_name"
+    elif date_sorting == "asc":
+        order_by = "date"
+        print(cdr_data)
+    elif date_sorting == "desc":
+        order_by = "-date"
+    elif sorting == "desc":
+        order_by = "-id"
+
     if order_by:
         cdr_data = cdr_data.order_by(order_by)
     else:
-        cdr_data = cdr_data.order_by('date')
-    
-    
-    p = Paginator(cdr_data,10)
-    
-    page =  request.GET.get('page')
-    cdr_emails = CDRDetail.objects.values('company_email').distinct()
-    cdr_company_name = CDRDetail.objects.values('company_name').distinct()
-    cdr_job_name = CDRDetail.objects.values('job_name').distinct()
-    
-    # print(cdr_emails)
+        cdr_data = cdr_data.order_by("date")
+
+    p = Paginator(cdr_data, 10)
+    page = request.GET.get("page")
+    cdr_emails = CDRDetail.objects.values("company_email").distinct()
+    cdr_company_name = CDRDetail.objects.values("company_name").distinct()
+    cdr_job_name = CDRDetail.objects.values("job_name").distinct()
+
     datas = p.get_page(page)
     nums = "a" * datas.paginator.num_pages
     context = {
-        
-        'nums': nums,
-        'cdr_details':datas,
-        'page_obj':datas,
-        'search':search,
-        'date':date,
-        'end_date':end_date,
-        'cdr_email':cdr_emails,
-        'cdr_company_name':cdr_company_name,
-        'cdr_job_names':cdr_job_name,
+        "nums": nums,
+        "cdr_details": datas,
+        "page_obj": datas,
+        "search": search,
+        "date": date,
+        "end_date": end_date,
+        "cdr_email": cdr_emails,
+        "cdr_company_name": cdr_company_name,
+        "cdr_job_names": cdr_job_name,
     }
-    return render(request,'CDR/cdr_page.html',context)
+    return render(request, "CDR/cdr_page.html", context)
 
 
-# def image_compress(filepath,cdr):
-#     print(filepath)
-#     rot,ext = os.path.splitext(filepath)
-#     size  = 2 * 1024 * 1024
-#     file_size  = os.path.getsize(filepath)
-#     if file_size < size :
-#         print(filepath)
-#     else:
-#         img = Image.open(filepath)
-#         folder, name = os.path.split(filepath)
-#         base, ext = os.path.splitext(name)
-        
-    
+@custom_login_required
 def cdr_add(request):
-    if request.method == 'POST':
-        company_name = request.POST.get('company_name', '').strip()
-        company_email = request.POST.get('company_email', '').strip()
-        cdr_upload_date = request.POST.get('cdr_upload_date', '').strip()
-        cdr_files = request.FILES.getlist('cdr_files', '')
-        job_name = request.POST.get('job_name', '')
-        cdr_corrections_data = request.POST.get('cdr_corrections')
-        new_company_name = request.POST.get('new_company_name', '').strip()
-        new_company_email = request.POST.get('new_company_email', '').strip()
-        new_job_name = request.POST.get('new_job_name', '').strip()
+    if request.method == "POST":
+        company_name = request.POST.get("company_name", "").strip()
+        company_email = request.POST.get("company_email", "").strip()
+        cdr_upload_date = request.POST.get("cdr_upload_date", "").strip()
+        cdr_files = request.FILES.getlist("cdr_files", "")
+        job_name = request.POST.get("job_name", "").strip()
+        cdr_corrections_data = request.POST.get("cdr_corrections")
+        new_company_name = request.POST.get("new_company_name", "").strip()
+        new_company_email = request.POST.get("new_company_email", "").strip()
+        new_job_name = request.POST.get("new_job_name", "").strip()
 
         if not job_name or not cdr_upload_date:
-            messages.error(request, "Job name and upload date are required.", extra_tags='custom-error-style')
-            return redirect('company_add_page')
+            messages.error(
+                request,
+                "Job name and upload date are required.",
+                extra_tags="custom-error-style",
+            )
+            return redirect("company_add_page")
 
-        if new_job_name != '':
+        if new_job_name != "":
             job_name = new_job_name
 
-        if new_company_email != '':
+        if new_company_email != "":
             company_email = new_company_email
 
-        if new_company_name != '':
+        if new_company_name != "":
             company_name = new_company_name
 
         required_fields = {
-            'Company Name': company_name,
-            'Company Email': company_email,
-            'Upload Date': cdr_upload_date,
-            'Job Name': job_name,
+            "Company Name": company_name,
+            "Company Email": company_email,
+            "Upload Date": cdr_upload_date,
+            "Job Name": job_name,
         }
 
-        valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
-
-        for file in cdr_files:
-            ext = os.path.splitext(file.name)[1]
-            if ext.lower() not in valid_extension:
-                messages.error(request, "Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed.", extra_tags="custom-success-style")
-                return redirect("company_add_page")
+        email_error = utils.email_validator(company_email)
+        if email_error:
+            messages.error(request, email_error, extra_tags="custom-success-style")
+            return redirect("company_add_page")
 
         for field, required in required_fields.items():
             if not required:
-                messages.error(request, f"{field} is Required", extra_tags="custom-success-style")
-                return redirect('company_add_page')
+                messages.error(
+                    request, f"{field} is Required", extra_tags="custom-success-style"
+                )
+                return redirect("company_add_page")
 
         if not cdr_files:
-            messages.error(request, "CDR File is Required", extra_tags='custom-success-style')
-            return redirect('company_add_page')
+            messages.error(
+                request, "CDR File is Required", extra_tags="custom-success-style"
+            )
+            return redirect("company_add_page")
         if len(cdr_files) > 2:
-            messages.error(request, "You can upload only 2 files", extra_tags="custom-error-style")
-            return redirect('company_add_page')
+            messages.error(
+                request, "You can upload only 2 files", extra_tags="custom-error-style"
+            )
+            return redirect("company_add_page")
 
-     
-        if CDRDetail.objects.filter(company_name=company_name, company_email=company_email).exists():
+        if CDRDetail.objects.filter(
+            company_name=company_name, company_email=company_email
+        ).exists():
             print("Valid")
         else:
             if CDRDetail.objects.filter(company_name=company_name).exists():
-                messages.error(request, "Choose Another Company Name", extra_tags='custom-success-style')
-                return redirect('company_add_page')
+                messages.error(
+                    request,
+                    "Choose Another Company Name",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("company_add_page")
             if CDRDetail.objects.filter(company_email=company_email).exists():
-                messages.error(request, "Choose Another Email", extra_tags='custom-success-style')
-                return redirect('company_add_page')
+                messages.error(
+                    request, "Choose Another Email", extra_tags="custom-success-style"
+                )
+                return redirect("company_add_page")
 
         # Ensure company is added
         if CompanyName.objects.filter(company_name__icontains=company_name).exists():
@@ -1191,61 +1176,60 @@ def cdr_add(request):
             company_add_in = CompanyName.objects.create(company_name=company_name)
             company_add_in.save()
 
-        if CDRDetail.objects.filter(job_name__icontains=job_name, date=cdr_upload_date).exists():
-            messages.error(request, 'Job Name already exists on this date. Kindly update job.', extra_tags='custom-success-style')
-            return redirect('company_add_page')
+        if CDRDetail.objects.filter(
+            job_name__icontains=job_name, date=cdr_upload_date
+        ).exists():
+            messages.error(
+                request,
+                "Job Name already exists on this date. Kindly update job.",
+                extra_tags="custom-success-style",
+            )
+            return redirect("company_add_page")
 
-        # Email regex validation
-        email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        if not re.match(email_regex, company_email):
-            messages.error(request, "Enter a valid email address.", extra_tags="custom-success-style")
-            return redirect('company_add_page')
-
-        
         data = {
-            'company_name': company_name,
-            'company_email': company_email,
-            'cdr_upload_date': cdr_upload_date,
-            'job_name': job_name,
-            'cdr_corrections': cdr_corrections_data,
+            "company_name": company_name,
+            "company_email": company_email,
+            "cdr_upload_date": cdr_upload_date,
+            "job_name": job_name,
+            "cdr_corrections": cdr_corrections_data,
         }
-        
-        url = os.environ.get('CREATE_WEBHOOK_CDR')
+
+        url = os.environ.get("CREATE_WEBHOOK_CDR")
         print(url)
         if url:
             file_dic = {}
             for i, file in enumerate(cdr_files):
                 _, file_extension = os.path.splitext(file.name)
                 random_number = random.randint(1, 100)
-                new_file_name = f'{cdr_upload_date}_{random_number}{file_extension}'
+                new_file_name = f"{cdr_upload_date}_{random_number}{file_extension}"
                 file.name = new_file_name
                 file_key = f"{new_file_name}"
-                file_dic[file_key] = (file.name, file, file.content_type) 
-                print("This is File Dic ",file_dic)
-            url = os.environ.get('CREATE_WEBHOOK_CDR')
-            response = requests.post(f'{url}',data=data,files=file_dic)
-            if response.status_code  == 200:
-                    print("Positive Response : ",response)
-                    messages.success(request,"CDR Upload Successfully ")
-                    return redirect('company_add_page')
-                
-                
+                file_dic[file_key] = (file.name, file, file.content_type)
+                print("This is File Dic ", file_dic)
+            print(file_dic)
+
+            url = os.environ.get("CREATE_WEBHOOK_CDR")
+            response = requests.post(f"{url}", data=data, files=file_dic)
+            if response.status_code == 200:
+                print("Positive Response : ", response)
+                messages.success(request, "CDR Upload Successfully ")
+                return redirect("company_add_page")
+
             else:
                 cdr_data = CDRDetail.objects.create(
                     date=cdr_upload_date,
                     company_name=company_name,
                     company_email=company_email,
                     cdr_corrections=cdr_corrections_data,
-                    job_name=job_name
-                    )
-                
+                    job_name=job_name,
+                )
+
                 for i in cdr_files:
                     filename = i.name
-                    size_limit = 2 * 1024 * 1024  
+                    size_limit = 2 * 1024 * 1024
                     file_size = i.size
                     thumbnail_file = nan
 
-        
                     if file_size > size_limit:
                         img = Image.open(i)
                         base, ext = os.path.splitext(filename)
@@ -1253,7 +1237,7 @@ def cdr_add(request):
 
                         for f in range(10):
                             io = BytesIO()
-                            img.save(io, format='webp', optimize=True, quality=quality)
+                            img.save(io, format="webp", optimize=True, quality=quality)
                             if io.tell() <= size_limit:
                                 print("this is tell ", io.tell)
                                 io.seek(0)
@@ -1261,52 +1245,43 @@ def cdr_add(request):
                                 break
                             quality -= 5
                         else:
-                            print("All GooD")
+                            print("All Good")
                     else:
                         thumbnail_file = File(io, name=f"{base}_thumbnail.webp")
-
                     file_dic = {}
                     _, file_extension = os.path.splitext(i.name)
                     random_number = random.randint(1, 100)
-                    new_file_name = f'{cdr_upload_date}_{random_number}{file_extension}'
+                    new_file_name = f"{cdr_upload_date}_{random_number}{file_extension}"
                     i.name = new_file_name
 
-                
                     file_key = f"{new_file_name}"
                     file_dic[file_key] = (i.name, i, i.content_type)
 
-                    
                     cdr_image = CDRImage.objects.create(
-                        cdr=cdr_data,
-                        image=i,
-                        thumbnail_image=thumbnail_file
+                        cdr=cdr_data, image=i, thumbnail_image=thumbnail_file
                     )
                     cdr_image.save()
-
                 cdr_data.save()
-                messages.success(request, 'CDR Upload Successfully SQLite DB')
-                return redirect('company_add_page')
-    
+                messages.success(request, "CDR Upload Successfully SQLite DB")
+                return redirect("company_add_page")
 
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
+
 @custom_login_required
-def cdr_delete(request,delete_id):
-    url = os.environ.get('DELETE_WEBHOOK_CDR')
+def cdr_delete(request, delete_id):
+    url = os.environ.get("DELETE_WEBHOOK_CDR")
     folder_url = CDRDetail.objects.get(id=delete_id).file_url
     print(folder_url)
     if folder_url:
         response = requests.delete(f"{url}{delete_id}")
         if response.status_code == 200:
-            messages.success(request,"CDR File Deleted successfully ")
-            return redirect('company_add_page')
+            messages.success(request, "CDR File Deleted successfully ")
+            return redirect("company_add_page")
         else:
-            messages.warning(request,"Your Credentials will Expire")
-            return redirect('company_add_page')
+            messages.warning(request, "Your Credentials will Expire")
+            return redirect("company_add_page")
 
     else:
-        delete = get_object_or_404(CDRDetail, id = delete_id)
+        delete = get_object_or_404(CDRDetail, id=delete_id)
         print(delete)
         delete_image = delete.cdr_images.all()
         for img in delete_image:
@@ -1317,11 +1292,9 @@ def cdr_delete(request,delete_id):
             else:
                 img.delete()
         delete.delete()
-        messages.success(request,"Data Delete successfully")
-        return redirect('company_add_page')
+        messages.success(request, "Data Delete successfully")
+        return redirect("company_add_page")
 
-        
-    
     # response = requests.delete(f"http://localhost:5678/webhook/d51a7064-e3b9-41f5-a76f-264e19f60b70/cdr/delete/{delete_id}")
     # print(response.status_code)
     # if response.status_code == '200':
@@ -1331,336 +1304,333 @@ def cdr_delete(request,delete_id):
     # return redirect('company_add_page')
 
 
-
-
-
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
 @custom_login_required
-def cdr_update(request,update_id):
-    
+def cdr_update(request, update_id):
+
     id = update_id
-    if request.method == 'POST':
-        date = request.POST.get('cdr_upload_date')
-        
-        company_email = request.POST.get('company_email','').strip()
-        cdr_files = request.FILES.getlist('files')
-        company_name = request.POST.get('company_name').strip()
-        job_names = request.POST.get('job_name').strip()
-    
-        cdr_corrections = request.POST.get('cdr_corrections')
-        
-        get_date = CDRDetail.objects.values('date').get(id=id)
-        date_formatte = get_date['date'].strftime("%Y-%m-%d")
-        
-        if CDRDetail.objects.filter(company_name__icontains = company_name, company_email=company_email).exists():
+    if request.method == "POST":
+        date = request.POST.get("cdr_upload_date")
+
+        company_email = request.POST.get("company_email", "").strip()
+        cdr_files = request.FILES.getlist("files")
+        company_name = request.POST.get("company_name").strip()
+        job_names = request.POST.get("job_name").strip()
+
+        cdr_corrections = request.POST.get("cdr_corrections")
+
+        get_date = CDRDetail.objects.values("date").get(id=id)
+        date_formatte = get_date["date"].strftime("%Y-%m-%d")
+
+        if CDRDetail.objects.filter(
+            company_name__icontains=company_name, company_email=company_email
+        ).exists():
             pass
         else:
-            if CDRDetail.objects.filter(company_email__icontains = company_email).exists():
-                messages.error(request,"Choose Another Email",extra_tags='custom-success-style')
-                return redirect('company_add_page')
-            
-        if date != date_formatte:   
-            if CDRDetail.objects.filter(job_name__icontains =  job_names ,date=date ).exists():
-                messages.error(request,'CDR Job Name are already Exists on this date kindly Update job',extra_tags='custom-success-style')
-                return redirect('company_add_page')
-        
-        if len(cdr_files) > 2:
-            messages.error(request,"More than 2 file not allowed",extra_tags='custom-success-style')
-            return redirect('company_add_page')
-        
+            if CDRDetail.objects.filter(
+                company_email__icontains=company_email
+            ).exists():
+                messages.error(
+                    request, "Choose Another Email", extra_tags="custom-success-style"
+                )
+                return redirect("company_add_page")
+
+        if date != date_formatte:
+            if CDRDetail.objects.filter(
+                job_name__icontains=job_names, date=date
+            ).exists():
+                messages.error(
+                    request,
+                    "CDR Job Name are already Exists on this date kindly Update job",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("company_add_page")
+
+        file_error = utils.file_validation(cdr_files)
+        if file_error:
+            messages.error(request, file_error, extra_tags="custom-success-style")
+            return redirect("data_entry")
+
         file_dic = {}
         for i, file in enumerate(cdr_files):
             # Get the original file extension
             _, file_extension = os.path.splitext(file.name)
             random_number = random.randint(1, 100)
-            new_file_name = f'{date}_{random_number}{file_extension}'
+            new_file_name = f"{date}_{random_number}{file_extension}"
             file.name = new_file_name
             file_key = f"{new_file_name}"
             file_dic[file_key] = (file.name, file, file.content_type)
-        
+
         company_email = str(company_email).strip()
         print(company_email)
-        
-        get_email = CDRDetail.objects.values_list('company_email').get(id=id)
-        email_string = get_email[0] 
+
+        get_email = CDRDetail.objects.values_list("company_email").get(id=id)
+        email_string = get_email[0]
         print(str(email_string))
-        
-        if company_email ==  email_string:
+
+        if company_email == email_string:
             print("No Change")
         else:
-            CDRDetail.objects.filter(company_email=email_string).update(company_email=company_email)     
-        url = os.environ.get('UPDATE_WEBHOOK_CDR')
+            CDRDetail.objects.filter(company_email=email_string).update(
+                company_email=company_email
+            )
+        url = os.environ.get("UPDATE_WEBHOOK_CDR")
         if not cdr_files:
-            update_details = get_object_or_404(CDRDetail,id=id)
+            update_details = get_object_or_404(CDRDetail, id=id)
             update_details.company_email = company_email
             update_details.cdr_corrections = cdr_corrections
             update_details.job_name = job_names
             update_details.date = date
             update_details.save()
-            messages.success(request,"CDR Data Updated")
-            return redirect('company_add_page')
+            messages.success(request, "CDR Data Updated")
+            return redirect("company_add_page")
         else:
-            get_folder_url = CDRDetail.objects.values_list('file_url').get(id=id)
+            get_folder_url = CDRDetail.objects.values_list("file_url").get(id=id)
             folder_url = get_folder_url[0]
             if folder_url:
                 data = {
-                    'date':date,
-                    'company_email':company_email,
-                    'company_name':company_name,
-                    'job_name':job_names,
-                    'cdr_corrections':cdr_corrections
+                    "date": date,
+                    "company_email": company_email,
+                    "company_name": company_name,
+                    "job_name": job_names,
+                    "cdr_corrections": cdr_corrections,
                 }
-                response = requests.post(f"{url}{id}",data=data,files=file_dic)
-                
+                response = requests.post(f"{url}{id}", data=data, files=file_dic)
+
                 if response.status_code == 200:
-                    messages.success(request,'Data Update Successfully')
-                    return redirect('company_add_page')
+                    messages.success(request, "Data Update Successfully")
+                    return redirect("company_add_page")
                 else:
-                    messages.warning(request,"Your Credentials will Expire")
-                    return redirect('company_add_page')
+                    messages.warning(request, "Your Credentials will Expire")
+                    return redirect("company_add_page")
             else:
-                update_details = get_object_or_404(CDRDetail,id=id)
+                update_details = get_object_or_404(CDRDetail, id=id)
                 update_details.company_email = company_email
                 update_details.cdr_corrections = cdr_corrections
                 update_details.job_name = job_names
                 update_details.date = date
-                
+
                 for file in file_dic:
-                    CDRImage.objects.create(
-                        
-                        cdr = update_details,
-                        image = file
-                    )
+                    CDRImage.objects.create(cdr=update_details, image=file)
                 update_details.save()
-                messages.success(request,'Data Update Successfully')
-                return redirect('company_add_page')
-            
-    return redirect('company_add_page')
+                messages.success(request, "Data Update Successfully")
+                return redirect("company_add_page")
+
+    return redirect("company_add_page")
+
 
 def offline_page(request):
-    return render(request,'Base/offline_page.html')
+    return render(request, "Base/offline_page.html")
+
 
 from django.core.mail import EmailMultiAlternatives
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
+
+
 @custom_login_required
 def cdr_sendmail_data(request):
-    
-    if request.method == 'POST':
-        date = request.POST.get('date'," ")
-        cdr_company_name = request.POST.get('cdr_company_name'," ")
-        cdr_company_address = request.POST.get('cdr_company_address'," ")
-        attachments  = request.FILES.getlist('attachment')
-        cdr_job_name = request.POST.get('cdr_job_name',' ')
-        cdr_corrections = request.POST.get('cdr_corrections'," ")
-        cdr_notes = request.POST.get('notes'," ")
-        correction_check = request.POST.get('correction_check','')
-        cdr_date_check = request.POST.get('cdr_date_check')
-   
-        if cdr_date_check == None or cdr_date_check == '':
-            date = ''
+
+    if request.method == "POST":
+        date = request.POST.get("date", " ")
+        cdr_company_name = request.POST.get("cdr_company_name", " ")
+        cdr_company_address = request.POST.get("cdr_company_address", " ")
+        attachments = request.FILES.getlist("attachment")
+        cdr_job_name = request.POST.get("cdr_job_name", " ")
+        cdr_corrections = request.POST.get("cdr_corrections", " ")
+        cdr_notes = request.POST.get("notes", " ")
+        correction_check = request.POST.get("correction_check", "")
+        cdr_date_check = request.POST.get("cdr_date_check")
+
+        if cdr_date_check == None or cdr_date_check == "":
+            date = ""
         else:
             date = date
-        if correction_check == None or correction_check == '':
-            cdr_corrections = ''
+        if correction_check == None or correction_check == "":
+            cdr_corrections = ""
         else:
             cdr_corrections = cdr_corrections
-        # print(date)
-        
-        # for attachment in attachments:
-        #     print(attachment.size)
 
-        #     if attachments.size > 25  * 1024 *1024:
-        #         messages.error(request,"This Image Error ")
-        #         return redirect("company_add_page")
-        # print(selected_items)
-        
-        
-        email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        if not re.match(email_regex, cdr_company_address):
-            messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style")
-            return redirect('company_add_page')
-    
         total_attachment_size = sum(f.size for f in attachments)
         MAX_SIZE_MB = 25
         if total_attachment_size > MAX_SIZE_MB * 1024 * 1024:
-            messages.error(request, f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files.",extra_tags="custom-success-style")
-            return redirect('company_add_page')
-        
-        
+            messages.error(
+                request,
+                f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files.",
+                extra_tags="custom-success-style",
+            )
+            return redirect("company_add_page")
+
+        email_error = utils.email_validator(cdr_company_address)
+        if email_error:
+            messages.error(request, email_error, extra_tags="custom-success-style")
+            return redirect("company_add_page")
+
         CDR_INFO = {
-            "date":date,
-            "Company_Email":cdr_company_address,
-            "Company_Name":cdr_company_name,
-            "cdr_job_name":cdr_job_name,
-            "cdr_corrections":cdr_corrections,
-            "notes":cdr_notes,
+            "date": date,
+            "Company_Email": cdr_company_address,
+            "Company_Name": cdr_company_name,
+            "cdr_job_name": cdr_job_name,
+            "cdr_corrections": cdr_corrections,
+            "notes": cdr_notes,
         }
 
         receiver_email = cdr_company_address
-        template_name =  "Base/cdr_email.html"
-        convert_to_html_content =  render_to_string(
-        template_name=template_name,
-        context=CDR_INFO
-
+        template_name = "Base/cdr_email.html"
+        convert_to_html_content = render_to_string(
+            template_name=template_name, context=CDR_INFO
         )
         email = EmailMultiAlternatives(
             subject="Mail From Nirmal Ventures",
             body="plain_message",
-            from_email='Soniyuvraj9499@gmail.com',
-            to=[receiver_email]
+            from_email="Soniyuvraj9499@gmail.com",
+            to=[receiver_email],
         )
-        email.attach_alternative(convert_to_html_content,"text/html")
+        email.attach_alternative(convert_to_html_content, "text/html")
         for i in attachments:
             email.attach(i.name, i.read(), i.content_type)
         email.send()
-        messages.success(request,"Mail Send successfully")
-        return redirect('company_add_page')
-    
-    return redirect('company_add_page')
+        messages.success(request, "Mail Send successfully")
+        return redirect("company_add_page")
+
+    return redirect("company_add_page")
 
 
-
-
-
-@never_cache
-@cache_control(no_store=True, no_cache=True, must_revalidate=True, max_age=0) 
-@login_required(redirect_field_name=None)
 @custom_login_required
 def send_mail_data(request):
-    
-    if request.method == 'POST':
-        date_check = request.POST.get('date_check')
-        date = request.POST.get('date',"")
-        bill_no = request.POST.get('bill_no',"")
-        company_name = request.POST.get('company_name',"")
-        company_email_address = request.POST.get('company_address')
-        job_name = request.POST.get('job_name',"")
-        noc = request.POST.get('noc',"")
-        prpc_sell_check = request.POST.get('prpc_sell_check','')
-        prpc_sell = request.POST.get('prpc_sell',"")
-        cylinder_size = request.POST.get('cylinder_size',"")
-        pouch_size = request.POST.get('pouch_size',"")
-        pouch_open_size = request.POST.get('pouch_open_size',"")
-        correction = request.POST.get('correction',"")
-        correction_check = request.POST.get('correction_check','')
-        attachments  = request.FILES.getlist('attachment')
-        note  = request.POST.get('notes','')
+
+    if request.method == "POST":
+        date_check = request.POST.get("date_check")
+        date = request.POST.get("date", "")
+        bill_no = request.POST.get("bill_no", "")
+        company_name = request.POST.get("company_name", "")
+        company_email_address = request.POST.get("company_address")
+        job_name = request.POST.get("job_name", "")
+        noc = request.POST.get("noc", "")
+        prpc_sell_check = request.POST.get("prpc_sell_check", "")
+        prpc_sell = request.POST.get("prpc_sell", "")
+        cylinder_size = request.POST.get("cylinder_size", "")
+        pouch_size = request.POST.get("pouch_size", "")
+        pouch_open_size = request.POST.get("pouch_open_size", "")
+        correction = request.POST.get("correction", "")
+        correction_check = request.POST.get("correction_check", "")
+        attachments = request.FILES.getlist("attachment")
+        note = request.POST.get("notes", "")
         # selected_item = request.POST.getlist('select_item[]',"")
 
-    if date_check == None or date_check == '':
-        date = ''
+    if date_check == None or date_check == "":
+        date = ""
     else:
-        date = date 
+        date = date
 
-    
-    if correction_check == None or correction_check == '':
-        correction = ''
+    if correction_check == None or correction_check == "":
+        correction = ""
     else:
         correction = correction
-    
-    if prpc_sell_check == None or prpc_sell_check == '':
-        prpc_sell = ''
+
+    if prpc_sell_check == None or prpc_sell_check == "":
+        prpc_sell = ""
     else:
         prpc_sell = prpc_sell
-    
-    
-    if company_email_address == '' or company_email_address == None:
-        messages.error(request,"Kindly provide Company email",extra_tags="custom-success-style")
-        return redirect('dashboard_page')
-    
-    email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    if not re.match(email_regex, company_email_address):
-        messages.error(request, "Enter a valid email address.",extra_tags="custom-success-style")
-        return redirect('dashboard_page')
+
+    if company_email_address == "" or company_email_address == None:
+        messages.error(
+            request, "Kindly provide Company email", extra_tags="custom-success-style"
+        )
+        return redirect("dashboard_page")
+
+    email_error = utils.email_validator(company_email_address)
+    if email_error:
+        messages.error(request, email_error, extra_tags="custom-success-style")
+        return redirect("dashboard_page")
 
     total_attachment_size = sum(f.size for f in attachments)
     print(total_attachment_size)
     MAX_SIZE_MB = 25
     if total_attachment_size > MAX_SIZE_MB * 1024 * 1024:
-        messages.error(request, f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files.",extra_tags="custom-success-style")
-        return redirect('dashboard_page')
-    
-    
-    job_info = {
-                "date": date,
-                "bill_no": bill_no,
-                "company_name": company_name,
-                "company_email_address": company_email_address,
-                "job_name":job_name,
-                "noc":noc,
-                "prpc_sell":prpc_sell,
-                "cylinder_size":cylinder_size,
-                "pouch_size":pouch_size,
-                "pouch_open_size":pouch_open_size,
-                "correction":correction,
-                'note':note
+        messages.error(
+            request,
+            f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files.",
+            extra_tags="custom-success-style",
+        )
+        return redirect("dashboard_page")
 
-        }
-    
+    job_info = {
+        "date": date,
+        "bill_no": bill_no,
+        "company_name": company_name,
+        "company_email_address": company_email_address,
+        "job_name": job_name,
+        "noc": noc,
+        "prpc_sell": prpc_sell,
+        "cylinder_size": cylinder_size,
+        "pouch_size": pouch_size,
+        "pouch_open_size": pouch_open_size,
+        "correction": correction,
+        "note": note,
+    }
+
     print(job_info)
     receiver_email = company_email_address
-    template_name  = "Base/send_email.html"
-    convert_to_html_content =  render_to_string(
-    template_name=template_name,
-    context=job_info
-
+    template_name = "Base/send_email.html"
+    convert_to_html_content = render_to_string(
+        template_name=template_name, context=job_info
     )
     email = EmailMultiAlternatives(
-    subject="Mail From Nirmal Ventures",
-    body='plain_message',
-    from_email=request.user.email,
-    to=[receiver_email],
-
+        subject="Mail From Nirmal Ventures",
+        body="plain_message",
+        from_email=request.user.email,
+        to=[receiver_email],
     )
     email.attach_alternative(convert_to_html_content, "text/html")
-    for  i in attachments:
+    for i in attachments:
         email.attach(i.name, i.read(), i.content_type)
     email.send()
-        
-    messages.success(request,"Mail Send successfully")
-    return redirect('dashboard_page')
-    
+
+    messages.success(request, "Mail Send successfully")
+    return redirect("dashboard_page")
+
+
 def company_name_suggestion(request):
-    company_name = request.GET.get('company_name', '')
+    company_name = request.GET.get("company_name", "")
     if company_name:
-      
-     
+
         jobs = list(
             CDRDetail.objects.filter(company_name__iexact=company_name)
-            .values('job_name')  
+            .values("job_name")
             .distinct()
         )
 
-        email = list(CDRDetail.objects.filter(company_name__iexact=company_name).values('company_email').distinct())
+        email = list(
+            CDRDetail.objects.filter(company_name__iexact=company_name)
+            .values("company_email")
+            .distinct()
+        )
         print(email)
-        return JsonResponse({
-            'email': email,
-            'jobs': jobs
-        })
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+        return JsonResponse({"email": email, "jobs": jobs})
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
 def company_name_suggestion_job(request):
-    company_name = request.GET.get('company_name', '')
-    
-    
+    company_name = request.GET.get("company_name", "")
+
     if company_name:
         jobs = list(
             Job_detail.objects.filter(company_name__iexact=company_name)
-            .values('job_name').distinct()
+            .values("job_name")
+            .distinct()
         )
-        job_detail = Job_detail.objects.filter(company_name__iexact=company_name).values('job_name').distinct()
-        cdr_job = CDRDetail.objects.filter(company_name__iexact=company_name).values('job_name').distinct()
+        job_detail = (
+            Job_detail.objects.filter(company_name__iexact=company_name)
+            .values("job_name")
+            .distinct()
+        )
+        cdr_job = (
+            CDRDetail.objects.filter(company_name__iexact=company_name)
+            .values("job_name")
+            .distinct()
+        )
         jobs = list(job_detail.union(cdr_job))
 
-        return JsonResponse({'jobs': jobs})
-    return JsonResponse({'error': 'Invalid request'}, status=400)
-
-
+        return JsonResponse({"jobs": jobs})
+    return JsonResponse({"error": "Invalid request"}, status=400)
 
 
 def file_convert(images):
@@ -1669,175 +1639,173 @@ def file_convert(images):
         print(i)
         ext = os.path.splitext(i.name)[1]
         if ext.lower() not in valid_extension:
-            return {'Error': 'Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed.'}
+            return {
+                "Error": "Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed."
+            }
     return None
 
 
-def cdr_job_check(job_name,date):
-    if CDRDetail.objects.filter(job_name__icontains=job_name,date=date).exists():
-        return {
-            'Error' : 'Job Name already exists on this date. Kindly update job'
-        }
+def cdr_job_check(job_name, date):
+    if CDRDetail.objects.filter(job_name__icontains=job_name, date=date).exists():
+        return {"Error": "Job Name already exists on this date. Kindly update job"}
     return None
 
 
-
-def cdr_company_check(company_name,company_email):
-    if CDRDetail.objects.filter(company_name=company_name, company_email=company_email).exists():
+def cdr_company_check(company_name, company_email):
+    if CDRDetail.objects.filter(
+        company_name=company_name, company_email=company_email
+    ).exists():
         print("Valid")
     else:
         if CDRDetail.objects.filter(company_name=company_name).exists():
-            return {
-             'Error' :  "Choose Another Company Name"  
-             } 
+            return {"Error": "Choose Another Company Name"}
         if CDRDetail.objects.filter(company_email=company_email).exists():
-            return {
-             'Error' :  "Choose Another Email"  
-            } 
-         
-    
-    
-    
+            return {"Error": "Choose Another Email"}
 
 
-
-# API OF ALL Views 
+# API OF ALL Views
 
 from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+
 class JobList(APIView):
-    def get(self,request):
-        if request.method == 'GET':
+    def get(self, request):
+        if request.method == "GET":
             job = Job_detail.objects.all()
-            serializer = JobDetailSerializer(job,many=True)
+            serializer = JobDetailSerializer(job, many=True)
             return Response(serializer.data)
-        
-        
+
     def post(self, request):
-        job_name = request.data.get('job_name')
-        new_job = request.data.get('new_job_name')
-         
-        date = request.data.get('date')
-        company_name = request.data.get('company_name')  
-        new_company = request.data.get('new_company')
-        images = request.FILES.getlist('images')
-        
-        if company_name and new_company == '' :
-            return Response({
-                'Error' : 'Please provide company Name'
-            },status=status.HTTP_400_BAD_REQUEST)
-        
-        valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]  
+        job_name = request.data.get("job_name")
+        new_job = request.data.get("new_job_name")
+
+        date = request.data.get("date")
+        company_name = request.data.get("company_name")
+        new_company = request.data.get("new_company")
+        images = request.FILES.getlist("images")
+
+        if company_name and new_company == "":
+            return Response(
+                {"Error": "Please provide company Name"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
         for i in images:
             ext = os.path.splitext(i.name)[1]
             if ext.lower() not in valid_extension:
-                return Response({
-                    'Error':'Invalid file  Only .jpg, .jpeg, .png and .ai are allowed.'
-                },status=status.HTTP_400_BAD_REQUEST)
-                
-        
-        if Job_detail.objects.filter(date=date,job_name=job_name).exists():
-             return Response(
-                {'Error': 'Job Name already exists on this date. Kindly update the job.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )    
-        if not company_name:
-            
-            company_name = new_company
-            if CompanyName.objects.filter(company_name__icontains=company_name).exists():
-                return Response({
-                    'Error' : 'Company name already Exists'
-                })
-            add_company  = CompanyName.objects.create(
-                company_name= company_name
+                return Response(
+                    {
+                        "Error": "Invalid file  Only .jpg, .jpeg, .png and .ai are allowed."
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        if Job_detail.objects.filter(date=date, job_name=job_name).exists():
+            return Response(
+                {
+                    "Error": "Job Name already exists on this date. Kindly update the job."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        
+        if not company_name:
+
+            company_name = new_company
+            if CompanyName.objects.filter(
+                company_name__icontains=company_name
+            ).exists():
+                return Response({"Error": "Company name already Exists"})
+            add_company = CompanyName.objects.create(company_name=company_name)
+
         if not job_name:
             job_name = new_job
-            
-        
+
         file_dic = {}
-        for i,file in enumerate(images):
-            _,file_extension = os.path.splitext(file.name)
-            random_number = random.randint(1,100)
-            new_file_name = f'{date}_{random_number}{file_extension}'
-            
+        for i, file in enumerate(images):
+            _, file_extension = os.path.splitext(file.name)
+            random_number = random.randint(1, 100)
+            new_file_name = f"{date}_{random_number}{file_extension}"
+
             file.name = new_file_name
-            file_key  = f"{new_file_name}"
-            file_dic[file_key] = (file.name,file,file.content_type)
-                    
+            file_key = f"{new_file_name}"
+            file_dic[file_key] = (file.name, file, file.content_type)
+
         mutable_data = request.data.copy()
-        mutable_data['company_name'] = company_name
-        mutable_data['job_name'] = job_name
-        
+        mutable_data["company_name"] = company_name
+        mutable_data["job_name"] = job_name
+
         serializer = JobDetailSerializer(data=mutable_data)
         if serializer.is_valid():
             job_instance = serializer.save()
             for img_key, (filename, image, content_type) in file_dic.items():
                 job_image = Jobimage.objects.create(job=job_instance, image=image)
-                
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class JobDetailAV(APIView):
-    def get(self,request,pk):
+    def get(self, request, pk):
         try:
             job = Job_detail.objects.get(pk=pk)
-            
+
         except Job_detail.DoesNotExist:
-            return Response({'Error' : 'Job dose not exist'},status=status.HTTP_404_NOT_FOUND)
-        
+            return Response(
+                {"Error": "Job dose not exist"}, status=status.HTTP_404_NOT_FOUND
+            )
+
         serializer = JobUpdateSerializer(job)
         return Response(serializer.data)
-    
-    def put(self,request,pk):   
-        if request.method == 'PUT':
+
+    def put(self, request, pk):
+        if request.method == "PUT":
             job = Job_detail.objects.get(pk=pk)
-            demo = Job_detail.objects.values('date').get(id=pk)
-            date_formatte  = demo['date'].strftime("%Y-%m-%d")
-            new_date = request.data.get('date')
-            images = request.FILES.getlist('images')
-            
-            
-       
-            valid_extension = [".jpeg", ".jpg", ".png" ,".ai"]  
+            demo = Job_detail.objects.values("date").get(id=pk)
+            date_formatte = demo["date"].strftime("%Y-%m-%d")
+            new_date = request.data.get("date")
+            images = request.FILES.getlist("images")
+
+            valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
             for i in images:
                 ext = os.path.splitext(i.name)[1]
                 if ext.lower() not in valid_extension:
-                    return Response({
-                        'Error':'Invalid file  Only .jpg, .jpeg, .png and .ai are allowed.'
-                    },status=status.HTTP_400_BAD_REQUEST)
-                    
-                    
+                    return Response(
+                        {
+                            "Error": "Invalid file  Only .jpg, .jpeg, .png and .ai are allowed."
+                        },
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
             file_dic = {}
-            for i,file in enumerate(images):
-                _,file_extension = os.path.splitext(file.name)
-                random_number = random.randint(1,100)
-                new_file_name = f'{date}_{random_number}{file_extension}'
+            for i, file in enumerate(images):
+                _, file_extension = os.path.splitext(file.name)
+                random_number = random.randint(1, 100)
+                new_file_name = f"{date}_{random_number}{file_extension}"
                 file.name = new_file_name
-                file_key  = f"{new_file_name}"
-                file_dic[file_key] = (file.name,file,file.content_type)
-                
+                file_key = f"{new_file_name}"
+                file_dic[file_key] = (file.name, file, file.content_type)
+
             if new_date != date_formatte:
                 if Job_detail.objects.filter(date=new_date).exists():
                     return Response(
-                        {'Error': 'A job with the same date already exists.'},
-                        status=status.HTTP_400_BAD_REQUEST
+                        {"Error": "A job with the same date already exists."},
+                        status=status.HTTP_400_BAD_REQUEST,
                     )
-  
-            serializer = JobUpdateSerializer(job,data=request.data)
+
+            serializer = JobUpdateSerializer(job, data=request.data)
             if serializer.is_valid():
-                job_instance =  serializer.save()
+                job_instance = serializer.save()
                 for img_key, (filename, image, content_type) in file_dic.items():
                     job_image = Jobimage.objects.create(job=job_instance, image=image)
                 return Response(serializer.data)
             else:
-                return Response(serializer.errors,status=status.HTTP_404_NOT_FOUND)
-            
-    def delete(self,request,pk):
-        if request.method == 'DELETE':
+                return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, pk):
+        if request.method == "DELETE":
             job = Job_detail.objects.get(pk=pk)
             delete_images = job.image.all()
             for img in delete_images:
@@ -1846,67 +1814,49 @@ class JobDetailAV(APIView):
                     os.remove(path)
                 else:
                     img.delete()
-                    
-            job.delete()
-            return Response({
-                'success' : 'Job Deleted Successfully '
-            },status=status.HTTP_200_OK)
-            
-            
 
+            job.delete()
+            return Response(
+                {"success": "Job Deleted Successfully "}, status=status.HTTP_200_OK
+            )
 
 
 class CDRDetailAVS(APIView):
     serializer_class = CDRDataSerializer
+
     def get(self, request):
-        if request.method == 'GET':
+        if request.method == "GET":
             cdr = CDRDetail.objects.all()
             serializer = CDRDataSerializer(cdr, many=True)
             return Response(serializer.data)
-    
-    
-    
-    
-    
-    def post(self, request):
-        job_name = request.data.get('job_name')
-        images = request.FILES.getlist('images')
-        date = request.data.get('date')
-        company_name = request.data.get('company_name')
-        company_email = request.data.get('company_email')
-        
-        
-        
-        
 
-        # print(images)
-        # print(date)
-        
-        # print(job_name)
-        
+    def post(self, request):
+        job_name = request.data.get("job_name")
+        images = request.FILES.getlist("images")
+        date = request.data.get("date")
+        company_name = request.data.get("company_name")
+        company_email = request.data.get("company_email")
+
         print(images)
-        image_error =file_convert(images)
+        image_error = file_convert(images)
         if image_error:
-            return Response(image_error,status=status.HTTP_404_NOT_FOUND)
-        
-        
-        
-        job_error = cdr_job_check(job_name,date)
-        if job_error : 
-            return Response(job_error,status=status.HTTP_400_BAD_REQUEST)
-        
-        company_name_error = cdr_company_check(company_name,company_email)
-        if company_name_error : 
-            return Response(company_name_error,status=status.HTTP_400_BAD_REQUEST)
-        
-        
+            return Response(image_error, status=status.HTTP_404_NOT_FOUND)
+
+        job_error = cdr_job_check(job_name, date)
+        if job_error:
+            return Response(job_error, status=status.HTTP_400_BAD_REQUEST)
+
+        company_name_error = cdr_company_check(company_name, company_email)
+        if company_name_error:
+            return Response(company_name_error, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            
+
             cdr_instance = serializer.save()
 
             for i in images:
-                print("This Is I  ",i)
+                print("This Is I  ", i)
                 filename = i.name
                 size_limit = 2 * 1024 * 1024
                 print(size_limit)
@@ -1915,7 +1865,7 @@ class CDRDetailAVS(APIView):
 
                 _, file_extension = os.path.splitext(i.name)
                 random_number = random.randint(1, 100)
-                new_file_name = f'{date}_{random_number}{file_extension}'
+                new_file_name = f"{date}_{random_number}{file_extension}"
                 i.name = new_file_name
 
                 if file_size > size_limit:
@@ -1925,70 +1875,58 @@ class CDRDetailAVS(APIView):
                     quality = 80
                     for f in range(10):
                         io = BytesIO()
-                        img.save(io, format='WEBP', optimize=True, quality=quality)
+                        img.save(io, format="WEBP", optimize=True, quality=quality)
                         size = io.tell()
                         print(size)
                         print(f"This is Size of {size:2f}")
-                        
+
                         if size <= size_limit:
-                            
+
                             thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
                             break
                         quality -= 5
-                else:   
+                else:
                     img = Image.open(i)
                     io = BytesIO()
-                    img.save(io, format='WEBP', optimize=True, quality=40)
+                    img.save(io, format="WEBP", optimize=True, quality=40)
                     io.seek(0)
                     base, ext = os.path.splitext(filename)
                     thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
 
                 print(thumbnail_file)
                 CDRImage.objects.create(
-                    cdr=cdr_instance,
-                    image=i,
-                    thumbnail_image=thumbnail_file
+                    cdr=cdr_instance, image=i, thumbnail_image=thumbnail_file
                 )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-
 
 
 class CDRUpdateView(APIView):
-    def get(self,request,pk):
+    def get(self, request, pk):
         try:
             cdr = CDRDetail.objects.get(pk=pk)
         except Exception as e:
-            return Response({
-                'error' : 'CDR Dose not exist'
-            })
+            return Response({"error": "CDR Dose not exist"})
         serializer = CDRDataSerializer(cdr)
         return Response(serializer.data)
-    def put(self, request,pk):
-        if request.method == 'PUT':
+
+    def put(self, request, pk):
+        if request.method == "PUT":
             cdr = CDRDetail.objects.get(pk=pk)
-            date = CDRDetail.objects.values('date').get(pk=pk)
-            date_formatte  = date['date'].strftime("%Y-%m-%d")
-            images  =  request.FILES.getlist('image')
-            
-            
+            date = CDRDetail.objects.values("date").get(pk=pk)
+            date_formatte = date["date"].strftime("%Y-%m-%d")
+            images = request.FILES.getlist("image")
+
             image_error = file_convert(images)
             if image_error:
-                return Response({
-                    'error' : image_error
-                })
-        
-            
-            
-
+                return Response({"error": image_error})
 
 
 # def image_compress(filepath):
 #     print("Hello world")
-#     size = 2 * 1024 * 1024 
+#     size = 2 * 1024 * 1024
 #     file_size = os.path.getsize(filepath)
 #     print(file_size)
 #     if file_size < size:
@@ -1998,59 +1936,35 @@ class CDRUpdateView(APIView):
 #         folder, name = os.path.split(filepath)
 #         base, ext = os.path.splitext(name)
 #         new_file = os.path.join(folder, f"{base}_compressed{ext}")
-        
+
 #         while True:
 #             img.save(new_file,optimize=True,quality=95)
 #             new_size = os.path.getsize(new_file)
 #             if new_size < size :
 #                 break
 #         return new_file
-                
-            
-          
-    
-    
+
+
 # image_compress("demo.jpg")
 # Django Class Base View
 
 # def function_name(demo,*args):
-    
+
 #     print(demo)
 
 # function_name()
 
 
-
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
 # def job_detail_print(request,job_id):
 #     print(job_id)
-    
+
 #     try:
-        
+
 #         item = Job_detail.objects.get(id = job_id)
 #         data = {
 #             'id': item.id,
 #             'description': item.correction,
-            
+
 #         }
 #         return JsonResponse(data)
 #     except Job_detail.DoesNotExist:
@@ -2078,12 +1992,12 @@ class CDRUpdateView(APIView):
 
 #     # Check for active sessions associated with this user
 #     sessions = Session.objects.filter(expire_date__gt=datetime.now()) # Filter for active sessions
-    
+
 #     for session in sessions:
 #         decoded_session = session.get_decoded()  # Decode the session data
 #         if decoded_session.get('_auth_user_id') == user.id:  # Check if the session belongs to the given user
 #             return True  # User is currently logged in via an active session
-    
+
 #     return False
 
 
@@ -2191,7 +2105,7 @@ class CDRUpdateView(APIView):
 #         })
 
 #     return render(request, 'upload.html')
-       # import re
+# import re
 # from django.shortcuts import redirect
 # from django.contrib import messages
 # from .models import CDRDetail
@@ -2222,11 +2136,6 @@ class CDRUpdateView(APIView):
 #             messages.error(request, "Company Email already exists.", extra_tags='custom-success-style')
 #             return redirect('company_add_page')
 
-#         # Validate email format
-#         email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-#         if not re.match(email_regex, company_email):
-#             messages.error(request, "Enter a valid email address.", extra_tags="custom-success-style")
-#             return redirect('company_add_page')
 
 #         # Create database record
 #         cdr_upload = CDRDetail.objects.create(
@@ -2290,13 +2199,7 @@ class CDRUpdateView(APIView):
 #     return folder_id, folder_link
 
 
-
 # ajax part
-
-
-        
-        
-   
 
 
 # def get_company_data(request):
@@ -2308,9 +2211,9 @@ class CDRUpdateView(APIView):
 #             .values('job_name')
 #             .distinct()
 #         )
-       
+
 #         email = CDRDetail.objects.filter(company_name=company_name).values_list('company_email', flat=True).first()
-        
+
 #         return JsonResponse({
 #             'email': email,
 #             'jobs': jobs

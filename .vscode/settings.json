@@ -9,5 +9,7 @@
         "prpc",
         "SOCIALACCOUNT",
         "succfully"
-    ]
+    ],
+    "editor.wordWrap": "on",
+    "editor.tabSize": 2
 }

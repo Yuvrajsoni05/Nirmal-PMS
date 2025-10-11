@@ -1,102 +1,90 @@
 {% load static %}
 <!-- Sidebar -->
-      <div class="sidebar" data-background-color="dark">
-        <div class="sidebar-logo">
-          <!-- Logo Header -->
-          <div class="logo-header" data-background-color="dark">
+<div class="sidebar" data-background-color="dark">
+    <div class="sidebar-logo">
+        <!-- Logo Header -->
+        <div class="logo-header" data-background-color="dark">
             <a href="{% url "dashboard_page" %}" class="logo">
-              <img
-                src="{% static "assets/img/nirmal_logo.png" %}"
-                alt="demo"
-                class="navbar-brand"
-                height="40"
-              />
+                <img src="{% static "assets/img/nirmal_logo.png" %}"
+                     alt="demo"
+                     class="navbar-brand"
+                     height="40" />
             </a>
-            <div class="nav-toggle"  >
-              <button class="btn btn-toggle toggle-sidebar">
-                <i class="gg-menu-right"></i>
-              </button>
-              <button class="btn btn-toggle sidenav-toggler">
-                <i class="gg-menu-left"></i>
-              </button>
+            <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                    <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                    <i class="gg-menu-left"></i>
+                </button>
             </div>
             <button class="topbar-toggler more">
-              <i class="gg-more-vertical-alt"></i>
+                <i class="gg-more-vertical-alt"></i>
             </button>
-          </div>
-          <!-- End Logo Header -->
         </div>
-        <div class="sidebar-wrapper scrollbar scrollbar-inner">
-          <div class="sidebar-content">
+        <!-- End Logo Header -->
+    </div>
+    <div class="sidebar-wrapper scrollbar scrollbar-inner">
+        <div class="sidebar-content">
             <ul class="nav nav-secondary">
-              <li class="nav-item active">
-                <a
-                 
-                  href="{% url "dashboard_page" %}"
-             
-                >
-                  <i class="fas fa-home"></i>
-                  <p>Dashboard</p>
-                  
-                </a>
-                
-              </li>
-              <li class="nav-section">
-                <span class="sidebar-mini-icon">
-                  <i class="fa fa-ellipsis-h"></i>
-                </span>
-                <h4 class="text-section">Other</h4>
-              </li>
-              
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#sidebarLayouts">
-                  <i class="fas fa-th-list"></i>
-                  <p>Manage User</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="sidebarLayouts">
-                  <ul class="nav nav-collapse">
-                    <li>
-                      <a href="{% url "register_page" %}">
-                        <span class="sub-item">Add User</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="{% url "edit_user_page" %}">
-                        <span class="sub-item">Edit User</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              
-              <li class="nav-item">
-                <a data-bs-toggle="collapse" href="#company_add_page">
-                  <i class="fas fa-th-list"></i>
-                  <p>CDR Upload</p>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="company_add_page">
-                  <ul class="nav nav-collapse">
-                    <li>
-                      <a href="{% url "company_add_page" %}">
-                        <span class="sub-item">Add & View CDR</span>
-                      </a>
-                    </li>
-               
-                  </ul>
-                </div>
-              </li>
-
+                <li class="nav-item active">
+                    <a href="{% url "dashboard_page" %}">
+                        <i class="fas fa-home"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">Other</h4>
+                </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#sidebarLayouts">
+                        <i class="fas fa-th-list"></i>
+                        <p>Manage User</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="sidebarLayouts">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{% url "register_page" %}">
+                                    <span class="sub-item">Add User</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url "edit_user_page" %}">
+                                    <span class="sub-item">Edit User</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#company_add_page">
+                        <i class="fas fa-th-list"></i>
+                        <p>CDR Upload</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="company_add_page">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{% url "company_add_page" %}">
+                                    <span class="sub-item">Add & View CDR</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
-            
-          </div>
-          <div class="mt-auto bottom text-center pt-3" style="position: absolute; bottom: 10%; width: 100%">
-              <a href="{% url 'logout' %}"  class="btn btn-danger btn-sm w-75">
-                <i class="fas fa-sign-out-alt"></i> Logout
-              </a>
-            </div>
         </div>
-        
-      </div>
-     
+        <div class="mt-auto bottom text-center pt-3"
+             style="position: absolute;
+                    bottom: 10%;
+                    width: 100%">
+            <a href="{% url 'logout' %}"  class="btn btn-danger btn-sm w-75">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+</div>

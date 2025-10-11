@@ -7,8 +7,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <style>
             /* Global styles */
-            body, html {
-                font-family: 'Arial', sans-serif;
+            body,
+            html {
+                font-family: "Arial", sans-serif;
                 margin: 0;
                 padding: 0;
                 background-color: #f4f7fc;
@@ -142,15 +143,16 @@
         <div class="container">
             <div class="header-section">
                 <div class="form-logo">
-                    <img src="{% static 'assets/img/nirmal_logo.png' %}" alt="Nirmal Ventures Logo" />
+                    <img
+                        src="{% static 'assets/img/nirmal_logo.png' %}"
+                        alt="Nirmal Ventures Logo"
+                    />
                 </div>
                 <h2>Nirmal Ventures</h2>
             </div>
-
             <div class="bottom-header">
                 <p>Date: <span>26/08/2025</span></p>
             </div>
-
             <div class="form-list">
                 <table class="info-table">
                     {% if date %}
@@ -158,32 +160,27 @@
                         <td>Date</td>
                         <td>{{ date }}</td>
                     </tr>
-                    {% endif %}
-                    {% if Company_Name %}
+                    {% endif %} {% if Company_Name %}
                     <tr>
                         <td>Company Name</td>
                         <td>{{ Company_Name }}</td>
                     </tr>
-                    {% endif %}
-                    {% if Company_Email %}
+                    {% endif %} {% if Company_Email %}
                     <tr>
                         <td>Company Email</td>
                         <td>{{ Company_Email }}</td>
                     </tr>
-                    {% endif %}
-                    {% if cdr_job_name %}
+                    {% endif %} {% if cdr_job_name %}
                     <tr>
                         <td>Job Name</td>
                         <td>{{ cdr_job_name }}</td>
                     </tr>
-                    {% endif %}
-                    {% if cdr_corrections %}
+                    {% endif %} {% if cdr_corrections %}
                     <tr>
                         <td>Correction</td>
                         <td>{{ cdr_corrections }}</td>
                     </tr>
-                    {% endif %}
-                    {% if notes %}
+                    {% endif %} {% if notes %}
                     <tr>
                         <td>Note</td>
                         <td>{{ notes }}</td>
@@ -191,18 +188,22 @@
                     {% endif %}
                 </table>
             </div>
-
             <div class="footer-section">
                 <div class="footer-top">
                     <p>Best Regards,</p>
                     <p>Nirmal Tubes and Containers Pvt Ltd</p>
                     <div class="footer-logo">
-                        <img src="https://nirmaltubes.com/wp-content/uploads/2024/01/Clip-path-group-1.svg" alt="Nirmal Ventures Logo" />
+                        <img
+                            src="https://nirmaltubes.com/wp-content/uploads/2024/01/Clip-path-group-1.svg"
+                            alt="Nirmal Ventures Logo"
+                        />
                     </div>
                 </div>
-                <a href="http://localhost:8000/" class="btn">Go to Nirmal Ventures</a>
+                <a href="http://localhost:8000/" class="btn"
+                    >Go to Nirmal Ventures</a
+                >
                 <div class="footer-bottom">
-                    &copy; {{ date|date:"Y" }} Nirmal Ventures | 
+                    &copy; {{ date|date:"Y" }} Nirmal Ventures |
                     <a href="http://localhost:8000/">www.nirmal.com</a>
                 </div>
             </div>
