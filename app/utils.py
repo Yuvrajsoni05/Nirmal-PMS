@@ -1,3 +1,5 @@
+from datetime import datetime
+import random
 import requests
 import re
 import os
@@ -62,6 +64,25 @@ def file_validation(files):
         
         if ext not in valid_extension:
             return "Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed"
+        
+        
+        
+
+def file_name_convert(files):
+    date = datetime.now()
+    date_s = date.strftime("%Y-%m-%d %H:%M:%S")
+    file_dic = {}
+    for i, file in enumerate(files):
+            _, file_extension = os.path.splitext(file.name)
+            random_number = random.randint(1, 1000)
+            new_file_name = f"{date_s}_{random_number}{file_extension}"
+            file.name = new_file_name
+            file_key = f"{new_file_name}"
+            file_dic[file_key] = (file.name, file, file.content_type)
+    # print(file_dic)        
+    return file_dic
+        
+     
         
         
         

@@ -49,7 +49,7 @@
                 {% comment %} <h3 class="fw-bold mb-3">Dashboard  {{ user.username }}<h1></h1></h3> {% endcomment %}
             </div>
             <div class="page-actions ms-md-auto py-2 py-md-0">
-                <a href="{% url "data_entry" %}" class="btn btn-primary btn-round">Add New Job</a>
+                <a href="{% url "job_entry" %}" class="btn btn-primary btn-round">Add New Job</a>
             </div>
         </div>
         <!-- Statistics Cards Section -->
@@ -262,7 +262,7 @@
                                                                                  style="height: 50px">
                                                                                 <a class="icon-link" href="{{ job_image.image.url }}" target="_blank">{{ job_image.image.name|filename }}</a>
                                                                             </div>
-                                                                        </div>
+                                                                        </div>  
                                                                     {% endfor %}
                                                                 </div>
                                                                 <button class="carousel-control-prev"
@@ -310,22 +310,27 @@
                                                     <td class="text-truncate sticky-right">
                                                         <div class="action-buttons">
                                                             <!-- Delete Button -->
-                                                            <form method="post"
-                                                                  action="{% url "delete_data" delete_id=i.id %}"
-                                                                  class="d-inline">
-                                                                {% csrf_token %}
-                                                                <button class="btn btn-sm btn-outline-danger ms-1"
-                                                                        onclick="return confirm('Are you sure you want to delete this item?')">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                         width="12"
-                                                                         height="12"
-                                                                         fill="currentColor"
-                                                                         class="bi bi-trash-fill"
-                                                                         viewBox="0 0 16 16">
-                                                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                                                    </svg>
-                                                                </button>
-                                                            </form>
+                                                            <form method="post" action="{% url 'delete_data' delete_id=i.id %}" class="d-inline" id="delete-form-{{ i.id }}">
+                                                        {% csrf_token %}
+                                                        <button type="button" class="btn btn-sm btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#confirmationModal" onclick="setFormId({{ i.id }})">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                                            </svg>
+                                                        </button>
+                                                    </form>
+                                                        <script>
+                                                                let formIdToSubmit;
+
+                                                                // Set the form ID for deletion
+                                                                function setFormId(id) {
+                                                                    formIdToSubmit = id;
+                                                                }
+
+                                                                // Submit the form if user confirms
+                                                                function submitForm() {
+                                                                    document.getElementById('delete-form-' + formIdToSubmit).submit();
+                                                                }
+                                                        </script>
                                                             <!-- Edit Button -->
                                                             <button type="button"
                                                                     class="btn btn-sm btn-outline-primary"
@@ -359,6 +364,27 @@
                                                     </td>
                                                 </tr>
                                                 <!-- Modals for each row -->
+                                                <!-- Modal Structure -->
+                                                        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                                            <div class="modal-dialog">
+                                                                <div class="modal-content">
+                                                                    <!-- Modal Header -->
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <!-- Modal Body -->
+                                                                    <div class="modal-body">
+                                                                        Are you sure you want to delete this item? 
+                                                                    </div>
+                                                                    <!-- Modal Footer -->
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-danger" onclick="submitForm()">Yes</button>
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                 <!-- View Details Modal -->
                                                 <div class="modal fade"
                                                      id="viewModal{{ i.id }}"
@@ -994,7 +1020,11 @@
                 </div>
             </div>
         </section>
-    {% endblock main_block %}
+        {% endblock main_block %}
+    </div>
+    
+    
     {% block script %}
+    
         <script src="{% static 'js/dashboard.js' %}"></script>
     {% endblock script %}

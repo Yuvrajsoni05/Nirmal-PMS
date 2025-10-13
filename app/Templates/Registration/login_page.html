@@ -1,277 +1,260 @@
-{% load socialaccount %}
-{% load static %}
+{% load socialaccount %} {% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Login - Nirmal</title>
-        <meta http-equiv="Cache-Control"
-              content="no-cache, no-store, must-revalidate" />
+        <meta
+            http-equiv="Cache-Control"
+            content="no-cache, no-store, must-revalidate"
+        />
         <meta http-equiv="Pragma" content="no-cache" />
         <meta http-equiv="Expires" content="0" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-              rel="stylesheet"
-              integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-              crossorigin="anonymous">
-        <link rel="stylesheet" href="{% static 'css/login_page.css' %}">
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-              rel="stylesheet">
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+            crossorigin="anonymous"
+        />
+        <link rel="stylesheet" href="{% static 'css/login_page.css' %}" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+            rel="stylesheet"
+        />
+
         <style>
-        /* Global & Utility */
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f8f9fa !important; /* Lighter background for better contrast */
-        }
-        
-        .gradient-form {
-            background-color: #f8f9fa !important; /* Override inline style */
-        }
+            body {
+                background: #0a1c33; /* Updated dark background */
+                font-family: "Poppins", sans-serif;
+                color: #fff;
+            }
 
-        /* Card and Layout */
-        .card {
-            border: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Deeper, softer shadow */
-            border-radius: 1rem !important;
-            overflow: hidden;
-        }
+            .login-wrapper {
+                display: flex;
+                height: 100vh;
+            }
 
-        /* Login Section (col-lg-6) */
-        .login-panel {
-            padding: 3rem 4rem !important; /* More breathing room */
-        }
+            .login-left {
+                width: 50%;
+                background: #0d2544; /* Slightly brighter than body */
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 50px;
+            }
 
-        /* Logo and Heading */
-        .login-panel .text-center {
-            margin-bottom: 2.5rem;
-        }
+            .login-box {
+                width: 100%;
+                max-width: 400px;
+            }
 
-        .login-panel .text-center h4 {
-            font-weight: 600;
-            color: #0d6efd; /* Use a primary color */
-            margin-top: 1rem !important;
-        }
+            h2 {
+                color: #fff;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
 
-        .login-panel .text-center p {
-            color: #6c757d;
-        }
-        
-        /* Form Inputs */
-        .form-control {
-            border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
-            border: 1px solid #ced4da;
-            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-        }
+            p {
+                color: #aab8c5; /* Light secondary text */
+            }
 
-        .form-control:focus {
-            border-color: #0d6efd;
-            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
-        }
+            .form-control {
+                background: #0a1c33;
+                border: 1px solid #1f3555; /* Border with blue tone */
+                color: #fff;
+            }
 
-        .form-label {
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            color: #343a40;
-            font-weight: 600 !important;
-        }
-        
-        /* Button */
-        .btn-primary.btn-block {
-            padding: 0.75rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 0.5rem;
-            width: 100%; /* Ensure full width as btn-block is deprecated */
-            margin-top: 1.5rem !important;
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-        }
+            .form-control:focus {
+                border-color: #f28a30; /* Orange tone */
+                box-shadow: none;
+            }
 
-        .btn-primary.btn-block:hover {
-            background-color: #0b5ed7;
-            border-color: #0b5ed7;
-        }
-        
-        /* Remember Me / Forgot Password Layout */
-        .login-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-        }
-        
-        /* Promotional Section (Right Side) */
-        .gradient-custom-2 {
-            /* Use the colors from the 'A' in the logo: Orange/Yellow to Red/Orange */
-            background: linear-gradient(to right, #ffae42, #ff6347); 
-            border-top-right-radius: 1rem;
-            border-bottom-right-radius: 1rem;
-            color: #fff;
-            padding: 3rem; /* Same padding as the login side for balance */
-        }
+            .btn-primary {
+                background: linear-gradient(
+                    to right,
+                    #f9c00c,
+                    #f2541b
+                ); /* Button in gradient */
+                border: none;
+                width: 100%;
+                padding: 10px;
+                font-weight: 600;
+                color: #fff;
+            }
 
-        .gradient-custom-2 h4 {
-            font-weight: 700;
-            margin-bottom: 1.5rem !important;
-        }
+            .login-right {
+                width: 50%;
+                background: url("{% static 'assets/img/grid-01.svg' %}"),
+                    #0a1c33;
+                background-size: cover;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: relative;
+            }
 
-        /* Toast Messages */
-        .toast-container {
-            top: 1.5rem !important; /* Move higher for a modern look */
-            max-width: 400px;
-        }
+            .login-logo {
+                max-width: 200px;
+                width: 100%;
+                height: auto;
+            }
 
-        .toast {
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
+            .toast-container {
+                top: 1.5rem !important;
+                max-width: 400px;
+            }
 
-        .toast-body {
-            font-size: 0.95rem;
-        }
-        
-        /* Make sure the image size is reasonable and not too small */
-        .text-center img {
-            max-width: 150px;
-            height: auto;
-        }
+            .toast {
+                border-radius: 0.5rem;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .toast-body {
+                font-size: 0.95rem;
+            }
+
+            .text-center img {
+                max-width: 150px;
+                height: auto;
+            }
         </style>
     </head>
     <body>
-        <div class="content">
-            <form action="{% url "login_page" %}" method="POST"  autocomplete="off">
-                {% csrf_token %}
-                <section class="h-100 gradient-form">
-                    <div class="container py-5 h-100">
-                        <div class="row d-flex justify-content-center align-items-center h-100">
-                            <div class="col-xl-10">
-                                <div class="card rounded-3 text-black">
-                                    <div class="row g-0">
-                                        <div class="col-lg-6">
-                                            <div class="card-body login-panel">
-                                                <div class="text-center">
-                                                    <img src="{% static 'assets/img/nirmal_logo.png' %}" alt="Nirmal Logo">
-                                                    <h4 class="mt-1 mb-1 pb-1">Nirmal Group</h4>
-                                                    <p>Please log in to your account</p>
-                                                </div>
-                                                <div class="form-outline mb-4">
-                                                    <label class="form-label" for="username">Username & email</label>
-                                                    <input type="text"
-                                                           name="username"
-                                                           id="username"
-                                                           class="form-control"
-                                                           placeholder="Enter your username"
-                                                           maxlength="100"
-                                                           required />
-                                                </div>
-                                                <div class="form-outline mb-4">
-                                                    <label class="form-label" for="password">Password</label>
-                                                    <input type="password"
-                                                           id="password"
-                                                           name="password"
-                                                           placeholder="Enter password"
-                                                           class="form-control"
-                                                           maxlength="20"
-                                                           required />
-                                                </div>
-                                                <button class="btn btn-primary btn-block mb-3" type="submit">Log in Now</button>
-                                                <div class="login-options">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input"
-                                                               type="checkbox"
-                                                               name="remember_me"
-                                                               id="remember_me">
-                                                        <label class="form-check-label" for="remember_me">Remember me</label>
-                                                    </div>
-                                                    <a class="text-muted small" href="{% url "password_reset" %}">Forgot password?</a>
-                                                </div>
-                                                {% comment %} <a href="{% provider_login_url 'google' process='login' %}">Login with Google</a> {% endcomment %}
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
-                                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                                                <h4 class="mb-4">We are more than just a company</h4>
-                                                <p class="small mb-0">
-                                                    Discover our commitment to quality and service. Log in to explore a seamless experience tailored just for you. We value our relationship and strive for excellence in every interaction.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </form>
-        </div>
-        <div class="toast-container position-fixed top-0 start-50 translate-middle-x p-3"
-             id="toastContainer">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="toast align-items-center text-bg-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} border-0 show"
-                         role="alert"
-                         data-toast-id="{{ forloop.counter }}">
-                        <div class="d-flex">
-                            <div class="toast-body d-flex align-items-center">
-                                {% if message.tags == 'error' %}
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="toast-icon"
-                                         fill="currentColor"
-                                         viewBox="0 0 16 16">
-                                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                                        <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z" />
-                                    </svg>
-                                {% elif message.tags == 'success' %}
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         class="toast-icon"
-                                         fill="currentColor"
-                                         viewBox="0 0 16 16">
-                                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.061L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                    </svg>
-                                {% endif %}
-                                <span class="flex-grow-1">{{ message }}</span>
-                            </div>
-                            <button type="button"
-                                    class="btn-close btn-close-white me-2 m-auto"
-                                    onclick="closeToast({{ forloop.counter }})"></button>
-                        </div>
-                        <div class="toast-progress">
-                            <div class="toast-progress-bar"></div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-        <script>
-        function closeToast(id) {
-            const toast = document.querySelector(`[data-toast-id="${id}"]`);
-            if (toast) {
-                toast.classList.add('hide');
-                setTimeout(() => {
-                    if (toast.parentNode) {
-                        toast.parentNode.removeChild(toast);
-                    }
-                }, 300);
-            }
-        }
+        <div class="login-wrapper">
+            <!-- Left Form -->
+            <div class="login-left">
+                <form
+                    class="login-box"
+                    method="POST"
+                    action="{% url 'login_page' %}"
+                >
+                    {% csrf_token %}
+                    <h2>Sign In</h2>
+                    <p>Enter your email / username and password to sign in!</p>
 
-    
-        document.addEventListener('DOMContentLoaded', function() {
-            const toasts = document.querySelectorAll('.toast[data-toast-id]');
-            toasts.forEach((toast, index) => {
-                const id = toast.getAttribute('data-toast-id');
-                setTimeout(() => {
-                    closeToast(id);
-                }, 5000);
+                    <div class="mb-3">
+                        <label class="form-label">Email / Username</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            name="username"
+                            required
+                        />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input
+                            type="password"
+                            class="form-control"
+                            name="password"
+                            required
+                        />
+                    </div>
+
+                    <div
+                        class="d-flex justify-content-between align-items-center mb-3"
+                    >
+                        <div>
+                            <input type="checkbox" id="remember_me" />
+                            <label for="remember_me">Keep me logged in</label>
+                        </div>
+                        <a href="{% url 'password_reset' %}" class="text-muted"
+                            >Forgot password?</a
+                        >
+                    </div>
+
+                    <button class="btn btn-primary">Sign In</button>
+                </form>
+            </div>
+
+            <!-- Right Panel with Logo -->
+            <div class="login-right">
+                <img
+                    src="{% static 'assets/img/nirmal_logo.png' %}"
+                    alt="Logo"
+                    class="login-logo"
+                    width="500"
+                    height="300"
+                />
+            </div>
+        </div>
+
+        <div
+            class="toast-container position-fixed top-0 start-50 translate-middle-x p-3"
+            id="toastContainer"
+        >
+            {% if messages %} {% for message in messages %}
+            <div
+                class="toast align-items-center text-bg-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} border-0 show"
+                role="alert"
+                data-toast-id="{{ forloop.counter }}"
+            >
+                <div class="d-flex">
+                    <div class="toast-body d-flex align-items-center">
+                        {% if message.tags == 'error' %}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="toast-icon"
+                            fill="currentColor"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                            />
+                            <path
+                                d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"
+                            />
+                        </svg>
+                        {% elif message.tags == 'success' %}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="toast-icon"
+                            fill="currentColor"
+                            viewBox="0 0 16 16"
+                        >
+                            <path
+                                d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.061L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"
+                            />
+                        </svg>
+                        {% endif %}
+                        <span class="flex-grow-1">{{ message }}</span>
+                    </div>
+                    <button
+                        type="button"
+                        class="btn-close btn-close-white me-2 m-auto"
+                        onclick="closeToast({{ forloop.counter }})"
+                    ></button>
+                </div>
+            </div>
+            {% endfor %} {% endif %}
+        </div>
+
+        <script>
+            function closeToast(id) {
+                const toast = document.querySelector(`[data-toast-id="${id}"]`);
+                if (toast) {
+                    toast.classList.add("hide");
+                    setTimeout(() => {
+                        if (toast.parentNode) {
+                            toast.parentNode.removeChild(toast);
+                        }
+                    }, 300);
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const toasts = document.querySelectorAll(
+                    ".toast[data-toast-id]"
+                );
+                toasts.forEach((toast) => {
+                    const id = toast.getAttribute("data-toast-id");
+                    setTimeout(() => {
+                        closeToast(id);
+                    }, 5000);
+                });
             });
-        });
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-                integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-                crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-                integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-                crossorigin="anonymous"></script>
     </body>
 </html>

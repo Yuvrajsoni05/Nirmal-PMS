@@ -1,42 +1,117 @@
-ERROR 2025-09-25 11:25:13,782 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-25 11:58:50,658 myapp login_page Something went wrong try again views.py
-ERROR 2025-09-25 11:59:45,443 myapp login_page Something went wrong try again views.py
-ERROR 2025-09-25 12:26:29,902 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-25 15:38:46,041 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-26 10:53:52,375 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-26 15:54:27,439 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-29 10:43:45,484 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-29 10:45:30,597 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-29 10:45:41,873 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-29 11:20:58,914 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-29 11:39:14,017 myapp login_page Something went wrong try again views.py
-ERROR 2025-09-29 13:21:03,871 myapp login_page Invalid Username and Password views.py
-ERROR 2025-09-29 16:02:57,828 myapp login_page Invalid Username and Password views.py
-ERROR 2025-10-01 11:06:04,238 myapp login_page Invalid Username and Password views.py
-ERROR 2025-10-01 12:57:38,178 myapp login_page Something went wrong try again views.py
-ERROR 2025-10-01 12:57:59,048 myapp login_page Something went wrong try again views.py
-ERROR 2025-10-01 12:59:50,864 myapp login_page Something went wrong try again views.py
-ERROR 2025-10-01 13:02:01,161 myapp login_page Something went wrong try again views.py
-ERROR 2025-10-01 13:02:18,061 myapp login_page Something went wrong try again views.py
-ERROR 2025-10-03 10:24:53,215 myapp login_page Invalid Username or Password views.py
-ERROR 2025-10-09 11:58:45,324 myapp login_page Invalid Username or Password views.py
-ERROR 2025-10-09 14:43:14,601 myapp login_page Invalid Username or Password views.py
-ERROR 2025-10-10 16:02:57,232 myapp login_page Invalid Username or Password views.py
-ERROR 2025-10-10 16:11:43,933 myapp login_page Something went wrong: 'WSGIRequest' object has no attribute 'username' views.py
+ERROR 2025-10-13 13:37:32,185 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 13:45:12,057 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 13:47:01,071 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 15:44:54,905 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 15:45:05,259 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 15:59:56,659 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 16:43:22,148 myapp update_job Something went wrong: cannot access local variable 'file_name_convert' where it is not associated with a value views.py
 Traceback (most recent call last):
-  File "D:\Nirmal\app\views.py", line 159, in login_page
-    messages.success(request, f'You are logged in {request.username}')
-                                                   ^^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'username'
-ERROR 2025-10-10 16:11:53,848 myapp login_page Something went wrong: 'WSGIRequest' object has no attribute 'username' views.py
+  File "D:\Nirmal\app\views.py", line 815, in update_job
+    file_name_convert = file_name_convert(files)
+                        ^^^^^^^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'file_name_convert' where it is not associated with a value
+ERROR 2025-10-13 16:43:39,176 myapp update_job Something went wrong: module 'datetime' has no attribute 'now' views.py
 Traceback (most recent call last):
-  File "D:\Nirmal\app\views.py", line 159, in login_page
-    messages.success(request, f'You are logged in {request.username}')
-                                                   ^^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'username'
-ERROR 2025-10-10 16:12:11,431 myapp login_page Something went wrong: 'WSGIRequest' object has no attribute 'username' views.py
+  File "D:\Nirmal\app\views.py", line 815, in update_job
+    file_name_converts = file_name_convert(files)
+  File "D:\Nirmal\app\utils.py", line 76, in file_name_convert
+    new_file_name = f"{datetime.now}_{random_number}{file_extension}"
+                       ^^^^^^^^^^^^
+AttributeError: module 'datetime' has no attribute 'now'
+ERROR 2025-10-13 16:44:09,959 myapp update_job Something went wrong: module 'datetime' has no attribute 'now' views.py
 Traceback (most recent call last):
-  File "D:\Nirmal\app\views.py", line 159, in login_page
-    messages.success(request, f'You are logged in {request.username}')
-                                                   ^^^^^^^^^^^^^^^^
-AttributeError: 'WSGIRequest' object has no attribute 'username'
+  File "D:\Nirmal\app\views.py", line 815, in update_job
+    file_name_converts = file_name_convert(files)
+  File "D:\Nirmal\app\utils.py", line 72, in file_name_convert
+    date = datetime.now()
+           ^^^^^^^^^^^^
+AttributeError: module 'datetime' has no attribute 'now'
+ERROR 2025-10-13 17:07:32,590 myapp delete_data Something went wrong: Expecting value: line 1 column 1 (char 0) views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\venv\Lib\site-packages\requests\models.py", line 976, in json
+    return complexjson.loads(self.text, **kwargs)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\simplejson\__init__.py", line 514, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "D:\Nirmal\venv\Lib\site-packages\simplejson\decoder.py", line 386, in decode
+    obj, end = self.raw_decode(s)
+               ~~~~~~~~~~~~~~~^^^
+  File "D:\Nirmal\venv\Lib\site-packages\simplejson\decoder.py", line 416, in raw_decode
+    return self.scan_once(s, idx=_w(s, idx).end())
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+simplejson.errors.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 444, in delete_data
+    data = response.json()
+  File "D:\Nirmal\venv\Lib\site-packages\requests\models.py", line 980, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+ERROR 2025-10-13 17:07:38,177 myapp delete_data Something went wrong: Expecting value: line 1 column 1 (char 0) views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\venv\Lib\site-packages\requests\models.py", line 976, in json
+    return complexjson.loads(self.text, **kwargs)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\simplejson\__init__.py", line 514, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "D:\Nirmal\venv\Lib\site-packages\simplejson\decoder.py", line 386, in decode
+    obj, end = self.raw_decode(s)
+               ~~~~~~~~~~~~~~~^^^
+  File "D:\Nirmal\venv\Lib\site-packages\simplejson\decoder.py", line 416, in raw_decode
+    return self.scan_once(s, idx=_w(s, idx).end())
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+simplejson.errors.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 444, in delete_data
+    data = response.json()
+  File "D:\Nirmal\venv\Lib\site-packages\requests\models.py", line 980, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+ERROR 2025-10-13 17:08:10,045 myapp delete_data Something went wrong: Expecting value: line 1 column 1 (char 0) views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\venv\Lib\site-packages\requests\models.py", line 976, in json
+    return complexjson.loads(self.text, **kwargs)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\simplejson\__init__.py", line 514, in loads
+    return _default_decoder.decode(s)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^
+  File "D:\Nirmal\venv\Lib\site-packages\simplejson\decoder.py", line 386, in decode
+    obj, end = self.raw_decode(s)
+               ~~~~~~~~~~~~~~~^^^
+  File "D:\Nirmal\venv\Lib\site-packages\simplejson\decoder.py", line 416, in raw_decode
+    return self.scan_once(s, idx=_w(s, idx).end())
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+simplejson.errors.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 444, in delete_data
+    data = response.json()
+  File "D:\Nirmal\venv\Lib\site-packages\requests\models.py", line 980, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+ERROR 2025-10-13 18:03:19,364 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 18:08:32,043 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 18:10:35,832 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 18:11:06,000 myapp delete_data Something went wrong: Job_detail matching query does not exist. views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 439, in delete_data
+    folder_url = Job_detail.objects.values_list("folder_url", flat=True).get(id=delete_id)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 633, in get
+    raise self.model.DoesNotExist(
+        "%s matching query does not exist." % self.model._meta.object_name
+    )
+app.models.Job_detail.DoesNotExist: Job_detail matching query does not exist.
+ERROR 2025-10-13 18:43:37,118 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 18:43:46,366 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 18:51:53,071 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 19:07:37,253 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-13 19:07:43,398 myapp login_page Invalid Username or Password views.py
