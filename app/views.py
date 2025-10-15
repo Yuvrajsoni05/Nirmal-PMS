@@ -977,14 +977,14 @@ def user_password(request):
             confirm_password = request.POST.get("confirm_password", "").strip()
 
             if old_password == "" or old_password == None:
-                error = "Please provide Old Password."
+                error = "Please provide old Password."
                 return render(request, "profile.html", context={"error": error})
 
             user_password = request.user
             if not user_password.check_password(old_password):
                 messages.error(
                     request,
-                    "Old Password is Incorrect",
+                    "old Password is Incorrect",
                     extra_tags="custom-success-style",
                 )
                 return redirect("profile_page")
@@ -1168,7 +1168,7 @@ def cdr_add(request):
         if CDRDetail.objects.filter(
             company_name=company_name, company_email=company_email
         ).exists():
-            print("Valid")
+            pass
         else:
             if CDRDetail.objects.filter(company_name=company_name).exists():
                 messages.error(
@@ -1209,19 +1209,11 @@ def cdr_add(request):
         }
 
         url = os.environ.get("CREATE_WEBHOOK_CDR")
-        print(url)
+       
         if url:
-            file_dic = {}
-            for i, file in enumerate(cdr_files):
-                _, file_extension = os.path.splitext(file.name)
-                random_number = random.randint(1, 100)
-                new_file_name = f"{cdr_upload_date}_{random_number}{file_extension}"
-                file.name = new_file_name
-                file_key = f"{new_file_name}"
-                file_dic[file_key] = (file.name, file, file.content_type)
-                print("This is File Dic ", file_dic)
+            
+            file_dic = file_name_convert(cdr_files)
             print(file_dic)
-
             url = os.environ.get("CREATE_WEBHOOK_CDR")
             response = requests.post(f"{url}", data=data, files=file_dic)
             if response.status_code == 200:
@@ -1237,47 +1229,44 @@ def cdr_add(request):
                     cdr_corrections=cdr_corrections_data,
                     job_name=job_name,
                 )
-
-                for i in cdr_files:
-                    filename = i.name
-                    size_limit = 2 * 1024 * 1024
-                    file_size = i.size
-                    thumbnail_file = nan
-
-                    if file_size > size_limit:
-                        img = Image.open(i)
-                        base, ext = os.path.splitext(filename)
-                        quality = 98
-
-                        for f in range(10):
-                            io = BytesIO()
-                            img.save(io, format="webp", optimize=True, quality=quality)
-                            if io.tell() <= size_limit:
-                                print("this is tell ", io.tell)
-                                io.seek(0)
-                                thumbnail_file = File(io, name=f"{base}_thumbnail.webp")
-                                break
-                            quality -= 5
-                        else:
-                            print("All Good")
-                    else:
-                        thumbnail_file = File(io, name=f"{base}_thumbnail.webp")
-                    file_dic = {}
-                    _, file_extension = os.path.splitext(i.name)
-                    random_number = random.randint(1, 100)
-                    new_file_name = f"{cdr_upload_date}_{random_number}{file_extension}"
-                    i.name = new_file_name
-
-                    file_key = f"{new_file_name}"
-                    file_dic[file_key] = (i.name, i, i.content_type)
-
-                    cdr_image = CDRImage.objects.create(
-                        cdr=cdr_data, image=i, thumbnail_image=thumbnail_file
+                for file_key, file_data in file_dic.items():
+                    file_obj = file_data[1]
+                    CDRImage.objects.create(
+                        cdr=cdr_data, image=file_obj
                     )
-                    cdr_image.save()
+                    
                 cdr_data.save()
                 messages.success(request, "CDR Upload Successfully SQLite DB")
                 return redirect("company_add_page")
+
+                # for i in cdr_files:
+                #     filename = i.name
+                #     size_limit = 2 * 1024 * 1024
+                #     file_size = i.size
+                #     thumbnail_file = nan
+
+                #     if file_size > size_limit:
+                #         img = Image.open(i)
+                #         base, ext = os.path.splitext(filename)
+                #         quality = 98
+
+                #         for f in range(10):
+                #             io = BytesIO()
+                #             img.save(io, format="webp", optimize=True, quality=quality)
+                #             if io.tell() <= size_limit:
+                #                 print("this is tell ", io.tell)
+                #                 io.seek(0)
+                #                 thumbnail_file = File(io, name=f"{base}_thumbnail.webp")
+                #                 break
+                #             quality -= 5
+                #         else:
+                #             print("All Good")
+                #     else:
+                #         thumbnail_file = File(io, name=f"{base}_thumbnail.webp")
+                 
+                    # print(i)
+                
+                
 
 
 @custom_login_required
@@ -1358,15 +1347,7 @@ def cdr_update(request, update_id):
             messages.error(request, file_error, extra_tags="custom-success-style")
             return redirect("job_entry")
 
-        file_dic = {}
-        for i, file in enumerate(cdr_files):
-            # Get the original file extension
-            _, file_extension = os.path.splitext(file.name)
-            random_number = random.randint(1, 100)
-            new_file_name = f"{date}_{random_number}{file_extension}"
-            file.name = new_file_name
-            file_key = f"{new_file_name}"
-            file_dic[file_key] = (file.name, file, file.content_type)
+        file_dic = file_name_convert(cdr_files)
 
         company_email = str(company_email).strip()
         print(company_email)
@@ -1416,9 +1397,10 @@ def cdr_update(request, update_id):
                 update_details.cdr_corrections = cdr_corrections
                 update_details.job_name = job_names
                 update_details.date = date
-
-                for file in file_dic:
-                    CDRImage.objects.create(cdr=update_details, image=file)
+                
+                for file_key, file_data in file_dic.items():
+                    file_obj = file_data[1]
+                    CDRImage.objects.create(cdr=update_details, image=file_obj)
                 update_details.save()
                 messages.success(request, "Data Update Successfully")
                 return redirect("company_add_page")

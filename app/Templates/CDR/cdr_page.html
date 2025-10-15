@@ -251,40 +251,34 @@
                                             <td>{{ i.company_email }}</td>
                                             <td>{{ i.date }}</td>
                                             {% if i.file_url == none or i.file_url == '' %}
-                                                <td>
-                                                    <div id="carousel-{{ i.id }}"
-                                                         class="carousel slide"
-                                                         data-bs-ride="carousel">
-                                                        <div class="carousel-inner">
-                                                            {% for cdr_image in i.cdr_images.all %}
-                                                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                                                    <div class="d-flex justify-content-center align-items-center"
-                                                                         style="height: 50px">
-                                                                        <a class="icon-link" href="{{ cdr_image.image.url }}" target="_blank">{{ cdr_image.image.name|filename }}</a>
+                                                            <td class="text-truncate">
+                                                                <div id="carousel-{{ i.id }}" class="carousel slide" data-bs-ride="false">
+                                                                    <div class="carousel-inner ">
+                                                                        {% for cdr_image in i.cdr_images.all %}
+                                                                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                                                <div class="d-flex justify-content-center align-items-center" style="height: 50px">
+                                                                                    <a class="icon-link" href="{{ cdr_image.image.url }}" target="_blank">{{ cdr_image.image.name|filename }}</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor %}
                                                                     </div>
+                                                                    <!-- Controls -->
+                                                                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ i.id }}" data-bs-slide="prev">
+                                                                        <span class="previcon" aria-hidden="false"><i class="fa fa-caret-left" aria-hidden="true"></i></span>
+                                                                    </button>
+                                                                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ i.id }}" data-bs-slide="next">
+                                                                        <span class="nexticon" aria-hidden="true"><i class="fa fa-caret-right" aria-hidden="true"></i></span>
+                                                                    </button>
                                                                 </div>
-                                                            {% endfor %}
-                                                        </div>
-                                                        <!-- Controls -->
-                                                        <button class="carousel-control-prev"
-                                                                type="button"
-                                                                data-bs-target="#carousel-{{ i.id }}"
-                                                                data-bs-slide="prev">
-                                                            <span class="previcon" aria-hidden="false"><i class="fa fa-caret-left" aria-hidden="true"></i></span>
-                                                        </button>
-                                                        <button class="carousel-control-next"
-                                                                type="button"
-                                                                data-bs-target="#carousel-{{ i.id }}"
-                                                                data-bs-slide="next">
-                                                            <span class="nexticon" aria-hidden="true"><i class="fa fa-caret-right" aria-hidden="true"></i></span>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            {% else %}
-                                                <td>
+                                                            </td>
+                                                        {% else %}
+                                                            <td class="text-truncate">
                                                     <a class="icon-link" href="{{ i.file_url }}">View Folder</a>
                                                 </td>
                                             {% endif %}
+
+
+                                               
                                             {% if i.cdr_corrections %}
                                                 <td class="text-truncate"
                                                     data-bs-toggle="modal"

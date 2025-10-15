@@ -4,23 +4,20 @@
 <html lang="en">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <title>{% block title %}base{% endblock %}</title>
+        <title>{% block title %}base {% endblock %}</title>
         <meta
             content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
             name="viewport"
         />
 
         <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"
-            integrity="sha512-5A8nwdMOWrSz20fDsjczgUidUBR8liPYU+WymTZP1lmY9G6Oc7HlZv156XqnsgNUzTyMefFTcsFH/tnJE/+xBg=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer"
-        />
-        <link
             rel="icon"
             type="image/x-icon"
             href="{% static 'assets/img/logo_icon.png' %}"
+        />
+        <link
+            rel="stylesheet"
+            href="{% static 'assets/css/font-awesome.css' %}"
         />
         <link rel="stylesheet" href="{% static 'css/base.css' %}" />
         <script src="{% static 'assets/js/plugin/webfont/webfont.min.js' %}"></script>
@@ -41,7 +38,7 @@
                 },
             });
         </script>
-        
+
         {% block styles %} {% endblock styles %}
         <!-- CSS Files -->
         <link

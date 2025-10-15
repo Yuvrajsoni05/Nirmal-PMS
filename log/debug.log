@@ -115,3 +115,5 @@ ERROR 2025-10-13 18:43:46,366 myapp login_page Invalid Username or Password view
 ERROR 2025-10-13 18:51:53,071 myapp login_page Invalid Username or Password views.py
 ERROR 2025-10-13 19:07:37,253 myapp login_page Invalid Username or Password views.py
 ERROR 2025-10-13 19:07:43,398 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-14 13:16:13,065 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-14 14:59:09,748 myapp login_page Invalid Username or Password views.py

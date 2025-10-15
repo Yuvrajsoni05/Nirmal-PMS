@@ -90,16 +90,20 @@ class CDRImage(models.Model):
     thumbnail_image = models.FileField(upload_to='cdr_thumbnail_image/',blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
     
-    
     def __str__(self):
         return f"{self.cdr}" 
 class CompanyName(models.Model):
     company_name = models.CharField(max_length=300)
-0
+    
+    def __str__(self):
+        return f"{self.company_name}"
    
     
 class CylinderMadeIn(models.Model):
     cylinder_made_in =  models.CharField(max_length=300,unique=True,blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.cylinder_made_in}"
     
     
 
