@@ -30,6 +30,10 @@ class AdminCDRDetail(admin.ModelAdmin):
     list_display = ["id" , 'company_name']
 admin.site.register(CDRDetail,AdminCDRDetail)
 
+
+
+
+admin.site.register(CDRImage)
     
 # class AdminCompanyName(admin.ModelAdmin):
 #     list_display = ("company_name")
