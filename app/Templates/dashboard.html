@@ -204,7 +204,7 @@
                                             <th scope="col">Correction</th>
                                             <th scope="col">Folder id</th>
                                             <th scope="col" class="sticky-right">Job Status</th>
-                                            <th scope="col">CDN Links</th>
+                                            <th scope="col">CD Links</th>
                                             <th scope="col" class="sticky-right" colspan="3">Actions</th>
                                         </tr>
                                     </thead>
@@ -299,11 +299,44 @@
                                                         {% endif %}
                                                     </td>
                                                     <!-- CDR Links Column -->
-                                                    <td>
+                                                    <td class="text-truncate">
                                                         {% if i.cdr_file_url %}
                                                             <a class="icon-link" href="{{ i.cdr_file_url }}" target="_blank">CDR</a>
                                                         {% else %}
-                                                            -
+                                                            {% if i.cdr_images_urls %}
+                                                                <div id="cdr-carousel-{{ i.id }}" class="carousel slide" data-bs-ride="carousel">
+                                                                    <div class="carousel-inner">
+                                                                        {% for cdr_img in i.cdr_images_urls %}
+                                                                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                                                <div class="d-flex justify-content-center align-items-center" style="height: 50px;">
+                                                                                    <a class="icon-link text-decoration-none "
+                                                                                    href="{{ cdr_img }}" target="_blank">
+                                                                                        {% comment %} {{ cdr_img|filename }} {% endcomment %} CDR
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    </div>
+
+                                                                    <button class="carousel-control-prev" type="button"
+                                                                            data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="prev">
+                                                                        <span class="previcon" aria-hidden="false">
+                                                                            <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                                                        </span>
+                                                                    </button>
+
+                                                                    <button class="carousel-control-next" type="button"
+                                                                            data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="next">
+                                                                        <span class="nexticon" aria-hidden="true">
+                                                                            <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                                        </span>
+                                                                    </button>
+                                                                </div>
+                                                            {% else %}
+                                                                <p>-</p>
+                                                            {% endif %}
+
+
                                                         {% endif %}
                                                     </td>
                                                     <!-- Actions Column -->

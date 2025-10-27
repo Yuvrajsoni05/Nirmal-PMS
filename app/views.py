@@ -1860,41 +1860,41 @@ class CDRDetailAVS(APIView):
                 size_limit = 2 * 1024 * 1024
                 print(size_limit)
                 file_size = i.size
-                thumbnail_file = None
+                # thumbnail_file = None
 
                 _, file_extension = os.path.splitext(i.name)
                 random_number = random.randint(1, 100)
                 new_file_name = f"{date}_{random_number}{file_extension}"
                 i.name = new_file_name
 
-                if file_size > size_limit:
-                    img = Image.open(i)
-                    base, ext = os.path.splitext(new_file_name)
-                    print(base)
-                    quality = 80
-                    for f in range(10):
-                        io = BytesIO()
-                        img.save(io, format="WEBP", optimize=True, quality=quality)
-                        size = io.tell()
-                        print(size)
-                        print(f"This is Size of {size:2f}")
+                # if file_size > size_limit:
+                #     img = Image.open(i)
+                #     base, ext = os.path.splitext(new_file_name)
+                #     print(base)
+                #     quality = 80
+                #     for f in range(10):
+                #         io = BytesIO()
+                #         img.save(io, format="WEBP", optimize=True, quality=quality)
+                #         size = io.tell()
+                #         print(size)
+                #         print(f"This is Size of {size:2f}")
 
-                        if size <= size_limit:
+                #         if size <= size_limit:
 
-                            thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
-                            break
-                        quality -= 5
-                else:
-                    img = Image.open(i)
-                    io = BytesIO()
-                    img.save(io, format="WEBP", optimize=True, quality=40)
-                    io.seek(0)
-                    base, ext = os.path.splitext(filename)
-                    thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
+                #             thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
+                #             break
+                #         quality -= 5
+                # else:
+                #     img = Image.open(i)
+                #     io = BytesIO()
+                #     img.save(io, format="WEBP", optimize=True, quality=40)
+                #     io.seek(0)
+                #     base, ext = os.path.splitext(filename)
+                #     thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
 
-                print(thumbnail_file)
+                
                 CDRImage.objects.create(
-                    cdr=cdr_instance, image=i, thumbnail_image=thumbnail_file
+                    cdr=cdr_instance, image=i
                 )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 

@@ -53,7 +53,19 @@ class Job_detail(models.Model):
             if cdr and cdr.file_url:
                 return cdr.file_url
             return None
-        
+        @property
+        def cdr_images_urls(self):
+            
+            cdr = CDRDetail.objects.filter(
+                company_name__iexact=self.company_name,
+                job_name__iexact=self.job_name
+            ).first()
+            if not cdr:
+                return []
+       
+            images = cdr.cdr_images.all()
+            
+            return [img.image.url for img in images if img.image]
         
    
 
@@ -87,7 +99,7 @@ class CDRDetail(models.Model):
 class CDRImage(models.Model):
     cdr =  models.ForeignKey(CDRDetail,on_delete=models.CASCADE, related_name='cdr_images')
     image = models.ImageField(upload_to='cdr_files/')
-    thumbnail_image = models.FileField(upload_to='cdr_thumbnail_image/',blank=True, null=True)
+    # thumbnail_image = models.FileField(upload_to='cdr_thumbnail_image/',blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
     
     def __str__(self):
