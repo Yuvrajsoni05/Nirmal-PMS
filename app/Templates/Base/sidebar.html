@@ -8,9 +8,9 @@
             <img src="{% static 'assets/img/logo_icon.png' %}" alt="demo" class="navbar-brand" height="40" />
         </a>
      
-     <h1 class="font-weight-bold ml-3" style="background: linear-gradient(to right, #00c6ff, #0072ff); -webkit-background-clip: text; color: transparent; text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); letter-spacing: 1px;">
-    NIRMAL
-</h1>
+        <h1 class="font-weight-bold ml-3" style="background: linear-gradient(to right, #00c6ff, #0072ff); -webkit-background-clip: text; color: transparent; text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5); letter-spacing: 1px;">
+            NIRMAL
+            </h1>
 
 
         <div class="nav-toggle">
@@ -75,6 +75,22 @@
                             <li>
                                 <a href="{% url "company_add_page" %}">
                                     <span class="sub-item">Add & View CDR</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#Quotation">
+                        <i class="fas fa-th-list"></i>
+                        <p>Quotation</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="Quotation">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{% url "quotation_page" %}">
+                                    <span class="sub-item">Add & View Quotation</span>
                                 </a>
                             </li>
                         </ul>

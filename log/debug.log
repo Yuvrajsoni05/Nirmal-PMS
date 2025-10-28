@@ -123,3 +123,1072 @@ ERROR 2025-10-27 10:12:29,012 myapp login_page Invalid Username or Password view
 ERROR 2025-10-27 10:12:38,625 myapp login_page Invalid Username or Password views.py
 ERROR 2025-10-27 10:12:54,101 myapp login_page Invalid Username or Password views.py
 ERROR 2025-10-27 15:33:30,667 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-27 16:54:08,603 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-28 11:03:49,178 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-28 11:03:59,608 myapp login_page Invalid Username or Password views.py
+ERROR 2025-10-28 12:08:15,583 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,620 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,649 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,676 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,702 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,729 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,760 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,792 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,822 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,853 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,879 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,915 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,943 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,970 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:15,995 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:16,023 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:16,052 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:16,087 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:16,117 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,179 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,213 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,243 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,272 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,299 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,328 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,356 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,383 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,411 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,441 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,471 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,498 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,523 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,548 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,578 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,609 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,636 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,663 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,688 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:17,715 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,484 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,514 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,545 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,576 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,608 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,634 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,661 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,686 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,713 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,745 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,772 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,797 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,822 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,854 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,878 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,903 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,930 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,957 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:19,984 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:20,009 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,064 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,095 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,122 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,257 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,285 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,310 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,335 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,361 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,397 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,426 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,451 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,476 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,502 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,533 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,564 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,591 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,615 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,641 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,666 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 12:08:25,690 myapp dashboard_page Something went wrong: name 'pr' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 428, in dashboard_page
+    print("Job Name:", job.job_name)
+    ^^
+NameError: name 'pr' is not defined
+ERROR 2025-10-28 16:30:30,230 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,380 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,406 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,542 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,569 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,595 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,623 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,654 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,678 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,702 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,730 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,762 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,793 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,825 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,855 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,886 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,913 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,937 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,964 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:30,997 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,049 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,084 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,218 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,245 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,270 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,295 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,320 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,345 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,373 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,417 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,448 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,477 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,508 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,535 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,563 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,589 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,617 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,641 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,667 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:32,695 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:37,734 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:37,775 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:37,804 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:37,834 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:37,865 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:37,900 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:37,931 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:37,962 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:37,996 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,026 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+    "job_history":job_history,
+                  ^^^^^^^^^^^
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,058 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,096 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,238 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,347 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,374 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,405 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,440 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,466 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,493 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,519 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,663 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,695 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 16:30:38,728 myapp dashboard_page Something went wrong: name 'job_history' is not defined views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 411, in dashboard_page
+NameError: name 'job_history' is not defined. Did you mean: 'JobHistory'?
+ERROR 2025-10-28 19:04:02,900 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:02,939 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:02,970 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:02,998 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,025 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,053 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,174 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,222 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,350 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,379 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,458 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,487 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,600 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,653 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,684 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,815 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:03,848 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:04,133 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:04,160 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:04,222 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,292 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,323 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,355 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,496 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,566 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,627 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,659 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,736 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,761 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,787 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,814 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,840 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,874 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,923 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:05,955 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:06,007 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:06,113 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:06,223 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:06,261 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-10-28 19:04:06,293 myapp dashboard_page Something went wrong: 'QuerySet' object has no attribute 'name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 410, in dashboard_page
+    print(company_name.name)
+          ^^^^^^^^^^^^^^^^^
+AttributeError: 'QuerySet' object has no attribute 'name'

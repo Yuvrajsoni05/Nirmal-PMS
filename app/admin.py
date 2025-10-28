@@ -9,6 +9,11 @@ admin.site.register(CylinderMadeIn)
 
 
 
+
+class JobDetailHistory(admin.ModelAdmin):
+    list_display = ("id", "job" , "field_name" , "old_value" , "new_value" , "changed_at","chnage_user" )
+admin.site.register(JobHistory,JobDetailHistory)
+
 class AdminDetail(admin.ModelAdmin):
     list_display = ("first_name" ,"last_name" , "email","username")
 admin.site.register(Registration,AdminDetail)
@@ -16,7 +21,7 @@ admin.site.register(Registration,AdminDetail)
 
 
 class AdminJobDetails(admin.ModelAdmin):
-    list_display = ("date", "bill_no" , "company_name" , "job_name" , "prpc_purchase" , "prpc_sell")
+    list_display = ("id","date", "bill_no" , "company_name" , "job_name" , "prpc_purchase" , "prpc_sell")
 admin.site.register(Job_detail,AdminJobDetails)
 
 

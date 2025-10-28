@@ -4,7 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 from django.core.validators import validate_email
-
+# from simple_history.models import HistoricalRecords
 
 
 # Create your models here.  
@@ -39,7 +39,7 @@ class Job_detail(models.Model):
         cylinder_bill_no = models.CharField(blank=True, null=True)
         job_status = models.CharField(max_length=200,blank=True, null=True)
         created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
-        # image_upload_date = models.DateTimeField()
+        # history = HistoricalRecords()
 
         def __str__(self):
             return self.company_name
@@ -67,7 +67,18 @@ class Job_detail(models.Model):
             
             return [img.image.url for img in images if img.image]
         
-   
+class JobHistory(models.Model):
+    job = models.ForeignKey(Job_detail, on_delete=models.CASCADE, related_name="job_history")
+    field_name = models.CharField(max_length=200)
+    old_value = models.TextField(blank=True, null=True)
+    new_value = models.TextField(blank=True, null=True)
+    changed_at = models.DateTimeField(auto_now_add=True)
+    chnage_user = models.ForeignKey(Registration, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.job.job_name} - {self.field_name} changed"
+    
+
 
         
 class Jobimage(models.Model):

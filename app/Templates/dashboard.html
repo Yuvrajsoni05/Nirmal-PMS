@@ -145,12 +145,19 @@
                                                    value="{{ request.GET.end_date }}">
                                         </div>
                                         <div class="form-outline me-2 mb-2 col-12 col-md-auto" data-mdb-input-init>
-                                            <input type="text"
+                                            <select class="form-select" name="q" id="q">
+                                                {% for company in company_name  %}
+                                                
+                                                <option value="{{ company.company_name }}" >{{ company.company_name }}</option>
+                                                {% endfor %}
+                                                
+                                            </select>
+                                            {% comment %} <input type="text"
                                                    name="q"
                                                    id="q"
                                                    class="form-control"
                                                    value="{{ request.GET.q }}"
-                                                   placeholder="Search Field">
+                                                   placeholder="Search Field"> {% endcomment %}
                                         </div>
                                         <button type="submit"
                                                 class="btn btn-primary w-sm-25 w-md-auto me-2 mb-2"
@@ -204,7 +211,8 @@
                                             <th scope="col">Correction</th>
                                             <th scope="col">Folder id</th>
                                             <th scope="col" class="sticky-right">Job Status</th>
-                                            <th scope="col">CD Links</th>
+                                            <th scope="col">CDR Links</th>
+                                            <th scope="col"> Job History </th>
                                             <th scope="col" class="sticky-right" colspan="3">Actions</th>
                                         </tr>
                                     </thead>
@@ -232,6 +240,8 @@
                                                     <td class="text-truncate">{{ i.pouch_size }}</td>
                                                     <td class="text-truncate">{{ i.pouch_open_size }}</td>
                                                     <td class="text-truncate">{{ i.pouch_combination }}</td>
+                                                    
+                                                    
                                                     <!-- Correction Column -->
                                                     {% if i.correction %}
                                                         <td class="text-truncate"
@@ -339,6 +349,16 @@
 
                                                         {% endif %}
                                                     </td>
+
+                                                   
+                                                    <td class="text-truncate"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#OldBackdrop{{ i.id }}"
+                                                        title="{{ i.id }}">
+                                                        {{ i.job_history.count }} Records
+                                                    </td>
+                                                  
+                                                    
                                                     <!-- Actions Column -->
                                                     <td class="text-truncate sticky-right">
                                                         <div class="action-buttons">
@@ -755,6 +775,46 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+
+                                                <!-- Model Correction Job -->
+                                                <div class="modal fade" id="OldBackdrop{{ i.id }}" tabindex="-1" aria-hidden="true">
+                                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                        <div class="modal-header bg-light border-bottom">
+                                                            <h5 class="modal-title">
+                                                            <i class="bi bi-clock-history me-2"></i> Job History<b> {{i.job_name}} </b>
+                                                            </h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {% if i.job_history.all %}
+                                                            <div class="list-group">
+                                                                {% for history in i.job_history.all %}
+                                                                <div class="list-group-item">
+                                                                    <div class="d-flex justify-content-between">
+                                                                    <strong class="text-primary">{{ history.field_name }}</strong> &nbsp; &nbsp;
+                                                                    <small class="text-muted">{{ history.timestamp|date:"M d, Y H:i" }}</small>
+                                                                    </div>
+                                                                    <p class="mb-1">
+                                                                    <span class="text-danger fw-semibold">Changed From:</span> {{ history.old_value }}
+                                                                    <span class="text-success fw-semibold">To:</span> {{ history.new_value }}<br>
+                                                                    <span class="text-success fw-semibold">Date & Time:</span> {{ history.changed_at }}
+                                                                    </p>
+                                                                </div>
+                                                                {% endfor %}
+                                                            </div>
+                                                            {% else %}
+                                                            <p class="text-muted text-center mb-0">No job history available.</p>
+                                                            {% endif %}
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+
+                                                            
                                                 {% comment %} Model {% endcomment %}
                                                 <div class="modal fade"
                                                      id="exampleModal{{ i.id }}"

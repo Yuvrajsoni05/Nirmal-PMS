@@ -8,6 +8,7 @@ from traceback import print_tb
 from PIL import Image
 from django.views.decorators.http import require_GET
 from django.db import utils
+from regex import P
 
 from app.utils import email_check, file_name_convert
 
@@ -48,6 +49,7 @@ import logging
 
 from django.db.models import Q
 from django.db.models import Sum
+from django.forms import fields
 
 
 # mail
@@ -396,7 +398,7 @@ def dashboard_page(request):
         page = request.GET.get("page")
         datas = p.get_page(page)
         total_job = db_sqlite3.count()
-        company_name = CompanyName.objects.all()
+        company_name = CompanyName.objects.all().order_by("company_name")
         count_of_company = company_name.count()
 
         cylinder_company_names = CylinderMadeIn.objects.all()
@@ -404,6 +406,7 @@ def dashboard_page(request):
         count_of_cylinder_company = cylinder_company_names.count()
         nums = " " * datas.paginator.num_pages
 
+           
         context = {
             "nums": nums,
             "venues": datas,
@@ -424,6 +427,7 @@ def dashboard_page(request):
             "total_active_job": total_active_job,
             "job_status": job_status,
         }
+        
     except Exception as e:
         messages.warning(request, "Something went wrong  try again")
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
@@ -802,13 +806,7 @@ def update_job(request, update_id):
 
         folder_id = get_data.folder_url
 
-
-            
-            
-    
         file_dic = file_name_convert(files)
-               
-
         url = os.environ.get("UPDATE_WEBHOOK_JOB")
         if folder_id:
 
@@ -850,9 +848,27 @@ def update_job(request, update_id):
                 return redirect("dashboard_page")
         else:
             try:
-
+                old_job = Job_detail.objects.get(id=update_id)
                 update_job_data = get_object_or_404(Job_detail, id=update_id)
-                print(update_job_data)
+                job = old_job
+                print(old_job)
+                for field in ['job_status', 'cylinder_bill_no', 'correction' , 'cylinder_size' , 'prpc_sell' , 'prpc_purchase' , 'noc' , 'job_type' , 'job_name', 'company_name' , 'bill_no'  , 'pouch_open_size' , 'pouch_size' , 'cylinder_made_in']:
+                    
+                    old_value = getattr(old_job, field)
+                    new_value = request.POST.get(field)
+                    print(f"{field} -  {old_value} -  {new_value}")
+                    if old_value != new_value:
+
+                        JobHistory.objects.create(
+                            job=job,
+                            field_name=field,
+                            old_value=old_value,
+                            new_value=new_value,
+                            chnage_user=request.user
+                        )
+                        setattr(job, field, new_value)
+                job.save()        
+
                 update_job_data.company_name = company_name
                 update_job_data.date = date
                 update_job_data.bill_no = bill_no
@@ -878,14 +894,20 @@ def update_job(request, update_id):
                 update_job_data.save()
                 messages.success(request, "Data Update successfully ")
                 return redirect("dashboard_page")
-            except Exception:
-                messages.warning(request, "Something went wrong try again")
+            except Exception as e:
+                print(e)
+                messages.warning(request, f"Something went wrong try again {e}")
                 return redirect("dashboard_page")
 
     except Exception as e:
         messages.error(request, f"Something went wrong try again {e}")
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
         return redirect("dashboard_page")
+    
+    
+    
+
+   
 
 
 @custom_login_required
@@ -1655,7 +1677,8 @@ def cdr_company_check(company_name, company_email):
 
 
 
-
+def quotation_page(request):
+    return render(request, "quotation/quotation_page.html")
 
 
 
