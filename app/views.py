@@ -1,5 +1,6 @@
 from ast import Import
 from ctypes import util
+import email
 from email.mime import image
 from genericpath import isfile
 from io import BytesIO
@@ -9,6 +10,7 @@ from PIL import Image
 from django.views.decorators.http import require_GET
 from django.db import utils
 from regex import P
+
 
 from app.utils import email_check, file_name_convert
 
@@ -29,7 +31,7 @@ from django.views.generic import TemplateView
 from datetime import date, datetime, timedelta
 from django.core.files.base import ContentFile
 
-from app.models import CDRDetail, Job_detail
+from app.models import CDRDetail, Job_detail, ProformaInvoice
 from app.serializers import CDRDataSerializer, JobDetailSerializer, JobUpdateSerializer
 from .models import *
 from django.contrib import messages, sessions
@@ -50,6 +52,8 @@ import logging
 from django.db.models import Q
 from django.db.models import Sum
 from django.forms import fields
+
+
 
 
 # mail
@@ -1677,10 +1681,104 @@ def cdr_company_check(company_name, company_email):
 
 
 
-def quotation_page(request):
-    return render(request, "quotation/quotation_page.html")
+def ProformaInvoicePage(request):
+    
+    return render(request, "ProformaInvoice/proforma_invoice_page.html")
+
+def ProformaInvoiceCreate(request):
+    if request.method == "POST":
+        invoice_no = request.POST.get("invoice_no","").strip()
+        invoice_date = request.POST.get("invoice_date","").strip()
+        mode_payment = request.POST.get("mode_payment","").strip()
+        
+        company_name = request.POST.get("company_name","").strip()
+        company_contact = request.POST.get("company_contact","").strip()
+        company_email = request.POST.get("company_email","").strip()
+        
+        billing_address = request.POST.get("billing_address","").strip()
+        billing_state_name = request.POST.get("billing_state_name","").strip()
+        billing_gstin_no = request.POST.get("billing_gstin_no","").strip()
+        title = request.POST.get("title","").strip()
+        
+        job_name = request.POST.get("job_name","").strip()
+        pouch_diameter = request.POST.get("pouch_diameter","").strip()
+        pouch_height = request.POST.get("pouch_height","").strip()
+        
+        cylinder_diameter = request.POST.get("cylinder_diameter","").strip()
+        cylinder_height = request.POST.get("cylinder_height","").strip()
+        cylinder_size = f"{cylinder_diameter} x {cylinder_height}"
+        pouch_open_size = f"{pouch_diameter} x {pouch_height}"
+
+        
+        prpc_price = request.POST.get("prpc_price","").strip()
+        quantity = request.POST.get("quantity","").strip()
+        gst = request.POST.get("gst","").strip()
+        terms = request.POST.get("terms","").strip()
+        total_amount = request.POST.get("total_amount","").strip()
+        banking_details = request.POST.get("bank_details","").strip()
+    
+        
+        email_error = utils.email_validator(company_email)
+        if email_error:
+            messages.error(request, email_error, extra_tags="custom-success-style")
+            return redirect("proforma_invoice_page")
+        
+        
+        try:    
+            proforma_invoice = ProformaInvoice.objects.create(
+                invoice_no=invoice_no,
+                invoice_date=invoice_date,
+                mode_payment=mode_payment,
+                company_name=company_name,
+                company_contact=company_contact,
+                company_email=company_email,
+                billing_address=billing_address,
+                billing_state_name=billing_state_name,
+                billing_gstin_no=billing_gstin_no,
+                title=title,
+                job_name=job_name,
+                pouch_open_size=pouch_open_size,
+                cylinder_size=cylinder_size,
+                prpc_rate=prpc_price,
+                quantity=quantity,
+                gst=gst,
+                terms_note=terms,
+                banking_details=banking_details,
+                total=total_amount,
+            )
+            proforma_invoice.save()
+            messages.success(request, "Proforma Invoice Created Successfully")
+            return redirect("proforma_invoice_page")
+        except Exception as e:
+            messages.warning(request, f"Something went wrong try again {e}")
+            print(e)
+            return redirect("proforma_invoice_page")
+        
+    return redirect("proforma_invoice_page")   
+
+ 
 
 
+
+def ProformaInvoicePageAJAX(request):
+    gst = request.GET.get("gst","").strip()
+    quantity = request.GET.get("quantity","").strip()
+    prpc_price = request.GET.get("prpc_price","").strip()
+    billing_state_name = request.GET.get("billing_state_name","").strip()
+    quantity = float(quantity)
+    prpc_price = float(prpc_price)
+    print(type(prpc_price))
+    print(type(quantity))
+    
+    
+    total_amount = prpc_price * quantity
+    total_amount = round(total_amount, 2)
+    
+    print("This is total amount",billing_state_name)
+    print("This is total amount before gst",total_amount)
+    
+
+    return JsonResponse({"total_amount": total_amount})
 
 
 

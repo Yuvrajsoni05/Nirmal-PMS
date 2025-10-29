@@ -1,0 +1,266 @@
+{% extends "base/base.html" %} {% load static %} {% block title %}Quotation
+Page{% endblock %} 
+
+
+
+{% block main_block %}
+<div class="page-inner">
+  <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+    <div>
+        <h3 class="fw-bold mb-3">Proforma Invoice</h3>
+    </div>
+  </div>
+  
+<div class="row">
+    <div class="col-12">
+        <div class="card card-round mb-3">
+            <div class="card-header">
+                <div class="card-title">Proforma Details</div>
+            </div>
+            <div class="card-body">
+                <form method="post" id="proformaInvoiceForm" class="row g-4" action="{% url "proforma_invoice_create" %} ">
+                    {% csrf_token %}
+
+                    <div class="col-md-4">
+                        <label for="invoice_no" class="form-label fw-semibold">Invoice No.</label>
+                        <input type="text" class="form-control" id="invoice_no"  name="invoice_no" placeholder="Enter invoice number" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="invoice_date" class="form-label fw-semibold">Date</label>
+                        <input type="date" class="form-control" id="invoice_date" name="invoice_date" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="due_date" class="form-label fw-semibold">Mode / Term of Payment</label>
+                        <input type="text" class="form-control" id="mode_payment" name="mode_payment" value="100%" placeholder="Mode / Term of Payment">
+                    </div>
+
+
+
+                    <div class="col-md-6">
+                        <label for="company_name" class="form-label fw-semibold">Customer / Company Name</label>
+                        <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Customer or company name" required>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="contact" class="form-label fw-semibold">Contact</label>
+                        <input type="number" class="form-control" id="company_contact" name="company_contact" placeholder="9499561272">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="email" class="form-label fw-semibold">Email</label>
+                        <input type="email" class="form-control" id="company_email" name="company_email" placeholder="customer@example.com">
+                    </div>
+
+                    
+
+                    <div class="col-12">
+                        <label for="billing_address" class="form-label fw-semibold">Billing Address</label>
+                        <textarea class="form-control" id="billing_address" name="billing_address" rows="2" placeholder="Street, City, State, ZIP"></textarea>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="billing_state_name" class="form-label fw-semibold">Billing State Name</label>
+                        <select class="form-control form-select" id="billing_state_name" name="billing_state_name" required>
+                            <option value="" selected disabled>Select State</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Chhattisgarh">Chhattisgarh</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                            <option value="Jharkhand">Jharkhand</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Manipur">Manipur</option>
+                            <option value="Meghalaya">Meghalaya</option>
+                            <option value="Mizoram">Mizoram</option>
+                            <option value="Nagaland">Nagaland</option>
+                            <option value="Odisha">Odisha</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Sikkim">Sikkim</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Tripura">Tripura</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Uttarakhand">Uttarakhand</option>
+                            <option value="West Bengal">West Bengal</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="billing_gstin_no" class="form-label fw-semibold">Billing GSTIN/UN.</label>
+                        <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No." required>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Title</label>
+                            <select id="title" name="title" class="form-control">
+                                <option value="Select Title" selected disabled>Select Title</option>
+                                <option value="JobWork on Cylinder">JobWork on Cylinder</option>
+                                <option value="Copper Engraved Cylinder">Copper Engraved Cylinder</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label for="job_name" class="form-label fw-semibold">Job Name</label>
+                        <input type="text" class="form-control" id="job_name" name="job_name" placeholder="Job Name" required>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold">Pouch Open Size </label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="pouch_diameter" name="pouch_diameter" placeholder="Diameter (e.g. 50)" step="any" aria-label="Diameter">
+                            <input type="number" class="form-control" id="pouch_height" name="pouch_height" placeholder="Height (e.g. 100)" step="any" aria-label="Height">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="cyl_size" class="form-label fw-semibold">Cylinder Size</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="cylinder_diameter" name="cylinder_diameter" placeholder="Diameter (e.g. 50)" step="any" aria-label="Diameter">
+                            <input type="number" class="form-control" id="cylinder_height" name="cylinder_height" placeholder="Height (e.g. 100)" step="any" aria-label="Height">
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="quantity" class="form-label fw-semibold">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Quantity" required>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
+                        <input type="text" class="form-control" id="prpc_price" name="prpc_price" placeholder="Per Rate Per Cylinder" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="gst" class="form-label fw-semibold">GST</label>
+                        <select id="gst" name="gst" class="form-control">
+                            <option value="GST Included" selected disabled selected hidden">GST Included</option>
+                            <option value="9">SGST 9%</option> 
+                            <option value="9">CGST 9%</option>
+                            <option value="18">IGST 18%</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-9">
+                        <label for="terms" class="form-label fw-semibold">Terms & Notes</label>
+                        <input type="text" id="terms" name="terms" class="form-control" placeholder="e.g. Net 30, Delivery within 7 days">
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <label for="total" class="form-label fw-semibold">Total</label>
+                        <input type="text" id="total_amount" name="total_amount" class="form-control" placeholder="Total">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label for="order_status" class="form-label fw-semibold">Order Status</label>
+                        <select id="order_status" name="order_status" class="form-control">
+                            <option value="all" selected disabled selected>Order Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                           
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="bank_details" class="form-label fw-semibold">Bank Details</label>
+                        <input type="text" id="bank_details" name="bank_details" class="form-control" placeholder="Bank Name, A/C No., IFSC Code">
+                    </div>
+
+
+                    <div class="col-12 d-flex justify-content-end">
+                        <button type="reset" class="btn btn-secondary me-2">Reset</button>
+                        <button type="submit" class="btn btn-primary">Save Proforma</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-round">
+                <div class="card-header">
+                    <div class="card-head-row card-tools-still-right">
+                        <div class="card-title">Proforma Invoice</div>
+                        <div class="card-tools"></div>
+                    </div>
+                </div>                  
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock main_block %}
+{% block script %}
+<script>
+         function updatePouchOpenSize() {
+    const diameter = document.getElementById('pouch_diameter').value;
+    const height = document.getElementById('pouch_height').value;
+    if(diameter && height) {
+        document.getElementById('pouch_open_size').value = diameter + 'x' + height;
+        console.log("Pouch Open Size:", document.getElementById('pouch_open_size').value); 
+    }
+}
+
+function updateCylinderSize() {
+    const diameter = document.getElementById('cylinder_diameter').value;
+    const height = document.getElementById('cylinder_height').value;
+    if(diameter && height) {
+        document.getElementById('cylinder_size').value = diameter + 'x' + height;
+        console.log("Cylinder Size:", document.getElementById('cylinder_size').value); // Debug log
+    }
+}
+
+</script>
+
+<script>
+ $(document).ready(function() {
+        $('#gst, #quantity, #prpc_price, #billing_state_name').on('change', function() {
+            var formData = {
+                gst: $('#gst').val(),
+                quantity: $('#quantity').val(),
+                prpc_price: $('#prpc_price').val(),
+                billing_state_name: $('#billing_state_name').val()
+            };
+
+           
+            $.ajax({
+                url: "{% url 'proforma_invoice_ajax' %}",  
+                type: "GET",  
+                data: formData,  
+                success: function(response) {
+                console.log("AJAX Response:", response); 
+                if(response.total_amount !== undefined) {
+                  
+                    $('#total_amount').val(response.total_amount.toFixed(2));  
+                    } else {
+                        alert("Error: " + response.error);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("An error occurred: " + error);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+   
+{% endblock script %}
+

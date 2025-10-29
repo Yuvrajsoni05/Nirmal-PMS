@@ -10,11 +10,6 @@ from app.models import Registration
 
 
 
-
-
-
-
-
 def email_validator(email):
     print(email)
     email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
@@ -26,10 +21,6 @@ def email_check(email):
     if Registration.objects.filter(email=email).exists():
         return "Email is Already Exist"
     
-       
-    
-
-
 
 def validator_password(password):
     if len(password) < 8:

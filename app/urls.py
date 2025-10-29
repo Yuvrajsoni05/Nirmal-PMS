@@ -28,7 +28,9 @@ urlpatterns = [
     path("offline_page", offline_page, name="offline-page"),
     path("send_mail", send_mail_data, name="send_mail"),
     path("cdr_sendmail_data", cdr_sendmail_data, name="cdr_sendmail_data"),
-    path("quotation_page", quotation_page, name="quotation_page"),
+    path("proforma_invoice_page", ProformaInvoicePage, name="proforma_invoice_page"),
+    path("proforma_invoice_create",ProformaInvoiceCreate, name="proforma_invoice_create"),
+    path('proforma_invoice_ajax',ProformaInvoicePageAJAX, name='proforma_invoice_ajax'),
     path(
         "company_name_suggestion_job",
         company_name_suggestion_job,
