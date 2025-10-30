@@ -400,7 +400,10 @@
         </div>
     {% endblock main_block %}
     {% block script %}
-        <script>$("#company_name").change(function () {
+        <script>
+            
+            
+    $("#company_name").change(function () {
     let companyName = $(this).val();
     if (companyName === "other") {
         $("#new_company").show();

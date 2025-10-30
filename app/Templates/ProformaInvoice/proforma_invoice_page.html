@@ -23,34 +23,47 @@ Page{% endblock %}
 
                     <div class="col-md-4">
                         <label for="invoice_no" class="form-label fw-semibold">Invoice No.</label>
-                        <input type="text" class="form-control" id="invoice_no"  name="invoice_no" placeholder="Enter invoice number" required>
+                        <input type="text" class="form-control" id="invoice_no" name="invoice_no" placeholder="Enter invoice number" >
+                        <span class="form-text text-danger" id="invoice_no_error">This field is required</span>
                     </div>
 
                     <div class="col-md-4">
                         <label for="invoice_date" class="form-label fw-semibold">Date</label>
-                        <input type="date" class="form-control" id="invoice_date" name="invoice_date" required>
+                        <input type="date" class="form-control" id="invoice_date" name="invoice_date" >
+                        <span class="form-text text-danger" id="invoice_date_error">This field is required</span>
                     </div>
 
                     <div class="col-md-4">
                         <label for="due_date" class="form-label fw-semibold">Mode / Term of Payment</label>
                         <input type="text" class="form-control" id="mode_payment" name="mode_payment" value="100%" placeholder="Mode / Term of Payment">
+                         <span class="form-text text-danger" id="mode_payment_error">This field is required</span>
                     </div>
 
 
 
                     <div class="col-md-6">
                         <label for="company_name" class="form-label fw-semibold">Customer / Company Name</label>
-                        <input type="text" class="form-control" id="company_name" name="company_name" placeholder="Customer or company name" required>
+
+                        <select class="form-control form-select" id="company_name" name="company_name" >
+                            <option value="" selected disabled>Select Customer / Company Name</option>
+                            {% for company in company_list %}
+                                <option value="{{ company.company_name }}">{{ company.company_name }}</option>
+                            {% endfor %}
+                            <option value="others">Other</option>
+                        </select>
+                        <span class="form-text text-danger" id="company_name_error">This field is required</span>
                     </div>
 
                     <div class="col-md-3">
                         <label for="contact" class="form-label fw-semibold">Contact</label>
                         <input type="number" class="form-control" id="company_contact" name="company_contact" placeholder="9499561272">
+                        <span class="form-text text-danger" id="company_contact_error">This field is required</span>
                     </div>
 
                     <div class="col-md-3">
                         <label for="email" class="form-label fw-semibold">Email</label>
                         <input type="email" class="form-control" id="company_email" name="company_email" placeholder="customer@example.com">
+                        <span class="form-text text-danger" id="company_email_error">This field is required</span>
                     </div>
 
                     
@@ -58,11 +71,12 @@ Page{% endblock %}
                     <div class="col-12">
                         <label for="billing_address" class="form-label fw-semibold">Billing Address</label>
                         <textarea class="form-control" id="billing_address" name="billing_address" rows="2" placeholder="Street, City, State, ZIP"></textarea>
+                        <span class="form-text text-danger" id="billing_address_error">This field is required</span>
                     </div>
 
                     <div class="col-md-4">
                         <label for="billing_state_name" class="form-label fw-semibold">Billing State Name</label>
-                        <select class="form-control form-select" id="billing_state_name" name="billing_state_name" required>
+                        <select class="form-control form-select" id="billing_state_name" name="billing_state_name" >
                             <option value="" selected disabled>Select State</option>
                             <option value="Andhra Pradesh">Andhra Pradesh</option>
                             <option value="Arunachal Pradesh">Arunachal Pradesh</option>
@@ -93,10 +107,12 @@ Page{% endblock %}
                             <option value="Uttarakhand">Uttarakhand</option>
                             <option value="West Bengal">West Bengal</option>
                         </select>
+                        <span class="form-text text-danger" id="billing_state_name_error">This field is required</span>
                     </div>
                     <div class="col-md-4">
                         <label for="billing_gstin_no" class="form-label fw-semibold">Billing GSTIN/UN.</label>
-                        <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No." required>
+                        <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No." >
+                        <span class="form-text text-danger" id="billing_gstin_no_error">This field is required</span>
                     </div>
                     
                     <div class="col-md-12">
@@ -107,19 +123,27 @@ Page{% endblock %}
                                 <option value="JobWork on Cylinder">JobWork on Cylinder</option>
                                 <option value="Copper Engraved Cylinder">Copper Engraved Cylinder</option>
                             </select>
+                            <span class="form-text text-danger" id="title_error">This field is required</span>
                         </div>
                     </div>
                     
                     <div class="col-md-4">
                         <label for="job_name" class="form-label fw-semibold">Job Name</label>
-                        <input type="text" class="form-control" id="job_name" name="job_name" placeholder="Job Name" required>
+                        <select id="job_name" name="job_name" class="form-control">
+                            <option value="" selected disabled>Select Job Name</option>
+                            <option value="others">Other</option>
+
+                        </select>
+                        <span class="form-text text-danger" id="job_name_error">This field is required</span>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Pouch Open Size </label>
                         <div class="input-group">
-                            <input type="number" class="form-control" id="pouch_diameter" name="pouch_diameter" placeholder="Diameter (e.g. 50)" step="any" aria-label="Diameter">
-                            <input type="number" class="form-control" id="pouch_height" name="pouch_height" placeholder="Height (e.g. 100)" step="any" aria-label="Height">
+                            <input type="number" class="form-control" id="pouch_diameter" name="pouch_diameter" placeholder="Diameter (e.g. 50)" step="any" aria-label="Diameter"><br>
+                            <span class="form-text text-danger" id="pouch_diameter_error">This field is required</span>
+                            <input type="number" class="form-control" id="pouch_height" name="pouch_height" placeholder="Height (e.g. 100)" step="any" aria-label="Height"><br>
+                            <span class="form-text text-danger" id="pouch_height_error">This field is required</span>
                         </div>
                     </div>
 
@@ -127,38 +151,59 @@ Page{% endblock %}
                         <label for="cyl_size" class="form-label fw-semibold">Cylinder Size</label>
                         <div class="input-group">
                             <input type="number" class="form-control" id="cylinder_diameter" name="cylinder_diameter" placeholder="Diameter (e.g. 50)" step="any" aria-label="Diameter">
+                            <span class="form-text text-danger" id="cylinder_diameter_error">This field is required</span>
                             <input type="number" class="form-control" id="cylinder_height" name="cylinder_height" placeholder="Height (e.g. 100)" step="any" aria-label="Height">
+                            <span class="form-text text-danger" id="cylinder_height_error">This field is required</span>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <label for="quantity" class="form-label fw-semibold">Quantity</label>
-                        <input type="number" class="form-control" id="quantity" name="quantity" placeholder="Quantity" required>
+                        <input type="number" class="form-control" value="0" id="quantity" name="quantity" placeholder="Quantity" >
+                        <span class="form-text text-danger" id="quantity_error">This field is required</span>
                     </div>
 
 
                     <div class="col-md-4">
                         <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
-                        <input type="text" class="form-control" id="prpc_price" name="prpc_price" placeholder="Per Rate Per Cylinder" required>
+                        <input type="number" class="form-control" value="0" id="prpc_price" name="prpc_price" placeholder="Per Rate Per Cylinder" >
+                        <span class="form-text text-danger" id="prpc_price_error">This field is required</span>
                     </div>
-                    <div class="col-md-4">
+                    
+                    <div class="col-md-4 d-flex align-items-center accordion">
                         <label for="gst" class="form-label fw-semibold">GST</label>
-                        <select id="gst" name="gst" class="form-control">
-                            <option value="GST Included" selected disabled selected hidden">GST Included</option>
-                            <option value="9">SGST 9%</option> 
-                            <option value="9">CGST 9%</option>
-                            <option value="18">IGST 18%</option>
-                        </select>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="gst[]" value="SGST 9%" id="gst[]">
+                            <label class="form-check-label" for="sgst">
+                                SGST 9%
+                            </label> 
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="gst[]" value="CGST 9%" id="gst[]">
+                            <label class="form-check-label" for="cgst">
+                                CGST 9%
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="gst[]" value="IGST 18%" id="gst[]">
+                            <label class="form-check-label" for="igst">
+                                IGST 18%
+                            </label>
+                        </div>
                     </div>
+
+
 
                     <div class="col-md-9">
                         <label for="terms" class="form-label fw-semibold">Terms & Notes</label>
                         <input type="text" id="terms" name="terms" class="form-control" placeholder="e.g. Net 30, Delivery within 7 days">
+                        <span class="form-text text-danger" id="terms_error">This field is required</span>
                     </div>
                     
                     <div class="col-md-3">
                         <label for="total" class="form-label fw-semibold">Total</label>
                         <input type="text" id="total_amount" name="total_amount" class="form-control" placeholder="Total">
+                        <span class="form-text text-danger" id="total_amount_error">This field is required</span>
                     </div>
 
                     <div class="col-md-3">
@@ -171,10 +216,12 @@ Page{% endblock %}
                             <option value="delivered">Delivered</option>
                             <option value="cancelled">Cancelled</option>
                         </select>
+                        <span class="form-text text-danger" id="order_status_error">This field is required</span>
                     </div>
                     <div class="col-md-6">
                         <label for="bank_details" class="form-label fw-semibold">Bank Details</label>
                         <input type="text" id="bank_details" name="bank_details" class="form-control" placeholder="Bank Name, A/C No., IFSC Code">
+                        <span class="form-text text-danger" id="bank_details_error">This field is required</span>
                     </div>
 
 
@@ -228,36 +275,128 @@ function updateCylinderSize() {
 </script>
 
 <script>
- $(document).ready(function() {
-        $('#gst, #quantity, #prpc_price, #billing_state_name').on('change', function() {
-            var formData = {
-                gst: $('#gst').val(),
-                quantity: $('#quantity').val(),
-                prpc_price: $('#prpc_price').val(),
-                billing_state_name: $('#billing_state_name').val()
-            };
-
-           
-            $.ajax({
-                url: "{% url 'proforma_invoice_ajax' %}",  
-                type: "GET",  
-                data: formData,  
-                success: function(response) {
-                console.log("AJAX Response:", response); 
-                if(response.total_amount !== undefined) {
-                  
-                    $('#total_amount').val(response.total_amount.toFixed(2));  
-                    } else {
-                        alert("Error: " + response.error);
+    // Function to validate all form fields
+                function validateField(fieldId) {
+                    const field = document.getElementById(fieldId);
+                    const errorElement = document.getElementById(fieldId + '_error');
+                    if (!field.value || field.value.trim() === '' || field.value === '0') {
+                        errorElement.style.display = 'block';
+                        return false;
                     }
-                },
-                error: function(xhr, status, error) {
-                    alert("An error occurred: " + error);
+                    errorElement.style.display = 'none';
+                    return true;
                 }
-            });
+
+                // Add event listeners when document is ready
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.getElementById('proformaInvoiceForm');
+                    const requiredFields = [
+                        'invoice_no', 'invoice_date', 'mode_payment', 'company_name',
+                        'company_contact', 'company_email', 'billing_address', 
+                        'billing_state_name', 'billing_gstin_no', 'title', 'job_name',
+                        'pouch_diameter', 'pouch_height', 'cylinder_diameter', 
+                        'cylinder_height', 'quantity', 'prpc_price', 'terms', 
+                        'total_amount', 'order_status', 'bank_details'
+                    ];
+
+                    // Add input event listeners to all fields
+                    requiredFields.forEach(fieldId => {
+                        const field = document.getElementById(fieldId);
+                        if (field) {
+                            field.addEventListener('input', function() {
+                                validateField(fieldId);
+                            });
+                        }
+                    });
+
+                    // Form submission handler
+                    form.addEventListener('submit', function(e) {
+                        let isValid = true;
+
+                        // Validate all fields
+                        requiredFields.forEach(fieldId => {
+                            if (!validateField(fieldId)) {
+                                isValid = false;
+                            }
+                        });
+
+                        // Check GST checkboxes
+                        const gstCheckboxes = document.querySelectorAll('input[name="gst[]"]');
+                        let gstChecked = false;
+                        gstCheckboxes.forEach(checkbox => {
+                            if (checkbox.checked) {
+                                gstChecked = true;
+                            }
+                        });
+
+                        if (!gstChecked) {
+                            isValid = false;
+                            // You might want to add a specific error message for GST
+                        }
+
+                        if (!isValid) {
+                            e.preventDefault();
+                            console.log("Form validation failed. Please fill all required fields.");
+                        }
+                    });
+                });
+</script>
+
+<script>
+$(document).ready(function() {
+    $('#quantity, #gst[], #prpc_price, #billing_state_name, #company_name').on('input', function() {
+        var gst = $('#gst[]').val();
+        var quantity = $('#quantity').val();
+        var prpc_price = $('#prpc_price').val();
+        var billing_state_name = $('#billing_state_name').val();
+        var company_name = $('#company_name').val();
+
+        $.ajax({
+            url: "{% url 'proforma_invoice_ajax' %}",
+            type: "GET",
+            data: {
+                quantity: quantity,
+                prpc_price: prpc_price,
+                billing_state_name: billing_state_name,
+                gst: gst,
+                company_name: company_name
+            },
+            success: function(response) {
+                if (response.company_email !== undefined) {
+                    $('#company_email').val(response.company_email);
+                    console.log("Company Email:", response.company_email);
+                }
+                if (response.company_contact !== undefined) {
+                    $('#company_contact').val(response.company_contact);
+                }
+                if (response.billing_address !== undefined) {
+                    $('#billing_address').val(response.billing_address);
+                }
+
+                if (response.job !== undefined) {
+                    var jobSelect = $('#job_name');
+                    jobSelect.empty();
+                    jobSelect.append('<option value="" selected disabled>Select Job Name</option>');
+                    response.job.forEach(function(i) {
+                        jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
+                    });
+                    jobSelect.append('<option value="others">Other</option>');
+                }
+                if (response.total_amount !== undefined) {
+                    $('#total_amount').val(response.total_amount.toFixed(2));
+                } else if (response.error) {
+                    alert("Error: " + response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("Server error: " + error);
+            }
         });
     });
+});
 </script>
+
+
 
 
 

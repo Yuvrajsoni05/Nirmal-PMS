@@ -1,4 +1,5 @@
 from ast import Import
+from calendar import c
 from ctypes import util
 import email
 from email.mime import image
@@ -9,7 +10,9 @@ from traceback import print_tb
 from PIL import Image
 from django.views.decorators.http import require_GET
 from django.db import utils
+from pyparsing import C
 from regex import P
+
 
 
 from app.utils import email_check, file_name_convert
@@ -1603,7 +1606,7 @@ def send_mail_data(request):
     messages.success(request, "Mail Send successfully")
     return redirect("dashboard_page")
 
-
+@custom_login_required
 def company_name_suggestion(request):
     company_name = request.GET.get("company_name", "")
     if company_name:
@@ -1623,7 +1626,7 @@ def company_name_suggestion(request):
         return JsonResponse({"email": email, "jobs": jobs})
     return JsonResponse({"error": "Invalid request"}, status=400)
 
-
+@custom_login_required
 def company_name_suggestion_job(request):
     company_name = request.GET.get("company_name", "")
 
@@ -1648,7 +1651,7 @@ def company_name_suggestion_job(request):
         return JsonResponse({"jobs": jobs})
     return JsonResponse({"error": "Invalid request"}, status=400)
 
-
+@custom_login_required
 def file_convert(images):
     valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
     for i in images:
@@ -1660,18 +1663,18 @@ def file_convert(images):
             }
     return None
 
-
+@custom_login_required
 def cdr_job_check(job_name, date):
     if CDRDetail.objects.filter(job_name__icontains=job_name, date=date).exists():
         return {"Error": "Job Name already exists on this date. Kindly update job"}
     return None
 
-
+@custom_login_required
 def cdr_company_check(company_name, company_email):
     if CDRDetail.objects.filter(
         company_name=company_name, company_email=company_email
     ).exists():
-        print("Valid")
+        pass
     else:
         if CDRDetail.objects.filter(company_name=company_name).exists():
             return {"Error": "Choose Another Company Name"}
@@ -1680,10 +1683,15 @@ def cdr_company_check(company_name, company_email):
 
 
 
-
+@custom_login_required
 def ProformaInvoicePage(request):
+    company_list  = CompanyName.objects.values("company_name").distinct().union(
+        ProformaInvoice.objects.values("company_name").distinct()
+    )
     
-    return render(request, "ProformaInvoice/proforma_invoice_page.html")
+    context = {"company_list":company_list
+    }
+    return render(request, "ProformaInvoice/proforma_invoice_page.html",context=context)
 
 def ProformaInvoiceCreate(request):
     if request.method == "POST":
@@ -1712,11 +1720,41 @@ def ProformaInvoiceCreate(request):
         
         prpc_price = request.POST.get("prpc_price","").strip()
         quantity = request.POST.get("quantity","").strip()
-        gst = request.POST.get("gst","").strip()
+        gst = request.POST.getlist("gst[]")
         terms = request.POST.get("terms","").strip()
         total_amount = request.POST.get("total_amount","").strip()
         banking_details = request.POST.get("bank_details","").strip()
     
+
+        for field_name, field_value in {
+            "Invoice No": invoice_no,
+            "Invoice Date": invoice_date,
+            "Mode Payment": mode_payment,
+            "Company Name": company_name,
+            "Company Contact": company_contact,
+            "Company Email": company_email,
+            "Billing Address": billing_address,
+            "Billing State Name": billing_state_name,
+            "Billing GSTIN No": billing_gstin_no,
+            "Title": title,
+            "Job Name": job_name,
+            "Pouch Open Size": pouch_open_size,
+            "Cylinder Size": cylinder_size,
+            "PRPC Price": prpc_price,
+            "Quantity": quantity,
+            "GST": gst,
+            "Terms": terms,
+            "Total Amount": total_amount,
+            "Banking Details": banking_details,
+        }.items():
+            if not field_value:
+                messages.error(
+                    request,
+                    f"{field_name} is Required",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("proforma_invoice_page")
+        
         
         email_error = utils.email_validator(company_email)
         if email_error:
@@ -1761,24 +1799,57 @@ def ProformaInvoiceCreate(request):
 
 
 def ProformaInvoicePageAJAX(request):
-    gst = request.GET.get("gst","").strip()
-    quantity = request.GET.get("quantity","").strip()
-    prpc_price = request.GET.get("prpc_price","").strip()
+    gst = request.GET.getlist("gst")
+    quantity = request.GET.get("quantity","0").strip()
+    prpc_price = request.GET.get("prpc_price","0").strip()
     billing_state_name = request.GET.get("billing_state_name","").strip()
+    if quantity == "" or prpc_price == "":
+        quantity = 0
+        prpc_price = 0
+    
     quantity = float(quantity)
+    company_name = request.GET.get("company_name", "").strip()
     prpc_price = float(prpc_price)
-    print(type(prpc_price))
-    print(type(quantity))
     
     
+  
     total_amount = prpc_price * quantity
     total_amount = round(total_amount, 2)
+
+ 
+    if company_name:
+        job = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("job_name").distinct().union(
+            CDRDetail.objects.filter(company_name__iexact=company_name).values("job_name").distinct().union(
+                Job_detail.objects.filter(company_name__iexact=company_name).values("job_name").distinct()
+            )
+        )
+        )        
+        company_contact = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_contact").distinct())
+        
+        company_email = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_email").distinct().union(
+            CDRDetail.objects.filter(company_name__iexact=company_name).values("company_email").distinct()
+        ))
+        
+        billing_address = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("billing_address").distinct())
+        
+        
+        company_email = company_email[0]['company_email'] if company_email else ''
+        company_contact = company_contact[0]['company_contact'] if company_contact else ''
+        billing_address = billing_address[0]['billing_address'] if billing_address else ''
+        
     
-    print("This is total amount",billing_state_name)
-    print("This is total amount before gst",total_amount)
     
 
-    return JsonResponse({"total_amount": total_amount})
+    print("this is GST",gst)
+    context = {"total_amount": total_amount,
+               "job":job,
+               "company_contact":company_contact,
+                "company_email":company_email,
+                "billing_address":billing_address             
+   
+               }
+    
+    return JsonResponse(context)
 
 
 
