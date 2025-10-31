@@ -1,0 +1,977 @@
+{% extends "Base/base.html" %} {% load static %} {% block main_block %}
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold mb-0">View Proforma Invoices</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card card-round">
+                <div class="card-header">
+                    <div class="card-head-row card-tools-still-right">
+                        <div class="card-title">View Proforma Invoices</div>
+                        <div class="card-tools">
+                            <form
+                                method="get"
+                                class="d-flex flex-wrap align-items-center"
+                                action=""
+                            >
+                                <div
+                                    class="me-1 mb-2 col-12 col-md-auto input-wrapper"
+                                >
+                                    <label for="date">Start Date</label>
+                                    <input
+                                        type="date"
+                                        class="form-control"
+                                        id="date"
+                                        name="date"
+                                        placeholder="Start Date"
+                                        value=""
+                                    />
+                                </div>
+                                <div
+                                    class="me-1 mb-2 col-12 col-md-auto input-wrapper"
+                                >
+                                    <label for="end_date">End Date</label>
+                                    <input
+                                        type="date"
+                                        class="form-control"
+                                        id="end_date"
+                                        name="end_date"
+                                        placeholder="End Date"
+                                        value=""
+                                    />
+                                </div>
+                                <div
+                                    class="form-outline me-2 mb-2 col-12 col-md-auto"
+                                    data-mdb-input-init
+                                >
+                                    <input
+                                        type="text"
+                                        name="search"
+                                        id="search"
+                                        class="form-control"
+                                        value=""
+                                        placeholder="Search Field"
+                                    />
+                                </div>
+                                <button
+                                    type="submit"
+                                    class="btn btn-primary w-sm-25 w-md-auto me-2 mb-2"
+                                    data-mdb-ripple-init
+                                >
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                <a href="{% url 'view_proforma_invoice' %}">
+                                    <button
+                                        type="button"
+                                        name="reset"
+                                        class="btn btn-secondary col-12 col-md-auto mb-2"
+                                        data-mdb-ripple-init
+                                    >
+                                        Reset
+                                    </button>
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="thead-light">
+                                <tr class="text-nowrap text-center">
+                                    <th scope="col">
+                                        <a href="">Sr No</a>
+                                    </th>
+                                    <th scope="col">
+                                        <a href="">Invoices no.</a>
+                                    </th>
+                                    <th scope="col">
+                                        <a href="">Invoices Date</a>
+                                    </th>
+                                    <th scope="col">Mode / Payment</th>
+                                    <th scope="col">
+                                        <a href="">Company Name </a>
+                                    </th>
+                                    <th scope="col">Company Contact</th>
+                                    <th scope="col">Company Email</th>
+                                    <th scope="col">Billing Address</th>
+                                    <th scope="col">Billing GSTINT No</th>
+                                    <th scope="col">Billing State Name</th>
+                                    <th scope="col">title</th>
+                                    <th scope="col">Job Name</th>
+                                    <th scope="col">Pouch Open Size</th>
+                                    <th scope="col">Cylinder Size</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">PRPC Rate</th>
+                                    <th scope="col">GST</th>
+                                    <th scope="col">Total Amount</th>
+                                    <th scope="col" colspan="3">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for proforma in proformaInvoices %}
+                                <tr class="text-nowrap text-center">
+                                    <td
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#viewModal{{ i.id }}"
+                                    >
+                                        {{ forloop.counter}}
+                                    </td>
+                                    <td>{{ proforma.invoice_no }}</td>
+                                    <td>{{ proforma.invoice_date }}</td>
+                                    <td>{{ proforma.mode_payment }}</td>
+
+                                    <td>{{ proforma.company_name }}</td>
+                                    <td>{{ proforma.company_contact }}</td>
+                                    <td>{{ proforma.company_email }}</td>
+                                    <td>{{ proforma.billing_address }}</td>
+                                    <td>{{ proforma.billing_gstin_no }}</td>
+                                    <td>{{ proforma.billing_state_name }}</td>
+                                    <td title="{{ proforma.title }}">
+                                        {{ proforma.title }}
+                                    </td>
+
+                                    <td title="{{ proforma.job_name }}">
+                                        {{ proforma.job_name }}
+                                    </td>
+                                    <td>{{ proforma.pouch_open_size }}</td>
+                                    <td>{{ proforma.cylinder_size }}</td>
+                                    <td>{{ proforma.quantity }}</td>
+                                    <td>{{ proforma.prpc_rate }}</td>
+                                    <td>
+                                        {% for gst in proforma.gst %}
+                                        <span>{{ gst }} ,</span>
+                                        {% endfor %}
+                                    </td>
+
+                                    <td>{{ proforma.total }}</td>
+
+                                    <td class="text-truncate">
+                                        <form
+                                            action="{% url "delete_proforma_invoice" proforma_id=proforma.id  %}"
+                                            method="POST"
+                                            class="d-inline"
+                                            id="delete-form-{{ proforma.id }}"
+                                        >
+                                            {% csrf_token %}
+                                            <button
+                                                type="button"
+                                                name="delete_proforma_invoice"
+                                                class="btn btn-sm btn-outline-danger ms-1"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#confirmationModal"
+                                                data-id="{{ proforma.id }}"
+                                            >
+                                                <i
+                                                    class="fa fa-trash"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </button>
+                                        </form>
+
+                                        <script>
+                                            let formIdToSubmit;
+                                            document.addEventListener(
+                                                "DOMContentLoaded",
+                                                function () {
+                                                    const deleteButtons =
+                                                        document.querySelectorAll(
+                                                            ".btn-outline-danger"
+                                                        );
+                                                    deleteButtons.forEach(
+                                                        (button) => {
+                                                            button.addEventListener(
+                                                                "click",
+                                                                function () {
+                                                                    formIdToSubmit =
+                                                                        this
+                                                                            .dataset
+                                                                            .id;
+                                                                }
+                                                            );
+                                                        }
+                                                    );
+                                                }
+                                            );
+                                            function submitForm() {
+                                                document
+                                                    .getElementById(
+                                                        "delete-form-" +
+                                                            formIdToSubmit
+                                                    )
+                                                    .submit();
+                                            }
+                                        </script>
+
+                                        <!-- Modal -->
+                                        <div
+                                            class="modal fade"
+                                            id="confirmationModal"
+                                            tabindex="-1"
+                                            aria-labelledby="confirmationModalLabel"
+                                            aria-hidden="true"
+                                        >
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5
+                                                            class="modal-title"
+                                                            id="confirmationModalLabel"
+                                                        >
+                                                            Confirm Deletion
+                                                        </h5>
+                                                        <button
+                                                            type="button"
+                                                            class="btn-close"
+                                                            data-bs-dismiss="modal"
+                                                            aria-label="Close"
+                                                        ></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to
+                                                        delete this item?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-danger"
+                                                            onclick="submitForm()"
+                                                        >
+                                                            Yes
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-secondary"
+                                                            data-bs-dismiss="modal"
+                                                        >
+                                                            No
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-outline-primary"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#proformaupdate{{ proforma.id }}"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                class="bi bi-pencil-square"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path
+                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
+                                                />
+                                                <path
+                                                    fill-rule="evenodd"
+                                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
+                                                />
+                                            </svg>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-outline-success"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#emailModal{{ i.id }}"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                class="bi bi-envelope"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path
+                                                    d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </td>
+
+                                    <!-- Corrections Modal -->
+                                    <div
+                                        class="modal fade"
+                                        id="event_corrections{{ i.id }}"
+                                        tabindex="-1"
+                                        role="dialog"
+                                        aria-labelledby="exampleModalCenterTitle"
+                                        aria-hidden="true"
+                                    >
+                                        <div
+                                            class="modal-dialog modal-dialog-centered"
+                                            role="document"
+                                        >
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5
+                                                        class="modal-title"
+                                                        id="exampleModalLongTitle"
+                                                    >
+                                                        Correction
+                                                    </h5>
+                                                    <button
+                                                        type="button"
+                                                        class="btn-close btn-close-white"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"
+                                                    ></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{ i.cdr_corrections }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Update Modal -->
+                                    <div
+                                        class="modal fade"
+                                        id="proformaupdate{{ proforma.id }}"
+                                        tabindex="-1"
+                                        aria-hidden="true"
+                                    >
+                                        <div
+                                            class="modal-dialog modal-lg modal-dialog-centered modal-xl"
+                                        >
+                                            <div class="modal-content">
+                                                <div
+                                                    class="modal-header bg-light"
+                                                >
+                                                    <h5 class="modal-title">
+                                                        Proforma Invoice Update
+                                                        {{ proforma.id }}
+                                                    </h5>
+                                                    <button
+                                                        type="button"
+                                                        class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"
+                                                    ></button>
+                                                </div>
+                                                <div
+                                                    class="modal-body form-datas"
+                                                >
+                                                    <form
+                                                        method="post"
+                                                        action=""
+                                                        class="cdr-form"
+                                                        enctype="multipart/form-data"
+                                                    >
+                                                        {% csrf_token %}
+                                                        <input
+                                                            type="hidden"
+                                                            value="{{ i.id }}"
+                                                        />
+                                                        <div class="row g-4">
+                                                            <!-- Event Date -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="cdr_upload_date"
+                                                                    class="form-label fw-bold"
+                                                                    >Proforma
+                                                                    Invoice
+                                                                    Date</label
+                                                                >
+
+                                                                <input
+                                                                    type="date"
+                                                                    class="form-control"
+                                                                    id="cdr_upload_date"
+                                                                    name="cdr_upload_date"
+                                                                    value="{{ proforma.invoice_date|date:'Y-m-d' }}"
+                                                                    required
+                                                                />
+                                                                <div
+                                                                    class="invalid-feedback"
+                                                                    id="event_date_error"
+                                                                >
+                                                                    Please
+                                                                    provide an
+                                                                    event date.
+                                                                </div>
+                                                            </div>
+                                                            <!-- Company Name -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="company_name"
+                                                                    class="form-label fw-bold"
+                                                                    >Company
+                                                                    Name</label
+                                                                >
+                                                                <input
+                                                                    type="text"
+                                                                    id="company_name"
+                                                                    class="form-control"
+                                                                    name="company_name"
+                                                                    value="{{ proforma.company_name }}"
+                                                                    readonly
+                                                                />
+                                                            </div>
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="company_email"
+                                                                    class="form-label fw-bold"
+                                                                    >Company
+                                                                    Email</label
+                                                                >
+                                                                <input
+                                                                    type="text"
+                                                                    id="company_email"
+                                                                    class="form-control"
+                                                                    name="company_email"
+                                                                    value="{{ proforma.company_email }}"
+                                                                />
+                                                            </div>
+                                                            <!-- Job Name -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="job_name"
+                                                                    class="form-label fw-bold"
+                                                                    >Job
+                                                                    Name</label
+                                                                >
+                                                                <input
+                                                                    type="text"
+                                                                    id="job_name"
+                                                                    class="form-control"
+                                                                    name="job_name"
+                                                                    value="{{ proforma.job_name }}"
+                                                                    readonly
+                                                                />
+                                                            </div>
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="cdr_corrections"
+                                                                    class="form-label fw-bold"
+                                                                    >Term
+                                                                    note</label
+                                                                >
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="cdr_corrections"
+                                                                    name="cdr_corrections"
+                                                                    placeholder="any Corrections...?"
+                                                                    value="{{ proforma.term_note }}"
+                                                                />
+                                                            </div>
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="cdr_corrections"
+                                                                    class="form-label fw-bold"
+                                                                    >CDR
+                                                                    Corrections</label
+                                                                >
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="cdr_corrections"
+                                                                    name="cdr_corrections"
+                                                                    placeholder="Any Corrections...?"
+                                                                    value="{{ i.cdr_corrections }}"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <!-- Form Actions -->
+                                                        <div
+                                                            class="col-12 mt-3"
+                                                        >
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-secondary"
+                                                                data-bs-dismiss="modal"
+                                                            >
+                                                                Close
+                                                            </button>
+                                                            <button
+                                                                type="submit"
+                                                                onclick="return validateUpdateForm(this.form)"
+                                                                class="btn btn-primary"
+                                                            >
+                                                                Save changes
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Email Modal -->
+                                    <div
+                                        class="modal fade"
+                                        id="emailModal{{ i.id }}"
+                                        tabindex="-1"
+                                        role="dialog"
+                                        aria-labelledby="emailModalLabel{{ i.id }}"
+                                        aria-hidden="true"
+                                    >
+                                        <div
+                                            class="modal-dialog modal-xl modal-dialog-centered"
+                                            role="document"
+                                        >
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5
+                                                        class="modal-title"
+                                                        id="emailModalLabel{{ i.id }}"
+                                                    >
+                                                        Send Mail
+                                                    </h5>
+                                                    <button
+                                                        type="button"
+                                                        class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"
+                                                    ></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form
+                                                        method="post"
+                                                        action="{% url 'cdr_sendmail_data' %}"
+                                                        enctype="multipart/form-data"
+                                                        autocomplete="off"
+                                                    >
+                                                        {% csrf_token %}
+                                                        <div class="row g-4">
+                                                            <!-- CDR Date -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="date"
+                                                                    class="form-label fw-bold"
+                                                                    >CDR
+                                                                    Date</label
+                                                                >
+                                                                <div
+                                                                    class="form-check mb-2"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        name="cdr_date_check"
+                                                                        value="true"
+                                                                        id="cdrDateCheck{{ i.id }}"
+                                                                    />
+                                                                    <label
+                                                                        class="form-check-label"
+                                                                        for="cdrDateCheck{{ i.id }}"
+                                                                        >Enable
+                                                                        Date</label
+                                                                    >
+                                                                </div>
+                                                                <input
+                                                                    type="date"
+                                                                    class="form-control"
+                                                                    id="date"
+                                                                    name="date"
+                                                                    value="{{ i.date|date:'Y-m-d' }}"
+                                                                />
+                                                            </div>
+                                                            <!-- Company Name -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    class="form-label fw-bold"
+                                                                    >Company
+                                                                    Name</label
+                                                                >
+                                                                <div
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        id="cdr_company_name{{ i.id }}"
+                                                                        name="cdr_company_name"
+                                                                        value="{{ i.company_name }}"
+                                                                    />
+                                                                    <label
+                                                                        class="form-check-label"
+                                                                        for="cdr_company_name{{ i.id }}"
+                                                                        >{{
+                                                                        i.company_name
+                                                                        }}</label
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <!-- Company Email Address -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="cdr_company_address"
+                                                                    class="form-label fw-bold"
+                                                                    >Company
+                                                                    Email
+                                                                    Address</label
+                                                                >
+                                                                <input
+                                                                    type="email"
+                                                                    id="cdr_company_address"
+                                                                    class="form-control"
+                                                                    name="cdr_company_address"
+                                                                    placeholder="Enter Company Email Address"
+                                                                    maxlength="50"
+                                                                    value="{{ i.company_email }}"
+                                                                />
+                                                            </div>
+                                                            <!-- Job Name -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    class="form-label fw-bold"
+                                                                    >Job
+                                                                    Name</label
+                                                                >
+                                                                <div
+                                                                    class="form-check"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        id="cdr_job_name{{ i.id }}"
+                                                                        name="cdr_job_name"
+                                                                        value="{{ i.job_name }}"
+                                                                    />
+                                                                    <label
+                                                                        class="form-check-label"
+                                                                        for="cdr_job_name{{ i.id }}"
+                                                                        >{{
+                                                                        i.job_name
+                                                                        }}</label
+                                                                    >
+                                                                </div>
+                                                            </div>
+                                                            <!-- Correction -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="cdr_corrections"
+                                                                    class="form-label fw-bold"
+                                                                    >Correction</label
+                                                                >
+                                                                <div
+                                                                    class="form-check mb-2"
+                                                                >
+                                                                    <input
+                                                                        class="form-check-input"
+                                                                        type="checkbox"
+                                                                        name="correction_check"
+                                                                        value="true"
+                                                                        id="enableCorrection{{ i.id }}"
+                                                                    />
+                                                                    <label
+                                                                        class="form-check-label"
+                                                                        for="enableCorrection{{ i.id }}"
+                                                                        >Enable
+                                                                        Correction</label
+                                                                    >
+                                                                </div>
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="cdr_corrections"
+                                                                    name="cdr_corrections"
+                                                                    placeholder="Enter Corrections"
+                                                                    value="{{ i.cdr_corrections }}"
+                                                                />
+                                                            </div>
+                                                            <!-- Attachment -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="attachment"
+                                                                    class="form-label fw-bold"
+                                                                    >Attachment</label
+                                                                >
+                                                                <input
+                                                                    type="file"
+                                                                    class="form-control"
+                                                                    id="attachment"
+                                                                    name="attachment"
+                                                                    accept=".jpeg,.png,.jpg,.ai"
+                                                                    multiple
+                                                                />
+                                                            </div>
+                                                            <!-- Notes -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="notes"
+                                                                    class="form-label fw-bold"
+                                                                    >Note</label
+                                                                >
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="notes"
+                                                                    name="notes"
+                                                                    placeholder="Write Notes"
+                                                                />
+                                                            </div>
+                                                            <!-- Action Buttons -->
+                                                            <div
+                                                                class="col-12 text-end"
+                                                            >
+                                                                <button
+                                                                    type="button"
+                                                                    class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal"
+                                                                >
+                                                                    Close
+                                                                </button>
+                                                                <button
+                                                                    type="submit"
+                                                                    class="btn btn-primary"
+                                                                >
+                                                                    Send Mail
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- View Modal -->
+                                    <div
+                                        class="modal fade"
+                                        id="viewModal{{ i.id }}"
+                                        tabindex="-1"
+                                        role="dialog"
+                                        aria-labelledby="exampleModalCenterTitle"
+                                        aria-hidden="true"
+                                    >
+                                        <div
+                                            class="modal-dialog modal-dialog-centered modal-xl"
+                                            role="document"
+                                        >
+                                            <div class="modal-content">
+                                                <!-- Modal Header -->
+                                                <div
+                                                    class="modal-header bg-primary text-white"
+                                                >
+                                                    <h5 class="modal-title">
+                                                        CDR Details
+                                                    </h5>
+                                                    <button
+                                                        type="button"
+                                                        class="btn-close btn-close-white"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"
+                                                    ></button>
+                                                </div>
+                                                <!-- Modal Body -->
+                                                <div class="modal-body">
+                                                    <div
+                                                        class="container-fluid"
+                                                    >
+                                                        <div class="row">
+                                                            <!-- Column 1 -->
+                                                            <div
+                                                                class="col-md-4 mb-3"
+                                                            >
+                                                                <p>
+                                                                    <strong
+                                                                        >Date:</strong
+                                                                    >
+                                                                    {{ i.date }}
+                                                                </p>
+                                                                <p>
+                                                                    <strong
+                                                                        >Link:</strong
+                                                                    >
+                                                                    <a
+                                                                        href="{{ i.file_url }}"
+                                                                        target="_blank"
+                                                                        class="btn btn-outline-primary btn-sm"
+                                                                        >Open
+                                                                        Folder</a
+                                                                    >
+                                                                </p>
+                                                            </div>
+                                                            <!-- Column 2 -->
+                                                            <div
+                                                                class="col-md-4 mb-3"
+                                                            >
+                                                                <p>
+                                                                    <strong
+                                                                        >Job
+                                                                        Name:</strong
+                                                                    >
+                                                                    {{
+                                                                    i.job_name
+                                                                    }}
+                                                                </p>
+                                                                <p>
+                                                                    <strong
+                                                                        >Job
+                                                                        Corrections:</strong
+                                                                    >
+                                                                    {{
+                                                                    i.cdr_corrections
+                                                                    }}
+                                                                </p>
+                                                            </div>
+                                                            <!-- Column 3 -->
+                                                            <div
+                                                                class="col-md-4 mb-3"
+                                                            >
+                                                                <p>
+                                                                    <strong
+                                                                        >Company
+                                                                        Name:</strong
+                                                                    >
+                                                                    {{
+                                                                    i.company_name
+                                                                    }}
+                                                                </p>
+                                                                <p>
+                                                                    <strong
+                                                                        >Company
+                                                                        Email:</strong
+                                                                    >
+                                                                    {{
+                                                                    i.company_email
+                                                                    }}
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        class="btn btn-secondary"
+                                                        onclick="printJobDetails(this)"
+                                                        data-id="{{ i.id }}"
+                                                        data-job_name="{{ i.job_name }}"
+                                                        data-date="{{ i.date }}"
+                                                        data-company_name="{{ i.company_name }}"
+                                                        data-company_email="{{ i.company_email }}"
+                                                        data-correction="{{ i.cdr_corrections }}"
+                                                        data-folder_url="{{ i.file_url }}"
+                                                    >
+                                                        Print
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if proformaInvoices %}
+        <nav aria-label="Page navigation example">
+            <div class="pagination-info">
+                Page {{ proformaInvoices.number }} of {{ proformaInvoices.paginator.num_pages }}
+            </div>
+            <ul class="pagination justify-content-end">
+                {% if proformaInvoices.has_previous %}
+                <li class="page-item">
+                    <a
+                        class="page-link"
+                        href="?page={{ proformaInvoices.previous_page_number }}&search={{ request.GET.search }}"
+                        >Previous</a
+                    >
+                </li>
+                {% endif %} {% for i in proformaInvoices.paginator.page_range %}
+                <li
+                    class="page-item {% if proformaInvoices.number == i %}active{% endif %}"
+                >
+                    <a
+                        class="page-link"
+                        href="?page={{ i }}&search={{ request.GET.search }}"
+                        >{{ i }}</a
+                    >
+                </li>
+                {% endfor %} {% if proformaInvoices.has_next %}
+                <li class="page-item">
+                    <a
+                        class="page-link"
+                        href="?page={{ proformaInvoices.next_page_number }}&search={{ request.GET.search }}"
+                        >Next</a
+                    >
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock main_block %} 
+
+
+
+{% block script %}
+<script>
+    function formatNumberWithCommas(input) {
+    let value = input.value;
+
+    value = value.replace(/,/g, "");
+
+    value = value.replace(/[^0-9.]/g, "");
+
+    const parts = value.split(".");
+    if (parts.length > 2) {
+        value = parts[0] + "." + parts.slice(1).join("");
+    }
+
+    if (value === "") {
+        input.value = "";
+        return;
+    }
+
+    if (value === ".") {
+        input.value = ".";
+        return;
+    }
+
+    const [integerPart, decimalPart] = value.split(".");
+
+    if (!integerPart) {
+        input.value = decimalPart !== undefined ? "." + decimalPart : "";
+        return;
+    }
+
+    const formattedInteger = parseInt(integerPart).toLocaleString("en-IN");
+
+    if (decimalPart !== undefined) {
+        input.value = formattedInteger + "." + decimalPart;
+    } else {
+        input.value = formattedInteger;
+    }
+}
+</script>
+
+
+{% endblock script %}

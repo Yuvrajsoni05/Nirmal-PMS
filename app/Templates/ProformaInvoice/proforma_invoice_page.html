@@ -1,5 +1,4 @@
-{% extends "base/base.html" %} {% load static %} {% block title %}Quotation
-Page{% endblock %} 
+{% extends "base/base.html" %} {% load static %} 
 
 
 
@@ -39,11 +38,8 @@ Page{% endblock %}
                          <span class="form-text text-danger" id="mode_payment_error">This field is required</span>
                     </div>
 
-
-
                     <div class="col-md-6">
                         <label for="company_name" class="form-label fw-semibold">Customer / Company Name</label>
-
                         <select class="form-control form-select" id="company_name" name="company_name" >
                             <option value="" selected disabled>Select Customer / Company Name</option>
                             {% for company in company_list %}
@@ -65,8 +61,6 @@ Page{% endblock %}
                         <input type="email" class="form-control" id="company_email" name="company_email" placeholder="customer@example.com">
                         <span class="form-text text-danger" id="company_email_error">This field is required</span>
                     </div>
-
-                    
 
                     <div class="col-12">
                         <label for="billing_address" class="form-label fw-semibold">Billing Address</label>
@@ -109,6 +103,8 @@ Page{% endblock %}
                         </select>
                         <span class="form-text text-danger" id="billing_state_name_error">This field is required</span>
                     </div>
+
+
                     <div class="col-md-4">
                         <label for="billing_gstin_no" class="form-label fw-semibold">Billing GSTIN/UN.</label>
                         <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No." >
@@ -159,14 +155,14 @@ Page{% endblock %}
 
                     <div class="col-md-4">
                         <label for="quantity" class="form-label fw-semibold">Quantity</label>
-                        <input type="number" class="form-control" value="0" id="quantity" name="quantity" placeholder="Quantity" >
+                        <input type="number" class="form-control"  id="quantity" name="quantity" placeholder="Quantity" >
                         <span class="form-text text-danger" id="quantity_error">This field is required</span>
                     </div>
 
 
                     <div class="col-md-4">
                         <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
-                        <input type="number" class="form-control" value="0" id="prpc_price" name="prpc_price" placeholder="Per Rate Per Cylinder" >
+                        <input type="number" class="form-control"  id="prpc_price" name="prpc_price" placeholder="Per Rate Per Cylinder" >
                         <span class="form-text text-danger" id="prpc_price_error">This field is required</span>
                     </div>
                     
@@ -192,8 +188,6 @@ Page{% endblock %}
                         </div>
                     </div>
 
-
-
                     <div class="col-md-9">
                         <label for="terms" class="form-label fw-semibold">Terms & Notes</label>
                         <input type="text" id="terms" name="terms" class="form-control" placeholder="e.g. Net 30, Delivery within 7 days">
@@ -218,6 +212,8 @@ Page{% endblock %}
                         </select>
                         <span class="form-text text-danger" id="order_status_error">This field is required</span>
                     </div>
+
+
                     <div class="col-md-6">
                         <label for="bank_details" class="form-label fw-semibold">Bank Details</label>
                         <input type="text" id="bank_details" name="bank_details" class="form-control" placeholder="Bank Name, A/C No., IFSC Code">
@@ -229,30 +225,156 @@ Page{% endblock %}
                         <button type="reset" class="btn btn-secondary me-2">Reset</button>
                         <button type="submit" class="btn btn-primary">Save Proforma</button>
                     </div>
+
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card card-round">
-                <div class="card-header">
-                    <div class="card-head-row card-tools-still-right">
-                        <div class="card-title">Proforma Invoice</div>
-                        <div class="card-tools"></div>
-                    </div>
-                </div>                  
-            </div>
-        </div>
-    </div>
-  </div>
-</div>
+
+  
 
 
 {% endblock main_block %}
 {% block script %}
+
+<script>
+$(document).ready(function() {
+    $('#quantity, #prpc_price, #billing_state_name, #company_name').on('input change', function() {
+        var changedField = $(this).attr('id'); // which input triggered the event
+        var quantity = $('#quantity').val();
+        var prpc_price = $('#prpc_price').val();
+        var billing_state_name = $('#billing_state_name').val();
+        var company_name = $('#company_name').val();
+
+        // ✅ Only run for the specific field using "if / else if"
+        if (changedField === 'company_name') {
+            console.log("Company changed → fetching company details");
+        } else if (changedField === 'quantity' || changedField === 'prpc_price') {
+            console.log("Quantity or price changed → recalc total");
+        } else if (changedField === 'billing_state_name') {
+            console.log("Billing state changed → maybe GST logic later");
+        } else {
+            return; 
+        }
+
+        // Common AJAX (you can customize per case)
+        $.ajax({
+            url: "{% url 'proforma_invoice_ajax' %}",
+            type: "GET",
+            data: {
+                quantity: quantity,
+                prpc_price: prpc_price,
+                billing_state_name: billing_state_name,
+                company_name: company_name
+            },
+            success: function(response) {
+                if (changedField === 'company_name') {
+                    // update company-related fields only
+                    $('#company_email').val(response.company_email);
+                    $('#company_contact').val(response.company_contact);
+                    $('#billing_address').val(response.billing_address);
+                    var jobSelect = $('#job_name');
+                    jobSelect.empty().append('<option disabled selected>Select Job Name</option>').append('<option value="others">Other</option>');
+                    response.job.forEach(function(i) {
+                        jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
+                    });
+                    jobSelect.append('<option value="others">Other</option>');
+                } 
+                else if (changedField === 'quantity' || changedField === 'prpc_price') {
+                  
+                    $('#total_amount').val(response.total_amount.toFixed(2));
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("Server error: " + error);
+            }
+        });
+    });
+});
+</script>
+<script>
+$(function() {
+    var fields = [
+        'invoice_no','invoice_date','mode_payment','company_name','company_contact','company_email',
+        'billing_address','billing_state_name','billing_gstin_no','title','job_name',
+        'pouch_diameter','pouch_height','cylinder_diameter','cylinder_height',
+        'quantity','prpc_price','terms','total_amount','order_status','bank_details'
+    ];
+
+    function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    function isNumber(v){ return v !== "" && !isNaN(v); }
+
+    function validateAndToggleError(id) {
+        var $el = $('#' + id);
+        var val = $.trim($el.val());
+        var $err = $('#' + id + '_error');
+
+        // select placeholders that should be considered empty
+        if($el.is('select')) {
+            if(!val || val === 'Select Title' || val === 'all') { $err.show(); return false; }
+        }
+
+        if(id === 'company_contact') {
+            if(/^\d+$/.test(val)) { $err.hide(); return true; }
+            $err.show(); return false;
+        }
+
+        if(id === 'company_email') {
+            if(isEmail(val)) { $err.hide(); return true; }
+            $err.show(); return false;
+        }
+
+        if(id === 'pouch_diameter' || id === 'pouch_height') {
+            // hide individual pouch errors when both filled
+            var d = $.trim($('#pouch_diameter').val()), h = $.trim($('#pouch_height').val());
+            if(d !== "" && h !== "") { $('#pouch_diameter_error,#pouch_height_error').hide(); updatePouchOpenSize(); return true; }
+            if(val !== "") { $('#' + id + '_error').hide(); } else { $('#' + id + '_error').show(); }
+            return false;
+        }
+
+        if(id === 'cylinder_diameter' || id === 'cylinder_height') {
+            var d2 = $.trim($('#cylinder_diameter').val()), h2 = $.trim($('#cylinder_height').val());
+            if(d2 !== "" && h2 !== "") { $('#cylinder_diameter_error,#cylinder_height_error').hide(); updateCylinderSize(); return true; }
+            if(val !== "") { $('#' + id + '_error').hide(); } else { $('#' + id + '_error').show(); }
+            return false;
+        }
+
+        // generic check: non-empty
+        if(val !== "") { $err.hide(); return true; }
+        $err.show();
+        return false;
+    }
+
+    // bind events
+    fields.forEach(function(id){
+        $('#' + id).on('input change keyup', function(){
+            validateAndToggleError(id);
+        });
+    });
+
+    // GST checkboxes (if you add an error span with id "gst_error")
+    $('input[name="gst[]"]').on('change', function(){
+        var ok = $('input[name="gst[]"]:checked').length > 0;
+        var $err = $('#gst_error');
+        if($err.length) { if(ok) $err.hide(); else $err.show(); }
+    });
+
+    // Optionally validate on form submit and prevent submit if any required empty
+    $('#proformaInvoiceForm').on('submit', function(e){
+        var ok = true;
+        fields.forEach(function(id){
+            if(!validateAndToggleError(id)) ok = false;
+        });
+        if(!ok){
+            e.preventDefault();
+            $('html,body').animate({scrollTop: $('.text-danger:visible').first().offset().top - 80}, 200);
+        }
+    });
+});
+</script>
+
 <script>
          function updatePouchOpenSize() {
     const diameter = document.getElementById('pouch_diameter').value;
@@ -274,132 +396,6 @@ function updateCylinderSize() {
 
 </script>
 
-<script>
-    // Function to validate all form fields
-                function validateField(fieldId) {
-                    const field = document.getElementById(fieldId);
-                    const errorElement = document.getElementById(fieldId + '_error');
-                    if (!field.value || field.value.trim() === '' || field.value === '0') {
-                        errorElement.style.display = 'block';
-                        return false;
-                    }
-                    errorElement.style.display = 'none';
-                    return true;
-                }
 
-                // Add event listeners when document is ready
-                document.addEventListener('DOMContentLoaded', function() {
-                    const form = document.getElementById('proformaInvoiceForm');
-                    const requiredFields = [
-                        'invoice_no', 'invoice_date', 'mode_payment', 'company_name',
-                        'company_contact', 'company_email', 'billing_address', 
-                        'billing_state_name', 'billing_gstin_no', 'title', 'job_name',
-                        'pouch_diameter', 'pouch_height', 'cylinder_diameter', 
-                        'cylinder_height', 'quantity', 'prpc_price', 'terms', 
-                        'total_amount', 'order_status', 'bank_details'
-                    ];
-
-                    // Add input event listeners to all fields
-                    requiredFields.forEach(fieldId => {
-                        const field = document.getElementById(fieldId);
-                        if (field) {
-                            field.addEventListener('input', function() {
-                                validateField(fieldId);
-                            });
-                        }
-                    });
-
-                    // Form submission handler
-                    form.addEventListener('submit', function(e) {
-                        let isValid = true;
-
-                        // Validate all fields
-                        requiredFields.forEach(fieldId => {
-                            if (!validateField(fieldId)) {
-                                isValid = false;
-                            }
-                        });
-
-                        // Check GST checkboxes
-                        const gstCheckboxes = document.querySelectorAll('input[name="gst[]"]');
-                        let gstChecked = false;
-                        gstCheckboxes.forEach(checkbox => {
-                            if (checkbox.checked) {
-                                gstChecked = true;
-                            }
-                        });
-
-                        if (!gstChecked) {
-                            isValid = false;
-                            // You might want to add a specific error message for GST
-                        }
-
-                        if (!isValid) {
-                            e.preventDefault();
-                            console.log("Form validation failed. Please fill all required fields.");
-                        }
-                    });
-                });
-</script>
-
-<script>
-$(document).ready(function() {
-    $('#quantity, #gst[], #prpc_price, #billing_state_name, #company_name').on('input', function() {
-        var gst = $('#gst[]').val();
-        var quantity = $('#quantity').val();
-        var prpc_price = $('#prpc_price').val();
-        var billing_state_name = $('#billing_state_name').val();
-        var company_name = $('#company_name').val();
-
-        $.ajax({
-            url: "{% url 'proforma_invoice_ajax' %}",
-            type: "GET",
-            data: {
-                quantity: quantity,
-                prpc_price: prpc_price,
-                billing_state_name: billing_state_name,
-                gst: gst,
-                company_name: company_name
-            },
-            success: function(response) {
-                if (response.company_email !== undefined) {
-                    $('#company_email').val(response.company_email);
-                    console.log("Company Email:", response.company_email);
-                }
-                if (response.company_contact !== undefined) {
-                    $('#company_contact').val(response.company_contact);
-                }
-                if (response.billing_address !== undefined) {
-                    $('#billing_address').val(response.billing_address);
-                }
-
-                if (response.job !== undefined) {
-                    var jobSelect = $('#job_name');
-                    jobSelect.empty();
-                    jobSelect.append('<option value="" selected disabled>Select Job Name</option>');
-                    response.job.forEach(function(i) {
-                        jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
-                    });
-                    jobSelect.append('<option value="others">Other</option>');
-                }
-                if (response.total_amount !== undefined) {
-                    $('#total_amount').val(response.total_amount.toFixed(2));
-                } else if (response.error) {
-                    alert("Error: " + response.error);
-                }
-            },
-            error: function(xhr, status, error) {
-                alert("Server error: " + error);
-            }
-        });
-    });
-});
-</script>
-
-
-
-
-
-   
 {% endblock script %}
 

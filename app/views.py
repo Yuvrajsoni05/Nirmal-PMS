@@ -6,6 +6,8 @@ from email.mime import image
 from genericpath import isfile
 from io import BytesIO
 from math import nan
+from multiprocessing import context
+from pydoc import pager
 from traceback import print_tb
 from PIL import Image
 from django.views.decorators.http import require_GET
@@ -1688,11 +1690,64 @@ def ProformaInvoicePage(request):
     company_list  = CompanyName.objects.values("company_name").distinct().union(
         ProformaInvoice.objects.values("company_name").distinct()
     )
-    
     context = {"company_list":company_list
     }
     return render(request, "ProformaInvoice/proforma_invoice_page.html",context=context)
 
+def ViewProformaInvoice(request):
+    proformaInvoice = ProformaInvoice.objects.all()
+    P = Paginator(proformaInvoice,1)
+    page = request.GET.get("page")
+    proformaInvoice = P.get_page(page)
+    nums = "a" * proformaInvoice.paginator.num_pages
+
+    try:
+        for proforma in proformaInvoice:
+            gst_value = str(proforma.gst).strip()
+            gst_value = re.sub(r'\s+', '', gst_value)  
+            gst_value = gst_value.replace("'", '"')
+            
+            proforma.gst = json.loads(gst_value)
+    except (json.JSONDecodeError, TypeError): 
+        cleaned = gst_value.replace("[", "").replace("]", "").replace('"', "")
+        proforma.gst = [x for x in cleaned.split(",") if x]
+
+    context = {
+        "nums" :nums,
+        "proformaInvoices": proformaInvoice,
+    }
+    return render(request, "ProformaInvoice/view_proforma_invoice.html",context=context)
+
+
+
+def UpdateProformaInvoice(request,proforma_id):
+    if request.method  == "POST":
+        invoice_date = request.POST.get("invoice_date")
+        mode_payment  = request.POST.get("mode_payment")
+        billing_address = request.POST.get("billing_address")
+        billing_gstin = request.POST.get("billing_gstin")
+        
+        print(invoice_date,mode_payment,billing_address,billing_gstin)
+        
+        
+        
+        item = get_object_or_404(ProformaInvoice,id=proforma_id)
+        
+    return redirect("view_proforma_invoice")
+    
+
+@custom_login_required
+def DeleteProformaInvoice(request,proforma_id):
+    if request.method == "POST":
+        item = get_object_or_404(ProformaInvoice, id=proforma_id)
+        print("Delete Request Received")
+        item.delete()
+        messages.success(request, "Proforma Invoice Deleted Successfully")
+        return redirect("view_proforma_invoice")
+    return redirect("view_proforma_invoice")
+             
+        
+@custom_login_required
 def ProformaInvoiceCreate(request):
     if request.method == "POST":
         invoice_no = request.POST.get("invoice_no","").strip()
@@ -1799,14 +1854,13 @@ def ProformaInvoiceCreate(request):
 
 
 def ProformaInvoicePageAJAX(request):
-    gst = request.GET.getlist("gst")
+    
     quantity = request.GET.get("quantity","0").strip()
     prpc_price = request.GET.get("prpc_price","0").strip()
-    billing_state_name = request.GET.get("billing_state_name","").strip()
     if quantity == "" or prpc_price == "":
         quantity = 0
         prpc_price = 0
-    
+  
     quantity = float(quantity)
     company_name = request.GET.get("company_name", "").strip()
     prpc_price = float(prpc_price)
@@ -1815,15 +1869,19 @@ def ProformaInvoicePageAJAX(request):
   
     total_amount = prpc_price * quantity
     total_amount = round(total_amount, 2)
-
- 
+    job = ""
+    company_contact = ""
+    company_email = ""
+    billing_address = ""
     if company_name:
-        job = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("job_name").distinct().union(
-            CDRDetail.objects.filter(company_name__iexact=company_name).values("job_name").distinct().union(
-                Job_detail.objects.filter(company_name__iexact=company_name).values("job_name").distinct()
+        if job:
+            job = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("job_name").distinct().union(
+                CDRDetail.objects.filter(company_name__iexact=company_name).values("job_name").distinct().union(
+                    Job_detail.objects.filter(company_name__iexact=company_name).values("job_name").distinct()
+                )
             )
-        )
-        )        
+            )
+        
         company_contact = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_contact").distinct())
         
         company_email = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_email").distinct().union(
@@ -1836,11 +1894,10 @@ def ProformaInvoicePageAJAX(request):
         company_email = company_email[0]['company_email'] if company_email else ''
         company_contact = company_contact[0]['company_contact'] if company_contact else ''
         billing_address = billing_address[0]['billing_address'] if billing_address else ''
+    else:
+        company_name = ""
         
     
-    
-
-    print("this is GST",gst)
     context = {"total_amount": total_amount,
                "job":job,
                "company_contact":company_contact,

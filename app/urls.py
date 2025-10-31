@@ -30,6 +30,8 @@ urlpatterns = [
     path("cdr_sendmail_data", cdr_sendmail_data, name="cdr_sendmail_data"),
     path("proforma_invoice_page", ProformaInvoicePage, name="proforma_invoice_page"),
     path("proforma_invoice_create",ProformaInvoiceCreate, name="proforma_invoice_create"),
+    path('view_proforma_invoice',ViewProformaInvoice, name='view_proforma_invoice'),
+    path('delete_proforma_invoice/<uuid:proforma_id>/',DeleteProformaInvoice, name='delete_proforma_invoice'),
     path('proforma_invoice_ajax',ProformaInvoicePageAJAX, name='proforma_invoice_ajax'),
     path(
         "company_name_suggestion_job",
