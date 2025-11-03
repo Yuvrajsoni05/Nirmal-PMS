@@ -17,6 +17,7 @@ from regex import P
 
 
 
+from app.templatetags import custom_tags
 from app.utils import email_check, file_name_convert
 
 from numpy import size
@@ -57,6 +58,7 @@ import logging
 from django.db.models import Q
 from django.db.models import Sum
 from django.forms import fields
+from django.core.exceptions import ObjectDoesNotExist
 
 
 
@@ -350,8 +352,8 @@ def update_user(request, user_id):
 @custom_login_required
 def dashboard_page(request):
     try:
-        get_q = request.GET.get("q", "").strip()
-        date_s = request.GET.get("date", "").strip()
+        get_q = request.GET.get("q", "")
+        date_s = request.GET.get("date", "")
         date_e = request.GET.get("end_date", "")
         sorting = request.GET.get("sorting", "")
         date_sorting = request.GET.get("date_sorting", "")
@@ -1695,12 +1697,23 @@ def ProformaInvoicePage(request):
     return render(request, "ProformaInvoice/proforma_invoice_page.html",context=context)
 
 def ViewProformaInvoice(request):
-    proformaInvoice = ProformaInvoice.objects.all()
-    P = Paginator(proformaInvoice,1)
+    proformaInvoice = ProformaInvoice.objects.all().order_by('invoice_date')
+    company_name = ProformaInvoice.objects.values_list('company_name', flat=True).distinct()
+    start_date = request.GET.get('start_date')
+    end_date =  request.GET.get("end_date")
+    select_company = request.GET.get('select_company'," ")
+    
+    
+    if start_date and end_date:
+         proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date])
+    
+    
+    proformaInvoice = proformaInvoice.filter(company_name__icontains=select_company).all()
+    P = Paginator(proformaInvoice,3)
     page = request.GET.get("page")
-    proformaInvoice = P.get_page(page)
+    proformaInvoice = P.get_page(page)  
     nums = "a" * proformaInvoice.paginator.num_pages
-
+    
     try:
         for proforma in proformaInvoice:
             gst_value = str(proforma.gst).strip()
@@ -1715,6 +1728,7 @@ def ViewProformaInvoice(request):
     context = {
         "nums" :nums,
         "proformaInvoices": proformaInvoice,
+        "company_name":company_name
     }
     return render(request, "ProformaInvoice/view_proforma_invoice.html",context=context)
 
@@ -1726,19 +1740,15 @@ def UpdateProformaInvoice(request,proforma_id):
         mode_payment  = request.POST.get("mode_payment")
         billing_address = request.POST.get("billing_address")
         billing_gstin = request.POST.get("billing_gstin")
-        
         print(invoice_date,mode_payment,billing_address,billing_gstin)
-        
-        
-        
         item = get_object_or_404(ProformaInvoice,id=proforma_id)
-        
     return redirect("view_proforma_invoice")
     
 
 @custom_login_required
 def DeleteProformaInvoice(request,proforma_id):
     if request.method == "POST":
+        print(proforma_id)
         item = get_object_or_404(ProformaInvoice, id=proforma_id)
         print("Delete Request Received")
         item.delete()
@@ -1753,11 +1763,9 @@ def ProformaInvoiceCreate(request):
         invoice_no = request.POST.get("invoice_no","").strip()
         invoice_date = request.POST.get("invoice_date","").strip()
         mode_payment = request.POST.get("mode_payment","").strip()
-        
         company_name = request.POST.get("company_name","").strip()
         company_contact = request.POST.get("company_contact","").strip()
         company_email = request.POST.get("company_email","").strip()
-        
         billing_address = request.POST.get("billing_address","").strip()
         billing_state_name = request.POST.get("billing_state_name","").strip()
         billing_gstin_no = request.POST.get("billing_gstin_no","").strip()
@@ -1779,8 +1787,16 @@ def ProformaInvoiceCreate(request):
         terms = request.POST.get("terms","").strip()
         total_amount = request.POST.get("total_amount","").strip()
         banking_details = request.POST.get("bank_details","").strip()
-    
-
+        new_company = request.POST.get("new_company","").strip()
+        new_job = request.POST.get("new_job","").strip()
+        
+        
+        if company_name == "" or new_company != "":
+            company_name = new_company
+        if job_name == "" or new_job != "":
+            job_name = new_job
+            
+            
         for field_name, field_value in {
             "Invoice No": invoice_no,
             "Invoice Date": invoice_date,
@@ -1809,14 +1825,32 @@ def ProformaInvoiceCreate(request):
                     extra_tags="custom-success-style",
                 )
                 return redirect("proforma_invoice_page")
+            
+            
+        if ProformaInvoice.objects.filter(invoice_no=invoice_no).exists():
+            messages.error(request,"Invoice number already exists",extra_tags="custom-success-style")
+            return redirect("proforma_invoice_page")
         
         
         email_error = utils.email_validator(company_email)
         if email_error:
             messages.error(request, email_error, extra_tags="custom-success-style")
             return redirect("proforma_invoice_page")
-        
-        
+        if ProformaInvoice.objects.filter(company_name=company_name).exists():
+            
+            if ProformaInvoice.objects.filter(company_name=company_name, company_email=company_email, company_contact=company_contact).exists():
+                pass
+            else:
+                messages.error(request,"You Can't Chnage Data ")
+                return redirect("proforma_invoice_page")
+        else:
+            if ProformaInvoice.objects.filter(company_email=company_email).exists():
+                messages.error(request,"Email already Exists",extra_tags="custom-success-style")
+                return redirect("proforma_invoice_page")
+            if ProformaInvoice.objects.filter(company_contact=company_contact).exists():
+                messages.error(request,"Contact already Exists",extra_tags="custom-success-style")
+                return redirect("proforma_invoice_page")
+            
         try:    
             proforma_invoice = ProformaInvoice.objects.create(
                 invoice_no=invoice_no,
@@ -1844,7 +1878,7 @@ def ProformaInvoiceCreate(request):
             return redirect("proforma_invoice_page")
         except Exception as e:
             messages.warning(request, f"Something went wrong try again {e}")
-            print(e)
+     
             return redirect("proforma_invoice_page")
         
     return redirect("proforma_invoice_page")   
@@ -1854,35 +1888,61 @@ def ProformaInvoiceCreate(request):
 
 
 def ProformaInvoicePageAJAX(request):
-    
-    quantity = request.GET.get("quantity","0").strip()
-    prpc_price = request.GET.get("prpc_price","0").strip()
+    igst = request.GET.get('igsts')
+    cgst = request.GET.get('cgsts')
+    sgst = request.GET.get('sgsts')
+    quantity = request.GET.get("quantity","0")
+    prpc_price = request.GET.get("prpc_price","0")
+    company_name = request.GET.get("company_name", "")
     if quantity == "" or prpc_price == "":
         quantity = 0
         prpc_price = 0
-  
+        
+    
+    print(company_name)
+
+    gst = int(igst) + int(cgst) + int(sgst)
+    
     quantity = float(quantity)
-    company_name = request.GET.get("company_name", "").strip()
+   
     prpc_price = float(prpc_price)
+
+
+    base_amount = quantity * prpc_price
+    gst_amount = base_amount * (gst/100)
+    total_amount = base_amount + gst_amount
+    
+
     
     
-  
-    total_amount = prpc_price * quantity
     total_amount = round(total_amount, 2)
     job = ""
     company_contact = ""
     company_email = ""
     billing_address = ""
     if company_name:
-        if job:
-            job = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("job_name").distinct().union(
-                CDRDetail.objects.filter(company_name__iexact=company_name).values("job_name").distinct().union(
-                    Job_detail.objects.filter(company_name__iexact=company_name).values("job_name").distinct()
-                )
+      
+            
+        job = list(
+            ProformaInvoice.objects.filter(company_name__iexact=company_name)
+            .values("job_name")
+            .distinct()
+            .union(
+                CDRDetail.objects.filter(company_name__iexact=company_name)
+                .values("job_name")
+                .distinct()
             )
+          .union(
+                Job_detail.objects.filter(company_name__iexact=company_name)
+                .values("job_name")
+                .distinct()
             )
+        )
+
         
+        print(job)
         company_contact = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_contact").distinct())
+        print(company_contact)
         
         company_email = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_email").distinct().union(
             CDRDetail.objects.filter(company_name__iexact=company_name).values("company_email").distinct()
@@ -1894,10 +1954,13 @@ def ProformaInvoicePageAJAX(request):
         company_email = company_email[0]['company_email'] if company_email else ''
         company_contact = company_contact[0]['company_contact'] if company_contact else ''
         billing_address = billing_address[0]['billing_address'] if billing_address else ''
+
+
+        
     else:
         company_name = ""
-        
     
+   
     context = {"total_amount": total_amount,
                "job":job,
                "company_contact":company_contact,
@@ -1905,7 +1968,8 @@ def ProformaInvoicePageAJAX(request):
                 "billing_address":billing_address             
    
                }
-    
+    logger.debug(f"AJAX context: {context}")
+    print(job)
     return JsonResponse(context)
 
 

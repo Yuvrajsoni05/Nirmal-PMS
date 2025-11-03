@@ -23,19 +23,19 @@
                     <div class="col-md-4">
                         <label for="invoice_no" class="form-label fw-semibold">Invoice No.</label>
                         <input type="text" class="form-control" id="invoice_no" name="invoice_no" placeholder="Enter invoice number" >
-                        <span class="form-text text-danger" id="invoice_no_error">This field is required</span>
+                        <span class="invalid-feedback" id="invoice_no_error">This field is required</span>
                     </div>
 
                     <div class="col-md-4">
                         <label for="invoice_date" class="form-label fw-semibold">Date</label>
                         <input type="date" class="form-control" id="invoice_date" name="invoice_date" >
-                        <span class="form-text text-danger" id="invoice_date_error">This field is required</span>
+                        <span class="invalid-feedback" id="invoice_date_error">This field is required</span>
                     </div>
 
                     <div class="col-md-4">
                         <label for="due_date" class="form-label fw-semibold">Mode / Term of Payment</label>
                         <input type="text" class="form-control" id="mode_payment" name="mode_payment" value="100%" placeholder="Mode / Term of Payment">
-                         <span class="form-text text-danger" id="mode_payment_error">This field is required</span>
+                         <span class="invalid-feedback" id="mode_payment_error">This field is required</span>
                     </div>
 
                     <div class="col-md-6">
@@ -47,25 +47,26 @@
                             {% endfor %}
                             <option value="others">Other</option>
                         </select>
-                        <span class="form-text text-danger" id="company_name_error">This field is required</span>
+                        <input type="text" id="new_company"  name="new_company" style="display: none" placeholder="New Company Name"  name="new_company" class="form-control">
+                        <span class="invalid-feedback"  id="company_name_error">This field is required</span>
                     </div>
 
                     <div class="col-md-3">
                         <label for="contact" class="form-label fw-semibold">Contact</label>
-                        <input type="number" class="form-control" id="company_contact" name="company_contact" placeholder="9499561272">
-                        <span class="form-text text-danger" id="company_contact_error">This field is required</span>
+                        <input type="tel" class="form-control" id="company_contact" name="company_contact" placeholder="9499561272" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel" >
+                        <span class="invalid-feedback" id="company_contact_error">This field is required</span>
                     </div>
 
                     <div class="col-md-3">
                         <label for="email" class="form-label fw-semibold">Email</label>
                         <input type="email" class="form-control" id="company_email" name="company_email" placeholder="customer@example.com">
-                        <span class="form-text text-danger" id="company_email_error">This field is required</span>
+                        <span class="invalid-feedback" id="company_email_error">This field is required</span>
                     </div>
 
                     <div class="col-12">
                         <label for="billing_address" class="form-label fw-semibold">Billing Address</label>
                         <textarea class="form-control" id="billing_address" name="billing_address" rows="2" placeholder="Street, City, State, ZIP"></textarea>
-                        <span class="form-text text-danger" id="billing_address_error">This field is required</span>
+                        <span class="invalid-feedback" id="billing_address_error">This field is required</span>
                     </div>
 
                     <div class="col-md-4">
@@ -101,14 +102,14 @@
                             <option value="Uttarakhand">Uttarakhand</option>
                             <option value="West Bengal">West Bengal</option>
                         </select>
-                        <span class="form-text text-danger" id="billing_state_name_error">This field is required</span>
+                        <span class="invalid-feedback" id="billing_state_name_error">This field is required</span>
                     </div>
 
 
                     <div class="col-md-4">
                         <label for="billing_gstin_no" class="form-label fw-semibold">Billing GSTIN/UN.</label>
                         <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No." >
-                        <span class="form-text text-danger" id="billing_gstin_no_error">This field is required</span>
+                        <span class="invalid-feedback" id="billing_gstin_no_error">This field is required</span>
                     </div>
                     
                     <div class="col-md-12">
@@ -119,7 +120,7 @@
                                 <option value="JobWork on Cylinder">JobWork on Cylinder</option>
                                 <option value="Copper Engraved Cylinder">Copper Engraved Cylinder</option>
                             </select>
-                            <span class="form-text text-danger" id="title_error">This field is required</span>
+                            <span class="invalid-feedback" id="title_error">This field is required</span>
                         </div>
                     </div>
                     
@@ -130,16 +131,17 @@
                             <option value="others">Other</option>
 
                         </select>
-                        <span class="form-text text-danger" id="job_name_error">This field is required</span>
+                        <input type="text" name="new_job" class="form-control" style="display: none;" id="new_job" placeholder="Enter new Job">
+                        <span class="invalid-feedback" id="job_name_error">This field is required</span>
                     </div>
 
                     <div class="col-md-4">
                         <label class="form-label fw-semibold">Pouch Open Size </label>
                         <div class="input-group">
                             <input type="number" class="form-control" id="pouch_diameter" name="pouch_diameter" placeholder="Diameter (e.g. 50)" step="any" aria-label="Diameter"><br>
-                            <span class="form-text text-danger" id="pouch_diameter_error">This field is required</span>
+                            <span class="invalid-feedback" id="pouch_diameter_error">This field is required</span>
                             <input type="number" class="form-control" id="pouch_height" name="pouch_height" placeholder="Height (e.g. 100)" step="any" aria-label="Height"><br>
-                            <span class="form-text text-danger" id="pouch_height_error">This field is required</span>
+                            <span class="invalid-feedback" id="pouch_height_error">This field is required</span>
                         </div>
                     </div>
 
@@ -147,41 +149,41 @@
                         <label for="cyl_size" class="form-label fw-semibold">Cylinder Size</label>
                         <div class="input-group">
                             <input type="number" class="form-control" id="cylinder_diameter" name="cylinder_diameter" placeholder="Diameter (e.g. 50)" step="any" aria-label="Diameter">
-                            <span class="form-text text-danger" id="cylinder_diameter_error">This field is required</span>
+                            <span class="invalid-feedback" id="cylinder_diameter_error">This field is required</span>
                             <input type="number" class="form-control" id="cylinder_height" name="cylinder_height" placeholder="Height (e.g. 100)" step="any" aria-label="Height">
-                            <span class="form-text text-danger" id="cylinder_height_error">This field is required</span>
+                            <span class="invalid-feedback" id="cylinder_height_error">This field is required</span>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <label for="quantity" class="form-label fw-semibold">Quantity</label>
-                        <input type="number" class="form-control"  id="quantity" name="quantity" placeholder="Quantity" >
-                        <span class="form-text text-danger" id="quantity_error">This field is required</span>
+                        <input type="number" class="form-control" step="any"  id="quantity" name="quantity" placeholder="Quantity" >
+                        <span class="invalid-feedback" id="quantity_error">This field is required</span>
                     </div>
 
 
                     <div class="col-md-4">
                         <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
-                        <input type="number" class="form-control"  id="prpc_price" name="prpc_price" placeholder="Per Rate Per Cylinder" >
-                        <span class="form-text text-danger" id="prpc_price_error">This field is required</span>
+                        <input type="number" class="form-control" step="any"  id="prpc_price" name="prpc_price" placeholder="Per Rate Per Cylinder" >
+                        <span class="invalid-feedback" id="prpc_price_error">This field is required</span>
                     </div>
                     
                     <div class="col-md-4 d-flex align-items-center accordion">
                         <label for="gst" class="form-label fw-semibold">GST</label>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" name="gst[]" value="SGST 9%" id="gst[]">
+                            <input class="form-check-input gst-checkbox" type="checkbox" name="gst[]" value="SGST 9" id="sgst">
                             <label class="form-check-label" for="sgst">
                                 SGST 9%
                             </label> 
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" name="gst[]" value="CGST 9%" id="gst[]">
+                            <input class="form-check-input gst-checkbox" type="checkbox" name="gst[]" value="CGST 9" id="cgst">
                             <label class="form-check-label" for="cgst">
                                 CGST 9%
                             </label>
                         </div>
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" name="gst[]" value="IGST 18%" id="gst[]">
+                            <input class="form-check-input gst-checkbox" type="checkbox" name="gst[]" value="IGST 18" id="igst">
                             <label class="form-check-label" for="igst">
                                 IGST 18%
                             </label>
@@ -191,13 +193,13 @@
                     <div class="col-md-9">
                         <label for="terms" class="form-label fw-semibold">Terms & Notes</label>
                         <input type="text" id="terms" name="terms" class="form-control" placeholder="e.g. Net 30, Delivery within 7 days">
-                        <span class="form-text text-danger" id="terms_error">This field is required</span>
+                        <span class="invalid-feedback" id="terms_error">This field is required</span>
                     </div>
                     
                     <div class="col-md-3">
                         <label for="total" class="form-label fw-semibold">Total</label>
                         <input type="text" id="total_amount" name="total_amount" class="form-control" placeholder="Total">
-                        <span class="form-text text-danger" id="total_amount_error">This field is required</span>
+                        <span class="invalid-feedback" id="total_amount_error">This field is required</span>
                     </div>
 
                     <div class="col-md-3">
@@ -210,14 +212,14 @@
                             <option value="delivered">Delivered</option>
                             <option value="cancelled">Cancelled</option>
                         </select>
-                        <span class="form-text text-danger" id="order_status_error">This field is required</span>
+                        <span class="invalid-feedback" id="order_status_error">This field is required</span>
                     </div>
 
 
                     <div class="col-md-6">
                         <label for="bank_details" class="form-label fw-semibold">Bank Details</label>
                         <input type="text" id="bank_details" name="bank_details" class="form-control" placeholder="Bank Name, A/C No., IFSC Code">
-                        <span class="form-text text-danger" id="bank_details_error">This field is required</span>
+                        <span class="invalid-feedback" id="bank_details_error">This field is required</span>
                     </div>
 
 
@@ -238,28 +240,45 @@
 
 {% endblock main_block %}
 {% block script %}
-
 <script>
 $(document).ready(function() {
-    $('#quantity, #prpc_price, #billing_state_name, #company_name').on('input change', function() {
-        var changedField = $(this).attr('id'); // which input triggered the event
+   
+    $('#quantity, #prpc_price, #billing_state_name, #company_name, #job_name, input[name="gst[]"]').on('input change', function() {
+        var changedField = $(this).attr('id');
         var quantity = $('#quantity').val();
+        var job_name = $('#job_name').val();
         var prpc_price = $('#prpc_price').val();
         var billing_state_name = $('#billing_state_name').val();
         var company_name = $('#company_name').val();
+        var igst = $('#igst').is(':checked') ? 18 : 0;
+        var cgst = $('#cgst').is(':checked') ? 9 : 0;
+        var sgst = $('#sgst').is(':checked') ? 9 : 0;
+        
+        console.log(sgst, igst, cgst)
 
-        // ✅ Only run for the specific field using "if / else if"
-        if (changedField === 'company_name') {
-            console.log("Company changed → fetching company details");
-        } else if (changedField === 'quantity' || changedField === 'prpc_price') {
-            console.log("Quantity or price changed → recalc total");
-        } else if (changedField === 'billing_state_name') {
-            console.log("Billing state changed → maybe GST logic later");
-        } else {
-            return; 
+        console.log(company_name)
+        if (company_name === "others") {
+            $("#new_company").show();
+
+      
+        }else if (company_name === " "){
+            $("#new_company").hide();
+        }
+         else {
+            $("#new_company").hide();
+        }
+        
+        if (job_name === "others") {
+            $("#new_job").show();
+        }else if (job_name === ""){
+            $("#new_job").hide();
+        }
+         else {
+            $("#new_job").hide();
         }
 
-        // Common AJAX (you can customize per case)
+
+
         $.ajax({
             url: "{% url 'proforma_invoice_ajax' %}",
             type: "GET",
@@ -267,23 +286,30 @@ $(document).ready(function() {
                 quantity: quantity,
                 prpc_price: prpc_price,
                 billing_state_name: billing_state_name,
-                company_name: company_name
+                company_name: company_name,
+                igsts: igst,
+                cgsts: cgst,
+                sgsts: sgst,  
             },
             success: function(response) {
                 if (changedField === 'company_name') {
-                    // update company-related fields only
                     $('#company_email').val(response.company_email);
                     $('#company_contact').val(response.company_contact);
                     $('#billing_address').val(response.billing_address);
                     var jobSelect = $('#job_name');
-                    jobSelect.empty().append('<option disabled selected>Select Job Name</option>').append('<option value="others">Other</option>');
-                    response.job.forEach(function(i) {
-                        jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
-                    });
+                    
+                    jobSelect.empty()
+                        .append('<option value="" selected>Select Job</option>');
+
+                    if (response.job && Array.isArray(response.job)) {
+                        response.job.forEach(function(i) {
+                            jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
+                        });
+                    }
+                    
                     jobSelect.append('<option value="others">Other</option>');
-                } 
-                else if (changedField === 'quantity' || changedField === 'prpc_price') {
-                  
+                } else {
+                    
                     $('#total_amount').val(response.total_amount.toFixed(2));
                 }
             },

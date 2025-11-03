@@ -12,67 +12,29 @@
                     <div class="card-head-row card-tools-still-right">
                         <div class="card-title">View Proforma Invoices</div>
                         <div class="card-tools">
-                            <form
-                                method="get"
-                                class="d-flex flex-wrap align-items-center"
-                                action=""
-                            >
-                                <div
-                                    class="me-1 mb-2 col-12 col-md-auto input-wrapper"
-                                >
-                                    <label for="date">Start Date</label>
-                                    <input
-                                        type="date"
-                                        class="form-control"
-                                        id="date"
-                                        name="date"
-                                        placeholder="Start Date"
-                                        value=""
-                                    />
-                                </div>
-                                <div
-                                    class="me-1 mb-2 col-12 col-md-auto input-wrapper"
-                                >
-                                    <label for="end_date">End Date</label>
-                                    <input
-                                        type="date"
-                                        class="form-control"
-                                        id="end_date"
-                                        name="end_date"
-                                        placeholder="End Date"
-                                        value=""
-                                    />
-                                </div>
-                                <div
-                                    class="form-outline me-2 mb-2 col-12 col-md-auto"
-                                    data-mdb-input-init
-                                >
-                                    <input
-                                        type="text"
-                                        name="search"
-                                        id="search"
-                                        class="form-control"
-                                        value=""
-                                        placeholder="Search Field"
-                                    />
-                                </div>
-                                <button
-                                    type="submit"
-                                    class="btn btn-primary w-sm-25 w-md-auto me-2 mb-2"
-                                    data-mdb-ripple-init
-                                >
-                                    <i class="fa fa-search"></i>
-                                </button>
-                                <a href="{% url 'view_proforma_invoice' %}">
-                                    <button
-                                        type="button"
-                                        name="reset"
-                                        class="btn btn-secondary col-12 col-md-auto mb-2"
-                                        data-mdb-ripple-init
-                                    >
-                                        Reset
+                            <form method="get" class="d-flex align-items-center" action="">
+                                <div class="d-flex align-items-center gap-1">
+                                    <div class="form-group mb-0">
+                                        <input type="date" class="form-control" id="date" name="start_date" placeholder="Start Date" value="">
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <input type="date" class="form-control" id="end_date" name="end_date" placeholder="End Date" value="">
+                                    </div>
+                                    <div class="form-group mb-0">
+                                        <select class="form-select form-control" name="select_company" style="min-width: 350px;">
+                                            <option value="" selected > Select Company Name </option>
+                                            {% for company in company_name %}
+                                                <option value="{{ company }} ">{{ company }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary ">
+                                        <i class="fa fa-search"></i>
                                     </button>
-                                </a>
+                                    <a href="{% url 'view_proforma_invoice' %}" class="btn btn-secondary ">
+                                        Reset
+                                    </a>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -127,7 +89,7 @@
                                     <td>{{ proforma.company_name }}</td>
                                     <td>{{ proforma.company_contact }}</td>
                                     <td>{{ proforma.company_email }}</td>
-                                    <td>{{ proforma.billing_address }}</td>
+                                    <td data-bs-toggle="modal" data-bs-target="#billing_addressModel{{proforma.id}}" title="{{proforma.id}}"  class="text-truncate">{{ proforma.billing_address|truncatechars:30 }}</td>
                                     <td>{{ proforma.billing_gstin_no }}</td>
                                     <td>{{ proforma.billing_state_name }}</td>
                                     <td title="{{ proforma.title }}">
@@ -301,7 +263,7 @@
                                     <!-- Corrections Modal -->
                                     <div
                                         class="modal fade"
-                                        id="event_corrections{{ i.id }}"
+                                        id="billing_addressModel{{proforma.id}}"
                                         tabindex="-1"
                                         role="dialog"
                                         aria-labelledby="exampleModalCenterTitle"
@@ -317,7 +279,7 @@
                                                         class="modal-title"
                                                         id="exampleModalLongTitle"
                                                     >
-                                                        Correction
+                                                        Billing Address
                                                     </h5>
                                                     <button
                                                         type="button"
@@ -327,7 +289,7 @@
                                                     ></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    {{ i.cdr_corrections }}
+                                                    {{ proforma.billing_address }}
                                                 </div>
                                             </div>
                                         </div>
@@ -344,7 +306,7 @@
                                         >
                                             <div class="modal-content">
                                                 <div
-                                                    class="modal-header bg-light"
+                                                    class="modal-header bg-light"   
                                                 >
                                                     <h5 class="modal-title">
                                                         Proforma Invoice Update
@@ -372,7 +334,49 @@
                                                             value="{{ i.id }}"
                                                         />
                                                         <div class="row g-4">
-                                                            <!-- Event Date -->
+                                                            <!-- invoice No -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="invoice_no"
+                                                                    class="form-label fw-bold"
+                                                                    >Invoice No.</label
+                                                                >
+
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="invoice_no"
+                                                                    name="invoice_no"
+                                                                    value="{{ proforma.invoice_no }}"
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            
+
+                                                            <!-- Mode Payment No -->
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="mode_payment"
+                                                                    class="form-label fw-bold"
+                                                                    >Mode / Payment</label
+                                                                >
+
+                                                                <input
+                                                                    type="text"
+                                                                    class="form-control"
+                                                                    id="mode_payment "
+                                                                    name="mode_payment "
+                                                                    value="{{ proforma.mode_payment }}"
+                                                                    required
+                                                                />
+                                                            </div>
+
+
+                                                            <!-- invoice Date -->
                                                             <div
                                                                 class="col-md-6"
                                                             >
@@ -384,6 +388,8 @@
                                                                     Date</label
                                                                 >
 
+
+                                                                
                                                                 <input
                                                                     type="date"
                                                                     class="form-control"
@@ -420,6 +426,7 @@
                                                                     readonly
                                                                 />
                                                             </div>
+                                                            <!-- Company Email -->
                                                             <div
                                                                 class="col-md-6"
                                                             >
@@ -435,6 +442,26 @@
                                                                     class="form-control"
                                                                     name="company_email"
                                                                     value="{{ proforma.company_email }}"
+                                                                />
+                                                            </div>
+                                                        <!-- Company Contact -->
+
+                                                            <div
+                                                                class="col-md-6"
+                                                            >
+                                                                <label
+                                                                    for="company_contact"
+                                                                    class="form-label fw-bold"
+                                                                    >Company
+                                                                    Contact</label
+                                                                >
+                                                                <input
+                                                                    type="number"
+                                                                    id="company_contact"
+                                                                    class="form-control"
+                                                                    name="company_contact"
+                                                                    value="{{ proforma.company_contact }}"
+                                                                    readonly
                                                                 />
                                                             </div>
                                                             <!-- Job Name -->
@@ -468,9 +495,9 @@
                                                                 <input
                                                                     type="text"
                                                                     class="form-control"
-                                                                    id="cdr_corrections"
-                                                                    name="cdr_corrections"
-                                                                    placeholder="any Corrections...?"
+                                                                    id="term_note"
+                                                                    name="term_note"
+                                                                    placeholder="Term note"
                                                                     value="{{ proforma.term_note }}"
                                                                 />
                                                             </div>
@@ -478,18 +505,17 @@
                                                                 class="col-md-6"
                                                             >
                                                                 <label
-                                                                    for="cdr_corrections"
+                                                                    for="billing_address"
                                                                     class="form-label fw-bold"
-                                                                    >CDR
-                                                                    Corrections</label
+                                                                    >Billing Address</label
                                                                 >
                                                                 <input
                                                                     type="text"
                                                                     class="form-control"
-                                                                    id="cdr_corrections"
-                                                                    name="cdr_corrections"
+                                                                    id="billing_address"
+                                                                    name="billing_address"
                                                                     placeholder="Any Corrections...?"
-                                                                    value="{{ i.cdr_corrections }}"
+                                                                    value="{{ proforma.billing_address }}"
                                                                 />
                                                             </div>
                                                         </div>
