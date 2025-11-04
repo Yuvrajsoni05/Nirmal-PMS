@@ -14,8 +14,7 @@ from pathlib import Path
 
 import os
 from dotenv import load_dotenv
-# from dotenv import load_dotenv
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'app', 'Google', 'credentials.json')
 
@@ -82,11 +81,6 @@ INSTALLED_APPS = [
     
 ]
 
-# DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-# DBBACKUP_STORAGE_OPTIONS = {
-#     'location': os.path.join(BASE_DIR, 'backup'),
-# }
-# DBBACKUP_DUMP_CMD = r'C:\Program Files\PostgreSQL\16\bin\pg_dump.exe'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -105,7 +99,6 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'simple_history.middleware.HistoryRequestMiddleware',
-
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',

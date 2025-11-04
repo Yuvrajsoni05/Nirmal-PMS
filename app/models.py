@@ -13,7 +13,6 @@ class Registration(AbstractUser):
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, db_index=True
     )
-
     first_name = models.CharField(max_length=200, blank=True,null=True,)
     last_name = models.CharField(max_length=200,blank=True, null=True)
     email = models.EmailField(max_length=200, unique=True,validators=[validate_email])
@@ -85,13 +84,12 @@ class Jobimage(models.Model):
     job = models.ForeignKey(Job_detail,related_name='image', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='job_images/')
     upload_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
-    
     def __str__(self):
         return f"Image for Job ID: {self.job.id}"
+    
+    
 class CDRDetail(models.Model):
     date = models.DateField()
-    
-
     company_name = models.CharField(max_length=200)
     job_name =  models.CharField(max_length=200,blank=True, null=True)
     company_email = models.EmailField(blank=True, null=True,)
@@ -105,6 +103,7 @@ class CDRDetail(models.Model):
         return f"{self.company_name} - {self.job_name}"
   
      
+     
 class CDRImage(models.Model):
     cdr =  models.ForeignKey(CDRDetail,on_delete=models.CASCADE, related_name='cdr_images')
     image = models.ImageField(upload_to='cdr_files/')
@@ -112,22 +111,57 @@ class CDRImage(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
     
     def __str__(self):
-        return f"{self.cdr}" 
+        return f"{self.cdr}"
+    
+    
+    
 class CompanyName(models.Model):
     company_name = models.CharField(max_length=300)
-    
     def __str__(self):
         return f"{self.company_name}"
    
 
 class CylinderMadeIn(models.Model):
     cylinder_made_in =  models.CharField(max_length=300,unique=True,blank=True, null=True)
-    
     def __str__(self):
         return f"{self.cylinder_made_in}"
-    
-    
+
+
+
+
+
 class ProformaInvoice(models.Model):
+    INDIAN_STATES = [
+        ("Andhra Pradesh", "Andhra Pradesh"),
+        ("Arunachal Pradesh", "Arunachal Pradesh"),
+        ("Assam", "Assam"),
+        ("Bihar", "Bihar"),
+        ("Chhattisgarh", "Chhattisgarh"),
+        ("Goa", "Goa"),
+        ("Gujarat", "Gujarat"),
+        ("Haryana", "Haryana"),
+        ("Himachal Pradesh", "Himachal Pradesh"),
+        ("Jharkhand", "Jharkhand"),
+        ("Karnataka", "Karnataka"),
+        ("Kerala", "Kerala"),
+        ("Madhya Pradesh", "Madhya Pradesh"),
+        ("Maharashtra", "Maharashtra"),
+        ("Manipur", "Manipur"),
+        ("Meghalaya", "Meghalaya"),
+        ("Mizoram", "Mizoram"),
+        ("Nagaland", "Nagaland"),
+        ("Odisha", "Odisha"),
+        ("Punjab", "Punjab"),
+        ("Rajasthan", "Rajasthan"),
+        ("Sikkim", "Sikkim"),
+        ("Tamil Nadu", "Tamil Nadu"),
+        ("Telangana", "Telangana"),
+        ("Tripura", "Tripura"),
+        ("Uttar Pradesh", "Uttar Pradesh"),
+        ("Uttarakhand", "Uttarakhand"),
+        ("West Bengal", "West Bengal"),
+    ]
+
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     invoice_no = models.CharField(max_length=200, unique=True)
@@ -138,7 +172,7 @@ class ProformaInvoice(models.Model):
     company_email = models.EmailField(max_length=200)
     billing_address = models.TextField()
     billing_gstin_no = models.CharField(max_length=100)
-    billing_state_name = models.CharField(max_length=200)
+    billing_state_name = models.CharField(max_length=200, choices=INDIAN_STATES)
     title = models.CharField(max_length=200)
     job_name = models.CharField(max_length=200)
     quantity = models.CharField(max_length=200)
@@ -155,3 +189,10 @@ class ProformaInvoice(models.Model):
         return f"Proforma Invoice: {self.invoice_no}"
 
         
+
+
+class Company(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
+    company_name = models.CharField(max_length=200,blank=True,null=True)
+    company_email = models.EmailField(max_length=200,blank=True,null=True)
+    

@@ -17,6 +17,7 @@ from regex import P
 
 
 
+
 from app.templatetags import custom_tags
 from app.utils import email_check, file_name_convert
 
@@ -1241,7 +1242,7 @@ def cdr_add(request):
             "cdr_corrections": cdr_corrections_data,
         }
 
-        url = os.environ.get("CREATE_WEBHOOK_CDR")
+        uarl = os.environ.get("CREATE_WEBHOOK_CDR")
        
         if url:
             
@@ -1272,32 +1273,7 @@ def cdr_add(request):
                 messages.success(request, "CDR Upload Successfully SQLite DB")
                 return redirect("company_add_page")
 
-                # for i in cdr_files:
-                #     filename = i.name
-                #     size_limit = 2 * 1024 * 1024
-                #     file_size = i.size
-                #     thumbnail_file = nan
-
-                #     if file_size > size_limit:
-                #         img = Image.open(i)
-                #         base, ext = os.path.splitext(filename)
-                #         quality = 98
-
-                #         for f in range(10):
-                #             io = BytesIO()
-                #             img.save(io, format="webp", optimize=True, quality=quality)
-                #             if io.tell() <= size_limit:
-                #                 print("this is tell ", io.tell)
-                #                 io.seek(0)
-                #                 thumbnail_file = File(io, name=f"{base}_thumbnail.webp")
-                #                 break
-                #             quality -= 5
-                #         else:
-                #             print("All Good")
-                #     else:
-                #         thumbnail_file = File(io, name=f"{base}_thumbnail.webp")
-                 
-                    # print(i)
+              
                 
                 
 
@@ -1435,7 +1411,7 @@ def cdr_update(request, update_id):
                     file_obj = file_data[1]
                     CDRImage.objects.create(cdr=update_details, image=file_obj)
                 update_details.save()
-                messages.success(request, "Data Update Successfully")
+                messages.success(request, "Data Updated Successfully")
                 return redirect("company_add_page")
 
     return redirect("company_add_page")
@@ -1565,7 +1541,7 @@ def send_mail_data(request):
         return redirect("dashboard_page")
 
     total_attachment_size = sum(f.size for f in attachments)
-    print(total_attachment_size)
+
     MAX_SIZE_MB = 25
     if total_attachment_size > MAX_SIZE_MB * 1024 * 1024:
         messages.error(
@@ -1692,7 +1668,9 @@ def ProformaInvoicePage(request):
     company_list  = CompanyName.objects.values("company_name").distinct().union(
         ProformaInvoice.objects.values("company_name").distinct()
     )
-    context = {"company_list":company_list
+    states = ProformaInvoice.INDIAN_STATES
+    context = {"company_list":company_list,
+               "states":states
     }
     return render(request, "ProformaInvoice/proforma_invoice_page.html",context=context)
 
@@ -1701,15 +1679,17 @@ def ViewProformaInvoice(request):
     company_name = ProformaInvoice.objects.values_list('company_name', flat=True).distinct()
     start_date = request.GET.get('start_date')
     end_date =  request.GET.get("end_date")
-    select_company = request.GET.get('select_company'," ")
-    
+    select_company = request.GET.get('select_company',"")
+    states = ProformaInvoice.INDIAN_STATES
     
     if start_date and end_date:
          proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date])
     
-    
-    proformaInvoice = proformaInvoice.filter(company_name__icontains=select_company).all()
-    P = Paginator(proformaInvoice,3)
+    if select_company and select_company.strip(): 
+        proformaInvoice = proformaInvoice.filter(company_name__icontains=select_company.strip())
+        
+        
+    P = Paginator(proformaInvoice,5)
     page = request.GET.get("page")
     proformaInvoice = P.get_page(page)  
     nums = "a" * proformaInvoice.paginator.num_pages
@@ -1725,10 +1705,13 @@ def ViewProformaInvoice(request):
         cleaned = gst_value.replace("[", "").replace("]", "").replace('"', "")
         proforma.gst = [x for x in cleaned.split(",") if x]
 
+        
+    print(proforma.gst)
     context = {
         "nums" :nums,
         "proformaInvoices": proformaInvoice,
-        "company_name":company_name
+        "company_name":company_name,
+        "states":states
     }
     return render(request, "ProformaInvoice/view_proforma_invoice.html",context=context)
 
@@ -1739,9 +1722,47 @@ def UpdateProformaInvoice(request,proforma_id):
         invoice_date = request.POST.get("invoice_date")
         mode_payment  = request.POST.get("mode_payment")
         billing_address = request.POST.get("billing_address")
-        billing_gstin = request.POST.get("billing_gstin")
-        print(invoice_date,mode_payment,billing_address,billing_gstin)
+        billing_gstin = request.POST.get("billing_gstin_no")
+        billing_state_name = request.POST.get("billing_state_name")
+        quantity = request.POST.get("quantity")
+        pouch_open_size  = request.POST.get("pouch_open_size")
+        cylinder_size = request.POST.get("cylinder_size")
+        prpc_rate = request.POST.get("prpc_rate")
+      
+        total = request.POST.getlist("total")
+        
+        company_name = request.POST.get("company_name")
+        company_email = request.POST.get("company_email")
+        company_contact = request.POST.get("company_contact")
+        title = request.POST.get("title")
+        banking_details = request.POST.get("banking_details")
+        
+        
+        
+        print(invoice_date,mode_payment,billing_state_name,billing_address,billing_gstin,quantity,pouch_open_size,cylinder_size,prpc_rate,total,company_name,company_email,company_contact,title,banking_details)
+        print(proforma_id)
         item = get_object_or_404(ProformaInvoice,id=proforma_id)
+        item.invoice_date = invoice_date
+        item.mode_payment = mode_payment
+        item.billing_address = billing_address
+        item.billing_state_name = billing_state_name
+        item.billing_gstin_no = billing_gstin
+        item.quantity = quantity
+        item.pouch_open_size = pouch_open_size
+        item.cylinder_size = cylinder_size
+        item.prpc_rate = prpc_rate
+        item.company_name = company_name
+        item.company_email = company_email
+        item.company_contact = company_contact
+        item.title = title
+        item.banking_details = banking_details
+        item.save()
+        messages.success(request,"Data  Successfully")
+        return redirect('view_proforma_invoice')
+    
+        
+        
+        
     return redirect("view_proforma_invoice")
     
 
@@ -1884,9 +1905,6 @@ def ProformaInvoiceCreate(request):
     return redirect("proforma_invoice_page")   
 
  
-
-
-
 def ProformaInvoicePageAJAX(request):
     igst = request.GET.get('igsts')
     cgst = request.GET.get('cgsts')
@@ -1898,22 +1916,13 @@ def ProformaInvoicePageAJAX(request):
         quantity = 0
         prpc_price = 0
         
-    
-    print(company_name)
-
     gst = int(igst) + int(cgst) + int(sgst)
     
     quantity = float(quantity)
-   
     prpc_price = float(prpc_price)
-
-
     base_amount = quantity * prpc_price
     gst_amount = base_amount * (gst/100)
     total_amount = base_amount + gst_amount
-    
-
-    
     
     total_amount = round(total_amount, 2)
     job = ""
@@ -1921,8 +1930,6 @@ def ProformaInvoicePageAJAX(request):
     company_email = ""
     billing_address = ""
     if company_name:
-      
-            
         job = list(
             ProformaInvoice.objects.filter(company_name__iexact=company_name)
             .values("job_name")
@@ -1939,24 +1946,18 @@ def ProformaInvoicePageAJAX(request):
             )
         )
 
-        
-        print(job)
         company_contact = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_contact").distinct())
-        print(company_contact)
         
         company_email = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_email").distinct().union(
             CDRDetail.objects.filter(company_name__iexact=company_name).values("company_email").distinct()
         ))
         
         billing_address = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("billing_address").distinct())
-        
+    
         
         company_email = company_email[0]['company_email'] if company_email else ''
         company_contact = company_contact[0]['company_contact'] if company_contact else ''
         billing_address = billing_address[0]['billing_address'] if billing_address else ''
-
-
-        
     else:
         company_name = ""
     
@@ -1969,7 +1970,7 @@ def ProformaInvoicePageAJAX(request):
    
                }
     logger.debug(f"AJAX context: {context}")
-    print(job)
+   
     return JsonResponse(context)
 
 

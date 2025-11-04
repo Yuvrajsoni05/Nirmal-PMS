@@ -105,35 +105,20 @@
                                     <td>{{ proforma.prpc_rate }}</td>
                                     <td>
                                         {% for gst in proforma.gst %}
-                                        <span>{{ gst }} ,</span>
+                                        <span>{{ gst }}  &nbsp; </span>
                                         {% endfor %}
                                     </td>
 
                                     <td>{{ proforma.total }}</td>
 
                                     <td class="text-truncate">
-                                        <form
-                                            action="{% url "delete_proforma_invoice" proforma_id=proforma.id  %}"
-                                            method="POST"
-                                            class="d-inline"
-                                            id="delete-form-{{ proforma.id }}"
-                                        >
+                                        <form action="{% url "delete_proforma_invoice" proforma_id=proforma.id  %}" method="POST"  class="d-inline" id="delete-form-{{ proforma.id }}" >
                                             {% csrf_token %}
                                             <button
-                                                type="button"
-                                                name="delete_proforma_invoice"
-                                                class="btn btn-sm btn-outline-danger ms-1"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#confirmationModal"
-                                                data-id="{{ proforma.id }}"
-                                            >
-                                                <i
-                                                    class="fa fa-trash"
-                                                    aria-hidden="true"
-                                                ></i>
+                                                type="button"name="delete_proforma_invoice" class="btn btn-sm btn-outline-danger ms-1"data-bs-toggle="modal"data-bs-target="#confirmationModal" data-id="{{ proforma.id }}" >
+                                                <i class="fa fa-trash" aria-hidden="true"></i>
                                             </button>
                                         </form>
-
                                         <script>
                                             let formIdToSubmit;
                                             document.addEventListener(
@@ -169,13 +154,7 @@
                                         </script>
 
                                         <!-- Modal -->
-                                        <div
-                                            class="modal fade"
-                                            id="confirmationModal"
-                                            tabindex="-1"
-                                            aria-labelledby="confirmationModalLabel"
-                                            aria-hidden="true"
-                                        >
+                                        <div class="modal fade" id="confirmationModal" tabindex="-1"aria-labelledby="confirmationModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -204,11 +183,9 @@
                                                         >
                                                             Yes
                                                         </button>
-                                                        <button
-                                                            type="button"
+                                                        <button type="button"
                                                             class="btn btn-secondary"
-                                                            data-bs-dismiss="modal"
-                                                        >
+                                                            data-bs-dismiss="modal">
                                                             No
                                                         </button>
                                                     </div>
@@ -267,8 +244,7 @@
                                         tabindex="-1"
                                         role="dialog"
                                         aria-labelledby="exampleModalCenterTitle"
-                                        aria-hidden="true"
-                                    >
+                                        aria-hidden="true">
                                         <div
                                             class="modal-dialog modal-dialog-centered"
                                             role="document"
@@ -294,248 +270,165 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Update Modal -->
-                                    <div
-                                        class="modal fade"
-                                        id="proformaupdate{{ proforma.id }}"
-                                        tabindex="-1"
-                                        aria-hidden="true"
-                                    >
-                                        <div
-                                            class="modal-dialog modal-lg modal-dialog-centered modal-xl"
-                                        >
+                                    <!-- Proforma Invoice Update Modal -->
+                                    <div class="modal fade" id="proformaupdate{{ proforma.id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl modal-dialog-centered">
                                             <div class="modal-content">
-                                                <div
-                                                    class="modal-header bg-light"   
-                                                >
-                                                    <h5 class="modal-title">
-                                                        Proforma Invoice Update
-                                                        {{ proforma.id }}
-                                                    </h5>
-                                                    <button
-                                                        type="button"
-                                                        class="btn-close"
-                                                        data-bs-dismiss="modal"
-                                                        aria-label="Close"
-                                                    ></button>
+                                                <!-- Modal Header -->
+                                                <div class="modal-header bg-light">
+                                                    <h5 class="modal-title">Proforma Invoice Update {{ proforma.id }}</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div
-                                                    class="modal-body form-datas"
-                                                >
-                                                    <form
-                                                        method="post"
-                                                        action=""
-                                                        class="cdr-form"
-                                                        enctype="multipart/form-data"
-                                                    >
+
+                                                <!-- Modal Body -->
+                                                <div class="modal-body">
+                                                    <form method="post" action="{% url "update_proforma_invoice" proforma_id=proforma.id  %}" class="cdr-form" enctype="multipart/form-data">
                                                         {% csrf_token %}
-                                                        <input
-                                                            type="hidden"
-                                                            value="{{ i.id }}"
-                                                        />
+                                                        <input type="hidden" value="{{ proforma.id }}" />
+
                                                         <div class="row g-4">
-                                                            <!-- invoice No -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="invoice_no"
-                                                                    class="form-label fw-bold"
-                                                                    >Invoice No.</label
-                                                                >
-
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    id="invoice_no"
-                                                                    name="invoice_no"
-                                                                    value="{{ proforma.invoice_no }}"
-                                                                    required
-                                                                />
-                                                            </div>
-                                                            
-
-                                                            <!-- Mode Payment No -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="mode_payment"
-                                                                    class="form-label fw-bold"
-                                                                    >Mode / Payment</label
-                                                                >
-
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    id="mode_payment "
-                                                                    name="mode_payment "
-                                                                    value="{{ proforma.mode_payment }}"
-                                                                    required
-                                                                />
+                                                            <!-- Invoice Number -->
+                                                            <div class="col-md-6">
+                                                                <label for="invoice_no" class="form-label fw-bold">Invoice No.</label>
+                                                                <input type="text" class="form-control" id="invoice_no" name="invoice_no" 
+                                                                    value="{{ proforma.invoice_no }}" readonly />
                                                             </div>
 
-
-                                                            <!-- invoice Date -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="cdr_upload_date"
-                                                                    class="form-label fw-bold"
-                                                                    >Proforma
-                                                                    Invoice
-                                                                    Date</label
-                                                                >
-
-
-                                                                
-                                                                <input
-                                                                    type="date"
-                                                                    class="form-control"
-                                                                    id="cdr_upload_date"
-                                                                    name="cdr_upload_date"
-                                                                    value="{{ proforma.invoice_date|date:'Y-m-d' }}"
-                                                                    required
-                                                                />
-                                                                <div
-                                                                    class="invalid-feedback"
-                                                                    id="event_date_error"
-                                                                >
-                                                                    Please
-                                                                    provide an
-                                                                    event date.
-                                                                </div>
+                                                            <!-- Invoice Date -->
+                                                            <div class="col-md-6">
+                                                                <label for="invoice_date" class="form-label fw-bold">Proforma Invoice Date</label>
+                                                                <input type="date" class="form-control" id="invoice_date" name="invoice_date" 
+                                                                    value="{{ proforma.invoice_date|date:'Y-m-d' }}" required />
                                                             </div>
+
+                                                            <!-- Mode of Payment -->
+                                                            <div class="col-md-6">
+                                                                <label for="mode_payment" class="form-label fw-bold">Mode / Payment</label>
+                                                                <input type="text" class="form-control" id="mode_payment" name="mode_payment" 
+                                                                    value="{{ proforma.mode_payment }}" required />
+                                                            </div>
+
                                                             <!-- Company Name -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="company_name"
-                                                                    class="form-label fw-bold"
-                                                                    >Company
-                                                                    Name</label
-                                                                >
-                                                                <input
-                                                                    type="text"
-                                                                    id="company_name"
-                                                                    class="form-control"
-                                                                    name="company_name"
-                                                                    value="{{ proforma.company_name }}"
-                                                                    readonly
-                                                                />
+                                                            <div class="col-md-6">
+                                                                <label for="company_name" class="form-label fw-bold">Company Name</label>
+                                                                <input type="text" class="form-control" id="company_name" name="company_name" 
+                                                                    value="{{ proforma.company_name }}" readonly />
                                                             </div>
-                                                            <!-- Company Email -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="company_email"
-                                                                    class="form-label fw-bold"
-                                                                    >Company
-                                                                    Email</label
-                                                                >
-                                                                <input
-                                                                    type="text"
-                                                                    id="company_email"
-                                                                    class="form-control"
-                                                                    name="company_email"
-                                                                    value="{{ proforma.company_email }}"
-                                                                />
-                                                            </div>
-                                                        <!-- Company Contact -->
 
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="company_contact"
-                                                                    class="form-label fw-bold"
-                                                                    >Company
-                                                                    Contact</label
-                                                                >
-                                                                <input
-                                                                    type="number"
-                                                                    id="company_contact"
-                                                                    class="form-control"
-                                                                    name="company_contact"
-                                                                    value="{{ proforma.company_contact }}"
-                                                                    readonly
-                                                                />
+                                                            <!-- Company Email -->
+                                                            <div class="col-md-6">
+                                                                <label for="company_email" class="form-label fw-bold">Company Email</label>
+                                                                <input type="email" class="form-control" id="company_email" name="company_email" 
+                                                                    value="{{ proforma.company_email }}" />
                                                             </div>
+
+                                                            <!-- Company Contact -->
+                                                            <div class="col-md-6">
+                                                                <label for="company_contact" class="form-label fw-bold">Company Contact</label>
+                                                                <input type="tel" class="form-control" id="company_contact" name="company_contact" 
+                                                                    value="{{ proforma.company_contact }}"  />
+                                                            </div>
+
                                                             <!-- Job Name -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="job_name"
-                                                                    class="form-label fw-bold"
-                                                                    >Job
-                                                                    Name</label
-                                                                >
-                                                                <input
-                                                                    type="text"
-                                                                    id="job_name"
-                                                                    class="form-control"
-                                                                    name="job_name"
-                                                                    value="{{ proforma.job_name }}"
-                                                                    readonly
-                                                                />
+                                                            <div class="col-md-6">
+                                                                <label for="job_name" class="form-label fw-bold">Job Name</label>
+                                                                <input type="text" class="form-control" id="job_name" name="job_name" 
+                                                                    value="{{ proforma.job_name }}" readonly />
                                                             </div>
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="cdr_corrections"
-                                                                    class="form-label fw-bold"
-                                                                    >Term
-                                                                    note</label
-                                                                >
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    id="term_note"
-                                                                    name="term_note"
-                                                                    placeholder="Term note"
-                                                                    value="{{ proforma.term_note }}"
-                                                                />
+
+                                                            <!-- Title -->
+                                                            <div class="col-md-6">
+                                                                <label for="title" class="form-label fw-bold">Title</label>
+                                                                <input type="text" class="form-control" id="title" name="title" 
+                                                                    placeholder="Enter title" value="{{ proforma.title }}" />
                                                             </div>
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="billing_address"
-                                                                    class="form-label fw-bold"
-                                                                    >Billing Address</label
-                                                                >
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    id="billing_address"
-                                                                    name="billing_address"
-                                                                    placeholder="Any Corrections...?"
-                                                                    value="{{ proforma.billing_address }}"
-                                                                />
+
+                                                            <!-- Billing Address -->
+                                                            <div class="col-md-6">
+                                                                <label for="billing_address" class="form-label fw-bold">Billing Address</label>
+                                                                <input type="text" class="form-control" id="billing_address" name="billing_address" 
+                                                                    placeholder="Enter billing address" value="{{ proforma.billing_address }}" />
+                                                            </div>
+
+                                                            <!-- Billing GSTIN No -->
+                                                            <div class="col-md-6">
+                                                                <label for="billing_gstin_no" class="form-label fw-bold">Billing GSTIN No.</label>
+                                                                <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" 
+                                                                    placeholder="Enter GSTIN number" value="{{ proforma.billing_gstin_no }}" />
+                                                            </div>
+
+                                                            <!-- Billing State Name -->
+                                                            <div class="col-md-6">
+                                                                <label for="billing_state_name" class="form-label fw-bold">Billing State Name</label>
+                                                                <select class="form-control form-select" id="billing_state_name" name="billing_state_name" required>
+                                                                    <option value="" selected disabled>Select State</option>
+                                                                    {% for value, label in states %}
+                                                                        <option value="{{ value }}" {% if proforma.billing_state_name == value %}selected{% endif %}>
+                                                                            {{ label }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                                                                                                                                                                                                                                                                    </div>
+
+                                                            <!-- Quantity -->
+                                                            <div class="col-md-6">
+                                                                <label for="quantity" class="form-label fw-bold">Quantity</label>
+                                                                <input type="number" class="form-control" id="quantity" name="quantity" 
+                                                                    placeholder="Enter quantity" value="{{ proforma.quantity }}" />
+                                                            </div>
+
+                                                            <!-- Pouch Open Size -->
+                                                            <div class="col-md-6">
+                                                                <label for="pouch_open_size" class="form-label fw-bold">Pouch Open Size</label>
+                                                                <input type="text" class="form-control" id="pouch_open_size" name="pouch_open_size" 
+                                                                    placeholder="Enter pouch size"  value="{{ proforma.pouch_open_size }}" />
+                                                            </div>
+
+                                                            <!-- Cylinder Size -->
+                                                            <div class="col-md-6">
+                                                                <label for="cylinder_size" class="form-label fw-bold">Cylinder Size</label>
+                                                                <input type="text" class="form-control" id="cylinder_size" name="cylinder_size" 
+                                                                    placeholder="Enter cylinder size" value="{{ proforma.cylinder_size }}" />
+                                                            </div>
+
+                                                            <!-- PRPC Rate -->
+                                                            <div class="col-md-6">
+                                                                <label for="prpc_rate" class="form-label fw-bold">PRPC Rate</label>
+                                                                <input type="number" step="0.01" class="form-control" id="prpc_rate" name="prpc_rate" 
+                                                                    placeholder="Enter PRPC rate" value="{{ proforma.prpc_rate }}" />
+                                                            </div>
+
+                                                            <!-- GST -->
+                                                            
+                                                            <!-- Total -->
+                                                            <div class="col-md-6">
+                                                                <label for="total" class="form-label fw-bold">Total Amount</label>
+                                                                <input type="number" step="0.01" class="form-control" id="total" name="total" 
+                                                                    placeholder="Total amount" value="{{ proforma.total }}" readonly />
+                                                            </div>
+
+                                                            <!-- Banking Details -->
+                                                            <div class="col-md-6">
+                                                                <label for="banking_details" class="form-label fw-bold">Banking Details</label>
+                                                                <input type="text" class="form-control" id="banking_details" name="banking_details" 
+                                                                    placeholder="Enter banking details" value="{{ proforma.banking_details }}" />
+                                                            </div>
+
+                                                            <!-- Terms Note -->
+                                                            <div class="col-md-6">
+                                                                <label for="term_note" class="form-label fw-bold">Terms & Conditions</label>
+                                                                <input type="text" class="form-control" id="term_note" name="term_note" 
+                                                                    placeholder="Enter terms and conditions" value="{{ proforma.terms_note }}" />
                                                             </div>
                                                         </div>
+
                                                         <!-- Form Actions -->
-                                                        <div
-                                                            class="col-12 mt-3"
-                                                        >
-                                                            <button
-                                                                type="button"
-                                                                class="btn btn-secondary"
-                                                                data-bs-dismiss="modal"
-                                                            >
+                                                        <div class="mt-4 d-flex justify-content-end gap-2">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                                                 Close
                                                             </button>
-                                                            <button
-                                                                type="submit"
-                                                                onclick="return validateUpdateForm(this.form)"
-                                                                class="btn btn-primary"
-                                                            >
-                                                                Save changes
+                                                            <button type="submit" class="btn btn-primary">
+                                                                Save Changes
                                                             </button>
                                                         </div>
                                                     </form>
@@ -544,366 +437,215 @@
                                         </div>
                                     </div>
                                     <!-- Email Modal -->
-                                    <div
-                                        class="modal fade"
-                                        id="emailModal{{ i.id }}"
-                                        tabindex="-1"
-                                        role="dialog"
-                                        aria-labelledby="emailModalLabel{{ i.id }}"
-                                        aria-hidden="true"
-                                    >
-                                        <div
-                                            class="modal-dialog modal-xl modal-dialog-centered"
-                                            role="document"
-                                        >
+                                    <div class="modal fade"id="emailModal{{ i.id }}"tabindex="-1"role="dialog"aria-labelledby="emailModalLabel{{ i.id }}"aria-hidden="true">
+                                        <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5
-                                                        class="modal-title"
-                                                        id="emailModalLabel{{ i.id }}"
-                                                    >
-                                                        Send Mail
-                                                    </h5>
-                                                    <button
-                                                        type="button"
-                                                        class="btn-close"
-                                                        data-bs-dismiss="modal"
-                                                        aria-label="Close"
-                                                    ></button>
+                                                    <h5 class="modal-title"id="emailModalLabel{{ i.id }}">Send Mail</h5>
+                                                    <button type="button"class="btn-close"data-bs-dismiss="modal"aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form
-                                                        method="post"
-                                                        action="{% url 'cdr_sendmail_data' %}"
-                                                        enctype="multipart/form-data"
-                                                        autocomplete="off"
-                                                    >
+                                                    <form method="post" action="{% url "update_proforma_invoice" proforma_id=proforma.id  %}" class="cdr-form" enctype="multipart/form-data">
                                                         {% csrf_token %}
+                                                        <input type="hidden" value="{{ proforma.id }}" />
+
                                                         <div class="row g-4">
-                                                            <!-- CDR Date -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="date"
-                                                                    class="form-label fw-bold"
-                                                                    >CDR
-                                                                    Date</label
-                                                                >
-                                                                <div
-                                                                    class="form-check mb-2"
-                                                                >
-                                                                    <input
-                                                                        class="form-check-input"
-                                                                        type="checkbox"
-                                                                        name="cdr_date_check"
-                                                                        value="true"
-                                                                        id="cdrDateCheck{{ i.id }}"
-                                                                    />
-                                                                    <label
-                                                                        class="form-check-label"
-                                                                        for="cdrDateCheck{{ i.id }}"
-                                                                        >Enable
-                                                                        Date</label
-                                                                    >
-                                                                </div>
-                                                                <input
-                                                                    type="date"
-                                                                    class="form-control"
-                                                                    id="date"
-                                                                    name="date"
-                                                                    value="{{ i.date|date:'Y-m-d' }}"
-                                                                />
+                                                            <!-- Invoice Number -->
+                                                            <div class="col-md-6">
+                                                                <label for="invoice_no" class="form-label fw-bold">Invoice No.</label>
+                                                                  <input class="form-check-input" type="checkbox" name="include_invoice_no" id="include_invoice_no" value="1">
+                                                                    <label class="form-check-label" for="include_invoice_no">
+                                                                        Include this field
+                                                                    </label>
+                                                                    <input type="text" class="form-control" id="invoice_no" name="invoice_no" 
+                                                                    value="{{ proforma.invoice_no }}" readonly />
                                                             </div>
+
+                                                            <!-- Invoice Date -->
+                                                            <div class="col-md-6">
+                                                                <label for="invoice_date" class="form-label fw-bold">Proforma Invoice Date</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_invoice_date" id="include_invoice_date" value="1">
+                                                                    <label class="form-check-label" for="include_invoice_date">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="date" class="form-control" id="invoice_date" name="invoice_date" 
+                                                                    value="{{ proforma.invoice_date|date:'Y-m-d' }}" required />
+                                                            </div>
+
+                                                            <!-- Mode of Payment -->
+                                                            <div class="col-md-6">
+                                                                <label for="mode_payment" class="form-label fw-bold">Mode / Payment</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_mode_payment" id="include_mode_payment" value="1">
+                                                                    <label class="form-check-label" for="include_mode_payment">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="text" class="form-control" id="mode_payment" name="mode_payment" 
+                                                                    value="{{ proforma.mode_payment }}" required />
+                                                            </div>
+
                                                             <!-- Company Name -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    class="form-label fw-bold"
-                                                                    >Company
-                                                                    Name</label
-                                                                >
-                                                                <div
-                                                                    class="form-check"
-                                                                >
-                                                                    <input
-                                                                        class="form-check-input"
-                                                                        type="checkbox"
-                                                                        id="cdr_company_name{{ i.id }}"
-                                                                        name="cdr_company_name"
-                                                                        value="{{ i.company_name }}"
-                                                                    />
-                                                                    <label
-                                                                        class="form-check-label"
-                                                                        for="cdr_company_name{{ i.id }}"
-                                                                        >{{
-                                                                        i.company_name
-                                                                        }}</label
-                                                                    >
-                                                                </div>
+                                                            <div class="col-md-6">
+                                                                <label for="company_name" class="form-label fw-bold">Company Name</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_company_name" id="include_company_name" value="1">
+                                                                    <label class="form-check-label" for="include_company_name">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="text" class="form-control" id="company_name" name="company_name" 
+                                                                    value="{{ proforma.company_name }}" readonly />
                                                             </div>
-                                                            <!-- Company Email Address -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="cdr_company_address"
-                                                                    class="form-label fw-bold"
-                                                                    >Company
-                                                                    Email
-                                                                    Address</label
-                                                                >
-                                                                <input
-                                                                    type="email"
-                                                                    id="cdr_company_address"
-                                                                    class="form-control"
-                                                                    name="cdr_company_address"
-                                                                    placeholder="Enter Company Email Address"
-                                                                    maxlength="50"
-                                                                    value="{{ i.company_email }}"
-                                                                />
+
+                                                            <!-- Company Email -->
+                                                            <div class="col-md-6">
+                                                                <label for="company_email" class="form-label fw-bold">Company Email</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_company_email" id="include_company_email" value="1">
+                                                                    <label class="form-check-label" for="include_company_email">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="email" class="form-control" id="company_email" name="company_email" 
+                                                                    value="{{ proforma.company_email }}" />
                                                             </div>
+
+                                                            <!-- Company Contact -->
+                                                            <div class="col-md-6">
+                                                                <label for="company_contact" class="form-label fw-bold">Company Contact</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_company_contact" id="include_company_contact" value="1">
+                                                                    <label class="form-check-label" for="include_company_contact">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="tel" class="form-control" id="company_contact" name="company_contact" 
+                                                                    value="{{ proforma.company_contact }}"  />
+                                                            </div>
+
+                                                            <!-- Billing Address -->
+                                                            <div class="col-md-6">
+                                                                <label for="billing_address" class="form-label fw-bold">Billing Address</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_billing_address" id="include_billing_address" value="1">
+                                                                    <label class="form-check-label" for="include_billing_address">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="text" class="form-control" id="billing_address" name="billing_address" 
+                                                                    placeholder="Enter billing address" value="{{ proforma.billing_address }}" />
+                                                            </div>
+
+
+                                                            <!-- Billing State Name -->
+                                                            <div class="col-md-6">
+                                                                <label for="billing_state_name" class="form-label fw-bold">Billing State Name</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_billing_state_name" id="include_billing_state_name" value="1">
+                                                                    <label class="form-check-label" for="include_billing_state_name">
+                                                                        Include this field
+                                                                    </label>
+                                                                <select class="form-control form-select" id="billing_state_name" name="billing_state_name" required>
+                                                                    <option value="" selected disabled>Select State</option>
+                                                                    {% for value, label in states %}
+                                                                        <option value="{{ value }}" {% if proforma.billing_state_name == value %}selected{% endif %}>
+                                                                            {{ label }}
+                                                                        </option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+
+                                                            <!-- Billing GSTIN No -->
+                                                            <div class="col-md-6">
+                                                                <label for="billing_gstin_no" class="form-label fw-bold">Billing GSTIN No.</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_billing_gstin_no" id="include_billing_gstin_no" value="1">
+                                                                    <label class="form-check-label" for="include_billing_gstin_no">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" 
+                                                                    placeholder="Enter GSTIN number" value="{{ proforma.billing_gstin_no }}" />
+                                                            </div>
+
+                                                            <!-- Title -->
+                                                            <div class="col-md-6">
+                                                                <label for="title" class="form-label fw-bold">Title</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_title" id="include_title" value="1">
+                                                                    <label class="form-check-label" for="include_title">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="text" class="form-control" id="title" name="title" 
+                                                                    placeholder="Enter title" value="{{ proforma.title }}" />
+                                                            </div>
+
+
                                                             <!-- Job Name -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    class="form-label fw-bold"
-                                                                    >Job
-                                                                    Name</label
-                                                                >
-                                                                <div
-                                                                    class="form-check"
-                                                                >
-                                                                    <input
-                                                                        class="form-check-input"
-                                                                        type="checkbox"
-                                                                        id="cdr_job_name{{ i.id }}"
-                                                                        name="cdr_job_name"
-                                                                        value="{{ i.job_name }}"
-                                                                    />
-                                                                    <label
-                                                                        class="form-check-label"
-                                                                        for="cdr_job_name{{ i.id }}"
-                                                                        >{{
-                                                                        i.job_name
-                                                                        }}</label
-                                                                    >
-                                                                </div>
+                                                            <div class="col-md-6">
+                                                                <label for="job_name" class="form-label fw-bold">Job Name</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_job_name" id="include_job_name" value="1">
+                                                                    <label class="form-check-label" for="include_job_name">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="text" class="form-control" id="job_name" name="job_name" 
+                                                                    value="{{ proforma.job_name }}" readonly />
                                                             </div>
-                                                            <!-- Correction -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="cdr_corrections"
-                                                                    class="form-label fw-bold"
-                                                                    >Correction</label
-                                                                >
-                                                                <div
-                                                                    class="form-check mb-2"
-                                                                >
-                                                                    <input
-                                                                        class="form-check-input"
-                                                                        type="checkbox"
-                                                                        name="correction_check"
-                                                                        value="true"
-                                                                        id="enableCorrection{{ i.id }}"
-                                                                    />
-                                                                    <label
-                                                                        class="form-check-label"
-                                                                        for="enableCorrection{{ i.id }}"
-                                                                        >Enable
-                                                                        Correction</label
-                                                                    >
-                                                                </div>
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    id="cdr_corrections"
-                                                                    name="cdr_corrections"
-                                                                    placeholder="Enter Corrections"
-                                                                    value="{{ i.cdr_corrections }}"
-                                                                />
+
+                                                            <!-- Quantity -->
+                                                            <div class="col-md-6">
+                                                                <label for="quantity" class="form-label fw-bold">Quantity</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_quantity" id="include_quantity" value="1">
+                                                                    <label class="form-check-label" for="include_quantity">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="number" class="form-control" id="quantity" name="quantity" 
+                                                                    placeholder="Enter quantity" value="{{ proforma.quantity }}" />
                                                             </div>
-                                                            <!-- Attachment -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="attachment"
-                                                                    class="form-label fw-bold"
-                                                                    >Attachment</label
-                                                                >
-                                                                <input
-                                                                    type="file"
-                                                                    class="form-control"
-                                                                    id="attachment"
-                                                                    name="attachment"
-                                                                    accept=".jpeg,.png,.jpg,.ai"
-                                                                    multiple
-                                                                />
+
+                                                            <!-- Pouch Open Size -->
+                                                            <div class="col-md-6">
+                                                                <label for="pouch_open_size" class="form-label fw-bold">Pouch Open Size</label>
+                                                                <input class="form-check-input" type="checkbox" name="include_pouch_open_size" id="include_pouch_open_size" value="1">
+                                                                    <label class="form-check-label" for="include_pouch_open_size">
+                                                                        Include this field
+                                                                    </label>
+                                                                <input type="text" class="form-control" id="pouch_open_size" name="pouch_open_size" 
+                                                                    placeholder="Enter pouch size"  value="{{ proforma.pouch_open_size }}" />
                                                             </div>
-                                                            <!-- Notes -->
-                                                            <div
-                                                                class="col-md-6"
-                                                            >
-                                                                <label
-                                                                    for="notes"
-                                                                    class="form-label fw-bold"
-                                                                    >Note</label
-                                                                >
-                                                                <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    id="notes"
-                                                                    name="notes"
-                                                                    placeholder="Write Notes"
-                                                                />
+
+                                                            <!-- Cylinder Size -->
+                                                            <div class="col-md-6">
+                                                                <label for="cylinder_size" class="form-label fw-bold">Cylinder Size</label>
+                                                                <input type="text" class="form-control" id="cylinder_size" name="cylinder_size" 
+                                                                    placeholder="Enter cylinder size" value="{{ proforma.cylinder_size }}" />
                                                             </div>
-                                                            <!-- Action Buttons -->
-                                                            <div
-                                                                class="col-12 text-end"
-                                                            >
-                                                                <button
-                                                                    type="button"
-                                                                    class="btn btn-secondary"
-                                                                    data-bs-dismiss="modal"
-                                                                >
-                                                                    Close
-                                                                </button>
-                                                                <button
-                                                                    type="submit"
-                                                                    class="btn btn-primary"
-                                                                >
-                                                                    Send Mail
-                                                                </button>
+
+                                                            <!-- PRPC Rate -->
+                                                            <div class="col-md-6">
+                                                                <label for="prpc_rate" class="form-label fw-bold">PRPC Rate</label>
+                                                                <input type="number" step="0.01" class="form-control" id="prpc_rate" name="prpc_rate" 
+                                                                    placeholder="Enter PRPC rate" value="{{ proforma.prpc_rate }}" />
+                                                            </div>           
+                                                            <!-- Total -->
+                                                            <div class="col-md-6">
+                                                                <label for="total" class="form-label fw-bold">Total Amount</label>
+                                                                <input type="number" step="0.01" class="form-control" id="total" name="total" 
+                                                                    placeholder="Total amount" value="{{ proforma.total }}" readonly />
                                                             </div>
+
+                                                            <!-- Banking Details -->
+                                                            <div class="col-md-6">
+                                                                <label for="banking_details" class="form-label fw-bold">Banking Details</label>
+                                                                <input type="text" class="form-control" id="banking_details" name="banking_details" 
+                                                                    placeholder="Enter banking details" value="{{ proforma.banking_details }}" />
+                                                            </div>
+
+                                                            <!-- Terms Note -->
+                                                            <div class="col-md-6">
+                                                                <label for="term_note" class="form-label fw-bold">Terms & Conditions</label>
+                                                                <input type="text" class="form-control" id="term_note" name="term_note" 
+                                                                    placeholder="Enter terms and conditions" value="{{ proforma.terms_note }}" />
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Form Actions -->
+                                                        <div class="mt-4 d-flex justify-content-end gap-2">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                                Close
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary">
+                                                                Save Changes
+                                                            </button>
                                                         </div>
                                                     </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- View Modal -->
-                                    <div
-                                        class="modal fade"
-                                        id="viewModal{{ i.id }}"
-                                        tabindex="-1"
-                                        role="dialog"
-                                        aria-labelledby="exampleModalCenterTitle"
-                                        aria-hidden="true"
-                                    >
-                                        <div
-                                            class="modal-dialog modal-dialog-centered modal-xl"
-                                            role="document"
-                                        >
-                                            <div class="modal-content">
-                                                <!-- Modal Header -->
-                                                <div
-                                                    class="modal-header bg-primary text-white"
-                                                >
-                                                    <h5 class="modal-title">
-                                                        CDR Details
-                                                    </h5>
-                                                    <button
-                                                        type="button"
-                                                        class="btn-close btn-close-white"
-                                                        data-bs-dismiss="modal"
-                                                        aria-label="Close"
-                                                    ></button>
-                                                </div>
-                                                <!-- Modal Body -->
-                                                <div class="modal-body">
-                                                    <div
-                                                        class="container-fluid"
-                                                    >
-                                                        <div class="row">
-                                                            <!-- Column 1 -->
-                                                            <div
-                                                                class="col-md-4 mb-3"
-                                                            >
-                                                                <p>
-                                                                    <strong
-                                                                        >Date:</strong
-                                                                    >
-                                                                    {{ i.date }}
-                                                                </p>
-                                                                <p>
-                                                                    <strong
-                                                                        >Link:</strong
-                                                                    >
-                                                                    <a
-                                                                        href="{{ i.file_url }}"
-                                                                        target="_blank"
-                                                                        class="btn btn-outline-primary btn-sm"
-                                                                        >Open
-                                                                        Folder</a
-                                                                    >
-                                                                </p>
-                                                            </div>
-                                                            <!-- Column 2 -->
-                                                            <div
-                                                                class="col-md-4 mb-3"
-                                                            >
-                                                                <p>
-                                                                    <strong
-                                                                        >Job
-                                                                        Name:</strong
-                                                                    >
-                                                                    {{
-                                                                    i.job_name
-                                                                    }}
-                                                                </p>
-                                                                <p>
-                                                                    <strong
-                                                                        >Job
-                                                                        Corrections:</strong
-                                                                    >
-                                                                    {{
-                                                                    i.cdr_corrections
-                                                                    }}
-                                                                </p>
-                                                            </div>
-                                                            <!-- Column 3 -->
-                                                            <div
-                                                                class="col-md-4 mb-3"
-                                                            >
-                                                                <p>
-                                                                    <strong
-                                                                        >Company
-                                                                        Name:</strong
-                                                                    >
-                                                                    {{
-                                                                    i.company_name
-                                                                    }}
-                                                                </p>
-                                                                <p>
-                                                                    <strong
-                                                                        >Company
-                                                                        Email:</strong
-                                                                    >
-                                                                    {{
-                                                                    i.company_email
-                                                                    }}
-                                                                </p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <button
-                                                        class="btn btn-secondary"
-                                                        onclick="printJobDetails(this)"
-                                                        data-id="{{ i.id }}"
-                                                        data-job_name="{{ i.job_name }}"
-                                                        data-date="{{ i.date }}"
-                                                        data-company_name="{{ i.company_name }}"
-                                                        data-company_email="{{ i.company_email }}"
-                                                        data-correction="{{ i.cdr_corrections }}"
-                                                        data-folder_url="{{ i.file_url }}"
-                                                    >
-                                                        Print
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>
@@ -916,6 +658,7 @@
                 </div>
             </div>
         </div>
+        <!-- Section Navbar -->
         {% if proformaInvoices %}
         <nav aria-label="Page navigation example">
             <div class="pagination-info">
