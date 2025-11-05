@@ -167,7 +167,8 @@
                             </label>
                         </div>
                     </div>
-
+                        <input type="hidden" name="taxable_value"  id="taxable_value"  >
+                        <input type="hidden" name="gst_value"  id="gst_value"  >
                     <div class="col-md-9">
                         <label for="terms" class="form-label fw-semibold">Terms & Notes</label>
                         <input type="text" id="terms" name="terms" class="form-control" placeholder="e.g. Net 30, Delivery within 7 days">
@@ -221,10 +222,12 @@
 <script>
 $(document).ready(function() {
    
-    $('#quantity, #prpc_price, #billing_state_name, #company_name, #igst_div , #cgst_div #sgst_div, #job_name, input[name="gst[]"]').on('input change', function() {
+    $('#quantity, #prpc_price, #billing_state_name,#taxable_value, #gst_value, #company_name, #igst_div , #cgst_div #sgst_div, #job_name, input[name="gst[]"]').on('input change', function() {
         var changedField = $(this).attr('id');
         var quantity = $('#quantity').val();
         var job_name = $('#job_name').val();
+        var taxable_value = $('#taxable_value').val();
+        var gst_value = $('#gst_value').val();
         var prpc_price = $('#prpc_price').val();
         var billing_state_name = $('#billing_state_name').val();
         var company_name = $('#company_name').val();
@@ -232,8 +235,8 @@ $(document).ready(function() {
         var cgst = $('#cgst').is(':checked') ? 9 : 0;
         var sgst = $('#sgst').is(':checked') ? 9 : 0;
         
-    
-
+        
+        console.log("This is Text",taxable_value)
         console.log(company_name)
         if (company_name === "others") {
             $("#new_company").show();
@@ -296,9 +299,13 @@ $(document).ready(function() {
                     }
                     
                     jobSelect.append('<option value="others">Other</option>');
-                } else {
-                    
                     $('#total_amount').val(response.total_amount.toFixed(2));
+                    $('#taxable_value').val(response.base_amount.toFixed(2));
+                    $('#gst_value').val(response.gst_amount.toFixed(2));
+                } else {
+                    $('#taxable_value').val(response.base_amount.toFixed(2));
+                    $('#total_amount').val(response.total_amount.toFixed(2));
+                    $('#gst_value').val(response.gst_amount.toFixed(2));
                 }
             },
             error: function(xhr, status, error) {

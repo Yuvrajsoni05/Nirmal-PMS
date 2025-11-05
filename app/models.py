@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 from django.core.validators import validate_email
+from django.forms import CharField
 # from simple_history.models import HistoricalRecords
 
 
@@ -182,6 +183,9 @@ class ProformaInvoice(models.Model):
     banking_details = models.TextField()
     gst = models.CharField(max_length=200)
     total = models.CharField()
+    taxable_value = models.CharField(max_length=200,blank=True, null=True)
+    gst_value = models.CharField(max_length=200,blank=True, null=True)
+    
     terms_note = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     

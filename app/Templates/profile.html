@@ -258,7 +258,7 @@ def update_proforma_invoice(request, proforma_id):
             field_value = request.POST.get(field)
             checkbox_value = request.POST.get(checkbox)
 
-            if checkbox_value == '1' and field_value:  # Only update if checkbox is checked and value is not empty
+            if checkbox_value == '1' and field_value:  
                 setattr(proforma, field, field_value)
 
         # Save the updated proforma

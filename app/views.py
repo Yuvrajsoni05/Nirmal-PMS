@@ -18,6 +18,7 @@ from regex import P
 
 
 
+
 from app.templatetags import custom_tags
 from app.utils import email_check, file_name_convert
 
@@ -60,6 +61,8 @@ from django.db.models import Q
 from django.db.models import Sum
 from django.forms import fields
 from django.core.exceptions import ObjectDoesNotExist
+from django import template
+
 
 
 
@@ -1706,7 +1709,7 @@ def ViewProformaInvoice(request):
         proforma.gst = [x for x in cleaned.split(",") if x]
 
         
-    print(proforma.gst)
+    
     context = {
         "nums" :nums,
         "proformaInvoices": proformaInvoice,
@@ -1759,12 +1762,69 @@ def UpdateProformaInvoice(request,proforma_id):
         item.save()
         messages.success(request,"Data  Successfully")
         return redirect('view_proforma_invoice')
-    
-        
-        
-        
     return redirect("view_proforma_invoice")
+
+
+
+@custom_login_required
+def ProformaSendMail(request):
+    if request.method == 'POST':
+        company_email  =  request.POST.get('company_email')
+        
+        fields_to_send_mail = {
+            'invoice_no' : 'include_invoice_no',
+            'invoice_date' : 'include_invoice_date',
+            'mode_payment' : 'include_mode_payment',
+            'company_name' : 'include_company_name',
+            'company_email' : 'include_company_email',
+            'company_contact' : 'include_company_contact',
+            'billing_address' : 'include_billing_address',
+            'billing_state_name' : 'include_billing_state_name',
+            'billing_gstin_no' : 'include_billing_gstin_no', 
+            'title' : 'include_title',
+            'job_name' : 'include_job_name',
+            'quantity' : 'include_quantity',
+            'pouch_open_size' : 'include_pouch_open_size',
+            'cylinder_size' : 'include_cylinder_size',
+            'prpc_rate' : 'include_prpc_rate',
+            'total' : 'include_total',
+            'banking_details' : 'include_banking_details',
+            'term_note' : 'include_term_note',
+            'gst':'include_gst',
+            'gst_value' : 'include_gst_value',
+            'taxable_value':'include_taxable_value'
+        }
+        
+        item_dic = {}
+        for i , r in fields_to_send_mail.items():
+            i_value = request.POST.get(i)
+            checkbox_value = request.POST.get(r,"")
+            if checkbox_value == '1' and i_value:
+                item_dic[i] = i_value
+        
+        print(item_dic)
+        receiver_email = company_email
+        template_name =   "Base/proforma_send_mail.html"
+        convert_to_html_content = render_to_string(
+            template_name=template_name,context=item_dic
+        )
+        email = EmailMultiAlternatives(
+            subject="Nirmal Group",
+            body = "plain message",
+            from_email= "soniyuvraj9499@gmail.com",
+            to = [receiver_email],
+            
+        )
+        email.attach_alternative(convert_to_html_content, "text/html")
+        email.send()
+        messages.success(request,"mail send successfully")
+        return redirect("view_proforma_invoice")
+              
+        
+            
     
+    return redirect("view_proforma_invoice")
+
 
 @custom_login_required
 def DeleteProformaInvoice(request,proforma_id):
@@ -1791,6 +1851,9 @@ def ProformaInvoiceCreate(request):
         billing_state_name = request.POST.get("billing_state_name","").strip()
         billing_gstin_no = request.POST.get("billing_gstin_no","").strip()
         title = request.POST.get("title","").strip()
+      
+        taxable_value = request.POST.get("taxable_value","")
+        gst_value = request.POST.get("gst_value","")
         
         job_name = request.POST.get("job_name","").strip()
         pouch_diameter = request.POST.get("pouch_diameter","").strip()
@@ -1810,14 +1873,15 @@ def ProformaInvoiceCreate(request):
         banking_details = request.POST.get("bank_details","").strip()
         new_company = request.POST.get("new_company","").strip()
         new_job = request.POST.get("new_job","").strip()
-        
+   
         
         if company_name == "" or new_company != "":
             company_name = new_company
         if job_name == "" or new_job != "":
             job_name = new_job
-            
-            
+              
+
+        print(gst)
         for field_name, field_value in {
             "Invoice No": invoice_no,
             "Invoice Date": invoice_date,
@@ -1893,6 +1957,8 @@ def ProformaInvoiceCreate(request):
                 terms_note=terms,
                 banking_details=banking_details,
                 total=total_amount,
+                taxable_value=taxable_value,
+                gst_value = gst_value
             )
             proforma_invoice.save()
             messages.success(request, "Proforma Invoice Created Successfully")
@@ -1922,6 +1988,10 @@ def ProformaInvoicePageAJAX(request):
     prpc_price = float(prpc_price)
     base_amount = quantity * prpc_price
     gst_amount = base_amount * (gst/100)
+    
+    
+    print("This is Total",base_amount)
+    print("This GST ",gst_amount)
     total_amount = base_amount + gst_amount
     
     total_amount = round(total_amount, 2)
@@ -1966,8 +2036,9 @@ def ProformaInvoicePageAJAX(request):
                "job":job,
                "company_contact":company_contact,
                 "company_email":company_email,
-                "billing_address":billing_address             
-   
+                "billing_address":billing_address,         
+                "base_amount":base_amount,
+                "gst_amount":gst_amount
                }
     logger.debug(f"AJAX context: {context}")
    

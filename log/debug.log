@@ -1192,3 +1192,4 @@ Traceback (most recent call last):
     print(company_name.name)
           ^^^^^^^^^^^^^^^^^
 AttributeError: 'QuerySet' object has no attribute 'name'
+ERROR 2025-11-05 12:21:23,182 myapp login_page Invalid Username or Password views.py
