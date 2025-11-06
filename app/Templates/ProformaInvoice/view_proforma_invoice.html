@@ -99,7 +99,9 @@
                                     </td>
 
                                     <td title="{{ proforma.job_name }}">
-                                        {{ proforma.job_name }}
+                                         {% for job in proforma.job_details.all %}
+                                            <div>{{ job }}</div>
+                                        {% endfor %}
                                     </td>
                                     <td>{{ proforma.pouch_open_size }}</td>
                                     <td>{{ proforma.cylinder_size }}</td>
@@ -616,6 +618,7 @@
                                                             <input class="form-check-input me-3" type="checkbox" name="include_total" value="1" checked>
                                                             <label class="fw-bold me-3 mb-0 fs-6">Total:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="total" value="{{ proforma.total }}" readonly>
+                                                            <input type="hidden" name="total_in_words" value="{{proforma.total_in_words}}" >
                                                         </div>
                                                     </div>
 
@@ -771,5 +774,43 @@
 
 <script src="{% static 'js/proforma.js' %}"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+  let jobIndex = 1; // to handle unique gst[] names
+
+  $('#add-job').on('click', function(e) {
+    e.preventDefault();
+
+    // Clone the first job section
+    let newSection = $('.job-section:first').clone();
+
+    // Clear all inputs
+    newSection.find('input').val('');
+    newSection.find('select').prop('selectedIndex', 0);
+    newSection.find('.gst-checkbox').prop('checked', false);
+
+    // Update GST input names for each new section
+    newSection.find('.gst-checkbox').each(function() {
+      $(this).attr('name', `gst[${jobIndex}][]`);
+    });
+
+    jobIndex++;
+
+    // Append cloned section to container
+    $('#job-container').append(newSection);
+  });
+
+  // Show "new job" input when "Other" is selected
+  $(document).on('change', 'select[name="job_name[]"]', function() {
+    const $input = $(this).siblings('input[name="new_job[]"]');
+    if ($(this).val() === 'others') {
+      $input.show();
+    } else {
+      $input.hide().val('');
+    }
+  });
+});
+</script>
 
 {% endblock script %}

@@ -10,9 +10,9 @@ admin.site.register(CylinderMadeIn)
 
 
 
-class AdminPerformaInvoice(admin.ModelAdmin):
-    list_display = ("id","company_name", "job_name" , "quantity" , "gst" , "total" )
-admin.site.register(ProformaInvoice,AdminPerformaInvoice)
+# class AdminPerformaInvoice(admin.ModelAdmin):
+#     list_display = ("id","company_name", "job_name" , "quantity" , "gst" , "total" )
+# admin.site.register(ProformaInvoice,AdminPerformaInvoice)
 
 class JobDetailHistory(admin.ModelAdmin):
     list_display = ("id", "job" , "field_name" , "old_value" , "new_value" , "changed_at","chnage_user" )

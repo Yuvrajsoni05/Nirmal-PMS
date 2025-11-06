@@ -240,7 +240,8 @@ function printProforma(button) {
                             <b>${data.title}</b><br />
                             <span style="font-style: italic; font-size: 12px">
                                 ${data.job_name}<br />
-                                Pouch Open Size : ${pouch_open_size}
+                                Pouch Open Size : ${data.pouch_open_size}<br>
+                                Cylinder Size  : ${data.cylinder_size}
                             </span>
                         </td>
                         <td class="text-right" style="padding: 6px 4px">-</td>

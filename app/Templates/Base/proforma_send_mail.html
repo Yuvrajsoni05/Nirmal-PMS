@@ -119,7 +119,8 @@
                 <tr>
                     <td style="width: 45%">
                         <b
-                            >Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.){% now "Y-m-d" %}</b
+                            >Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.){% now
+                            "Y-m-d" %}</b
                         ><br />
                         1601, 16th Floor, B Block,<br />
                         Navratna Corporate Park, Nr. Jayantilal Park<br />
@@ -191,7 +192,7 @@
                         <b>Consignee (Ship to)</b><br />
                         <b>{{ company_name }}</b><br />
                         {{ billing_address }}<br />
-                        CUTTACK - 753010<br />
+
                         GSTIN/UIN : {{ billing_gstin_no }}<br />
                         State Name : {{ billing_state_name }},
                     </td>
@@ -199,7 +200,7 @@
                         <b>Buyer (Bill to)</b><br />
                         <b>{{ company_name }}</b><br />
                         {{ billing_address }},<br />
-                        CUTTACK - 753010<br />
+
                         GSTIN/UIN : {{ billing_gstin_no }}<br />
                         State Name : {{ billing_state_name }}, <br />
                         Place of Supply : {{ billing_state_name }}
@@ -235,7 +236,12 @@
                             <b>{{ title }}</b><br />
                             <span style="font-style: italic; font-size: 12px">
                                 {{ job_name }}<br />
-                                Pouch Open Size : {{ pouch_open_size }}
+                                Pouch Open Size : {{ pouch_open_size }}<br />
+                                Cylinder Size : {{ cylinder_size }}
+                                <br /><br /><span style="margin-left: 150px"
+                                    ><b>{{ gst }}</b></span
+                                ><br />
+                                Less : <b> Rounding off Sale </b>
                             </span>
                         </td>
                         <td class="text-right" style="padding: 6px 4px">-</td>
@@ -301,8 +307,7 @@
                         class="text-center bold"
                         style="border-left: none; border-right: none"
                     >
-                        INR Three Lakh Forty Eight Thousand Nine Hundred Sixty
-                        Six Only
+                        INR {{total_in_words}}
                     </td>
                     <td class="bold text-right" style="border-left: none">
                         E. & O.E
@@ -313,8 +318,8 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 25%">HSN/SAC</th>
-                        <th style="width: 25%">HSN</th>
+                        <th style="width: 50%">HSN/SAC</th>
+
                         <th style="width: 12%">Taxable Value</th>
                         <th style="width: 8%">IGST<br />Rate</th>
                         <th style="width: 15%">IGST Amount</th>
@@ -324,7 +329,7 @@
                 <tbody>
                     <tr>
                         <td></td>
-                        <td></td>
+
                         <td class="text-right">{{ taxable_value }}</td>
                         <td class="text-center">{{ gst }}</td>
                         <td class="text-right">{{ gst_value }}</td>
@@ -334,9 +339,9 @@
                 <tfoot>
                     <tr>
                         <td class="bold">Total</td>
-                        <td class="text-right bold"></td>
-                        <td>{{ taxable_value }}</td>
+                        <td class="text-right bold">{{ taxable_value }}</td>
                         <td></td>
+
                         <td class="text-right bold">{{ gst_value }}</td>
                         <td class="text-right bold">{{ gst_value }}</td>
                     </tr>
@@ -363,7 +368,8 @@
                             font-size: 12px;
                         "
                     >
-                        for Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.){% now "Y-m-d" %} <br /><br /><br /><br />
+                        for Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.){% now
+                        "Y-m-d" %} <br /><br /><br /><br />
                         <div class="signature-line"></div>
                         Authorized Signatory
                     </td>

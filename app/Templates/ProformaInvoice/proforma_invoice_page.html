@@ -90,85 +90,86 @@
                         <span class="invalid-feedback" id="billing_gstin_no_error">This field is required</span>
                     </div>
                     
-                    <div class="col-md-12">
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold">Title</label>
-                            <select id="title" name="title" class="form-control">
-                                <option value="Select Title" selected disabled>Select Title</option>
-                                <option value="JobWork on Cylinder">JobWork on Cylinder</option>
-                                <option value="Copper Engraved Cylinder">Copper Engraved Cylinder</option>
-                            </select>
-                            <span class="invalid-feedback" id="title_error">This field is required</span>
-                        </div>
-                    </div>
                     
-                    <div class="col-md-4">
-                        <label for="job_name" class="form-label fw-semibold">Job Name</label>
-                        <select id="job_name" name="job_name" class="form-control">
-                            <option value="" selected disabled>Select Job Name</option>
-                            <option value="others">Other</option>
+                    <div id="job-container">
+                            <div class="row job-section border rounded p-3 mb-3">
+                                <div class="col-md-4">
+                                <label class="form-label fw-semibold">Title</label>
+                                <select id="title" name="title[]" class="form-control">
+                                    <option value="" selected disabled>Select Title</option>
+                                    <option value="JobWork on Cylinder">JobWork on Cylinder</option>
+                                    <option value="Copper Engraved Cylinder">Copper Engraved Cylinder</option>
+                                </select>
+                                <span class="invalid-feedback">This field is required</span>
+                                </div>
 
-                        </select>
-                        <input type="text" name="new_job" class="form-control" style="display: none;" id="new_job" placeholder="Enter new Job">
-                        <span class="invalid-feedback" id="job_name_error">This field is required</span>
-                    </div>
+                                <div class="col-md-4">
+                                    <label for="job_name" class="form-label fw-semibold">Job Name</label>
+                                    <select name="job_name[]" class="form-control job-name">
+                                    <option value="" selected disabled>Select Job Name</option>
+                                    <option value="Printing">Printing</option>
+                                    <option value="Packaging">Packaging</option>
+                                    <option value="others">Other</option>
+                                    </select>
 
-                    <div class="col-md-4">
-                        <label class="form-label fw-semibold">Pouch Open Size </label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="pouch_diameter" name="pouch_diameter" placeholder="Diameter (e.g. 50)" step="any" aria-label="Diameter"><br>
-                            <span class="invalid-feedback" id="pouch_diameter_error">This field is required</span>
-                            <input type="number" class="form-control" id="pouch_height" name="pouch_height" placeholder="Height (e.g. 100)" step="any" aria-label="Height"><br>
-                            <span class="invalid-feedback" id="pouch_height_error">This field is required</span>
-                        </div>
-                    </div>
+                                    <input type="text" name="new_job[]" class="form-control mt-2 new-job" style="display:none;" placeholder="Enter new Job">
+                                    <span class="invalid-feedback">This field is required</span>
+                                </div>
 
-                    <div class="col-md-4">
-                        <label for="cyl_size" class="form-label fw-semibold">Cylinder Size</label>
-                        <div class="input-group">
-                            <input type="number" class="form-control" id="cylinder_diameter" name="cylinder_diameter" placeholder="Diameter (e.g. 50)" step="any" aria-label="Diameter">
-                            <span class="invalid-feedback" id="cylinder_diameter_error">This field is required</span>
-                            <input type="number" class="form-control" id="cylinder_height" name="cylinder_height" placeholder="Height (e.g. 100)" step="any" aria-label="Height">
-                            <span class="invalid-feedback" id="cylinder_height_error">This field is required</span>
-                        </div>
-                    </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Pouch Open Size</label>
+                                    <div class="input-group">
+                                    <input type="number" class="form-control pouch-diameter" name="pouch_diameter[]" placeholder="Diameter (e.g. 50)" step="any">
+                                    <input type="number" class="form-control pouch-height" name="pouch_height[]" placeholder="Height (e.g. 100)" step="any">
+                                    <input type="hidden" class="pouch-open-size" name="pouch_open_size[]">
+                                    </div>
+                                </div>
 
-                    <div class="col-md-4">
-                        <label for="quantity" class="form-label fw-semibold">Quantity</label>
-                        <input type="number" class="form-control" step="any"  id="quantity" name="quantity" placeholder="Quantity" >
-                        <span class="invalid-feedback" id="quantity_error">This field is required</span>
-                    </div>
+                                <div class="col-md-4 mt-3">
+                                    <label class="form-label fw-semibold">Cylinder Size</label>
+                                    <div class="input-group">
+                                    <input type="number" class="form-control cylinder-diameter" name="cylinder_diameter[]" placeholder="Diameter (e.g. 50)" step="any">
+                                    <input type="number" class="form-control cylinder-height" name="cylinder_height[]" placeholder="Height (e.g. 100)" step="any">
+                                    <input type="hidden" class="cylinder-size" name="cylinder_size[]">
+                                    </div>
+                                </div>
 
+                                <div class="col-md-4 mt-3">
+                                <label for="quantity" class="form-label fw-semibold">Quantity</label>
+                                <input type="number" class="form-control" step="any" name="quantity[]" placeholder="Quantity">
+                                </div>
 
-                    <div class="col-md-4">
-                        <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
-                        <input type="number" class="form-control" step="any"  id="prpc_price" name="prpc_price" placeholder="Per Rate Per Cylinder"  >
-                        <span class="invalid-feedback" id="prpc_price_error">This field is required</span>
-                    </div>
-                    
-                    <div class="col-md-4 d-flex align-items-center accordion">
-                        <label for="gst" class="form-label fw-semibold">GST</label>
-                        <div class="form-check form-check-inline" id="sgst_div">
-                            <input class="form-check-input gst-checkbox" type="checkbox" name="gst[]" value="SGST - 9" id="sgst">
-                            <label class="form-check-label" for="sgst">
-                                SGST 9%
-                            </label> 
-                        </div>
-                        <div class="form-check form-check-inline" id="cgst_div">
-                            <input class="form-check-input gst-checkbox" type="checkbox" name="gst[]" value="CGST - 9" id="cgst">
-                            <label class="form-check-label" for="cgst">
-                                CGST 9%
-                            </label>
-                        </div>
-                        <div class="form-check form-check-inline " id="igst_div">
-                            <input class="form-check-input gst-checkbox" type="checkbox" name="gst[]" value="IGST - 18" id="igst">
-                            <label class="form-check-label" for="igst">
-                                IGST 18%
-                            </label>
-                        </div>
-                    </div>
-                        <input type="hidden" name="taxable_value"  id="taxable_value"  >
-                        <input type="hidden" name="gst_value"  id="gst_value"  >
+                                <div class="col-md-4 mt-3">
+                                <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
+                                <input type="number" class="form-control" step="any" name="prpc_price[]" placeholder="Per Rate Per Cylinder">
+                                
+                                </div>
+
+                                <div class="col-md-4 mt-3 d-flex align-items-center">
+                                <label class="form-label fw-semibold me-3">GST</label>
+                                <div class="form-check form-check-inline"id="sgst_div">
+                                    <input class="form-check-input gst-checkbox" type="checkbox" name="gst[]" value="SGST - 9">
+                                    <label class="form-check-label">SGST 9%</label>
+                                </div>
+                                <div class="form-check form-check-inline"id="cgst_div">
+                                    <input class="form-check-input gst-checkbox" type="checkbox" name="gst[]" value="CGST - 9">
+                                    <label class="form-check-label">CGST 9%</label>
+                                </div>
+                                <div class="form-check form-check-inline"id="igst_div">
+                                    <input class="form-check-input gst-checkbox" type="checkbox" name="gst[0][]" value="IGST - 18">
+                                    <label class="form-check-label">IGST 18%</label>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
+
+                            <!-- Add Button -->
+                            <div class="form-check form-check-inline">
+                            <button type="button" id="add-job" class="btn btn-primary d-flex align-items-center">
+                                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add New Job
+                            </button>
+                            </div>
+
                     <div class="col-md-9">
                         <label for="terms" class="form-label fw-semibold">Terms & Notes</label>
                         <input type="text" id="terms" name="terms" class="form-control" placeholder="e.g. Net 30, Delivery within 7 days">
@@ -219,7 +220,84 @@
 
 {% endblock main_block %}
 {% block script %}
+
 <script>
+$(document).ready(function() {
+    $('#billing_state_name, #company_name, #igst_div, #cgst_div, #sgst_div, input[name="gst[]"]').on('input change', function() {
+        var changedField = $(this).attr('id');
+        var billing_state_name = $('#billing_state_name').val();
+        var company_name = $('#company_name').val();
+        var igst = $('#igst').is(':checked') ? 18 : 0;
+        var cgst = $('#cgst').is(':checked') ? 9 : 0;
+        var sgst = $('#sgst').is(':checked') ? 9 : 0;
+
+       
+
+       
+        if (company_name === "others") {
+            $("#new_company").show();
+        } else {
+            $("#new_company").hide();
+        }
+
+       
+        if (billing_state_name === "Gujarat") {
+            $("#igst_div").hide();
+            $("#sgst_div").show();
+            $("#cgst_div").show();
+            igst = 0;
+        } else {
+            $("#igst_div").show();
+            $("#sgst_div").hide();
+            $("#cgst_div").hide();
+            sgst = 0;
+            cgst = 0;
+        }
+
+    
+
+ 
+        $.ajax({
+            url: "{% url 'proforma_invoice_ajax' %}",  
+            type: "GET",
+            data: {
+                billing_state_name: billing_state_name,
+                company_name: company_name,
+                igst: igst,
+                cgst: cgst,
+                sgst: sgst
+            },
+            success: function(response) {
+                console.log("AJAX response:", response);
+
+                if (changedField === 'company_name' && response.company_email) {
+                    $('#company_email').val(response.company_email);
+                    $('#company_contact').val(response.company_contact);
+                    $('#billing_address').val(response.billing_address);
+                }
+
+                if (response.total_amount !== undefined) {
+                    $('#total_amount').val(Number(response.total_amount).toFixed(2));
+                }
+                if (response.base_amount !== undefined) {
+                    $('#taxable_value').val(Number(response.base_amount).toFixed(2));
+                }
+                if (response.gst_amount !== undefined) {
+                    $('#gst_value').val(Number(response.gst_amount).toFixed(2));
+                }
+            },
+            error: function(xhr, status, error) {
+                console.log("Error status:", status);
+                console.log("Error details:", error);
+                console.log("Full response:", xhr.responseText);
+                alert("Server error: " + error);
+            }
+        });
+    });
+});
+</script>
+
+{% comment %} <script>
 $(document).ready(function() {
    
     $('#quantity, #prpc_price, #billing_state_name,#taxable_value, #gst_value, #company_name, #igst_div , #cgst_div #sgst_div, #job_name, input[name="gst[]"]').on('input change', function() {
@@ -234,10 +312,9 @@ $(document).ready(function() {
         var igst = $('#igst').is(':checked') ? 18 : 0;
         var cgst = $('#cgst').is(':checked') ? 9 : 0;
         var sgst = $('#sgst').is(':checked') ? 9 : 0;
+        console.log(billing_state_name)
         
         
-        console.log("This is Text",taxable_value)
-        console.log(company_name)
         if (company_name === "others") {
             $("#new_company").show();
         }else if (company_name === " "){
@@ -247,14 +324,7 @@ $(document).ready(function() {
             $("#new_company").hide();
         }
         
-        if (job_name === "others") {
-            $("#new_job").show();
-        }else if (job_name === ""){
-            $("#new_job").hide();
-        }
-         else {
-            $("#new_job").hide();
-        }
+       
         if (billing_state_name === "Gujarat") {
             $("#igst_div").hide(); 
             $("#sgst_div").show();
@@ -314,107 +384,73 @@ $(document).ready(function() {
         });
     });
 });
-</script>
+</script>  {% endcomment %}
+
+
+
+
 <script>
-$(function() {
-    var fields = [
-        'invoice_no','invoice_date','mode_payment','company_name','company_contact','company_email',
-        'billing_address','billing_state_name','billing_gstin_no','title','job_name',
-        'pouch_diameter','pouch_height','cylinder_diameter','cylinder_height',
-        'quantity','prpc_price','terms','total_amount','order_status','bank_details'
-    ];
+$(document).ready(function() {
+  let jobIndex = 1;
 
-    function isEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-    function isNumber(v){ return v !== "" && !isNaN(v); }
-
-    function validateAndToggleError(id) {
-        var $el = $('#' + id);
-        var val = $.trim($el.val());
-        var $err = $('#' + id + '_error');
-
-        // select placeholders that should be considered empty
-        if($el.is('select')) {
-            if(!val || val === 'Select Title' || val === 'all') { $err.show(); return false; }
-        }
-
-        if(id === 'company_contact') {
-            if(/^\d+$/.test(val)) { $err.hide(); return true; }
-            $err.show(); return false;
-        }
-
-        if(id === 'company_email') {
-            if(isEmail(val)) { $err.hide(); return true; }
-            $err.show(); return false;
-        }
-
-        if(id === 'pouch_diameter' || id === 'pouch_height') {
-            // hide individual pouch errors when both filled
-            var d = $.trim($('#pouch_diameter').val()), h = $.trim($('#pouch_height').val());
-            if(d !== "" && h !== "") { $('#pouch_diameter_error,#pouch_height_error').hide(); updatePouchOpenSize(); return true; }
-            if(val !== "") { $('#' + id + '_error').hide(); } else { $('#' + id + '_error').show(); }
-            return false;
-        }
-
-        if(id === 'cylinder_diameter' || id === 'cylinder_height') {
-            var d2 = $.trim($('#cylinder_diameter').val()), h2 = $.trim($('#cylinder_height').val());
-            if(d2 !== "" && h2 !== "") { $('#cylinder_diameter_error,#cylinder_height_error').hide(); updateCylinderSize(); return true; }
-            if(val !== "") { $('#' + id + '_error').hide(); } else { $('#' + id + '_error').show(); }
-            return false;
-        }
-
-        // generic check: non-empty
-        if(val !== "") { $err.hide(); return true; }
-        $err.show();
-        return false;
+    $(document).on('change', '.job-name', function() {
+    const section = $(this).closest('.job-section'); 
+    const newJobInput = section.find('.new-job');
+    if ($(this).val() === 'others') {
+        newJobInput.show();
+    } else {
+        newJobInput.hide().val('');
     }
-
-    // bind events
-    fields.forEach(function(id){
-        $('#' + id).on('input change keyup', function(){
-            validateAndToggleError(id);
-        });
     });
 
-    // GST checkboxes (if you add an error span with id "gst_error")
-    $('input[name="gst[]"]').on('change', function(){
-        var ok = $('input[name="gst[]"]:checked').length > 0;
-        var $err = $('#gst_error');
-        if($err.length) { if(ok) $err.hide(); else $err.show(); }
+    // 👇 add this small part
+    $(document).on('input', '.new-job', function() {
+    const section = $(this).closest('.job-section');
+    section.find('.job-name').attr('data-new-job', $(this).val());
     });
 
-    // Optionally validate on form submit and prevent submit if any required empty
-    $('#proformaInvoiceForm').on('submit', function(e){
-        var ok = true;
-        fields.forEach(function(id){
-            if(!validateAndToggleError(id)) ok = false;
-        });
-        if(!ok){
-            e.preventDefault();
-            $('html,body').animate({scrollTop: $('.text-danger:visible').first().offset().top - 80}, 200);
-        }
-    });
+  
+  $(document).on('input', '.pouch-diameter, .pouch-height', function() {
+    const section = $(this).closest('.job-section');
+    const diameter = section.find('.pouch-diameter').val();
+    const height = section.find('.pouch-height').val();
+    if (diameter && height) {
+      section.find('.pouch-open-size').val(`${diameter}x${height}`);
+      console.log("Pouch Open Size:", section.find('.pouch-open-size').val());
+    }
+  });
+
+
+    $(document).on('change', '.job_name', function() {
+    const section = $(this).closest('.job-section'); 
+    const newJobInput = section.find('.new-job');
+    if ($(this).val() === 'others') {
+      newJobInput.show();
+    } else {
+      newJobInput.hide().val(''); // hide and clear if not "Other"
+    }
+  });
+
+  $(document).on('input', '.cylinder-diameter, .cylinder-height', function() {
+    const section = $(this).closest('.job-section');
+    const diameter = section.find('.cylinder-diameter').val();
+    const height = section.find('.cylinder-height').val();
+    if (diameter && height) {
+      section.find('.cylinder-size').val(`${diameter}x${height}`);
+      console.log("Cylinder Size:", section.find('.cylinder-size').val());
+    }
+  });
+
+  $('#add-job').on('click', function(e) {
+    e.preventDefault();
+    let newSection = $('.job-section:first').clone();
+    newSection.find('input').val('');
+    newSection.find('select').prop('selectedIndex', 0);
+    newSection.find('.gst-checkbox').prop('checked', false);
+    $('#job-container').append(newSection);
+    jobIndex++;
+  });
 });
-</script>
-
-<script>
-         function updatePouchOpenSize() {
-    const diameter = document.getElementById('pouch_diameter').value;
-    const height = document.getElementById('pouch_height').value;
-    if(diameter && height) {
-        document.getElementById('pouch_open_size').value = diameter + 'x' + height;
-        console.log("Pouch Open Size:", document.getElementById('pouch_open_size').value); 
-    }
-}
-
-function updateCylinderSize() {
-    const diameter = document.getElementById('cylinder_diameter').value;
-    const height = document.getElementById('cylinder_height').value;
-    if(diameter && height) {
-        document.getElementById('cylinder_size').value = diameter + 'x' + height;
-        console.log("Cylinder Size:", document.getElementById('cylinder_size').value); // Debug log
-    }
-}
-
 </script>
 
 

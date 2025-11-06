@@ -1,11 +1,10 @@
-from ast import mod
 from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 from django.core.validators import validate_email
-from django.forms import CharField
-# from simple_history.models import HistoricalRecords
+
+
 
 
 # Create your models here.  
@@ -165,7 +164,7 @@ class ProformaInvoice(models.Model):
 
     id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    invoice_no = models.CharField(max_length=200, unique=True)
+    invoice_no = models.CharField(max_length=200)
     invoice_date = models.DateField()
     mode_payment = models.CharField(max_length=300,default="100%")
     company_name = models.CharField(max_length=300)
@@ -174,26 +173,28 @@ class ProformaInvoice(models.Model):
     billing_address = models.TextField()
     billing_gstin_no = models.CharField(max_length=100)
     billing_state_name = models.CharField(max_length=200, choices=INDIAN_STATES)
+    banking_details = models.TextField()
+    gst = models.CharField(max_length=200,blank=True, null=True)
+    taxable_value = models.CharField(max_length=200,blank=True, null=True)
+    gst_value = models.CharField(max_length=200,blank=True, null=True)
+    terms_note = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    total = models.CharField(max_length=200,blank=True, null=True)
+    def __str__(self):
+        return f"Proforma Invoice: {self.invoice_no}"
+
+        
+class ProformaJob(models.Model):
+    proforma_invoice = models.ForeignKey(ProformaInvoice,on_delete=models.CASCADE,related_name="job_details")
     title = models.CharField(max_length=200)
     job_name = models.CharField(max_length=200)
     quantity = models.CharField(max_length=200)
     pouch_open_size = models.CharField(max_length=200)
     cylinder_size = models.CharField(max_length=200)
     prpc_rate = models.CharField(max_length=200)
-    banking_details = models.TextField()
-    gst = models.CharField(max_length=200)
-    total = models.CharField()
-    taxable_value = models.CharField(max_length=200,blank=True, null=True)
-    gst_value = models.CharField(max_length=200,blank=True, null=True)
     
-    terms_note = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
     
-    def __str__(self):
-        return f"Proforma Invoice: {self.invoice_no}"
-
-        
-
+    
 
 class Company(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
