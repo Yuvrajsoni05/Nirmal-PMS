@@ -1193,3 +1193,5 @@ Traceback (most recent call last):
           ^^^^^^^^^^^^^^^^^
 AttributeError: 'QuerySet' object has no attribute 'name'
 ERROR 2025-11-05 12:21:23,182 myapp login_page Invalid Username or Password views.py
+ERROR 2025-11-07 10:19:38,375 myapp login_page Invalid Username or Password views.py
+ERROR 2025-11-07 18:36:39,344 myapp login_page Invalid Username or Password views.py

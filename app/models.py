@@ -1,8 +1,10 @@
+from ast import mod
 from pyexpat import model
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 from django.core.validators import validate_email
+from django.db.models.signals import pre_delete
 
 
 
@@ -175,7 +177,7 @@ class ProformaInvoice(models.Model):
     billing_state_name = models.CharField(max_length=200, choices=INDIAN_STATES)
     banking_details = models.TextField()
     gst = models.CharField(max_length=200,blank=True, null=True)
-    taxable_value = models.CharField(max_length=200,blank=True, null=True)
+    total_taxable_value = models.CharField(max_length=200,blank=True, null=True)
     gst_value = models.CharField(max_length=200,blank=True, null=True)
     terms_note = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -192,6 +194,23 @@ class ProformaJob(models.Model):
     pouch_open_size = models.CharField(max_length=200)
     cylinder_size = models.CharField(max_length=200)
     prpc_rate = models.CharField(max_length=200)
+    
+    @property
+    def taxable_value(self):
+        try:
+            return float(self.prpc_rate) * float(self.quantity)
+        except TypeError:
+            return None 
+    
+    def __str__(self):
+        return f"{self.title} {self.taxable_value}"
+    
+    
+    
+    
+    
+    
+    
     
     
     

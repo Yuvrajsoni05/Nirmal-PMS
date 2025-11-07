@@ -68,8 +68,9 @@
                                     <th scope="col">Cylinder Size</th>
                                     <th scope="col">Quantity</th>
                                     <th scope="col">PRPC Rate</th>
-                                    <th scope="col">GST</th>
                                     <th scope="col">Taxable Value</th>
+                                    <th scope="col">GST</th>
+                                    <th scope="col">Total Taxable Value</th>
                                     <th scope="col">Gst Value</th>
                                     <th scope="col">Total Amount</th>
                                     <th scope="col" colspan="3">Actions</th>
@@ -77,11 +78,11 @@
                             </thead>
                             <tbody>
                                 {% for proforma in proformaInvoices %}
+                                
                                 <tr class="text-nowrap text-center">
                                     <td
                                         data-bs-toggle="modal"
-                                        data-bs-target="#viewModal{{ i.id }}"
-                                    >
+                                        data-bs-target="#viewModal{{ i.id }}">
                                         {{ forloop.counter}}
                                     </td>
                                     <td>{{ proforma.invoice_no }}</td>
@@ -94,25 +95,49 @@
                                     <td data-bs-toggle="modal" data-bs-target="#billing_addressModel{{proforma.id}}" title="{{proforma.id}}"  class="text-truncate">{{ proforma.billing_address|truncatechars:30 }}</td>
                                     <td>{{ proforma.billing_gstin_no }}</td>
                                     <td>{{ proforma.billing_state_name }}</td>
-                                    <td title="{{ proforma.title }}">
-                                        {{ proforma.title }}
+                                    <td>
+                                    {% for job in proforma.job_details.all %}
+                                        <div>{{ job.title }}</div>
+                                    {% endfor %}
                                     </td>
 
-                                    <td title="{{ proforma.job_name }}">
-                                         {% for job in proforma.job_details.all %}
-                                            <div>{{ job }}</div>
-                                        {% endfor %}
-                                    </td>
-                                    <td>{{ proforma.pouch_open_size }}</td>
-                                    <td>{{ proforma.cylinder_size }}</td>
-                                    <td>{{ proforma.quantity }}</td>
-                                    <td>{{ proforma.prpc_rate }}</td>
                                     <td>
-                                        {% for gst in proforma.gst %}
-                                        <span>{{ gst }}  &nbsp; </span>
+                                    {% for job in proforma.job_details.all %}
+                                        <div>{{ job.job_name }}</div>
+                                    {% endfor %}
+                                </td>
+                                    <td>
+                                        {% for job in proforma.job_details.all %}
+                                            <div>{{ job.pouch_open_size }}</div>
                                         {% endfor %}
                                     </td>
-                                    <td> {{proforma.taxable_value }} </td>
+                                    <td>
+                                        {% for job in proforma.job_details.all %}
+                                            <div>{{ job.cylinder_size }}</div>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% for job in proforma.job_details.all %}
+                                            <div>{{ job.quantity }}</div>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% for job in proforma.job_details.all %}
+                                            <div>{{ job.prpc_rate }}</div>
+                                        {% endfor %}
+                                    </td>
+                                     <td>
+                                        {% for job in proforma.job_details.all %}
+                                            <div>{{ job.taxable_value }}</div>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                    {% for gst in proforma.gst %}
+                                    <span>{{ gst }}  &nbsp; </span>
+                                    {% endfor %}
+                                    </td>
+                                   
+                                    <td> {{proforma.total_taxable_value }} </td>
                                     <td> {{proforma.gst_value }} </td>
                                     <td>{{ proforma.total }}</td>
 
@@ -276,7 +301,7 @@
                                         </div>
                                     </div>
                                     <!-- Proforma Invoice Update Modal -->
-                                    <div class="modal fade" id="proformaupdate{{ proforma.id }}" tabindex="-1" aria-hidden="true">
+                                    {% comment %} <div class="modal fade" id="proformaupdate{{ proforma.id }}" tabindex="-1" aria-hidden="true">
                                         <div class="modal-dialog modal-xl modal-dialog-centered">
                                             <div class="modal-content">
                                                 <!-- Modal Header -->
@@ -440,7 +465,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> {% endcomment %}
+
+
+
                                     <!-- Email Modal -->
                                    <div class="modal fade" id="proformaemailModal{{ i.id }}" tabindex="-1" aria-labelledby="emailModalLabel{{ i.id }}" aria-hidden="true">
                                     <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -541,59 +569,80 @@
                                                         </div>
                                                     </div>
 
-                                                    <!-- Job -->
-                                                    <div class="col-md-6">
-                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_job_name" value="1" checked>
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Job Name:</label>
-                                                            <input type="text" class="form-control form-control-sm fs-6" name="job_name" value="{{ proforma.job_name }}" readonly>
-                                                        </div>
-                                                    </div>
+                                                    
+                                                   {% for job in proforma.job_details.all %}
+                                                    <div class="col-md-12 mb-4">
+                                                        <div class="card shadow-sm border-0">
+                                                            <div class="card-header text-black fw-bold">
+                                                                Job {{ forloop.counter }} — {{ job.job_name }}
+                                                            </div>
+                                                            <div class="card-body bg-light">
+                                                                <div class="row g-3">
+                                                                    <!-- Job Name -->
+                                                                    <div class="col-md-6">
+                                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                                            <input class="form-check-input me-3" type="checkbox" name="include_job_name" value="1" checked>
+                                                                            <label class="fw-bold me-3 mb-0 fs-6">Job Name:</label>
+                                                                            <input type="text" class="form-control form-control-sm fs-6" name="job_name" value="{{ job.job_name }}" readonly>
+                                                                        </div>
+                                                                    </div>
 
-                                                    <!-- Title -->
-                                                    <div class="col-md-6">
-                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_title" value="1" checked>
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Title:</label>
-                                                            <input type="text" class="form-control form-control-sm fs-6" name="title" value="{{ proforma.title }}" readonly>
-                                                        </div>
-                                                    </div>
+                                                                    <!-- Title -->
+                                                                    <div class="col-md-6">
+                                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                                            <input class="form-check-input me-3" type="checkbox" name="include_title" value="1" checked>
+                                                                            <label class="fw-bold me-3 mb-0 fs-6">Title:</label>
+                                                                            <input type="text" class="form-control form-control-sm fs-6" name="title" value="{{ job.title }}" readonly>
+                                                                        </div>
+                                                                    </div>
 
-                                                    <!-- Qty, Pouch, Cylinder -->
-                                                    <div class="col-md-4">
-                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_quantity" value="1" checked>
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Quantity:</label>
-                                                            <input type="text" class="form-control form-control-sm fs-6" name="quantity" value="{{ proforma.quantity }}" readonly>
+                                                                    <!-- Quantity -->
+                                                                    <div class="col-md-4">
+                                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                                            <input class="form-check-input me-3" type="checkbox" name="include_quantity" value="1" checked>
+                                                                            <label class="fw-bold me-3 mb-0 fs-6">Quantity:</label>
+                                                                            <input type="text" class="form-control form-control-sm fs-6" name="quantity" value="{{ job.quantity }}" readonly>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Pouch Open Size -->
+                                                                    <div class="col-md-4">
+                                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                                            <input class="form-check-input me-3" type="checkbox" name="include_pouch_open_size" value="1" checked>
+                                                                            <label class="fw-bold me-3 mb-0 fs-6">Pouch Open Size:</label>
+                                                                            <input type="text" class="form-control form-control-sm fs-6" name="pouch_open_size" value="{{ job.pouch_open_size }}" readonly>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Cylinder Size -->
+                                                                    <div class="col-md-4">
+                                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                                            <input class="form-check-input me-3" type="checkbox" name="include_cylinder_size" value="1" checked>
+                                                                            <label class="fw-bold me-3 mb-0 fs-6">Cylinder Size:</label>
+                                                                            <input type="text" class="form-control form-control-sm fs-6" name="cylinder_size" value="{{ job.cylinder_size }}" readonly>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Per Cylinder Rate -->
+                                                                    <div class="col-md-4">
+                                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                                            <input class="form-check-input me-3" type="checkbox" name="include_prpc_rate" value="1" checked>
+                                                                            <label class="fw-bold me-3 mb-0 fs-6">Per Cylinder Rate:</label>
+                                                                            <input type="text" class="form-control form-control-sm fs-6" name="prpc_rate" value="{{ job.prpc_rate }}" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
-                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_pouch_open_size" value="1" checked>
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Pouch Open Size:</label>
-                                                            <input type="text" class="form-control form-control-sm fs-6" name="pouch_open_size" value="{{ proforma.pouch_open_size }}" readonly>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_cylinder_size" value="1" checked>
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Cylinder Size:</label>
-                                                            <input type="text" class="form-control form-control-sm fs-6" name="cylinder_size" value="{{ proforma.cylinder_size }}" readonly>
-                                                        </div>
-                                                    </div>
+                                                    {% endfor %}
 
                                                     <!-- Rate, Taxable, GST -->
-                                                    <div class="col-md-4">
-                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_prpc_rate" value="1" checked>
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Per Cylinder Rate:</label>
-                                                            <input type="text" class="form-control form-control-sm fs-6" name="prpc_rate" value="{{ proforma.prpc_rate }}" readonly>
-                                                        </div>
-                                                    </div>
+                                                    
                                                     <div class="col-md-4">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                             <input class="form-check-input me-3" type="checkbox" name="include_taxable_value" value="1" checked>
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Taxable Value:</label>
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Total Taxable Value:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="taxable_value" value="{{ proforma.taxable_value }}" readonly>
                                                         </div>
                                                     </div>
@@ -774,43 +823,6 @@
 
 <script src="{% static 'js/proforma.js' %}"></script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(document).ready(function() {
-  let jobIndex = 1; // to handle unique gst[] names
 
-  $('#add-job').on('click', function(e) {
-    e.preventDefault();
-
-    // Clone the first job section
-    let newSection = $('.job-section:first').clone();
-
-    // Clear all inputs
-    newSection.find('input').val('');
-    newSection.find('select').prop('selectedIndex', 0);
-    newSection.find('.gst-checkbox').prop('checked', false);
-
-    // Update GST input names for each new section
-    newSection.find('.gst-checkbox').each(function() {
-      $(this).attr('name', `gst[${jobIndex}][]`);
-    });
-
-    jobIndex++;
-
-    // Append cloned section to container
-    $('#job-container').append(newSection);
-  });
-
-  // Show "new job" input when "Other" is selected
-  $(document).on('change', 'select[name="job_name[]"]', function() {
-    const $input = $(this).siblings('input[name="new_job[]"]');
-    if ($(this).val() === 'others') {
-      $input.show();
-    } else {
-      $input.hide().val('');
-    }
-  });
-});
-</script>
 
 {% endblock script %}

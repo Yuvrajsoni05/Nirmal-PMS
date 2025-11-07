@@ -13,6 +13,7 @@ from turtle import title
 from PIL import Image
 from django.views.decorators.http import require_GET
 from django.db import utils
+
 from pyparsing import C
 from regex import P
 
@@ -1686,13 +1687,14 @@ def ViewProformaInvoice(request):
     end_date =  request.GET.get("end_date")
     select_company = request.GET.get('select_company',"")
     states = ProformaInvoice.INDIAN_STATES
-    
+
     if start_date and end_date:
          proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date])
     
     if select_company and select_company.strip(): 
         proformaInvoice = proformaInvoice.filter(company_name__icontains=select_company.strip())
-        
+    
+    
         
     P = Paginator(proformaInvoice,5)
     page = request.GET.get("page")
@@ -1772,8 +1774,6 @@ def UpdateProformaInvoice(request,proforma_id):
 def ProformaSendMail(request):
     if request.method == 'POST':
         company_email  =  request.POST.get('company_email')
-        
-        
         fields_to_send_mail = {
             'invoice_no' : 'include_invoice_no',
             'invoice_date' : 'include_invoice_date',
@@ -1859,19 +1859,18 @@ def ProformaInvoiceCreate(request):
         banking_details = request.POST.get("bank_details","")
         new_company = request.POST.get("new_company","")
         
-            
-            
         title = request.POST.getlist("title[]")
         job_names = request.POST.getlist("job_name[]")
-        new_job = request.POST.getlist("new_job[]")
+        
         quantities = request.POST.getlist("quantity[]")
         pouch_open_sizes = request.POST.getlist("pouch_open_size[]")
         cylinder_sizes = request.POST.getlist("cylinder_size[]")
         prpc_price = request.POST.getlist("prpc_price[]")
         gst_list = request.POST.getlist("gst[]")
-        
-        
-
+        gst_value  = request.POST.get("gst_value")
+        taxable_value = request.POST.get("taxable_value")
+        if company_name == "" or new_company != "":
+            company_name = new_company
     
         if ProformaInvoice.objects.filter(invoice_no=invoice_no).exists():
             messages.error(request,"Invoice number already exists",extra_tags="custom-success-style")
@@ -1891,14 +1890,14 @@ def ProformaInvoiceCreate(request):
                 terms_note  = terms,
                 banking_details = banking_details,
                 gst = gst_list,
-                gst_value = '11',
-                taxable_value = '12'
+                total = totals,
+                gst_value = gst_value,
+                total_taxable_value =  taxable_value
+             
                 
             )
             print(len(job_names))
             for i in range(len(job_names)):
-                # if job_names[i].strip() == "" :
-                #     continue
                 ProformaJob.objects.create(
                     proforma_invoice = proforma,
                     title = title[i],
@@ -1906,8 +1905,8 @@ def ProformaInvoiceCreate(request):
                     quantity=quantities[i],
                     pouch_open_size=pouch_open_sizes[i],
                     cylinder_size=cylinder_sizes[i],
-                    prpc_rate=prpc_price[i],
-                
+                    prpc_rate=prpc_price[i]
+
                 )
             messages.success(request, "Proforma Invoice Created Successfully!")
             return redirect("proforma_invoice_page")           
@@ -1928,8 +1927,7 @@ def ProformaInvoiceCreate(request):
         
         
         
-        # if company_name == "" or new_company != "":
-        #     company_name = new_company
+        
         # if job_name == "" or new_job != "":
         #     job_name = new_job
               
@@ -2026,47 +2024,48 @@ def ProformaInvoicePageAJAX(request):
     igst = request.GET.get('igsts')
     cgst = request.GET.get('cgsts')
     sgst = request.GET.get('sgsts')
-    quantity = request.GET.get("quantity","0")
-    prpc_price = request.GET.get("prpc_price","0")
+    quantities = request.GET.getlist('quantities[]')
+    prpc_prices = request.GET.getlist('prpc_prices[]') 
+
     company_name = request.GET.get("company_name", "")
-    if quantity == "" or prpc_price == "":
-        quantity = 0
-        prpc_price = 0
+
         
 
+    gst = int(igst) + int(cgst) + int(sgst)
     
-    # quantity = float(quantity)
-    # prpc_price = float(prpc_price)
-    # base_amount = quantity * prpc_price
-    # gst_amount = base_amount * (gst/100)
+    quantities = [float(quantity) for quantity in quantities if quantity]
+   
+    prpc_prices = [float(prpc_price) for prpc_price in prpc_prices if prpc_price  ]
+   
+    # total_quantities = sum(quantities)
+    # total_prpc_prices = sum(prpc_prices)
     
+    taxable_value = sum(quantity * prpc_price for quantity, prpc_price in zip(quantities, prpc_prices))
+    gst_amount = taxable_value * (gst/100)
+    total_amount = taxable_value + gst_amount
     
-    # print("This is Total",base_amount)
-    # print("This GST ",gst_amount)
-    # total_amount = base_amount + gst_amount
-    
-    # total_amount = round(total_amount, 2)
-    job = ""
+    total_amount = round(total_amount, 2)
+    job_list = []
     company_contact = ""
     company_email = ""
     billing_address = ""
     if company_name:
-        # job = list(
-        #     ProformaInvoice.objects.filter(company_name__iexact=company_name)
-        #     .values("job_name")
-        #     .distinct()
-        #     .union(
-        #         CDRDetail.objects.filter(company_name__iexact=company_name)
-        #         .values("job_name")
-        #         .distinct()
-        #     )
-        #   .union(
-        #         Job_detail.objects.filter(company_name__iexact=company_name)
-        #         .values("job_name")
-        #         .distinct()
-        #     )
-        # )
+    
+        demo = list(ProformaJob.objects.values("job_name").distinct())
 
+        job = list(
+            CDRDetail.objects.filter(company_name__iexact=company_name)
+            .values("job_name")
+            .distinct()
+            .union(
+                Job_detail.objects.filter(company_name__iexact=company_name)
+                .values("job_name")
+                .distinct()
+            )
+        )
+
+        job_list = job + demo
+        
         company_contact = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_contact").distinct())
         
         company_email = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_email").distinct().union(
@@ -2081,16 +2080,17 @@ def ProformaInvoicePageAJAX(request):
         billing_address = billing_address[0]['billing_address'] if billing_address else ''
     else:
         company_name = ""
+        
     
    
     context = {
-        # "total_amount": total_amount,
-            #    "job":job,
+            "total_amount": total_amount,
+                "job":job_list,
                 "company_contact":company_contact,
                 "company_email":company_email,
                 "billing_address":billing_address,         
-                # "base_amount":base_amount,
-                # "gst_amount":gst_amount
+                "taxable_value":taxable_value,
+                "gst_amount":gst_amount
                }
     logger.debug(f"AJAX context: {context}")
    
