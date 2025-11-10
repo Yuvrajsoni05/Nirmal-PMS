@@ -183,6 +183,7 @@
                                             }
                                         </script>
 
+                                        
                                         <!-- Modal -->
                                         <div class="modal fade" id="confirmationModal" tabindex="-1"aria-labelledby="confirmationModalLabel" aria-hidden="true">
                                             <div class="modal-dialog">
@@ -223,12 +224,8 @@
                                             </div>
                                         </div>
 
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-outline-primary"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#proformaupdate{{ proforma.id }}"
-                                        >
+                                        {% comment %} <button
+                                            type="button"class="btn btn-sm btn-outline-primary"data-bs-toggle="modal"data-bs-target="#proformaupdate{{ proforma.id }}">
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 width="16"
@@ -245,12 +242,12 @@
                                                     d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
                                                 />
                                             </svg>
-                                        </button>
+                                        </button> {% endcomment %}
                                         <button
                                             type="button"
                                             class="btn btn-sm btn-outline-success"
                                             data-bs-toggle="modal"
-                                            data-bs-target="#proformaemailModal{{ i.id }}"
+                                            data-bs-target="#proformaemailModal{{ proforma.id }}"
                                         >
                                             <svg
                                                 xmlns="http://www.w3.org/2000/svg"
@@ -470,7 +467,7 @@
 
 
                                     <!-- Email Modal -->
-                                   <div class="modal fade" id="proformaemailModal{{ i.id }}" tabindex="-1" aria-labelledby="emailModalLabel{{ i.id }}" aria-hidden="true">
+                                   <div class="modal fade" id="proformaemailModal{{ proforma.id }}" tabindex="-1" aria-labelledby="emailModalLabel{{ i.id }}" aria-hidden="true">
                                     <div class="modal-dialog modal-xl modal-dialog-centered">
                                         <div class="modal-content border-0 shadow-lg">
                                         
@@ -491,7 +488,7 @@
                                                     <!-- Invoice Number -->
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_invoice_no" value="1" checked>
+                                                           
                                                             <label class="fw-bold me-3 mb-0 fs-6">Invoice No:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="invoice_no" value="{{ proforma.invoice_no }}" readonly>
                                                         </div>
@@ -500,7 +497,7 @@
                                                     <!-- Invoice Date -->
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_invoice_date" value="1" checked>
+                                                           
                                                             <label class="fw-bold me-3 mb-0 fs-6">Date:</label>
                                                             <input type="date" class="form-control form-control-sm w-auto fs-6" name="invoice_date" value="{{ proforma.invoice_date|date:'Y-m-d' }}">
                                                         </div>
@@ -509,7 +506,7 @@
                                                     <!-- Company Name -->
                                                     <div class="col-md-12">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_company_name" value="1" checked>
+                                                          
                                                             <label class="fw-bold me-3 mb-0 fs-6">Company Name:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="company_name" value="{{ proforma.company_name }}" readonly>
                                                         </div>
@@ -518,7 +515,7 @@
                                                     <!-- Company Email -->
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_company_email" value="1" checked>
+                                                           
                                                             <label class="fw-bold me-3 mb-0 fs-6">Company Email:</label>
                                                             <input type="email" class="form-control form-control-sm fs-6" name="company_email" value="{{ proforma.company_email }}">
                                                         </div>
@@ -527,7 +524,7 @@
                                                     <!-- Company Contact -->
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_company_contact" value="1" checked>
+                                                       
                                                             <label class="fw-bold me-3 mb-0 fs-6">Company Contact:</label>
                                                             <input type="tel" class="form-control form-control-sm fs-6" name="company_contact" value="{{ proforma.company_contact }}">
                                                         </div>
@@ -536,7 +533,7 @@
                                                     <!-- GSTIN -->
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_billing_gstin_no" value="1" checked>
+                                                           
                                                             <label class="fw-bold me-3 mb-0 fs-6">GSTIN:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="billing_gstin_no" value="{{ proforma.billing_gstin_no }}" readonly>
                                                         </div>
@@ -545,7 +542,7 @@
                                                     <!-- State -->
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_billing_state_name" value="1" checked>
+                                                        
                                                             <label class="fw-bold me-3 mb-0 fs-6">State:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="billing_state_name" value="{{ proforma.billing_state_name }}" readonly>
                                                         </div>
@@ -554,7 +551,7 @@
                                                     <!-- Billing Address -->
                                                     <div class="col-md-12">
                                                         <div class="d-flex bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3 mt-1" type="checkbox" name="include_billing_address" value="1" checked>
+                                                     
                                                             <label class="fw-bold me-3 mb-0 fs-6">Address:</label>
                                                             <textarea class="form-control form-control-sm fs-6" name="billing_address" rows="2">{{ proforma.billing_address }}</textarea>
                                                         </div>
@@ -563,7 +560,7 @@
                                                     <!-- Payment Mode -->
                                                     <div class="col-md-12">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_mode_payment" value="1" checked>
+                                                        
                                                             <label class="fw-bold me-3 mb-0 fs-6">Payment Mode:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="mode_payment" value="{{ proforma.mode_payment }}" readonly>
                                                         </div>
@@ -581,7 +578,7 @@
                                                                     <!-- Job Name -->
                                                                     <div class="col-md-6">
                                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                                            <input class="form-check-input me-3" type="checkbox" name="include_job_name" value="1" checked>
+                                                                         
                                                                             <label class="fw-bold me-3 mb-0 fs-6">Job Name:</label>
                                                                             <input type="text" class="form-control form-control-sm fs-6" name="job_name" value="{{ job.job_name }}" readonly>
                                                                         </div>
@@ -590,7 +587,7 @@
                                                                     <!-- Title -->
                                                                     <div class="col-md-6">
                                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                                            <input class="form-check-input me-3" type="checkbox" name="include_title" value="1" checked>
+                                                                 
                                                                             <label class="fw-bold me-3 mb-0 fs-6">Title:</label>
                                                                             <input type="text" class="form-control form-control-sm fs-6" name="title" value="{{ job.title }}" readonly>
                                                                         </div>
@@ -599,7 +596,7 @@
                                                                     <!-- Quantity -->
                                                                     <div class="col-md-4">
                                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                                            <input class="form-check-input me-3" type="checkbox" name="include_quantity" value="1" checked>
+                                                                           
                                                                             <label class="fw-bold me-3 mb-0 fs-6">Quantity:</label>
                                                                             <input type="text" class="form-control form-control-sm fs-6" name="quantity" value="{{ job.quantity }}" readonly>
                                                                         </div>
@@ -608,7 +605,7 @@
                                                                     <!-- Pouch Open Size -->
                                                                     <div class="col-md-4">
                                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                                            <input class="form-check-input me-3" type="checkbox" name="include_pouch_open_size" value="1" checked>
+                                                                          
                                                                             <label class="fw-bold me-3 mb-0 fs-6">Pouch Open Size:</label>
                                                                             <input type="text" class="form-control form-control-sm fs-6" name="pouch_open_size" value="{{ job.pouch_open_size }}" readonly>
                                                                         </div>
@@ -617,7 +614,7 @@
                                                                     <!-- Cylinder Size -->
                                                                     <div class="col-md-4">
                                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                                            <input class="form-check-input me-3" type="checkbox" name="include_cylinder_size" value="1" checked>
+                                                                           
                                                                             <label class="fw-bold me-3 mb-0 fs-6">Cylinder Size:</label>
                                                                             <input type="text" class="form-control form-control-sm fs-6" name="cylinder_size" value="{{ job.cylinder_size }}" readonly>
                                                                         </div>
@@ -626,9 +623,18 @@
                                                                     <!-- Per Cylinder Rate -->
                                                                     <div class="col-md-4">
                                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                                            <input class="form-check-input me-3" type="checkbox" name="include_prpc_rate" value="1" checked>
+                                                                          
                                                                             <label class="fw-bold me-3 mb-0 fs-6">Per Cylinder Rate:</label>
                                                                             <input type="text" class="form-control form-control-sm fs-6" name="prpc_rate" value="{{ job.prpc_rate }}" readonly>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <!-- Total Taxable Value  -->
+                                                                    <div class="col-md-4">
+                                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                                  
+                                                                            <label class="fw-bold me-3 mb-0 fs-6">Taxable Value:</label>
+                                                                            <input type="text" class="form-control form-control-sm fs-6" name="taxable_value" value="{{ job.taxable_value }}" readonly>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -641,14 +647,14 @@
                                                     
                                                     <div class="col-md-4">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_taxable_value" value="1" checked>
+                                                          
                                                             <label class="fw-bold me-3 mb-0 fs-6">Total Taxable Value:</label>
-                                                            <input type="text" class="form-control form-control-sm fs-6" name="taxable_value" value="{{ proforma.taxable_value }}" readonly>
+                                                            <input type="text" class="form-control form-control-sm fs-6" name="total_taxable_value" value="{{ proforma.total_taxable_value }}" readonly>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_gst" value="1" checked>
+                                                          
                                                             <label class="fw-bold me-3 mb-0 fs-6">GST:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="gst" value="{% for gst in proforma.gst %}{{ gst }} {% endfor %}" readonly>
                                                         </div>
@@ -657,24 +663,25 @@
                                                     <!-- GST Value & Total -->
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_gst_value" value="1" checked>
+                                                           
                                                             <label class="fw-bold me-3 mb-0 fs-6">GST Value:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="gst_value" value="{{ proforma.gst_value }}" readonly>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_total" value="1" checked>
+                                                           
                                                             <label class="fw-bold me-3 mb-0 fs-6">Total:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="total" value="{{ proforma.total }}" readonly>
-                                                            <input type="hidden" name="total_in_words" value="{{proforma.total_in_words}}" >
+                                                            <input type="hidden" class="form-control form-control-sm fs-6" name="total_in_words" value="{{ proforma.total_worlds }}" readonly>
+                                                          
                                                         </div>
                                                     </div>
 
                                                     <!-- Banking -->
                                                     <div class="col-md-12">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3" type="checkbox" name="include_banking_details" value="1" checked>
+                                                        
                                                             <label class="fw-bold me-3 mb-0 fs-6">Banking:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="banking_details" value="{{ proforma.banking_details }}" readonly>
                                                         </div>
@@ -683,7 +690,7 @@
                                                     <!-- Terms -->
                                                     <div class="col-md-12">
                                                         <div class="d-flex bg-white p-3 rounded">
-                                                            <input class="form-check-input me-3 mt-1" type="checkbox" name="include_term_note" value="1" checked>
+                                                          
                                                             <label class="fw-bold me-3 mb-0 fs-6">Terms:</label>
                                                             <textarea class="form-control form-control-sm fs-6" name="term_note" rows="3">{{ proforma.terms_note }}</textarea>
                                                         </div>
@@ -695,31 +702,39 @@
                                                 <div class="mt-4 d-flex justify-content-end gap-2">
                                                     <button type="button" class="btn btn-outline-secondary  px-4" data-bs-dismiss="modal">Close</button>
                                                     <button type="submit" class="btn btn-primary  px-4">Send Mail</button>
-                                                   <button type="button"
-                                                        class="btn btn-info px-4"
-                                                        onclick="printProforma(this)"
-                                                        data-id="{{ proforma.id }}"
-                                                        data-gst="{{ proforma.gst|join:', ' }}"
-                                                        data-invoice_no="{{ proforma.invoice_no }}"
-                                                        data-invoice_date="{{ proforma.invoice_date|date:'Y-m-d' }}"
-                                                        data-company_name="{{ proforma.company_name }}"
-                                                        data-company_email="{{ proforma.company_email }}"
-                                                        data-company_contact="{{ proforma.company_contact }}"
-                                                        data-billing_gstin_no="{{ proforma.billing_gstin_no }}"
-                                                        data-billing_state_name="{{ proforma.billing_state_name }}"
-                                                        data-billing_address="{{ proforma.billing_address }}"
-                                                        data-mode_payment="{{ proforma.mode_payment }}"
-                                                        data-job_name="{{ proforma.job_name }}"
-                                                        data-title="{{ proforma.title }}"
-                                                        data-quantity="{{ proforma.quantity }}"
-                                                        data-pouch_open_size="{{ proforma.pouch_open_size }}"
-                                                        data-cylinder_size="{{ proforma.cylinder_size }}"
-                                                        data-prpc_rate="{{ proforma.prpc_rate }}"
-                                                        data-taxable_value="{{ proforma.taxable_value }}"
-                                                        data-gst_value="{{ proforma.gst_value }}"
-                                                        data-total="{{ proforma.total }}"
-                                                        data-banking_details="{{ proforma.banking_details }}"
-                                                        data-terms_note="{{ proforma.terms_note }}">
+                                                  <button type="button"
+                                                    class="btn btn-info px-4"
+                                                    onclick="printProforma(this)"
+                                                    data-id="{{ proforma.id }}"
+                                                    data-invoice_no="{{ proforma.invoice_no }}"
+                                                    data-invoice_date="{{ proforma.invoice_date|date:'Y-m-d' }}"
+                                                    data-company_name="{{ proforma.company_name }}"
+                                                    data-company_email="{{ proforma.company_email }}"
+                                                    data-company_contact="{{ proforma.company_contact }}"
+                                                    data-billing_gstin_no="{{ proforma.billing_gstin_no }}"
+                                                    data-billing_state_name="{{ proforma.billing_state_name }}"
+                                                    data-billing_address="{{ proforma.billing_address|escapejs }}"
+                                                    data-mode_payment="{{ proforma.mode_payment }}"
+                                                    data-total_taxable_value="{{ proforma.total_taxable_value }}"
+                                                    data-gst="{{ proforma.gst|join:', ' }}"
+                                                    data-gst_value="{{ proforma.gst_value }}"
+                                                    data-total="{{ proforma.total }}"
+                                                    data-banking_details="{{ proforma.banking_details|escapejs }}"
+                                                    data-terms_note="{{ proforma.terms_note|escapejs }}"
+                                                    data-total_in_worlds = "{{proforma.total_worlds }}"
+                                                    data-jobs='[
+                                                        {% for job in proforma.job_details.all %}
+                                                        {
+                                                            "job_name": "{{ job.job_name|escapejs }}",
+                                                            "title": "{{ job.title|escapejs }}",
+                                                            "quantity": "{{ job.quantity }}",
+                                                            "pouch_open_size": "{{ job.pouch_open_size|escapejs }}",
+                                                            "cylinder_size": "{{ job.cylinder_size|escapejs }}",
+                                                            "prpc_rate": "{{ job.prpc_rate }}",
+                                                            "taxable_value": "{{ job.taxable_value }}"
+                                                        }{% if not forloop.last %},{% endif %}
+                                                        {% endfor %}
+                                                    ]'>
                                                     Print
                                                 </button>
                                                 </div>

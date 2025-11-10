@@ -1,19 +1,21 @@
 from ast import Import
 from calendar import c
 from ctypes import util
+
 import email
 from email.mime import image
 from genericpath import isfile
 from io import BytesIO
-from math import nan
+import math
 from multiprocessing import context
+from operator import itruediv
 from pydoc import pager
 from traceback import print_tb
 from turtle import title
 from PIL import Image
 from django.views.decorators.http import require_GET
 from django.db import utils
-
+from num2words import num2words
 from pyparsing import C
 from regex import P
 
@@ -1675,8 +1677,10 @@ def ProformaInvoicePage(request):
         ProformaInvoice.objects.values("company_name").distinct()
     )
     states = ProformaInvoice.INDIAN_STATES
+    invoice_status = ProformaInvoice.Invoice_Status
     context = {"company_list":company_list,
-               "states":states
+               "states":states,
+               "invoice_status":invoice_status
     }
     return render(request, "ProformaInvoice/proforma_invoice_page.html",context=context)
 
@@ -1687,6 +1691,7 @@ def ViewProformaInvoice(request):
     end_date =  request.GET.get("end_date")
     select_company = request.GET.get('select_company',"")
     states = ProformaInvoice.INDIAN_STATES
+    invoice_status = ProformaInvoice.Invoice_Status
 
     if start_date and end_date:
          proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date])
@@ -1718,7 +1723,8 @@ def ViewProformaInvoice(request):
         "nums" :nums,
         "proformaInvoices": proformaInvoice,
         "company_name":company_name,
-        "states":states
+        "states":states,
+        "invoice_status":invoice_status
     }
     return render(request, "ProformaInvoice/view_proforma_invoice.html",context=context)
 
@@ -1773,44 +1779,76 @@ def UpdateProformaInvoice(request,proforma_id):
 @custom_login_required
 def ProformaSendMail(request):
     if request.method == 'POST':
-        company_email  =  request.POST.get('company_email')
-        fields_to_send_mail = {
-            'invoice_no' : 'include_invoice_no',
-            'invoice_date' : 'include_invoice_date',
-            'mode_payment' : 'include_mode_payment',
-            'company_name' : 'include_company_name',
-            'company_email' : 'include_company_email',
-            'company_contact' : 'include_company_contact',
-            'billing_address' : 'include_billing_address',
-            'billing_state_name' : 'include_billing_state_name',
-            'billing_gstin_no' : 'include_billing_gstin_no', 
-            'title' : 'include_title',
-            'job_name' : 'include_job_name',
-            'quantity' : 'include_quantity',
-            'pouch_open_size' : 'include_pouch_open_size',
-            'cylinder_size' : 'include_cylinder_size',
-            'prpc_rate' : 'include_prpc_rate',
-            'total' : 'include_total',
-            'banking_details' : 'include_banking_details',
-            'term_note' : 'include_term_note',
-            'gst':'include_gst',
-            'gst_value' : 'include_gst_value',
-            'taxable_value':'include_taxable_value',
-            'total_in_words':'total_in_words'
-        }
+        company_email  =  request.POST.get('company_email','')
+        total = request.POST.get('total')
+        fields_to_send_mail = [
+            'invoice_no',
+            'invoice_date',
+            'company_name',
+            'company_email',
+            'company_contact',
+            'billing_address',
+            'billing_state_name',
+            'billing_gstin_no', 
+            'total',
+            'banking_details',
+            'term_note',
+            'gst',
+            'total_taxable_value',
+            'gst_value',
+            'mode_payment'  
+        ]
+        if company_email == None or company_email == '':
+            messages.error(request,"Company email is Required",extra_tags="custom-success-style")
+            return redirect('view_proforma_invoice')
+    
+
+        total_in_words = request.POST.get('total_in_words')
         
         item_dic = {}
-        for i , r in fields_to_send_mail.items():
-            i_value = request.POST.get(i)
-            checkbox_value = request.POST.get(r,"")
-            if checkbox_value == '1' and i_value:
-                item_dic[i] = i_value
+        for field in fields_to_send_mail:
+            field_value = request.POST.get(field, '')
+            if field_value: 
+                item_dic[field] = field_value
+        job_names = request.POST.getlist('job_name')
+        titles = request.POST.getlist('title')
+        quantities = request.POST.getlist('quantity')
+        pouch_sizes = request.POST.getlist('pouch_open_size')
+        cylinder_sizes = request.POST.getlist('cylinder_size')
+        prpc_rates = request.POST.getlist('prpc_rate')
+        taxable_value = request.POST.getlist('taxable_value')
+        date = datetime.now().strftime('%Y-%m-%d')
+        job_list = []
+        for jn, tl, qt, ps, cs, pr ,tx in zip(job_names, titles, quantities, pouch_sizes, cylinder_sizes, prpc_rates,taxable_value):
+            job_list.append({
+                'job_name': jn,
+                'title': tl,
+                'quantity': qt,
+                'pouch_open_size': ps,
+                'cylinder_size': cs,
+                'prpc_rate': pr,
+                'taxable_value':tx
+            })
+        item_dic['jobs'] = job_list
+        item_dic['total_in_words'] = total_in_words
+        item_dic['date'] = date
         
-        print(item_dic)
+        
+        
+        
+        email_error = utils.email_validator(company_email)
+        if email_error:
+            messages.error(request, email_error, extra_tags="custom-success-style")
+            return redirect("view_proforma_invoice")
+        
+        
+        
         receiver_email = company_email
         template_name =   "Base/proforma_send_mail.html"
         convert_to_html_content = render_to_string(
-            template_name=template_name,context=item_dic
+            template_name=template_name,context={
+                'data':item_dic
+            }
         )
         email = EmailMultiAlternatives(
             subject="Nirmal Group",
@@ -1827,7 +1865,7 @@ def ProformaSendMail(request):
         
             
     
-    return redirect("view_proforma_invoice")
+    return redirect("proforma_sendmail")
 
 
 @custom_login_required
@@ -1869,8 +1907,22 @@ def ProformaInvoiceCreate(request):
         gst_list = request.POST.getlist("gst[]")
         gst_value  = request.POST.get("gst_value")
         taxable_value = request.POST.get("taxable_value")
+        
+        
+        
+        required_fields = [
+        invoice_no, invoice_date, mode_payment, company_name, company_contact, 
+        company_email, billing_address, billing_state_name, billing_gstin_no,
+        terms, totals, banking_details, new_company, gst_value, taxable_value
+        ]
+        
+        
+        
         if company_name == "" or new_company != "":
             company_name = new_company
+            
+            
+        
     
         if ProformaInvoice.objects.filter(invoice_no=invoice_no).exists():
             messages.error(request,"Invoice number already exists",extra_tags="custom-success-style")

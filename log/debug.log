@@ -1195,3 +1195,5 @@ AttributeError: 'QuerySet' object has no attribute 'name'
 ERROR 2025-11-05 12:21:23,182 myapp login_page Invalid Username or Password views.py
 ERROR 2025-11-07 10:19:38,375 myapp login_page Invalid Username or Password views.py
 ERROR 2025-11-07 18:36:39,344 myapp login_page Invalid Username or Password views.py
+ERROR 2025-11-10 10:29:34,975 myapp login_page Invalid Username or Password views.py
+ERROR 2025-11-10 18:30:09,787 myapp login_page Invalid Username or Password views.py

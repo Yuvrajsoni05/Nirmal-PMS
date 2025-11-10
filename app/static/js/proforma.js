@@ -1,394 +1,238 @@
 function printProforma(button) {
     const data = button.dataset;
+    const jobs = JSON.parse(data.jobs || "[]");
+    const currentDate = new Date();
+    const jobRows = jobs
+        .map(
+            (job, index) => `
+                <tr>
+                    <td style="vertical-align: top; padding: 6px 4px; font-weight: bold;">
+                        ${index + 1}
+                    </td>
+                    <td style="padding: 6px 4px">
+                        <b>${job.title}</b><br />
+                        <span style="font-style: italic; font-size: 12px">
+                            ${job.job_name}<br />
+                            Pouch Open Size : ${job.pouch_open_size}<br />
+                            Cylinder Size : ${job.cylinder_size}<br /><br />
+                            <span style="margin-left: 150px"></span><br />
+                        </span>
+                    </td>
+                    <td class="text-right" style="padding: 6px 4px">-</td>
+                    <td class="text-right" style="padding: 6px 4px">-</td>
+                    <td class="text-right" style="padding: 6px 4px">
+                        ${job.quantity} Nos.
+                    </td>
+                    <td style="padding: 6px 4px" class="text-right">
+                        ${job.prpc_rate}
+                    </td>
+                    <td style="padding: 6px 4px">Nos.</td>
+                    <td class="text-right" style="padding: 6px 4px">
+                        ${job.taxable_value}
+                    </td>
+                </tr>`
+        )
+        .join("");
 
     const printWindow = window.open("", "_blank");
     printWindow.document.write(`
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=A4, initial-scale=1" />
-        <title>Proforma Invoice</title>
-        <style>
-            @page {
-                size: A4;
-                margin: 15mm 10mm;
-            }
-            body {
-                font-family: Arial, sans-serif;
-                font-size: 10px;
-                margin: 0;
-                padding: 0;
-                color: #000;
-            }
-            .container {
-                width: 210mm;
-                margin: 0 auto;
-                padding: 10px;
-            }
-            .header {
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 5px;
-                font-size: 12px;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 6px;
-            }
-            td,
-            th {
-                border: 1px solid black;
-                padding: 4px 6px;
-                vertical-align: top;
-                font-size: 12px;
-            }
-            td.noborder {
-                border: none;
-            }
-            .no-padding {
-                padding: 0;
-            }
-            .no-border-top {
-                border-top: none;
-            }
-            .bold {
-                font-weight: bold;
-            }
-            .text-right {
-                text-align: right;
-            }
-            .text-center {
-                text-align: center;
-            }
-            .underline {
-                text-decoration: underline;
-            }
-            .small-text {
-                font-size: 9px;
-            }
-            .border-right-none {
-                border-right: none;
-            }
-            .border-left-none {
-                border-left: none;
-            }
-            .border-bottom-none {
-                border-bottom: none;
-            }
-            .border-top-none {
-                border-top: none;
-            }
-            .bg-grey {
-                background: #f0f0f0;
-            }
-            .signature-section {
-                border-top: none;
-                text-align: center;
-            }
-            .signature-line {
-                margin-top: 10px;
-                border-top: 1px solid black;
-                width: 140px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .products-section td {
-                border: 1px solid black;
-                vertical-align: top;
-            }
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=A4, initial-scale=1" />
+<title>Proforma Invoice</title>
+<style>
+    @page { size: A4; margin: 15mm 10mm; }
+    body { font-family: Arial, sans-serif; font-size: 10px; margin: 0; padding: 0; color: #000; }
+    .container { width: 210mm; margin: 0 auto; padding: 10px; }
+    .header { font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+    td, th { border: 1px solid black; padding: 4px 6px; vertical-align: top; font-size: 12px; }
+    td.noborder { border: none; }
+    .no-padding { padding: 0; }
+    .bold { font-weight: bold; }
+    .text-right { text-align: right; }
+    .text-center { text-align: center; }
+    .underline { text-decoration: underline; }
+    .small-text { font-size: 9px; }
+    .signature-line { margin-top: 10px; border-top: 1px solid black; width: 140px; margin-left: auto; margin-right: auto; }
+    .products-section td { border: 1px solid black; vertical-align: top; }
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">PROFORMA INVOICE</div>
 
-            .text-right {
-                text-align: right;
-            }
-
-            .text-center {
-                text-align: center;
-            }
-
-            .bold {
-                font-weight: bold;
-            }
-
-            .products-section tr:nth-last-child(2) td,
-            .products-section tr:last-child td {
-                border-top: none;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">PROFORMA INVOICE</div>
-            <table>
-                <tr>
-                    <td style="width: 45%">
-                        <b
-                            >Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.){% now "Y-m-d" %}</b
-                        ><br />
-                        1601, 16th Floor, B Block,<br />
-                        Navratna Corporate Park, Nr. Jayantilal Park<br />
-                        Ambli Bopal Road, Ambli, Ahmedabad - 380058<br />
-                        GSTIN/UIN: 24AABCN6372N1Z4<br />
-                        State Name : Gujarat, Code : 24<br />
-                        CIN: U25200GJ1995PTC027623
-                    </td>
-                    <td style="width: 55%; font-size: 8px">
-                        <table
-                            style="
-                                width: 100%;
-                                border: 1px solid black;
-                                border-collapse: collapse;
-                                font-size: 8px;
-                            "
-                        >
-                            <tr>
-                                <td class="text-nowrap">
-                                    Invoice No.: <b> ${data.invoice_no} </b>
-                                </td>
-                                <td>
-                                    <b>PROFORMA INVOICE</b><br />PROFORMA
-                                    INVOICE date. ${data.invoice_date}
-                                </td>
-                                <td>
-                                    Invoice Date<br /><b>${data.invoice_date} </b>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Delivery Note</td>
-                                <td>
-                                    Mode/Terms of Payment<br /><b
-                                        >${data.mode_payment}</b
-                                    >
-                                </td>
-                                <td>Other References</td>
-                            </tr>
-                            <tr>
-                                <td>Reference No. & Date.</td>
-                                <td></td>
-                                <td>
-                                    Buyer's Order No.<br />
-                                    Dated
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Dispatch Doc No.</td>
-                                <td>Delivery Note Date</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Dispatched through</td>
-                                <td>Destination</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>Terms of Delivery</td>
-                                <td colspan="2"></td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-
-            <table>
-                <tr>
-                    <td style="width: 50%">
-                        <b>Consignee (Ship to)</b><br />
-                        <b>${data.company_name}</b><br />
-                        ${data.billing_address}<br />
-                        CUTTACK - 753010<br />
-                        GSTIN/UIN : ${data.billing_gstin_no}<br />
-                        State Name : ${data.billing_state_name},
-                    </td>
-                    <td style="width: 50%">
-                        <b>Buyer (Bill to)</b><br />
-                        <b>${data.company_name}</b><br />
-                        ${data.billing_address},<br />
-                        CUTTACK - 753010<br />
-                        GSTIN/UIN : ${data.billing_gstin_no}}<br />
-                        State Name : ${data.billing_state_name}, <br />
-                        Place of Supply : ${data.billing_state_name}
-                    </td>
-                </tr>
-            </table>
-
-            <table>
-                <thead>
+    <table>
+        <tr>
+            <td style="width: 45%">
+                <b>Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.)</b><br />
+                1601, 16th Floor, B Block,<br />
+                Navratna Corporate Park, Nr. Jayantilal Park<br />
+                Ambli Bopal Road, Ambli, Ahmedabad - 380058<br />
+                GSTIN/UIN: 24AABCN6372N1Z4<br />
+                State Name : Gujarat, Code : 24<br />
+                CIN: U25200GJ1995PTC027623
+            </td>
+            <td style="width: 55%; font-size: 8px">
+                <table style="width: 100%; border: 1px solid black; border-collapse: collapse; font-size: 8px;">
                     <tr>
-                        <th style="width: 4%">Sl No.</th>
-                        <th style="width: 27%">Description of Services</th>
-                        <th style="width: 8%">HSN/SAC</th>
-                        <th style="width: 8%">HSN Code</th>
-                        <th style="width: 8%">Quantity</th>
-                        <th style="width: 10%">Rate</th>
-                        <th style="width: 5%">per</th>
-                        <th style="width: 12%">Amount</th>
-                    </tr>
-                </thead>
-                <tbody class="products-section">
-                    <tr>
-                        <td
-                            style="
-                                vertical-align: top;
-                                padding: 6px 4px;
-                                font-weight: bold;
-                            "
-                        >
-                            1
-                        </td>
-                        <td style="padding: 6px 4px">
-                            <b>${data.title}</b><br />
-                            <span style="font-style: italic; font-size: 12px">
-                                ${data.job_name}<br />
-                                Pouch Open Size : ${data.pouch_open_size}<br>
-                                Cylinder Size  : ${data.cylinder_size}
-                            </span>
-                        </td>
-                        <td class="text-right" style="padding: 6px 4px">-</td>
-                        <td class="text-right" style="padding: 6px 4px">-</td>
-                        <td class="text-right" style="padding: 6px 4px">
-                            ${data.quantity} Nos.
-                        </td>
-                        <td style="padding: 6px 4px" class="text-right">
-                            ${data.prpc_rate}
-                        </td>
-                        <td style="padding: 6px 4px">Nos.</td>
-                        <td class="text-right" style="padding: 6px 4px">
-                            ${data.taxable_value}
-                        </td>
+                        <td>Invoice No.: <b>${data.invoice_no}</b></td>
+                        <td><b>PROFORMA INVOICE</b><br />PROFORMA INVOICE date. ${
+                            data.invoice_date
+                        }</td>
+                        <td>Invoice Date<br /><b>${data.invoice_date}</b></td>
                     </tr>
                     <tr>
-                        <td colspan="7"></td>
-                        <td
-                            class="text-right bold"
-                            style="
-                                padding: 6px 4px;
-                                border-left: none;
-                                border-top: none;
-                            "
-                        >
-                            ${data.taxable_value}
-                        </td>
+                        <td>Delivery Note</td>
+                        <td>Mode/Terms of Payment<br /><b>${
+                            data.mode_payment
+                        }</b></td>
+                        <td>Other References</td>
                     </tr>
-
                     <tr>
-                        <td
-                            colspan="7"
-                            style="padding: 6px 4px; font-weight: bold"
-                        >
-                            <i>${data.gst}</i>
-                        </td>
-
-                        <td
-                            class="text-right bold"
-                            style="padding: 6px 4px; border-left: none"
-                        >
-                            ${data.gst_value}
-                        </td>
+                        <td>Reference No. & Date.</td><td></td><td>Buyer's Order No.<br />Dated</td>
                     </tr>
-                </tbody>
+                    <tr><td>Dispatch Doc No.</td><td>Delivery Note Date</td><td></td></tr>
+                    <tr><td>Dispatched through</td><td>Destination</td><td></td></tr>
+                    <tr><td>Terms of Delivery</td><td colspan="2">${
+                        data.term_note
+                    }</td></tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 
-                <tfoot>
-                    <tr>
-                        <td colspan="4" class="text-right bold">Total</td>
-                        <td class="text-center bold">${data.quantity} Nos.</td>
-                        <td colspan="2"></td>
-                        <td class="text-right bold" style="font-size: 14px">
-                            ₹ ${data.total}}
-                        </td>
-                    </tr>
-                </tfoot>
-            </table>
+    <table>
+        <tr>
+            <td style="width: 50%">
+                <b>Consignee (Ship to)</b><br />
+                <b>${data.company_name}</b><br />
+                ${data.billing_address}<br />
+                GSTIN/UIN : ${data.billing_gstin_no}<br />
+                State Name : ${data.billing_state_name}
+            </td>
+            <td style="width: 50%">
+                <b>Buyer (Bill to)</b><br />
+                <b>${data.company_name}</b><br />
+                ${data.billing_address}<br />
+                GSTIN/UIN : ${data.billing_gstin_no}<br />
+                State Name : ${data.billing_state_name}<br />
+                Place of Supply : ${data.billing_state_name}
+            </td>
+        </tr>
+    </table>
 
-            <table>
-                <tr>
-                    <td class="bold">Amount Chargeable (in words)</td>
-                    <td
-                        class="text-center bold"
-                        style="border-left: none; border-right: none"
-                    >
-                        INR Three Lakh Forty Eight Thousand Nine Hundred Sixty
-                        Six Only
-                    </td>
-                    <td class="bold text-right" style="border-left: none">
-                        E. & O.E
-                    </td>
-                </tr>
-            </table>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:4%">Sl No.</th>
+                <th style="width:27%">Description of Services</th>
+                <th style="width:8%">HSN/SAC</th>
+                <th style="width:8%">HSN Code</th>
+                <th style="width:8%">Quantity</th>
+                <th style="width:10%">Rate</th>
+                <th style="width:5%">Per</th>
+                <th style="width:12%">Amount</th>
+            </tr>
+        </thead>
+        <tbody class="products-section">
+            ${jobRows}
+            <tr><td colspan="7"></td><td></td></tr>
+            <tr>
+                <td colspan="7" style="padding:6px 4px; font-weight:bold">
+                    <i>${data.gst}</i><br />Less : <b>Rounding off Sale</b>
+                </td>
+                <td class="text-right bold" style="padding:6px 4px;">${
+                    data.gst_value
+                }</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-left bold">Total</td>
+                <td colspan="3"></td>
+                <td class="text-right bold" style="font-size:14px">₹ ${
+                    data.total
+                }</td>
+            </tr>
+        </tfoot>
+    </table>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 25%">HSN/SAC</th>
-                        <th style="width: 25%">HSN</th>
-                        <th style="width: 12%">Taxable Value</th>
-                        <th style="width: 8%">IGST<br />Rate</th>
-                        <th style="width: 15%">IGST Amount</th>
-                        <th style="width: 18%">Total Tax Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td class="text-right">${data.taxable_value}</td>
-                        <td class="text-center">${data.gst}</td>
-                        <td class="text-right">${data.gst_value}</td>
-                        <td class="text-right">${data.gst_value}</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td class="bold">Total</td>
-                        <td class="text-right bold"></td>
-                        <td>${data.taxable_value}</td>
-                        <td></td>
-                        <td class="text-right bold">${data.gst_value}</td>
-                        <td class="text-right bold">${data.gst_value}</td>
-                    </tr>
-                </tfoot>
-            </table>
+    <table>
+        <tr>
+            <td class="bold">Amount Chargeable (in words)</td>
+            <td class="text-center bold" style="border-left:none; border-right:none;">
+                INR ${data.total_in_worlds} Only
+            </td>
+            <td class="bold text-right" style="border-left:none">E. & O.E</td>
+        </tr>
+    </table>
 
-            <table style="margin-top: 8px">
-                <tr>
-                    <td style="width: 52%; padding: 5px; vertical-align: top">
-                        <b>Tax Amount (in words) :</b><br />
-                        INR Fifty Three Thousand Two Hundred Thirty Two and
-                        Twelve paise Only<br /><br />
-                        <b>Company's PAN : </b> AABCN6372N<br /><br />
-                        <b>Declaration:</b><br />
-                        We declare that this invoice shows the actual price of
-                        the goods described and that all particulars are true
-                        and correct.
-                    </td>
-                    <td
-                        style="
-                            width: 48%;
-                            text-align: center;
-                            vertical-align: middle;
-                            font-size: 12px;
-                        "
-                    >
-                        for Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.){% now "Y-m-d" %} <br /><br /><br /><br />
-                        <div class="signature-line"></div>
-                        Authorized Signatory
-                    </td>
-                </tr>
-            </table>
+    <table>
+        <thead>
+            <tr>
+                <th style="width:50%">HSN/SAC</th>
+                <th style="width:12%">Taxable Value</th>
+                <th style="width:8%">IGST<br/>Rate</th>
+                <th style="width:15%">IGST Amount</th>
+                <th style="width:18%">Total Tax Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td class="text-right">${data.total_taxable_value}</td>
+                <td class="text-center">${data.gst}</td>
+                <td class="text-right">${data.gst_value}</td>
+                <td class="text-right">${data.gst_value}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td class="bold">Total</td>
+                <td class="text-right bold">${data.total_taxable_value}</td>
+                <td></td>
+                <td class="text-right bold">${data.gst_value}</td>
+                <td class="text-right bold">${data.gst_value}</td>
+            </tr>
+        </tfoot>
+    </table>
 
-            <div class="text-center" style="margin-top: 10px; font-size: 12px">
-                Shrri Nirmal Ventures Pvt. Ltd
-            </div>
-        </div>
-        <script>
-                    window.onload = function() {
-                        window.print();
-                        window.close();
-                    };
-                <\/script>
-    </body>
+    <table style="margin-top:8px">
+        <tr>
+            <td style="width:52%; padding:5px; vertical-align:top">
+                <b>Tax Amount (in words):</b><br/>
+                INR ${data.tax_in_words || ""} Only<br/><br/>
+                <b>Company's PAN:</b> AABCN6372N<br/><br/>
+                <b>Declaration:</b><br/>
+                We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
+            </td>
+            <td style="width:48%; text-align:center; vertical-align:middle; font-size:12px;">
+                for Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.)<br/><br/><br/><br/>
+                <div class="signature-line"> 
+                <img src="https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png" alt="Signature" style="width: 100%; max-width: 180px;" /></div>
+                Authorized Signatory
+            </td>
+        </tr>
+    </table>
+
+    <div class="text-center" style="margin-top:10px; font-size:12px">
+        Shrri Nirmal Ventures Pvt. Ltd
+    </div>
+</div>
+
+<script>
+    window.onload = function() {
+        window.print();
+        window.close();
+    };
+<\/script>
+</body>
 </html>
-
-    `);
+`);
     printWindow.document.close();
 }
+
+

@@ -4,9 +4,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 from django.core.validators import validate_email
-from django.db.models.signals import pre_delete
 
 
+from num2words import num2words
 
 
 # Create your models here.  
@@ -78,8 +78,6 @@ class JobHistory(models.Model):
 
     def __str__(self):
         return f"{self.job.job_name} - {self.field_name} changed"
-    
-
 
         
 class Jobimage(models.Model):
@@ -109,7 +107,7 @@ class CDRDetail(models.Model):
 class CDRImage(models.Model):
     cdr =  models.ForeignKey(CDRDetail,on_delete=models.CASCADE, related_name='cdr_images')
     image = models.ImageField(upload_to='cdr_files/')
-    # thumbnail_image = models.FileField(upload_to='cdr_thumbnail_image/',blank=True, null=True)
+
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
     
     def __str__(self):
@@ -133,6 +131,12 @@ class CylinderMadeIn(models.Model):
 
 
 class ProformaInvoice(models.Model):
+    
+    Invoice_Status = [
+        ("Pending","Pending"),
+        ("Confirmed","Confirmed")
+    ]
+    
     INDIAN_STATES = [
         ("Andhra Pradesh", "Andhra Pradesh"),
         ("Arunachal Pradesh", "Arunachal Pradesh"),
@@ -182,9 +186,20 @@ class ProformaInvoice(models.Model):
     terms_note = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     total = models.CharField(max_length=200,blank=True, null=True)
+    invoice_status = models.CharField(max_length=200,choices=Invoice_Status,blank=True, null=True)
+    
+    
+    
+    def total_worlds(self):
+        total_world = self.total.split('.')
+        total_in_words = num2words(total_world[0], lang='en_IN').title()
+        return total_in_words
+    
+    
     def __str__(self):
         return f"Proforma Invoice: {self.invoice_no}"
 
+    
         
 class ProformaJob(models.Model):
     proforma_invoice = models.ForeignKey(ProformaInvoice,on_delete=models.CASCADE,related_name="job_details")
@@ -201,6 +216,7 @@ class ProformaJob(models.Model):
             return float(self.prpc_rate) * float(self.quantity)
         except TypeError:
             return None 
+    
     
     def __str__(self):
         return f"{self.title} {self.taxable_value}"

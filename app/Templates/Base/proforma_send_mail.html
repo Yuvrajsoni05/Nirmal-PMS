@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -119,8 +120,8 @@
                 <tr>
                     <td style="width: 45%">
                         <b
-                            >Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.){% now
-                            "Y-m-d" %}</b
+                            >Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.) {{
+                            data.date }}</b
                         ><br />
                         1601, 16th Floor, B Block,<br />
                         Navratna Corporate Park, Nr. Jayantilal Park<br />
@@ -140,21 +141,23 @@
                         >
                             <tr>
                                 <td class="text-nowrap">
-                                    Invoice No.: <b> {{ invoice_no}} </b>
+                                    Invoice No.: <b> {{ data.invoice_no}} </b>
                                 </td>
                                 <td>
                                     <b>PROFORMA INVOICE</b><br />PROFORMA
-                                    INVOICE date. {% now "Y-m-d" %}
+                                    INVOICE CREATE date. {{data.date}}
                                 </td>
                                 <td>
-                                    Invoice Date<br /><b>{{ invoice_date }}</b>
+                                    Invoice Date<br /><b
+                                        >{{ data.invoice_date }}</b
+                                    >
                                 </td>
                             </tr>
                             <tr>
                                 <td>Delivery Note</td>
                                 <td>
                                     Mode/Terms of Payment<br /><b
-                                        >{{ mode_payment }}</b
+                                        >{{ data.mode_payment }}</b
                                     >
                                 </td>
                                 <td>Other References</td>
@@ -179,7 +182,7 @@
                             </tr>
                             <tr>
                                 <td>Terms of Delivery</td>
-                                <td colspan="2"></td>
+                                <td colspan="2">{{ term_note }}</td>
                             </tr>
                         </table>
                     </td>
@@ -190,20 +193,20 @@
                 <tr>
                     <td style="width: 50%">
                         <b>Consignee (Ship to)</b><br />
-                        <b>{{ company_name }}</b><br />
-                        {{ billing_address }}<br />
+                        <b>{{ data.company_name }}</b><br />
+                        {{ data.billing_address }}<br />
 
-                        GSTIN/UIN : {{ billing_gstin_no }}<br />
-                        State Name : {{ billing_state_name }},
+                        GSTIN/UIN : {{ data.billing_gstin_no }}<br />
+                        State Name : {{ data.billing_state_name }},
                     </td>
                     <td style="width: 50%">
                         <b>Buyer (Bill to)</b><br />
-                        <b>{{ company_name }}</b><br />
-                        {{ billing_address }},<br />
+                        <b>{{ data.company_name }}</b><br />
+                        {{ data.billing_address }},<br />
 
-                        GSTIN/UIN : {{ billing_gstin_no }}<br />
-                        State Name : {{ billing_state_name }}, <br />
-                        Place of Supply : {{ billing_state_name }}
+                        GSTIN/UIN : {{ data.billing_gstin_no }}<br />
+                        State Name : {{ data.billing_state_name }}, <br />
+                        Place of Supply : {{ data.billing_state_name }}
                     </td>
                 </tr>
             </table>
@@ -221,8 +224,10 @@
                         <th style="width: 12%">Amount</th>
                     </tr>
                 </thead>
+
                 <tbody class="products-section">
-                    <tr>
+                    {% for job in data.jobs %}
+                    <tr style="border-bottom: 1px solid #ce0000ff">
                         <td
                             style="
                                 vertical-align: top;
@@ -230,71 +235,57 @@
                                 font-weight: bold;
                             "
                         >
-                            1
+                            {{ forloop.counter }}
                         </td>
                         <td style="padding: 6px 4px">
-                            <b>{{ title }}</b><br />
+                            <b>{{ job.title }}</b><br />
                             <span style="font-style: italic; font-size: 12px">
-                                {{ job_name }}<br />
-                                Pouch Open Size : {{ pouch_open_size }}<br />
-                                Cylinder Size : {{ cylinder_size }}
-                                <br /><br /><span style="margin-left: 150px"
-                                    ><b>{{ gst }}</b></span
-                                ><br />
-                                Less : <b> Rounding off Sale </b>
+                                {{ job.job_name }}<br />
+                                Pouch Open Size: {{ job.pouch_open_size }}<br />
+                                Cylinder Size: {{ job.cylinder_size }}
                             </span>
                         </td>
                         <td class="text-right" style="padding: 6px 4px">-</td>
                         <td class="text-right" style="padding: 6px 4px">-</td>
                         <td class="text-right" style="padding: 6px 4px">
-                            {{ quantity }} Nos.
+                            {{ job.quantity }} Nos.
                         </td>
-                        <td style="padding: 6px 4px" class="text-right">
-                            {{ prpc_rate }}
+                        <td class="text-right" style="padding: 6px 4px">
+                            {{ job.prpc_rate }}
                         </td>
                         <td style="padding: 6px 4px">Nos.</td>
                         <td class="text-right" style="padding: 6px 4px">
-                            {{ taxable_value }}
+                            {{ job.taxable_value }}
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="7"></td>
-                        <td
-                            class="text-right bold"
-                            style="
-                                padding: 6px 4px;
-                                border-left: none;
-                                border-top: none;
-                            "
-                        >
-                            {{ taxable_value }}
-                        </td>
-                    </tr>
+                    {% endfor %}
 
                     <tr>
                         <td
                             colspan="7"
                             style="padding: 6px 4px; font-weight: bold"
                         >
-                            <i>{{ gst }}</i>
+                            <i>{{ data.gst }}</i>
+                            <br />
+                            Less : <b> Rounding off Sale </b>
                         </td>
 
                         <td
                             class="text-right bold"
                             style="padding: 6px 4px; border-left: none"
                         >
-                            {{ gst_value }}
+                            {{ data.gst_value }}
                         </td>
                     </tr>
                 </tbody>
 
                 <tfoot>
                     <tr>
-                        <td colspan="4" class="text-right bold">Total</td>
-                        <td class="text-center bold">{{quantity}} Nos.</td>
+                        <td colspan="4" class="text-left bold">Total</td>
+                        <td class="text-center bold"></td>
                         <td colspan="2"></td>
                         <td class="text-right bold" style="font-size: 14px">
-                            ₹ {{ total }}
+                            ₹ {{ data.total }}
                         </td>
                     </tr>
                 </tfoot>
@@ -307,7 +298,7 @@
                         class="text-center bold"
                         style="border-left: none; border-right: none"
                     >
-                        INR {{total_in_words}}
+                        INR {{data.total_in_words}} Only
                     </td>
                     <td class="bold text-right" style="border-left: none">
                         E. & O.E
@@ -330,20 +321,24 @@
                     <tr>
                         <td></td>
 
-                        <td class="text-right">{{ taxable_value }}</td>
-                        <td class="text-center">{{ gst }}</td>
-                        <td class="text-right">{{ gst_value }}</td>
-                        <td class="text-right">{{ gst_value }}</td>
+                        <td class="text-right">
+                            {{ data.total_taxable_value }}
+                        </td>
+                        <td class="text-center">{{ data.gst }}</td>
+                        <td class="text-right">{{ data.gst_value }}</td>
+                        <td class="text-right">{{ data.gst_value }}</td>
                     </tr>
                 </tbody>
                 <tfoot>
                     <tr>
                         <td class="bold">Total</td>
-                        <td class="text-right bold">{{ taxable_value }}</td>
+                        <td class="text-right bold">
+                            {{ data.total_taxable_value }}
+                        </td>
                         <td></td>
 
-                        <td class="text-right bold">{{ gst_value }}</td>
-                        <td class="text-right bold">{{ gst_value }}</td>
+                        <td class="text-right bold">{{ data.gst_value }}</td>
+                        <td class="text-right bold">{{ data.gst_value }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -352,8 +347,7 @@
                 <tr>
                     <td style="width: 52%; padding: 5px; vertical-align: top">
                         <b>Tax Amount (in words) :</b><br />
-                        INR Fifty Three Thousand Two Hundred Thirty Two and
-                        Twelve paise Only<br /><br />
+                        INR {{ total_in_words }} Only<br /><br />
                         <b>Company's PAN : </b> AABCN6372N<br /><br />
                         <b>Declaration:</b><br />
                         We declare that this invoice shows the actual price of
@@ -368,9 +362,19 @@
                             font-size: 12px;
                         "
                     >
-                        for Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.){% now
-                        "Y-m-d" %} <br /><br /><br /><br />
+                        <div>
+                            for Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.)
+                            {{data.date}}
+                        </div>
+                        <br /><br /><br /><br />
                         <div class="signature-line"></div>
+
+                        <img
+                            src="https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png"
+                            alt="Signature"
+                            height="60px"
+                        />
+                        <br />
                         Authorized Signatory
                     </td>
                 </tr>

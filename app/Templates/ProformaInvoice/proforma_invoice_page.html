@@ -68,7 +68,7 @@
 
                     <div class="col-md-4">
                         <label for="billing_state_name" class="form-label fw-semibold">Billing State Name</label>
-                        <select class="form-control form-select" id="billing_state_name" name="billing_state_name" required>
+                        <select class="form-control form-select" id="billing_state_name" name="billing_state_name" >
                             <option value="" selected disabled>Select State</option>
                             {% for value, label in states %}
                                 <option value="{{ value }}">
@@ -89,7 +89,9 @@
                     
                     
                     <div id="job-container">
-                            <div class="row job-section border rounded p-3 mb-3">
+                            <div class="row job-section border rounded p-3 mb-3 position-relative">
+                                <h5>Job Detail Section</h5>
+                    
                                 <div class="col-md-4">
                                 <label class="form-label fw-semibold">Title</label>
                                 <select id="title" name="title[]" class="form-control">
@@ -133,7 +135,7 @@
 
                             <div class="col-md-4 mt-3">
                                 <label for="quantity" class="form-label fw-semibold">Quantity</label>
-                                <input type="number" class="form-control item_check" step="any" name="quantity[]" placeholder="Quantity">
+                                <input type="number" class="form-control item_check" step="any" id="quantity" name="quantity[]" placeholder="Quantity">
                             </div>
 
                             <div class="col-md-4 mt-3">
@@ -175,24 +177,24 @@
                     </div>
                     <div class="col-md-3">
                         <label for="taxable_value" class="form-label fw-semibold">Total Taxable Value</label>
-                        <input type="text" id="taxable_value" name="taxable_value" class="form-control" placeholder="Total Taxable Value">
+                        <input type="text" id="taxable_value" name="taxable_value" class="form-control" placeholder="Total Taxable Value" readonly>
                         <span class="invalid-feedback" id="taxable_value_error">This field is required</span>
                     </div>
                     <div class="col-md-3">
                         <label for="total" class="form-label fw-semibold">Total</label>
-                        <input type="text" id="total_amount" name="total_amount" class="form-control" placeholder="Total">
+                        <input type="text" id="total_amount" name="total_amount" class="form-control" placeholder="Total" readonly>
                         <span class="invalid-feedback" id="total_amount_error">This field is required</span>
                     </div>
 
                     <div class="col-md-3">
-                        <label for="order_status" class="form-label fw-semibold">Order Status</label>
-                        <select id="order_status" name="order_status" class="form-control">
-                            <option value="all" selected disabled selected>Order Status</option>
-                            <option value="pending">Pending</option>
-                            <option value="confirmed">Confirmed</option>
-                           
-                            <option value="delivered">Delivered</option>
-                            <option value="cancelled">Cancelled</option>
+                        <label for="invoice_status" class="form-label fw-semibold">Invoice Status</label>
+                        <select id="invoice_status" name="invoice_status" class="form-control">
+                            <option value="" selected disabled selected>Order Status</option>
+                             {% for value, label in invoice_status %}
+                                <option value="{{ value }}">
+                                    {{ label }}
+                                </option>
+                            {% endfor %}
                         </select>
                         <span class="invalid-feedback" id="order_status_error">This field is required</span>
                     </div>
@@ -220,47 +222,298 @@
 
 {% endblock main_block %}
 {% block script %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
 
+    const invoiceNoInput = document.getElementById('invoice_no');
+    const invoiceNoError = document.getElementById('invoice_no_error');
+
+    const invoiceDateInput = document.getElementById('invoice_date');
+    const invoiceDateError = document.getElementById('invoice_date_error');
+
+    const modePaymentInput = document.getElementById('mode_payment');
+    const modePaymentError = document.getElementById('mode_payment_error');
+
+    const companyNameInput = document.getElementById('company_name');
+    const companyNameError = document.getElementById('company_name_error');
+
+    const companyContactInput = document.getElementById('company_contact');
+    const companyContactError = document.getElementById('company_contact_error');
+
+    const companyEmailInput = document.getElementById('company_email');
+    const companyEmailError = document.getElementById('company_email_error');
+
+    const billingAddressInput = document.getElementById('billing_address');
+    const billingAddressError = document.getElementById('billing_address_error');
+
+    const billingStateNameInput = document.getElementById('billing_state_name');
+    const billingStateNameError = document.getElementById('billing_state_name_error');
+
+    const billingGstinNoInput = document.getElementById('billing_gstin_no');
+    const billingGstinNoError = document.getElementById('billing_gstin_no_error');
+
+    const termsInput = document.getElementById('terms');
+    const termsError = document.getElementById('terms_error');
+
+    const taxableValueInput = document.getElementById('taxable_value');
+    const taxableValueError = document.getElementById('taxable_value_error');
+
+    const totalAmountInput = document.getElementById('total_amount');
+    const totalAmountError = document.getElementById('total_amount_error');
+
+    const orderStatusInput = document.getElementById('order_status');
+    const orderStatusError = document.getElementById('order_status_error');
+
+    const bankDetailsInput = document.getElementById('bank_details');
+    const bankDetailsError = document.getElementById('bank_details_error');
+
+    const proformaForm = document.getElementById('proformaInvoiceForm');
+
+    // Validation Functions
+    function validateInvoiceNo() {
+        if (invoiceNoInput.value.trim() === '') {
+            invoiceNoError.style.display = 'block';
+            return false;
+        } else {
+            invoiceNoError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateInvoiceDate() {
+        if (invoiceDateInput.value.trim() === '') {
+            invoiceDateError.style.display = 'block';
+            return false;
+        } else {
+            invoiceDateError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateModePayment() {
+        if (modePaymentInput.value.trim() === '') {
+            modePaymentError.style.display = 'block';
+            return false;
+        } else {
+            modePaymentError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateCompanyName() {
+        if (companyNameInput.value.trim() === '') {
+            companyNameError.style.display = 'block';
+            return false;
+        } else {
+            companyNameError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateCompanyContact() {
+        const contact = companyContactInput.value.trim();
+        const contactPattern = /^\d{10}$/;
+        if (contact === '' || !contactPattern.test(contact)) {
+            companyContactError.style.display = 'block';
+            return false;
+        } else {
+            companyContactError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateCompanyEmail() {
+        const email = companyEmailInput.value.trim();
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (email === '' || !emailPattern.test(email)) {
+            companyEmailError.style.display = 'block';
+            return false;
+        } else {
+            companyEmailError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateBillingAddress() {
+        if (billingAddressInput.value.trim() === '') {
+            billingAddressError.style.display = 'block';
+            return false;
+        } else {
+            billingAddressError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateBillingStateName() {
+        if (billingStateNameInput.value.trim() === '') {
+            billingStateNameError.style.display = 'block';
+            return false;
+        } else {
+            billingStateNameError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateBillingGstinNo() {
+        if (billingGstinNoInput.value.trim() === '') {
+            billingGstinNoError.style.display = 'block';
+            return false;
+        } else {
+            billingGstinNoError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateTerms() {
+        if (termsInput.value.trim() === '') {
+            termsError.style.display = 'block';
+            return false;
+        } else {
+            termsError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateTaxableValue() {
+        if (taxableValueInput.value.trim() === '') {
+            taxableValueError.style.display = 'block';
+            return false;
+        } else {
+            taxableValueError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateTotalAmount() {
+        if (totalAmountInput.value.trim() === '') {
+            totalAmountError.style.display = 'block';
+            return false;
+        } else {
+            totalAmountError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateOrderStatus() {
+        if (orderStatusInput.value.trim() === '' || orderStatusInput.value === 'all') {
+            orderStatusError.style.display = 'block';
+            return false;
+        } else {
+            orderStatusError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateBankDetails() {
+        if (bankDetailsInput.value.trim() === '') {
+            bankDetailsError.style.display = 'block';
+            return false;
+        } else {
+            bankDetailsError.style.display = 'none';
+            return true;
+        }
+    }
+
+    function validateForm() {
+        const isInvoiceNoValid = validateInvoiceNo();
+        const isInvoiceDateValid = validateInvoiceDate();
+        const isModePaymentValid = validateModePayment();
+        const isCompanyNameValid = validateCompanyName();
+        const isCompanyContactValid = validateCompanyContact();
+        const isCompanyEmailValid = validateCompanyEmail();
+        const isBillingAddressValid = validateBillingAddress();
+        const isBillingStateNameValid = validateBillingStateName();
+        const isBillingGstinNoValid = validateBillingGstinNo();
+        const isTermsValid = validateTerms();
+        const isTaxableValueValid = validateTaxableValue();
+        const isTotalAmountValid = validateTotalAmount();
+        const isOrderStatusValid = validateOrderStatus();
+        const isBankDetailsValid = validateBankDetails();
+
+        return (
+            isInvoiceNoValid &&
+            isInvoiceDateValid &&
+            isModePaymentValid &&
+            isCompanyNameValid &&
+            isCompanyContactValid &&
+            isCompanyEmailValid &&
+            isBillingAddressValid &&
+            isBillingStateNameValid &&
+            isBillingGstinNoValid &&
+            isTermsValid &&
+            isTaxableValueValid &&
+            isTotalAmountValid &&
+            isOrderStatusValid &&
+            isBankDetailsValid
+        );
+    }
+
+    invoiceNoInput.addEventListener('input', validateInvoiceNo);
+    invoiceDateInput.addEventListener('input', validateInvoiceDate);
+    modePaymentInput.addEventListener('input', validateModePayment);
+    companyNameInput.addEventListener('input', validateCompanyName);
+    companyContactInput.addEventListener('input', validateCompanyContact);
+    companyEmailInput.addEventListener('input', validateCompanyEmail);
+    billingAddressInput.addEventListener('input', validateBillingAddress);
+    billingStateNameInput.addEventListener('input', validateBillingStateName);
+    billingGstinNoInput.addEventListener('input', validateBillingGstinNo);
+    termsInput.addEventListener('input', validateTerms);
+    taxableValueInput.addEventListener('input', validateTaxableValue);
+    totalAmountInput.addEventListener('input', validateTotalAmount);
+    orderStatusInput.addEventListener('input', validateOrderStatus);
+    bankDetailsInput.addEventListener('input', validateBankDetails);
+
+ 
+    proformaForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        if (validateForm()) {
+            proformaForm.submit();
+        } else {
+            const firstError = document.querySelector('[style*="display: block"]');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    });
+});
+
+</script>
 <script>
 $(document).ready(function() {
+    // === Dynamic GST, totals, and AJAX updates ===
     $(document).on('input change', '#billing_state_name, #company_name, input[name="gst[]"], .item_check', function() {
         var changedField = $(this).attr('id');
         var billing_state_name = $('#billing_state_name').val();
         var company_name = $('#company_name').val();
-    
+
+        // GST Checkbox values
         var igst = $('#igst').is(':checked') ? 18 : 0;
         var cgst = $('#cgst').is(':checked') ? 9 : 0;
         var sgst = $('#sgst').is(':checked') ? 9 : 0;
 
-       
-      
-
+        // Collect all quantities and rates
         var quantities = $('input[name="quantity[]"]').map(function() {
-            return $(this).val();
-        }).get(); 
-
-
-        var prpc_prices = $('input[name="prpc_price[]"]').map(function() {
-            return $(this).val();
+            return $(this).val() || 0;
         }).get();
-        
+        var prpc_prices = $('input[name="prpc_price[]"]').map(function() {
+            return $(this).val() || 0;
+        }).get();
+
+        // Toggle "new company" input
         if (company_name === "others") {
             $("#new_company").show();
         } else {
             $("#new_company").hide();
         }
-        
 
-        console.log("All Quantities:", quantities);
-        console.log("All Prices:", prpc_prices);
-
-       
+        // Set GST options visibility
         if (billing_state_name === "Gujarat") {
             $("#igst_div").hide();
             $("#sgst_div").show();
             $("#cgst_div").show();
             igst = 0;
-        } else {
+        } else if (billing_state_name) {
             $("#igst_div").show();
             $("#sgst_div").hide();
             $("#cgst_div").hide();
@@ -268,11 +521,9 @@ $(document).ready(function() {
             cgst = 0;
         }
 
-    
-
-        console.log(igst,cgst,sgst)
+        // Send data to server
         $.ajax({
-            url: "{% url 'proforma_invoice_ajax' %}",  
+            url: "{% url 'proforma_invoice_ajax' %}",
             type: "GET",
             data: {
                 billing_state_name: billing_state_name,
@@ -282,28 +533,26 @@ $(document).ready(function() {
                 sgsts: sgst,
                 quantities: quantities,
                 prpc_prices: prpc_prices
-
             },
             success: function(response) {
-                
-
+                // === Update company details only when company changes ===
                 if (changedField === 'company_name' && response.company_email) {
                     $('#company_email').val(response.company_email);
                     $('#company_contact').val(response.company_contact);
                     $('#billing_address').val(response.billing_address);
-                }
-                var jobSelect = $('#job_name');
-                    
-                    jobSelect.empty()
-                        .append('<option value="" selected>Select Job</option>');
 
+                    // Only update job dropdown when company changes
+                    var jobSelect = $('.job-section:first').find('.job-name');
+                    jobSelect.empty().append('<option value="" selected>Select Job</option>');
                     if (response.job && Array.isArray(response.job)) {
                         response.job.forEach(function(i) {
                             jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
                         });
                     }
-                    
-                jobSelect.append('<option value="others">Other</option>');
+                    jobSelect.append('<option value="others">Other</option>');
+                }
+
+                // === Update totals only ===
                 if (response.total_amount !== undefined) {
                     $('#total_amount').val(Number(response.total_amount).toFixed(2));
                 }
@@ -315,178 +564,77 @@ $(document).ready(function() {
                 }
             },
             error: function(xhr, status, error) {
-                console.log("Error status:", status);
-                console.log("Error details:", error);
-                console.log("Full response:", xhr.responseText);
-                alert("Server error: " + error);
+                console.log("Error:", error);
             }
         });
     });
-});
-</script>
 
-{% comment %} <script>
-$(document).ready(function() {
-   
-    $('#quantity, #prpc_price, #billing_state_name,#taxable_value, #gst_value, #company_name, #igst_div , #cgst_div #sgst_div, #job_name, input[name="gst[]"]').on('input change', function() {
-        var changedField = $(this).attr('id');
-        var quantity = $('#quantity').val();
-        var job_name = $('#job_name').val();
-        var taxable_value = $('#taxable_value').val();
-        var gst_value = $('#gst_value').val();
-        var prpc_price = $('#prpc_price').val();
-        var billing_state_name = $('#billing_state_name').val();
-        var company_name = $('#company_name').val();
-        var igst = $('#igst').is(':checked') ? 18 : 0;
-        var cgst = $('#cgst').is(':checked') ? 9 : 0;
-        var sgst = $('#sgst').is(':checked') ? 9 : 0;
-        console.log(billing_state_name)
-        
-        
-        if (company_name === "others") {
-            $("#new_company").show();
-        }else if (company_name === " "){
-            $("#new_company").hide();
-        }
-         else {
-            $("#new_company").hide();
-        }
-        
-       
-        if (billing_state_name === "Gujarat") {
-            $("#igst_div").hide(); 
-            $("#sgst_div").show();
-            $("#cgst_div").show();
-            igst = 0
+    // === Dynamic Job Section Logic ===
+    $(document).on('change', '.job-name', function() {
+        const section = $(this).closest('.job-section');
+        const newJobInput = section.find('.new-job');
+
+        if ($(this).val() === 'others') {
+            newJobInput.show().focus();
         } else {
-            $("#igst_div").show(); 
-            $("#sgst_div").hide();
-            $("#cgst_div").hide();
-            sgst = 0
-            cgst = 0
+            newJobInput.hide().val('');
+            section.find('.job-name option.custom-job').remove();
         }
-        console.log(igst,sgst,cgst)
-        
-
-        $.ajax({
-            url: "{% url 'proforma_invoice_ajax' %}",
-            type: "GET",
-            data: {
-                quantity: quantity,
-                prpc_price: prpc_price,
-                billing_state_name: billing_state_name,
-                company_name: company_name,
-                igsts: igst,
-                cgsts: cgst,
-                sgsts: sgst,  
-            },
-            success: function(response) {
-                if (changedField === 'company_name') {
-                    $('#company_email').val(response.company_email);
-                    $('#company_contact').val(response.company_contact);
-                    $('#billing_address').val(response.billing_address);
-                    var jobSelect = $('#job_name');
-                    
-                    jobSelect.empty()
-                        .append('<option value="" selected>Select Job</option>');
-
-                    if (response.job && Array.isArray(response.job)) {
-                        response.job.forEach(function(i) {
-                            jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
-                        });
-                    }
-                    
-                    jobSelect.append('<option value="others">Other</option>');
-                    $('#total_amount').val(response.total_amount.toFixed(2));
-                    $('#taxable_value').val(response.base_amount.toFixed(2));
-                    $('#gst_value').val(response.gst_amount.toFixed(2));
-                } else {
-                    $('#taxable_value').val(response.base_amount.toFixed(2));
-                    $('#total_amount').val(response.total_amount.toFixed(2));
-                    $('#gst_value').val(response.gst_amount.toFixed(2));
-                }
-            },
-            error: function(xhr, status, error) {
-                alert("Server error: " + error);
-            }
-        });
     });
-});
-</script>  {% endcomment %}
 
+    $(document).on('input', '.new-job', function() {
+        const section = $(this).closest('.job-section');
+        const dropdown = section.find('.job-name');
+        const newJobName = $(this).val().trim();
 
+        dropdown.find('option.custom-job').remove();
 
+        if (newJobName !== '') {
+            dropdown.append(`<option class="custom-job" value="${newJobName}" selected>${newJobName}</option>`);
+        } else {
+            dropdown.val('others');
+        }
+    });
 
-<script>
-$(document).ready(function() {
-  let jobIndex = 1;
+    // === Pouch and Cylinder Size Calculation ===
+    $(document).on('input', '.pouch-diameter, .pouch-height', function() {
+        const section = $(this).closest('.job-section');
+        const diameter = section.find('.pouch-diameter').val();
+        const height = section.find('.pouch-height').val();
+        if (diameter && height) {
+            section.find('.pouch-open-size').val(`${diameter}x${height}`);
+        }
+    });
 
-
-  $(document).on('change', '.job-name', function() {
-    const section = $(this).closest('.job-section');
-    const newJobInput = section.find('.new-job');
-
-    if ($(this).val() === 'others') {
-      newJobInput.show().focus();
-    } else {
-      newJobInput.hide().val('');
-  
-      section.find('.job-name option.custom-job').remove();
-    }
-  });
-
-  $(document).on('input', '.new-job', function() {
-    const section = $(this).closest('.job-section');
-    const dropdown = section.find('.job-name');
-    const newJobName = $(this).val().trim();
-
-    
-    dropdown.find('option.custom-job').remove();
-
-    if (newJobName !== '') {
-      dropdown.append(`<option class="custom-job" value="${newJobName}" selected>${newJobName}</option>`);
-    } else {
-      dropdown.val('others');
-    }
-  });
-
-  
-  $(document).on('input', '.pouch-diameter, .pouch-height', function() {
-    const section = $(this).closest('.job-section');
-    const diameter = section.find('.pouch-diameter').val();
-    const height = section.find('.pouch-height').val();
-    if (diameter && height) {
-      section.find('.pouch-open-size').val(`${diameter}x${height}`);
-      console.log("Pouch Open Size:", section.find('.pouch-open-size').val());
-    }
-  });
-
-  
-  $(document).on('input', '.cylinder-diameter, .cylinder-height', function() {
-    const section = $(this).closest('.job-section');
-    const diameter = section.find('.cylinder-diameter').val();
-    const height = section.find('.cylinder-height').val();
-    if (diameter && height) {
-      section.find('.cylinder-size').val(`${diameter}x${height}`);
-      console.log("Cylinder Size:", section.find('.cylinder-size').val());
-    }
-  });
-
-
-  $('#add-job').on('click', function(e) {
+    $(document).on('input', '.cylinder-diameter, .cylinder-height', function() {
+        const section = $(this).closest('.job-section');
+        const diameter = section.find('.cylinder-diameter').val();
+        const height = section.find('.cylinder-height').val();
+        if (diameter && height) {
+            section.find('.cylinder-size').val(`${diameter}x${height}`);
+        }
+    });
+   
+    // === Add new Job Section dynamically ===
+    $('#add-job').on('click', function(e) {
     e.preventDefault();
     let newSection = $('.job-section:first').clone();
     newSection.find('input').val('');
     newSection.find('select').prop('selectedIndex', 0);
     newSection.find('.new-job').hide();
     newSection.find('option.custom-job').remove();
+    newSection.find('h5').after('<div><button type="button" style="align-items-left:50px" class="btn btn-danger btn-sm **position-absolute top-0 start-0** m-2 close-btn" id="close_job">X</button></div>');
+
+
     $('#job-container').append(newSection);
     jobIndex++;
   });
+  $(document).on('click', '#close_job', function(e) {
+        e.preventDefault();
+        $(this).closest('.job-section').remove();
+    });
 });
 </script>
-
-
 
 {% endblock script %}
 
