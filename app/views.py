@@ -362,6 +362,7 @@ def update_user(request, user_id):
 def dashboard_page(request):
     try:
         get_q = request.GET.get("q", "")
+        job_name_search = request.GET.get("job_name_search","")
         date_s = request.GET.get("date", "")
         date_e = request.GET.get("end_date", "")
         sorting = request.GET.get("sorting", "")
@@ -376,12 +377,14 @@ def dashboard_page(request):
         filters = Q()
         if get_q:
             filters &= (
-                Q(job_name__icontains=get_q)
-                | Q(company_name__icontains=get_q)
-                | Q(cylinder_made_in__icontains=get_q)
+             Q(company_name__icontains=get_q)
+            )
+        if job_name_search:
+            filters &= (
+                Q(job_name__icontains=job_name_search)
             )
         if date_s and date_e:
-            filters &= Q(date__range=[date_s, date_e])
+            filters &= Q(date__range=[date_s, date_e])  
         elif date_s:
             filters &= Q(date__icontains=date_s)
         elif date_e:
@@ -419,6 +422,7 @@ def dashboard_page(request):
         datas = p.get_page(page)
         total_job = db_sqlite3.count()
         company_name = CompanyName.objects.all().order_by("company_name")
+        job_names = Job_detail.objects.values('job_name').all().distinct()
         count_of_company = company_name.count()
 
         cylinder_company_names = CylinderMadeIn.objects.all()
@@ -431,6 +435,7 @@ def dashboard_page(request):
             "nums": nums,
             "venues": datas,
             "total_job": total_job,
+            "job_names":job_names,
             "company_name": company_name,
             "cylinder_company_names": cylinder_company_names,
             "count_of_company": count_of_company,
@@ -1167,7 +1172,7 @@ def cdr_add(request):
                 extra_tags="custom-error-style",
             )
             return redirect("company_add_page")
-
+        
         if new_job_name != "":
             job_name = new_job_name
 
@@ -1687,17 +1692,19 @@ def ProformaInvoicePage(request):
 def ViewProformaInvoice(request):
     proformaInvoice = ProformaInvoice.objects.prefetch_related('job_details').all().order_by('invoice_date')
     company_name = ProformaInvoice.objects.values_list('company_name', flat=True).distinct()
-    start_date = request.GET.get('start_date')
-    end_date =  request.GET.get("end_date")
+    start_date = request.GET.get('start_date',"")
+    end_date =  request.GET.get("end_date","")
     select_company = request.GET.get('select_company',"")
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
 
-    if start_date and end_date:
-         proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date])
-    
-    if select_company and select_company.strip(): 
-        proformaInvoice = proformaInvoice.filter(company_name__icontains=select_company.strip())
+    if select_company and start_date:
+        proformaInvoice = proformaInvoice.filter(Q(invoice_date__icontains=start_date) & Q(company_name__icontains=select_company))
+         
+    elif start_date and end_date.strip():
+        proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date])
+    elif start_date.strip():
+        proformaInvoice = proformaInvoice.filter(Q(invoice_date__icontains=start_date))
     
     
         
@@ -1716,8 +1723,6 @@ def ViewProformaInvoice(request):
     except (json.JSONDecodeError, TypeError): 
         cleaned = gst_value.replace("[", "").replace("]", "").replace('"', "")
         proforma.gst = [x for x in cleaned.split(",") if x]
-
-        
     
     context = {
         "nums" :nums,
@@ -1907,22 +1912,40 @@ def ProformaInvoiceCreate(request):
         gst_list = request.POST.getlist("gst[]")
         gst_value  = request.POST.get("gst_value")
         taxable_value = request.POST.get("taxable_value")
+        invoice_status = request.POST.get('invoice_status')
         
         
+        required_fields = {
+        'invoice no':invoice_no, 
+        'invoice date':invoice_date, 
+        'mode payment':mode_payment, 
+        'company name':company_name, 
+        'company contact':company_contact,
+        'company email':company_email, 
+        'billing address':billing_address, 
+        'billing state_name':billing_state_name, 
+        'billing GST in no':billing_gstin_no,
+        'terms':terms,
+        'totals':totals,
+        'banking details':banking_details,
+        'gst value':gst_value, 
+        'taxable value':taxable_value,
         
-        required_fields = [
-        invoice_no, invoice_date, mode_payment, company_name, company_contact, 
-        company_email, billing_address, billing_state_name, billing_gstin_no,
-        terms, totals, banking_details, new_company, gst_value, taxable_value
-        ]
+      
+        
+        }
         
         
-        
+        for field, required in required_fields.items():
+            if not required:
+                messages.error(
+                    request, f"{field} is Required", extra_tags="custom-success-style"
+                )
+                return redirect("proforma_invoice_page")
+         
         if company_name == "" or new_company != "":
             company_name = new_company
             
-            
-        
     
         if ProformaInvoice.objects.filter(invoice_no=invoice_no).exists():
             messages.error(request,"Invoice number already exists",extra_tags="custom-success-style")
@@ -1944,8 +1967,8 @@ def ProformaInvoiceCreate(request):
                 gst = gst_list,
                 total = totals,
                 gst_value = gst_value,
-                total_taxable_value =  taxable_value
-             
+                total_taxable_value =  taxable_value,
+                invoice_status = invoice_status
                 
             )
             print(len(job_names))
@@ -1958,7 +1981,6 @@ def ProformaInvoiceCreate(request):
                     pouch_open_size=pouch_open_sizes[i],
                     cylinder_size=cylinder_sizes[i],
                     prpc_rate=prpc_price[i]
-
                 )
             messages.success(request, "Proforma Invoice Created Successfully!")
             return redirect("proforma_invoice_page")           
@@ -1966,108 +1988,6 @@ def ProformaInvoiceCreate(request):
             messages.warning(request,"Something went Wrong")
             print(e)
             return redirect('proforma_invoice_page')
-        
-        
-            
-                
-            
-        
-        
-        
-        # taxable_value = request.POST.getlist("taxable_value[]","")
-        # gst_value = request.POST.getlist("gst_value[]","")
-        
-        
-        
-        
-        # if job_name == "" or new_job != "":
-        #     job_name = new_job
-              
-
-        # print(gst)
-        # for field_name, field_value in {
-        #     "Invoice No": invoice_no,
-        #     "Invoice Date": invoice_date,
-        #     "Mode Payment": mode_payment,
-        #     "Company Name": company_name,
-        #     "Company Contact": company_contact,
-        #     "Company Email": company_email,
-        #     "Billing Address": billing_address,
-        #     "Billing State Name": billing_state_name,
-        #     "Billing GSTIN No": billing_gstin_no,
-        #     "Title": title,
-        #     "Job Name": job_name,
-        #     "Pouch Open Size": pouch_open_size,
-        #     "Cylinder Size": cylinder_size,
-        #     "PRPC Price": prpc_price,
-        #     "Quantity": quantity,
-        #     "GST": gst,
-        #     "Terms": terms,
-        #     "Total Amount": total_amount,
-        #     "Banking Details": banking_details,
-        # }.items():
-        #     if not field_value:
-        #         messages.error(
-        #             request,
-        #             f"{field_name} is Required",
-        #             extra_tags="custom-success-style",
-        #         )
-        #         return redirect("proforma_invoice_page")
-            
-            
- 
-        
-        
-        # email_error = utils.email_validator(company_email)
-        # if email_error:
-        #     messages.error(request, email_error, extra_tags="custom-success-style")
-        #     return redirect("proforma_invoice_page")
-        # if ProformaInvoice.objects.filter(company_name=company_name).exists():
-            
-        #     if ProformaInvoice.objects.filter(company_name=company_name, company_email=company_email, company_contact=company_contact).exists():
-        #         pass
-        #     else:
-        #         messages.error(request,"You Can't Chnage Data ")
-        #         return redirect("proforma_invoice_page")
-        # else:
-        #     if ProformaInvoice.objects.filter(company_email=company_email).exists():
-        #         messages.error(request,"Email already Exists",extra_tags="custom-success-style")
-        #         return redirect("proforma_invoice_page")
-        #     if ProformaInvoice.objects.filter(company_contact=company_contact).exists():
-        #         messages.error(request,"Contact already Exists",extra_tags="custom-success-style")
-        #         return redirect("proforma_invoice_page")
-            
-        # try:    
-        #     proforma_invoice = ProformaInvoice.objects.create(
-        #         invoice_no=invoice_no,
-        #         invoice_date=invoice_date,
-        #         mode_payment=mode_payment,
-        #         company_name=company_name,
-        #         company_contact=company_contact,
-        #         company_email=company_email,
-        #         billing_address=billing_address,
-        #         billing_state_name=billing_state_name,
-        #         billing_gstin_no=billing_gstin_no,
-        #         title=title,
-        #         job_name=job_name,
-        #         pouch_open_size=pouch_open_size,
-        #         cylinder_size=cylinder_size,
-        #         prpc_rate=prpc_price,
-        #         quantity=quantity,
-        #         gst=gst,
-        #         terms_note=terms,
-        #         banking_details=banking_details,
-        #         total=total_amount,
-        #         taxable_value=taxable_value,
-        #         gst_value = gst_value
-        #     )
-        #     proforma_invoice.save()
-        #     messages.success(request, "Proforma Invoice Created Successfully")
-        #     return redirect("proforma_invoice_page")
-        # except Exception as e:
-        #     messages.warning(request, f"Something went wrong try again {e}")
-     
-            # return redirect("proforma_invoice_page")
         
     return redirect("proforma_invoice_page")   
 

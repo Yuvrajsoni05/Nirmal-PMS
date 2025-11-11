@@ -89,7 +89,7 @@
                     
                     
                     <div id="job-container">
-                            <div class="row job-section border rounded p-3 mb-3 position-relative">
+                            <div class="row job-section border rounded p-3 mb-3">
                                 <h5>Job Detail Section</h5>
                     
                                 <div class="col-md-4">
@@ -104,7 +104,7 @@
 
                                 <div class="col-md-4">
                                     <label for="job_name" class="form-label fw-semibold">Job Name</label>
-                                    <select name="job_name[]" id="job_name"class="form-control job-name">
+                                    <select name="job_name[]" id="job_name"class="form-control job-name" required>
                                     <option value="" selected disabled>Select Job Name</option>
                                     <option value="Printing">Printing</option>
                                     <option value="Packaging">Packaging</option>
@@ -112,7 +112,7 @@
                                     </select>
 
                                     <input type="text" name="new_job" class="form-control mt-2 new-job" style="display:none;" placeholder="Enter new Job">
-                                    <span class="invalid-feedback">This field is required</span>
+                                    <span class="invalid-feedback" >This field is required</span>
                                 </div>
 
                                 <div class="col-md-4">
@@ -135,12 +135,14 @@
 
                             <div class="col-md-4 mt-3">
                                 <label for="quantity" class="form-label fw-semibold">Quantity</label>
-                                <input type="number" class="form-control item_check" step="any" id="quantity" name="quantity[]" placeholder="Quantity">
+                                <input type="number" class="form-control item_check" step="any" id="quantity" name="quantity[]" placeholder="Quantity" >
+                                <span class="invalid-feedback" id="quantity_error">This field is required</span>
                             </div>
 
                             <div class="col-md-4 mt-3">
                                 <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
-                                <input type="number" class="form-control item_check" step="any" name="prpc_price[]" placeholder="Per Rate Per Cylinder">
+                                <input type="number" class="form-control item_check" step="any" id="prpc_price" name="prpc_price[]" placeholder="Per Rate Per Cylinder" >
+                                <span class="invalid-feedback" id="prpc_price_error">This field is required</span>
                             </div>
 
                             
@@ -228,6 +230,13 @@
     const invoiceNoInput = document.getElementById('invoice_no');
     const invoiceNoError = document.getElementById('invoice_no_error');
 
+
+    const QuantityInput = document.getElementById('quantity');
+    const QuantityError = document.getElementById('quantity_error');
+
+    const PRPCInput = document.getElementById('prpc_price');
+    const PRPCError = document.getElementById('prpc_price_error');
+
     const invoiceDateInput = document.getElementById('invoice_date');
     const invoiceDateError = document.getElementById('invoice_date_error');
 
@@ -261,9 +270,6 @@
     const totalAmountInput = document.getElementById('total_amount');
     const totalAmountError = document.getElementById('total_amount_error');
 
-    const orderStatusInput = document.getElementById('order_status');
-    const orderStatusError = document.getElementById('order_status_error');
-
     const bankDetailsInput = document.getElementById('bank_details');
     const bankDetailsError = document.getElementById('bank_details_error');
 
@@ -276,6 +282,29 @@
             return false;
         } else {
             invoiceNoError.style.display = 'none';
+            return true;
+        }
+    }
+
+
+    function validatePRPCPrice() {
+        if (PRPCInput.value.trim() === '') {
+            PRPCError.style.display = 'block';
+            return false;
+        } else {
+            PRPCError.style.display = 'none';
+            return true;
+        }
+    }
+
+
+
+    function validateQuantity() {
+        if (QuantityInput.value.trim() === '') {
+            QuantityError.style.display = 'block';
+            return false;
+        } else {
+            QuantityError.style.display = 'none';
             return true;
         }
     }
@@ -394,15 +423,7 @@
         }
     }
 
-    function validateOrderStatus() {
-        if (orderStatusInput.value.trim() === '' || orderStatusInput.value === 'all') {
-            orderStatusError.style.display = 'block';
-            return false;
-        } else {
-            orderStatusError.style.display = 'none';
-            return true;
-        }
-    }
+ 
 
     function validateBankDetails() {
         if (bankDetailsInput.value.trim() === '') {
@@ -415,6 +436,7 @@
     }
 
     function validateForm() {
+        const isPRPCValid = validatePRPCPrice();
         const isInvoiceNoValid = validateInvoiceNo();
         const isInvoiceDateValid = validateInvoiceDate();
         const isModePaymentValid = validateModePayment();
@@ -425,9 +447,9 @@
         const isBillingStateNameValid = validateBillingStateName();
         const isBillingGstinNoValid = validateBillingGstinNo();
         const isTermsValid = validateTerms();
+        const isQuantityValid = validateQuantity();
         const isTaxableValueValid = validateTaxableValue();
         const isTotalAmountValid = validateTotalAmount();
-        const isOrderStatusValid = validateOrderStatus();
         const isBankDetailsValid = validateBankDetails();
 
         return (
@@ -443,8 +465,9 @@
             isTermsValid &&
             isTaxableValueValid &&
             isTotalAmountValid &&
-            isOrderStatusValid &&
-            isBankDetailsValid
+            isBankDetailsValid &&
+            isQuantityValid &&
+            isPRPCValid
         );
     }
 
@@ -460,15 +483,19 @@
     termsInput.addEventListener('input', validateTerms);
     taxableValueInput.addEventListener('input', validateTaxableValue);
     totalAmountInput.addEventListener('input', validateTotalAmount);
-    orderStatusInput.addEventListener('input', validateOrderStatus);
+    QuantityInput.addEventListener('input', validateQuantity);
     bankDetailsInput.addEventListener('input', validateBankDetails);
+    PRPCInput.addEventListener('input' ,validatePRPCPrice);
 
- 
+    const loaderOverlay = document.getElementById("loader-overlay");
     proformaForm.addEventListener('submit', function (event) {
         event.preventDefault();
 
         if (validateForm()) {
-            proformaForm.submit();
+            if (loaderOverlay) {
+                    loaderOverlay.style.display = "flex";
+                }requestAnimationFrame(() => {
+                proformaForm.submit();});
         } else {
             const firstError = document.querySelector('[style*="display: block"]');
             if (firstError) {
@@ -481,12 +508,12 @@
 </script>
 <script>
 $(document).ready(function() {
-    // === Dynamic GST, totals, and AJAX updates ===
+
     $(document).on('input change', '#billing_state_name, #company_name, input[name="gst[]"], .item_check', function() {
         var changedField = $(this).attr('id');
         var billing_state_name = $('#billing_state_name').val();
         var company_name = $('#company_name').val();
-
+        
         // GST Checkbox values
         var igst = $('#igst').is(':checked') ? 18 : 0;
         var cgst = $('#cgst').is(':checked') ? 9 : 0;
@@ -507,6 +534,12 @@ $(document).ready(function() {
             $("#new_company").hide();
         }
 
+        if (changedField === 'company_name') {
+            $('#company_email').val('');
+            $('#company_contact').val('');
+            $('#billing_address').val('');
+        }
+
         // Set GST options visibility
         if (billing_state_name === "Gujarat") {
             $("#igst_div").hide();
@@ -520,7 +553,7 @@ $(document).ready(function() {
             sgst = 0;
             cgst = 0;
         }
-
+        console.log("Company name changed to:", company_name);
         // Send data to server
         $.ajax({
             url: "{% url 'proforma_invoice_ajax' %}",
@@ -623,7 +656,12 @@ $(document).ready(function() {
     newSection.find('select').prop('selectedIndex', 0);
     newSection.find('.new-job').hide();
     newSection.find('option.custom-job').remove();
-    newSection.find('h5').after('<div><button type="button" style="align-items-left:50px" class="btn btn-danger btn-sm **position-absolute top-0 start-0** m-2 close-btn" id="close_job">X</button></div>');
+    newSection.find('h5').after(`
+  <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+    <button class="btn btn-danger me-md-2" id="close_job" type="button">X</button>
+  </div>
+`);
+
 
 
     $('#job-container').append(newSection);

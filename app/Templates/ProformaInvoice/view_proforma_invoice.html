@@ -1,4 +1,40 @@
-{% extends "Base/base.html" %} {% load static %} {% block main_block %}
+{% extends "Base/base.html" %} {% load static %}
+{% block styles %}
+    <style>
+    .input-wrapper {
+        position: relative;
+     
+    }
+    .input-wrapper label {
+      position: absolute;
+      top: -0.6rem; /* push above border */
+      left: 1.75rem;
+      background: #FFFFFF; /* same as background to cover border */
+      padding: 0 4px;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+   .nexticon {
+    position: absolute;
+    right: -20px;
+   
+    width: 20px;
+    border-radius: 20px;
+    color: #000000ff;
+}
+.previcon {
+    position: absolute;
+    left: -20px;
+    
+    width: 20px;
+    border-radius: 20px;
+    color: #000000ff;
+}
+
+    </style>
+{% endblock styles %}
+
+    {% block main_block %}
 <div class="container-fluid py-4">
     <div class="row justify-content-center">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -12,39 +48,73 @@
                     <div class="card-head-row card-tools-still-right">
                         <div class="card-title">View Proforma Invoices</div>
                         <div class="card-tools">
-                            <form method="get" class="d-flex align-items-center" action="">
-                                <div class="d-flex align-items-center gap-1">
-                                    <div class="form-group mb-0">
-                                        <input type="date" class="form-control" id="date" name="start_date" placeholder="Start Date" value="">
+                            <form method="get" action="">
+                                <div class="d-flex flex-wrap gap-2 align-items-end">
+                                    <!-- Start Date -->
+                                    <div class="flex-fill input-wrapper" style="min-width: 150px;">
+                                        <label for="readonlyInput">Start Date</label>
+                                        <input type="date" 
+                                            class="form-control" 
+                                            id="start_date" 
+                                            name="start_date" 
+                                            placeholder="Start Date"
+                                            value="{{ request.GET.start_date }}">
                                     </div>
-                                    <div class="form-group mb-0">
-                                        <input type="date" class="form-control" id="end_date" name="end_date" placeholder="End Date" value="">
+                                    
+                                    <!-- End Date -->
+                                    <div class="flex-fill input-wrapper" style="min-width: 150px;">
+                                        <label>End Date</label>
+                                        <input type="date" 
+                                            class="form-control" 
+                                            id="end_date" 
+                                            name="end_date" 
+                                            placeholder="End Date"
+                                            value="{{ request.GET.end_date }}">
                                     </div>
-                                    <div class="form-group mb-0">
-                                        <select class="form-select form-control" name="select_company" style="min-width: 350px;">
-                                            <option value="" selected > Select Company Name </option>
+                                    
+                                    <!-- Company Select -->
+                                    <div class="flex-fill" style="min-width: 200px;">
+                                        <select class="form-select form-select-sm form-control" 
+                                                id="select_company"
+                                                name="select_company">
+                                            <option value="" {% if not request.GET.select_company %}selected{% endif %}>
+                                                Select Company Name
+                                            </option>
                                             {% for company in company_name %}
-                                                <option value="{{ company }} ">{{ company }}</option>
+                                                <option value="{{ company }}" 
+                                                        {% if request.GET.select_company == company %}selected{% endif %}>
+                                                    {{ company }}
+                                                </option>
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    <button type="submit" class="btn btn-primary ">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                    <a href="{% url 'view_proforma_invoice' %}" class="btn btn-secondary ">
-                                        Reset
-                                    </a>
+                                    
+                                    <!-- Action Buttons -->
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" 
+                                                class="btn btn-primary "
+                                                title="Search">
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                        <a href="{% url 'view_proforma_invoice' %}" 
+                                        class="btn btn-secondary "
+                                        title="Reset">
+                                            Reset
+                                        </a>
+                                    </div>
                                 </div>
                             </form>
                         </div>
                     </div>
+
+
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-striped">
                             <thead class="thead-light">
                                 <tr class="text-nowrap text-center">
-                                    <th scope="col">
+                                    <th scope="col" class="sticky-left">
                                         <a href="">Sr No</a>
                                     </th>
                                     <th scope="col">
@@ -73,16 +143,17 @@
                                     <th scope="col">Total Taxable Value</th>
                                     <th scope="col">Gst Value</th>
                                     <th scope="col">Total Amount</th>
-                                    <th scope="col" colspan="3">Actions</th>
+                                    <th scope="col">Proforma Statues</th>
+                                    <th scope="col" class="sticky-right" colspan="3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for proforma in proformaInvoices %}
                                 
-                                <tr class="text-nowrap text-center">
+                                <tr class="text-nowrap text-center ">
                                     <td
                                         data-bs-toggle="modal"
-                                        data-bs-target="#viewModal{{ i.id }}">
+                                        data-bs-target="#viewModal{{ proforma.id }}" class="sticky-left">
                                         {{ forloop.counter}}
                                     </td>
                                     <td>{{ proforma.invoice_no }}</td>
@@ -140,8 +211,8 @@
                                     <td> {{proforma.total_taxable_value }} </td>
                                     <td> {{proforma.gst_value }} </td>
                                     <td>{{ proforma.total }}</td>
-
-                                    <td class="text-truncate">
+                                    <td>{{ proforma.invoice_status }}</td>
+                                    <td class="text-truncate sticky-right" colspan="3" >
                                         <form action="{% url "delete_proforma_invoice" proforma_id=proforma.id  %}" method="POST"  class="d-inline" id="delete-form-{{ proforma.id }}" >
                                             {% csrf_token %}
                                             <button
@@ -149,7 +220,28 @@
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </button>
                                         </form>
-                                        <script>
+                                    
+                                        <button
+                                            type="button"
+                                            class="btn btn-sm btn-outline-success"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#proformaemailModal{{ proforma.id }}"
+                                        >
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                width="16"
+                                                height="16"
+                                                fill="currentColor"
+                                                class="bi bi-envelope"
+                                                viewBox="0 0 16 16"
+                                            >
+                                                <path
+                                                    d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"
+                                                />
+                                            </svg>
+                                        </button>
+                                    </td>
+    <script>
                                             let formIdToSubmit;
                                             document.addEventListener(
                                                 "DOMContentLoaded",
@@ -223,47 +315,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        {% comment %} <button
-                                            type="button"class="btn btn-sm btn-outline-primary"data-bs-toggle="modal"data-bs-target="#proformaupdate{{ proforma.id }}">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                fill="currentColor"
-                                                class="bi bi-pencil-square"
-                                                viewBox="0 0 16 16"
-                                            >
-                                                <path
-                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"
-                                                />
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"
-                                                />
-                                            </svg>
-                                        </button> {% endcomment %}
-                                        <button
-                                            type="button"
-                                            class="btn btn-sm btn-outline-success"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#proformaemailModal{{ proforma.id }}"
-                                        >
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                width="16"
-                                                height="16"
-                                                fill="currentColor"
-                                                class="bi bi-envelope"
-                                                viewBox="0 0 16 16"
-                                            >
-                                                <path
-                                                    d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"
-                                                />
-                                            </svg>
-                                        </button>
-                                    </td>
-
                                     <!-- Corrections Modal -->
                                     <div
                                         class="modal fade"
@@ -466,6 +517,120 @@
 
 
 
+                                    
+                                    <div class="modal fade" id="viewModal{{ proforma.id }}" tabindex="-1" aria-labelledby="viewModalLabel{{ proforma.id }}" style="width: 100%;" aria-hidden="true">
+                                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                                            <div class="modal-content border-0 shadow-lg">
+                                                <div class="modal-header bg-primary text-white">
+                                                    <h5 class="modal-title" id="viewModalLabel{{ proforma.id }}">
+                                                        Proforma Invoice Details: {{ proforma.invoice_no }}
+                                                    </h5>
+                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <div class="container-fluid">
+                                                        <!-- Section 1 -->
+                                                        <div class="row mb-3">
+                                                            <div class="col-md-6">
+                                                                <div class="info-block">
+                                                                    <span class="label">Invoice No:</span>
+                                                                    <span class="value">{{ proforma.invoice_no }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Invoice Date:</span>
+                                                                    <span class="value">{{ proforma.invoice_date }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Payment Mode:</span>
+                                                                    <span class="value">{{ proforma.mode_payment }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Company Name:</span>
+                                                                    <span class="value">{{ proforma.company_name }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Contact:</span>
+                                                                    <span class="value">{{ proforma.company_contact }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Email:</span>
+                                                                    <span class="value">{{ proforma.company_email }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Billing Address:</span>
+                                                                    <span class="value">{{ proforma.billing_address }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">GSTIN:</span>
+                                                                    <span class="value">{{ proforma.billing_gstin_no }}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-6">
+                                                                <div class="info-block">
+                                                                    <span class="label">State:</span>
+                                                                    <span class="value">{{ proforma.billing_state_name }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Job Titles:</span>
+                                                                    <span class="value d-flex flex-wrap">
+                                                                        {% for job in proforma.job_details.all %}
+                                                                            <span class="badge bg-info text-dark me-1">{{ job.title }}</span>
+                                                                        {% empty %}
+                                                                            <em>No jobs listed</em>
+                                                                        {% endfor %}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">GST:</span>
+                                                                    <span class="value">
+                                                                        {% for gst in proforma.gst %}
+                                                                            <span class="badge bg-success me-1">{{ gst }}</span>
+                                                                        {% empty %}
+                                                                            <em>No GST</em>
+                                                                        {% endfor %}
+                                                                    </span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Total Taxable Value:</span>
+                                                                    <span class="value">{{ proforma.total_taxable_value }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">GST Value:</span>
+                                                                    <span class="value">{{ proforma.gst_value }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Total:</span>
+                                                                    <span class="value fw-bold text-primary">₹{{ proforma.total }}</span>
+                                                                </div>
+                                                                <div class="info-block">
+                                                                    <span class="label">Status:</span>
+                                                                    <span class="value">
+                                                                        {% if proforma.invoice_status == "Paid" %}
+                                                                            <span class="badge bg-success">Paid</span>
+                                                                        {% elif proforma.invoice_status == "Pending" %}
+                                                                            <span class="badge bg-warning text-dark">Pending</span>
+                                                                        {% else %}
+                                                                            <span class="badge bg-secondary">{{ proforma.invoice_status }}</span>
+                                                                        {% endif %}
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="modal-footer bg-light">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                        Close
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                     <!-- Email Modal -->
                                    <div class="modal fade" id="proformaemailModal{{ proforma.id }}" tabindex="-1" aria-labelledby="emailModalLabel{{ i.id }}" aria-hidden="true">
                                     <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -498,7 +663,7 @@
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                            
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Date:</label>
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Invoice Date:</label>
                                                             <input type="date" class="form-control form-control-sm w-auto fs-6" name="invoice_date" value="{{ proforma.invoice_date|date:'Y-m-d' }}">
                                                         </div>
                                                     </div>
@@ -763,7 +928,7 @@
                 <li class="page-item">
                     <a
                         class="page-link"
-                        href="?page={{ proformaInvoices.previous_page_number }}&search={{ request.GET.search }}"
+                        href="?page={{ proformaInvoices.previous_page_number }}&search={{ request.GET.select_company }}&start_date={{request.GET.start_date}}&end_date={{request.GET.end_date}} "
                         >Previous</a
                     >
                 </li>
@@ -773,7 +938,7 @@
                 >
                     <a
                         class="page-link"
-                        href="?page={{ i }}&search={{ request.GET.search }}"
+                        href="?page={{ i }}&search={{ request.GET.select_company }}&start_date={{request.GET.start_date}}&end_date={{request.GET.end_date}}"
                         >{{ i }}</a
                     >
                 </li>
@@ -781,7 +946,7 @@
                 <li class="page-item">
                     <a
                         class="page-link"
-                        href="?page={{ proformaInvoices.next_page_number }}&search={{ request.GET.search }}"
+                        href="?page={{ proformaInvoices.next_page_number }}&search={{ request.GET.select_company }}&start_date={{request.GET.start_date}}&end_date={{request.GET.end_date}}"
                         >Next</a
                     >
                 </li>
