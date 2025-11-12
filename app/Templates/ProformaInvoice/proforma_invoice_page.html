@@ -202,9 +202,15 @@
                     </div>
 
 
-                    <div class="col-md-6">
+                    <div class="col-md-9">
                         <label for="bank_details" class="form-label fw-semibold">Bank Details</label>
-                        <input type="text" id="bank_details" name="bank_details" class="form-control" placeholder="Bank Name, A/C No., IFSC Code">
+                        <select id="bank_details" name="bank_details" class="form-control form-select">
+                            <option value=""> Select Bank  </option>
+                            {% for bank in bank_details  %}
+                                <option value="{{ bank.id }}" >{{ bank.bank_name }} - {{ bank.bank_brnach_address }}</option>
+                            {% endfor %}
+                            
+                        </select>
                         <span class="invalid-feedback" id="bank_details_error">This field is required</span>
                     </div>
 

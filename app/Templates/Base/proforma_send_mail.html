@@ -182,7 +182,7 @@
                             </tr>
                             <tr>
                                 <td>Terms of Delivery</td>
-                                <td colspan="2">{{ term_note }}</td>
+                                <td colspan="2"></td>
                             </tr>
                         </table>
                     </td>
@@ -358,16 +358,15 @@
                 </tr>
                 <tr>
                     <td style="width: 52%; font-size: 10px">
-                        <b>Bank Name:</b> YES Bank Bank Ltd.<br />
-                        <b>Branch:</b> Ahmedabad Main Branch<br />
-                        <b>Account Name:</b> Shrri Nirmal Ventures Pvt. Ltd.<br />
-                        <b>Account Number:</b> 120584600000115<br />
-                        <b>IFSC Code:</b> YESB0001205
+                        <b>Bank Name:</b> {{ data.bank_name }}<br />
+
+                        <b>Account Name:</b> {{data.bank_account_name}}.<br />
+                        <b>Account Number:</b> {{ data.bank_account_number }}<br />
+                        <b>IFSC Code:</b> {{ data.bank_ifsc_code }}
                     </td>
                     <td style="width: 50%; font-size: 10px; text-align: center">
                         <b>Bank Address:</b><br />
-                        Yes BANK Ltd.,SNO 9.TIME SQUARE ARCADE,OP <br />
-                        Main Road, Ahmedabad, Gujarat - 380058
+                        {{ data.bank_brnach_address }}
                     </td>
                 </tr>
             </table>
@@ -404,6 +403,25 @@
                         />
                         <br />
                         Authorized Signatory
+                    </td>
+                </tr>
+            </table>
+            <table style="margin-top: 15px">
+                <tr>
+                    <td
+                        colspan="2"
+                        style="
+                            text-align: center;
+                            font-weight: bold;
+                            font-size: 12px;
+                        "
+                    >
+                        Terms note
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 52%; font-size: 10px">
+                        {{data.term_note}}
                     </td>
                 </tr>
             </table>

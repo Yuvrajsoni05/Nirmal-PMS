@@ -17,6 +17,7 @@ admin.site.register(CylinderMadeIn)
 
 admin.site.register(ProformaInvoice)
 admin.site.register(ProformaJob)
+admin.site.register(BankDetails)
 
 class JobDetailHistory(admin.ModelAdmin):
     list_display = ("id", "job" , "field_name" , "old_value" , "new_value" , "changed_at","chnage_user" )

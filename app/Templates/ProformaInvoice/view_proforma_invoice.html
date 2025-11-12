@@ -73,7 +73,7 @@
                                     </div>
                                     
                                     <!-- Company Select -->
-                                    <div class="flex-fill" style="min-width: 200px;">
+                                    <div class="flex-fill" style="min-width: 400px;">
                                         <select class="form-select form-select-sm form-control" 
                                                 id="select_company"
                                                 name="select_company">
@@ -207,10 +207,11 @@
                                     <span>{{ gst }}  &nbsp; </span>
                                     {% endfor %}
                                     </td>
-                                   
+                                    
                                     <td> {{proforma.total_taxable_value }} </td>
                                     <td> {{proforma.gst_value }} </td>
                                     <td>{{ proforma.total }}</td>
+
                                     <td>{{ proforma.invoice_status }}</td>
                                     <td class="text-truncate sticky-right" colspan="3" >
                                         <form action="{% url "delete_proforma_invoice" proforma_id=proforma.id  %}" method="POST"  class="d-inline" id="delete-form-{{ proforma.id }}" >
@@ -643,7 +644,7 @@
                                         </div>
 
                                         <!-- Body -->
-                                        <div class="modal-body bg-light p-4">
+                                        <div class="modal-body bg-light p-4 overflow-y-auto overflow-hidden" style="height: 800px;">
                                             <form method="post" action="{% url 'proforma_sendmail' %}" enctype="multipart/form-data">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="proforma_id" value="{{ proforma.id }}">
@@ -826,14 +827,14 @@
                                                     </div>
 
                                                     <!-- GST Value & Total -->
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                            
                                                             <label class="fw-bold me-3 mb-0 fs-6">GST Value:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="gst_value" value="{{ proforma.gst_value }}" readonly>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-12">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                            
                                                             <label class="fw-bold me-3 mb-0 fs-6">Total:</label>
@@ -842,15 +843,42 @@
                                                           
                                                         </div>
                                                     </div>
-
+                                                    
                                                     <!-- Banking -->
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
-                                                        
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Banking:</label>
-                                                            <input type="text" class="form-control form-control-sm fs-6" name="banking_details" value="{{ proforma.banking_details }}" readonly>
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Bank Name</label>
+                                                            <input type="text" class="form-control form-control-sm fs-6" name="bank_name" value="{{ proforma.bank_details.bank_name }}" readonly>
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-6">
+                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Account Name</label>
+                                                            <input type="text" class="form-control form-control-sm fs-6" name="account_name" value="{{ proforma.bank_details.account_name }}" readonly>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Bank Account number</label>
+                                                            <input type="text" class="form-control form-control-sm fs-6" name="bank_account_number" value="{{ proforma.bank_details.bank_account_number }}" readonly>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-8">
+                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Bank Branch</label>
+                                                            <input type="text" class="form-control form-control-sm fs-6" name="bank_brnach_address" value="{{ proforma.bank_details.bank_brnach_address }}" readonly>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="d-flex align-items-center bg-white p-3 rounded">
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Bank IFSC Code</label>
+                                                            <input type="text" class="form-control form-control-sm fs-6" name="bank_ifsc_code" value="{{ proforma.bank_details.bank_ifsc_code }}" readonly>
+                                                        </div>
+                                                    </div>
+
+                                            
 
                                                     <!-- Terms -->
                                                     <div class="col-md-12">
@@ -887,6 +915,11 @@
                                                     data-banking_details="{{ proforma.banking_details|escapejs }}"
                                                     data-terms_note="{{ proforma.terms_note|escapejs }}"
                                                     data-total_in_worlds = "{{proforma.total_worlds }}"
+                                                    data-bank_name  = "{{proforma.bank_details.bank_name}}"
+                                                    data-bank_account_number  = "{{proforma.bank_details.bank_account_number}}"
+                                                    data-bank_brnach_address  = "{{proforma.bank_details.bank_brnach_address}}"
+                                                    data-bank_ifsc_code  = "{{proforma.bank_details.bank_ifsc_code }}"
+                                                    data-bank_account_name =   "{{proforma.bank_details.account_name }}"
                                                     data-jobs='[
                                                         {% for job in proforma.job_details.all %}
                                                         {

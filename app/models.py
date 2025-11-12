@@ -4,6 +4,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 from django.core.validators import validate_email
+from django.forms import CharField
+
 
 
 from num2words import num2words
@@ -127,8 +129,15 @@ class CylinderMadeIn(models.Model):
         return f"{self.cylinder_made_in}"
 
 
-
-
+class BankDetails(models.Model):
+    account_name = models.CharField(max_length=200, blank=True, null=True)
+    bank_name = models.CharField(max_length=200)
+    bank_brnach_address = models.TextField()
+    bank_account_number = models.CharField(max_length=200)
+    bank_ifsc_code  =  models.CharField(max_length=200)
+    
+    def __str__(self):
+        return f"{self.bank_name}"
 
 class ProformaInvoice(models.Model):
     
@@ -179,7 +188,7 @@ class ProformaInvoice(models.Model):
     billing_address = models.TextField()
     billing_gstin_no = models.CharField(max_length=100)
     billing_state_name = models.CharField(max_length=200, choices=INDIAN_STATES)
-    banking_details = models.TextField()
+    bank_details = models.ForeignKey(BankDetails,on_delete=models.SET_NULL,blank=True,null=True,related_name='bank_details')
     gst = models.CharField(max_length=200,blank=True, null=True)
     total_taxable_value = models.CharField(max_length=200,blank=True, null=True)
     gst_value = models.CharField(max_length=200,blank=True, null=True)
@@ -223,16 +232,21 @@ class ProformaJob(models.Model):
     
     
     
-    
-    
-    
-    
-    
-    
-    
 
 class Company(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     company_name = models.CharField(max_length=200,blank=True,null=True)
-    company_email = models.EmailField(max_length=200,blank=True,null=True)
-    
+
+  
+
+class CompanyEmail(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='emails')
+    email = models.EmailField(max_length=200)
+
+    def __str__(self):
+        return f"{self.company.name} - {self.email}"
+
+
+class CompanyContact(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='contacts')
+    contact_number = models.CharField(max_length=20)

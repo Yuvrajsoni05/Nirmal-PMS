@@ -79,16 +79,12 @@ function printProforma(button) {
                 <table style="width: 100%; border: 1px solid black; border-collapse: collapse; font-size: 8px;">
                     <tr>
                         <td>Invoice No.: <b>${data.invoice_no}</b></td>
-                        <td><b>PROFORMA INVOICE</b><br />PROFORMA INVOICE date. ${
-                            data.invoice_date
-                        }</td>
+                        <td><b>PROFORMA INVOICE</b><br />PROFORMA INVOICE date. ${data.invoice_date}</td>
                         <td>Invoice Date<br /><b>${data.invoice_date}</b></td>
                     </tr>
                     <tr>
                         <td>Delivery Note</td>
-                        <td>Mode/Terms of Payment<br /><b>${
-                            data.mode_payment
-                        }</b></td>
+                        <td>Mode/Terms of Payment<br /><b>${data.mode_payment}</b></td>
                         <td>Other References</td>
                     </tr>
                     <tr>
@@ -96,9 +92,7 @@ function printProforma(button) {
                     </tr>
                     <tr><td>Dispatch Doc No.</td><td>Delivery Note Date</td><td></td></tr>
                     <tr><td>Dispatched through</td><td>Destination</td><td></td></tr>
-                    <tr><td>Terms of Delivery</td><td colspan="2">${
-                        data.term_note
-                    }</td></tr>
+                    <tr><td>Terms of Delivery</td><td colspan="2">${data.term_note}</td></tr>
                 </table>
             </td>
         </tr>
@@ -139,23 +133,19 @@ function printProforma(button) {
         </thead>
         <tbody class="products-section">
             ${jobRows}
-            <tr><td colspan="7"></td><td></td></tr>
+      
             <tr>
                 <td colspan="7" style="padding:6px 4px; font-weight:bold">
                     <i>${data.gst}</i><br />Less : <b>Rounding off Sale</b>
                 </td>
-                <td class="text-right bold" style="padding:6px 4px;">${
-                    data.gst_value
-                }</td>
+                <td class="text-right bold" style="padding:6px 4px;">${data.gst_value}</td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="4" class="text-left bold">Total</td>
                 <td colspan="3"></td>
-                <td class="text-right bold" style="font-size:14px">₹ ${
-                    data.total
-                }</td>
+                <td class="text-right bold" style="font-size:14px">₹ ${data.total}</td>
             </tr>
         </tfoot>
     </table>
@@ -200,11 +190,40 @@ function printProforma(button) {
         </tfoot>
     </table>
 
+    <!-- Bank Details Section in Footer -->
+            <table style="margin-top: 15px">
+                <tr>
+                    <td
+                        colspan="2"
+                        style="
+                            text-align: center;
+                            font-weight: bold;
+                            font-size: 12px;
+                        "
+                    >
+                        BANK DETAILS
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 52%; font-size: 10px">
+                        <b>Bank Name:</b> ${data.bank_name}<br />
+
+                        <b>Account Name:</b> ${data.bank_account_name}.<br />
+                        <b>Account Number:</b> ${data.bank_account_number}<br />
+                        <b>IFSC Code:</b> ${data.bank_ifsc_code}
+                    </td>
+                    <td style="width: 50%; font-size: 10px; text-align: center">
+                        <b>Bank Address:</b><br />
+                        ${data.bank_brnach_address}
+                    </td>
+                </tr>
+            </table>
+
     <table style="margin-top:8px">
         <tr>
             <td style="width:52%; padding:5px; vertical-align:top">
                 <b>Tax Amount (in words):</b><br/>
-                INR ${data.tax_in_words || ""} Only<br/><br/>
+                INR ${data.total_in_worlds} Only<br/><br/>
                 <b>Company's PAN:</b> AABCN6372N<br/><br/>
                 <b>Declaration:</b><br/>
                 We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
@@ -234,5 +253,3 @@ function printProforma(button) {
 `);
     printWindow.document.close();
 }
-
-

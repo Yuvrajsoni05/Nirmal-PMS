@@ -1255,19 +1255,19 @@ def cdr_add(request):
             "cdr_corrections": cdr_corrections_data,
         }
 
-        uarl = os.environ.get("CREATE_WEBHOOK_CDR")
        
-        if url:
+       
+        
             
-            file_dic = file_name_convert(cdr_files)
-            print(file_dic)
+        file_dic = file_name_convert(cdr_files)
+        try:
             url = os.environ.get("CREATE_WEBHOOK_CDR")
             response = requests.post(f"{url}", data=data, files=file_dic)
             if response.status_code == 200:
                 print("Positive Response : ", response)
                 messages.success(request, "CDR Upload Successfully ")
                 return redirect("company_add_page")
-
+            
             else:
                 cdr_data = CDRDetail.objects.create(
                     date=cdr_upload_date,
@@ -1285,6 +1285,24 @@ def cdr_add(request):
                 cdr_data.save()
                 messages.success(request, "CDR Upload Successfully SQLite DB")
                 return redirect("company_add_page")
+        except Exception as e:
+            cdr_data = CDRDetail.objects.create(
+                    date=cdr_upload_date,
+                    company_name=company_name,
+                    company_email=company_email,
+                    cdr_corrections=cdr_corrections_data,
+                    job_name=job_name,
+                )
+            for file_key, file_data in file_dic.items():
+                file_obj = file_data[1]
+                CDRImage.objects.create(
+                    cdr=cdr_data, image=file_obj
+                )
+                    
+            cdr_data.save()
+            messages.success(request, "CDR Upload Successfully SQLite DB")
+            return redirect("company_add_page")
+            
 
               
                 
@@ -1426,15 +1444,12 @@ def cdr_update(request, update_id):
                 update_details.save()
                 messages.success(request, "Data Updated Successfully")
                 return redirect("company_add_page")
-
     return redirect("company_add_page")
+
 
 
 def offline_page(request):
     return render(request, "Base/offline_page.html")
-
-
-
 
 
 @custom_login_required
@@ -1501,7 +1516,6 @@ def cdr_sendmail_data(request):
         email.send()
         messages.success(request, "Mail Send successfully")
         return redirect("company_add_page")
-
     return redirect("company_add_page")
 
 
@@ -1681,17 +1695,20 @@ def ProformaInvoicePage(request):
     company_list  = CompanyName.objects.values("company_name").distinct().union(
         ProformaInvoice.objects.values("company_name").distinct()
     )
+    bank_details = BankDetails.objects.all()
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
     context = {"company_list":company_list,
                "states":states,
-               "invoice_status":invoice_status
+               "invoice_status":invoice_status,
+                "bank_details":bank_details,
     }
     return render(request, "ProformaInvoice/proforma_invoice_page.html",context=context)
 
 def ViewProformaInvoice(request):
-    proformaInvoice = ProformaInvoice.objects.prefetch_related('job_details').all().order_by('invoice_date')
+    proformaInvoice = ProformaInvoice.objects.prefetch_related('bank_details').prefetch_related('job_details').all().order_by('invoice_date')
     company_name = ProformaInvoice.objects.values_list('company_name', flat=True).distinct()
+    bank_details = BankDetails.objects.all()
     start_date = request.GET.get('start_date',"")
     end_date =  request.GET.get("end_date","")
     select_company = request.GET.get('select_company',"")
@@ -1726,6 +1743,7 @@ def ViewProformaInvoice(request):
     
     context = {
         "nums" :nums,
+       
         "proformaInvoices": proformaInvoice,
         "company_name":company_name,
         "states":states,
@@ -1796,7 +1814,10 @@ def ProformaSendMail(request):
             'billing_state_name',
             'billing_gstin_no', 
             'total',
-            'banking_details',
+            'bank_name',
+            'bank_account_number',
+            'bank_brnach_address',
+            'bank_ifsc_code',
             'term_note',
             'gst',
             'total_taxable_value',
@@ -1866,9 +1887,6 @@ def ProformaSendMail(request):
         email.send()
         messages.success(request,"mail send successfully")
         return redirect("view_proforma_invoice")
-              
-        
-            
     
     return redirect("proforma_sendmail")
 
@@ -1914,7 +1932,7 @@ def ProformaInvoiceCreate(request):
         taxable_value = request.POST.get("taxable_value")
         invoice_status = request.POST.get('invoice_status')
         
-        
+        print(banking_details)
         required_fields = {
         'invoice no':invoice_no, 
         'invoice date':invoice_date, 
@@ -1931,10 +1949,8 @@ def ProformaInvoiceCreate(request):
         'gst value':gst_value, 
         'taxable value':taxable_value,
         
-      
-        
         }
-        
+        bank_instance = BankDetails.objects.get(id=banking_details) if banking_details  else None
         
         for field, required in required_fields.items():
             if not required:
@@ -1963,7 +1979,7 @@ def ProformaInvoiceCreate(request):
                 billing_state_name = billing_state_name,
                 billing_gstin_no = billing_gstin_no,
                 terms_note  = terms,
-                banking_details = banking_details,
+                bank_details = bank_instance,
                 gst = gst_list,
                 total = totals,
                 gst_value = gst_value,
@@ -1971,7 +1987,7 @@ def ProformaInvoiceCreate(request):
                 invoice_status = invoice_status
                 
             )
-            print(len(job_names))
+            
             for i in range(len(job_names)):
                 ProformaJob.objects.create(
                     proforma_invoice = proforma,
@@ -1991,7 +2007,7 @@ def ProformaInvoiceCreate(request):
         
     return redirect("proforma_invoice_page")   
 
- 
+@require_GET
 def ProformaInvoicePageAJAX(request):
     igst = request.GET.get('igsts')
     cgst = request.GET.get('cgsts')
@@ -2065,7 +2081,6 @@ def ProformaInvoicePageAJAX(request):
                 "gst_amount":gst_amount
                }
     logger.debug(f"AJAX context: {context}")
-   
     return JsonResponse(context)
 
 
