@@ -16,7 +16,7 @@ import os
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SERVICE_ACCOUNT_FILE = os.path.join(BASE_DIR, 'app', 'Google', 'credentials.json')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -35,7 +35,6 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 LOGIN_URL = 'login_page'
-
 LOGOUT_REDIRECT_URL = 'logout'
 LOGIN_REDIRECT_URL = "/dashboard"
 MESSAGE_TAGS = {
@@ -47,13 +46,10 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
   
 
 
-# X_FRAME_OPTIONS = 'DENY'  
 
 
 
 
-# Ensure CSRF cookies are only sent with requests originating from the same domain
-# CSRF_COOKIE_SAMESITE = 'Strict'  # 'Strict' or 'Lax' depending on your needs
 
 
 CSRF_COOKIE_SECURE = False  # Set this to True if using HTTPS
@@ -70,27 +66,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'rest_framework',
-    "django.contrib.sites",
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
-    "allauth.socialaccount.providers.google",
-
     'drf_yasg',
     'simple_history',
     
 ]
-
-
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': ['profile', 'email'],
-        'AUTH_PARAMS': {'access_type': 'online'},
-        'OAUTH_PKCE_ENABLED': True, 
-    }
-}
-SITE_ID = 2
-
 
 
 MIDDLEWARE = [
@@ -102,7 +81,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',
+
 ]
 
 ROOT_URLCONF = 'nirmal_pms.urls'
@@ -181,15 +160,11 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 
-# ACCOUNT_AUTHENTICATION_METHOD = "username_email"   # login with username or email
-# ACCOUNT_EMAIL_REQUIRED = True
-# ACCOUNT_USERNAME_REQUIRED = True
-# ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = False
-# SOCIALACCOUNT_AUTO_SIGNUP = False
+
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') 
 MEDIA_URL = '/media/'
-SOCIALACCOUNT_ADAPTER = "app.adapters.MySocialAccountAdapter"
+
 
 
 
@@ -256,9 +231,5 @@ LOGGING = {
 
 
 
-AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    "allauth.account.auth_backends.AuthenticationBackend"
-    
-)
+
 

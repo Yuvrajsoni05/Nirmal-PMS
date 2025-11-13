@@ -1,414 +1,276 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="en-US">
     <head>
         <meta charset="UTF-8" />
-        <title>Job Order Completed</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Job Order Completed</title>
     </head>
+
     <body
         style="
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #f5f5f5;
+            background-color: #f4f4f8;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #000000;
         "
     >
         <table
             role="presentation"
-            style="width: 100%; background: #f5f5f5; padding: 20px"
+            width="100%"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            style="background-color: #f4f4f8; padding: 20px 0"
         >
             <tr>
                 <td align="center">
                     <table
-                        role="presentation"
+                        width="600"
+                        cellspacing="0"
+                        cellpadding="0"
+                        border="0"
                         style="
-                            background: white;
-                            padding: 30px;
-                            border: 1px solid #ddd;
-                            border-radius: 10px;
-                            max-width: 800px;
-                            width: 100%;
+                            background-color: #ffffff;
+                            border-radius: 6px;
+                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+                            padding: 20px;
                         "
                     >
+                        <!-- HEADER -->
                         <tr>
-                            <td>
-                                <h2
-                                    style="
-                                        color: #333;
-                                        font-size: 1.8rem;
-                                        margin-bottom: 20px;
-                                    "
-                                >
-                                    Job Order Completed
-                                </h2>
-                                <p
-                                    style="
-                                        color: #666;
-                                        line-height: 1.6;
-                                        margin-bottom: 20px;
-                                        font-size: 1rem;
-                                    "
-                                >
-                                    Hello,
-                                </p>
-                                <p
-                                    style="
-                                        color: #666;
-                                        line-height: 1.6;
-                                        margin-bottom: 20px;
-                                        font-size: 1rem;
-                                    "
-                                >
-                                    Your job order has been completed
-                                    successfully. Please find the details below:
-                                </p>
-                                <table
-                                    role="presentation"
-                                    style="
-                                        width: 100%;
-                                        border-collapse: collapse;
-                                        margin-top: 20px;
-                                    "
-                                >
-                                    {% if date %}
+                            <td
+                                style="
+                                    border-bottom: 2px solid #5b21b6;
+                                    padding-bottom: 10px;
+                                    display: flex;
+                                "
+                            >
+                                <table width="100%">
                                     <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Date
+                                        <td width="80">
+                                            <img
+                                                src="./assets/Nirmallogo.png"
+                                                alt="Company Logo"
+                                                style="
+                                                    width: 80px;
+                                                    height: auto;
+                                                "
+                                            />
                                         </td>
                                         <td
+                                            align="right"
                                             style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
+                                                font-size: 13px;
+                                                line-height: 1.5;
                                             "
                                         >
-                                            {{ date }}
+                                            <b
+                                                style="
+                                                    color: #5b21b6;
+                                                    font-size: 16px;
+                                                "
+                                                >Shree Nirmal Ventures Pvt.
+                                                Ltd.</b
+                                            ><br />
+                                            1601, 16th Floor, B Block,<br />
+                                            Navratna Corporate Park, Nr.
+                                            Jayantilal Park<br />
+                                            Ambli Bopal Road, Ambli, Ahmedabad -
+                                            380058
                                         </td>
                                     </tr>
-                                    {% endif %} {% if bill_no %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Bill Number
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ bill_no }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if company_name %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Company Name
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ company_name }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if company_email_address %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Company Email
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ company_email_address }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if job_name %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Job Name
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ job_name }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if noc %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Number of Colors
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ noc }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if prpc_sell %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            PRPC Sell
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ prpc_sell }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if cylinder_size %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Cylinder Size
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ cylinder_size }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if pouch_size %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Pouch Size
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ pouch_size }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if pouch_open_size %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Pouch Open Size
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ pouch_open_size }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if correction %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Correction
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ correction }}
-                                        </td>
-                                    </tr>
-                                    {% endif %} {% if note %}
-                                    <tr>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                font-weight: bold;
-                                                color: #333;
-                                                width: 220px;
-                                                text-align: left;
-                                            "
-                                        >
-                                            Note
-                                        </td>
-                                        <td
-                                            style="
-                                                padding: 12px;
-                                                border-bottom: 1px solid #eee;
-                                                color: #555;
-                                                text-align: left;
-                                            "
-                                        >
-                                            {{ note }}
-                                        </td>
-                                    </tr>
-                                    {% endif %}
                                 </table>
-                                <a
-                                    href="http://localhost:8000/"
+                            </td>
+                        </tr>
+
+                        <!-- BILL INFO -->
+                        <tr>
+                            <td
+                                style="
+                                    padding: 12px 0;
+                                    border-bottom: 1px solid #ddd;
+                                "
+                            >
+                                <table width="100%">
+                                    <tr>
+                                        <td><b>Bill No:</b> 11-VCR-DCR</td>
+                                        <td align="right">
+                                            <b>Job Date:</b> 13/11/2025
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <!-- COMPANY INFO -->
+                        <tr>
+                            <td
+                                style="
+                                    padding: 12px 0;
+                                    border-bottom: 1px solid #ddd;
+                                "
+                            >
+                                <table width="100%">
+                                    <tr>
+                                        <td>
+                                            <b>Company Name:</b> Shree Nirmal
+                                            Ventures Pvt. Ltd.
+                                        </td>
+                                        <td align="right">
+                                            <b>Company Email:</b>
+                                            xyz@example.com
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <!-- JOB TABLE -->
+                        <tr>
+                            <td style="padding: 15px 0">
+                                <table
+                                    width="100%"
+                                    cellspacing="0"
+                                    cellpadding="6"
+                                    border="1"
                                     style="
-                                        display: inline-block;
-                                        background: #007cba;
-                                        color: white;
-                                        padding: 12px 20px;
-                                        text-decoration: none;
-                                        margin-top: 20px;
-                                        border-radius: 5px;
-                                        font-size: 1.1rem;
-                                        transition: background-color 0.3s;
+                                        border-collapse: collapse;
+                                        border-color: #5b21b6;
+                                        font-size: 13px;
                                     "
-                                    >Visit Website</a
                                 >
+                                    <thead>
+                                        <tr
+                                            style="
+                                                background-color: #ede9fe;
+                                                color: #000;
+                                            "
+                                        >
+                                            <th
+                                                align="left"
+                                                style="width: 30%; padding: 8px"
+                                            >
+                                                Job Name
+                                            </th>
+                                            <th
+                                                align="left"
+                                                style="
+                                                    width: 17.5%;
+                                                    padding: 8px;
+                                                "
+                                            >
+                                                PRPC
+                                            </th>
+                                            <th
+                                                align="left"
+                                                style="
+                                                    width: 17.5%;
+                                                    padding: 8px;
+                                                "
+                                            >
+                                                Cylinder Size
+                                            </th>
+                                            <th
+                                                align="left"
+                                                style="
+                                                    width: 17.5%;
+                                                    padding: 8px;
+                                                "
+                                            >
+                                                Pouch Size
+                                            </th>
+                                            <th
+                                                align="left"
+                                                style="
+                                                    width: 17.5%;
+                                                    padding: 8px;
+                                                "
+                                            >
+                                                Pouch Open Size
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Title / Job Name</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>No. of Color</b></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <!-- CORRECTION -->
+                        <tr>
+                            <td
+                                style="
+                                    padding-top: 10px;
+                                    border-top: 1px solid #5b21b6;
+                                    font-size: 13px;
+                                "
+                            >
+                                <p style="margin: 0 0 5px 0; font-weight: bold">
+                                    Correction:
+                                </p>
                                 <div
                                     style="
-                                        margin-top: 30px;
-                                        padding-top: 20px;
-                                        border-top: 1px solid #eee;
-                                        color: #999;
-                                        font-size: 0.9rem;
-                                        text-align: center;
+                                        min-height: 30px;
+                                        background-color: #f9f9ff;
+                                        border: 1px dashed #d1c4ff;
+                                        padding: 8px;
+                                        border-radius: 4px;
                                     "
-                                >
-                                    © {{ date|date:"Y"|default:"2025" }} Nirmal
-                                    Ventures |
-                                    <a
-                                        href="http://www.nirmal.com"
-                                        style="
-                                            color: #007cba;
-                                            text-decoration: none;
-                                        "
-                                        >www.nirmal.com</a
-                                    >
-                                </div>
+                                ></div>
+                            </td>
+                        </tr>
+
+                        <!-- NOTE -->
+                        <tr>
+                            <td
+                                style="
+                                    padding-top: 10px;
+                                    font-size: 13px;
+                                    border-top: 1px solid #5b21b6;
+                                "
+                            >
+                                <p style="margin: 0 0 5px 0; font-weight: bold">
+                                    Note:
+                                </p>
+                                <div
+                                    style="
+                                        min-height: 30px;
+                                        background-color: #f9f9ff;
+                                        border: 1px dashed #d1c4ff;
+                                        padding: 8px;
+                                        border-radius: 4px;
+                                    "
+                                ></div>
+                            </td>
+                        </tr>
+
+                        <!-- FOOTER -->
+                        <tr>
+                            <td
+                                align="center"
+                                style="
+                                    padding-top: 20px;
+                                    border-top: 2px solid #5b21b6;
+                                    font-size: 13px;
+                                    color: #555;
+                                "
+                            >
+                                © Shree Nirmal Ventures Pvt. Ltd.
                             </td>
                         </tr>
                     </table>

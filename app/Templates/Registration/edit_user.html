@@ -87,8 +87,9 @@ Edit User
                                     <div class="modal fade"
                                          id="users_id{{ i.id }}"
                                          tabindex="-1"
+                                         data-bs-backdrop="static"
                                          aria-hidden="true">
-                                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-dialog modal-lg modal-dialog-centered" >
                                             <div class="modal-content ">
                                                 <div class="modal-header bg-light">
                                                     <h5 class="modal-title">Edit User</h5>
@@ -101,6 +102,7 @@ Edit User
                                                     <form method="post"
                                                           action="{% url "update_user" user_id=i.id %}"
                                                           enctype="multipart/form-data"
+                                                          
                                                           autocomplete="off">
                                                         {% csrf_token %}
                                                         <div class="row g-4">

@@ -236,6 +236,28 @@ function printProforma(button) {
             </td>
         </tr>
     </table>
+    <!--Terms & Notes  -->
+            <table style="margin-top: 15px">
+                <tr>
+                    <td
+                        colspan="2"
+                        style="
+                            text-align: center;
+                            font-weight: bold;
+                            font-size: 12px;
+                        "
+                    >
+                        Terms & Notes
+                    </td>
+                </tr>
+                <tr>
+                 
+                    <td style="width: 50%; font-size: 10px; text-align: center">
+                        
+                        ${data.terms}
+                    </td>
+                </tr>
+            </table>
 
     <div class="text-center" style="margin-top:10px; font-size:12px">
         Shrri Nirmal Ventures Pvt. Ltd

@@ -876,14 +876,20 @@ def update_job(request, update_id):
                 old_job = Job_detail.objects.get(id=update_id)
                 update_job_data = get_object_or_404(Job_detail, id=update_id)
                 job = old_job
-                print(old_job)
-                for field in ['job_status', 'cylinder_bill_no', 'correction' , 'cylinder_size' , 'prpc_sell' , 'prpc_purchase' , 'noc' , 'job_type' , 'job_name', 'company_name' , 'bill_no'  , 'pouch_open_size' , 'pouch_size' , 'cylinder_made_in']:
+                
+                format_example = "%Y-%m-%d"
+                dt_obj = datetime.strptime(cylinder_date, format_example)
+                date_object = dt_obj.date()
+                print(date_object)
+                for field in ['job_status', 'cylinder_bill_no', 'correction' , 'cylinder_size' , 'prpc_sell' , 'prpc_purchase' , 'noc' , 'job_type' , 'job_name', 'company_name' , 'bill_no'  , 'pouch_open_size' , 'pouch_size' , 'cylinder_made_in','cylinder_date','date']:
+                    
                     
                     old_value = getattr(old_job, field)
                     new_value = request.POST.get(field)
-                    print(f"{field} -  {old_value} -  {new_value}")
-                    if old_value != new_value:
 
+                    
+                    if str(old_value) != new_value:
+                        print(type(old_value) , type(new_value))
                         JobHistory.objects.create(
                             job=job,
                             field_name=field,
@@ -1306,7 +1312,6 @@ def cdr_add(request):
 
               
                 
-                
 
 
 @custom_login_required
@@ -1358,16 +1363,22 @@ def cdr_update(request, update_id):
         get_date = CDRDetail.objects.values("date").get(id=id)
         date_formatte = get_date["date"].strftime("%Y-%m-%d")
 
+        
+        
+        email_error = utils.email_validator(company_email)
+        if email_error:
+            messages.error(request, email_error, extra_tags="custom-success-style")
+            return redirect("company_add_page")
         if CDRDetail.objects.filter(
             company_name__icontains=company_name, company_email=company_email
         ).exists():
             pass
         else:
             if CDRDetail.objects.filter(
-                company_email__icontains=company_email
+                company_email=company_email
             ).exists():
                 messages.error(
-                    request, "Choose Another Email", extra_tags="custom-success-style"
+                    request, "Choose Another Email This Email is already Exist", extra_tags="custom-success-style"
                 )
                 return redirect("company_add_page")
 
@@ -1386,6 +1397,7 @@ def cdr_update(request, update_id):
         if file_error:
             messages.error(request, file_error, extra_tags="custom-success-style")
             return redirect("job_entry")
+        
 
         file_dic = file_name_convert(cdr_files)
 
@@ -1706,22 +1718,36 @@ def ProformaInvoicePage(request):
     return render(request, "ProformaInvoice/proforma_invoice_page.html",context=context)
 
 def ViewProformaInvoice(request):
-    proformaInvoice = ProformaInvoice.objects.prefetch_related('bank_details').prefetch_related('job_details').all().order_by('invoice_date')
+    proformaInvoice = ProformaInvoice.objects.prefetch_related('bank_details', 'job_details').all().order_by('invoice_status', 'invoice_date')
     company_name = ProformaInvoice.objects.values_list('company_name', flat=True).distinct()
-    bank_details = BankDetails.objects.all()
+  
     start_date = request.GET.get('start_date',"")
     end_date =  request.GET.get("end_date","")
     select_company = request.GET.get('select_company',"")
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
 
-    if select_company and start_date:
+    
+    
+    if select_company and start_date and end_date:
+        proformaInvoice = proformaInvoice.filter(
+            Q(invoice_date__range=[start_date, end_date]) &
+            Q(company_name__icontains=select_company)
+        )
+    elif select_company and start_date:
+        
         proformaInvoice = proformaInvoice.filter(Q(invoice_date__icontains=start_date) & Q(company_name__icontains=select_company))
-         
+    
+    elif start_date and end_date and select_company:
+        proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date]) & Q(company_name__icontains=select_company)
     elif start_date and end_date.strip():
+        
         proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date])
     elif start_date.strip():
         proformaInvoice = proformaInvoice.filter(Q(invoice_date__icontains=start_date))
+    elif select_company.strip():
+        proformaInvoice = proformaInvoice.filter(Q(company_name__icontains=select_company))
+    
     
     
         
@@ -2039,7 +2065,12 @@ def ProformaInvoicePageAJAX(request):
     billing_address = ""
     if company_name:
     
-        demo = list(ProformaJob.objects.values("job_name").distinct())
+        demo = list(
+            ProformaJob.objects
+            .filter(proforma_invoice__company_name=company_name)
+            .values('job_name')
+            .distinct()
+        )
 
         job = list(
             CDRDetail.objects.filter(company_name__iexact=company_name)

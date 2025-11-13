@@ -789,38 +789,40 @@
 
                                                 <!-- Model Correction Job -->
                                                 <div class="modal fade" id="OldBackdrop{{ i.id }}" tabindex="-1" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                                    <div class="modal-dialog modal-lg">
                                                         <div class="modal-content">
-                                                        <div class="modal-header bg-light border-bottom">
-                                                            <h5 class="modal-title">
-                                                            <i class="bi bi-clock-history me-2"></i> Job History<b> {{i.job_name}} </b>
-                                                            </h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            {% if i.job_history.all %}
-                                                            <div class="list-group">
-                                                                {% for history in i.job_history.all %}
-                                                                <div class="list-group-item">
-                                                                    <div class="d-flex justify-content-between">
-                                                                    <strong class="text-primary">{{ history.field_name }}</strong> &nbsp; &nbsp;
-                                                                    <small class="text-muted">{{ history.timestamp|date:"M d, Y H:i" }}</small>
-                                                                    </div>
-                                                                    <p class="mb-1">
-                                                                    <span class="text-danger fw-semibold">Changed From:</span> {{ history.old_value }}
-                                                                    <span class="text-success fw-semibold">To:</span> {{ history.new_value }}<br>
-                                                                    <span class="text-success fw-semibold">Date & Time:</span> {{ history.changed_at }}
-                                                                    </p>
-                                                                </div>
-                                                                {% endfor %}
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">
+                                                                    <i class="bi bi-clock-history me-2"></i> Job History <b>{{ i.job_name }}</b>
+                                                                </h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
-                                                            {% else %}
-                                                            <p class="text-muted text-center mb-0">No job history available.</p>
-                                                            {% endif %}
-                                                        </div>
+                                                            <div class="modal-body" style="max-height: 50vh; overflow-y: auto;">
+                                                                {% if i.job_history.all %}
+                                                                <div class="list-group">
+                                                                    {% for history in i.job_history.all %}
+                                                                    <div class="list-group-item">
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <strong class="text-primary">{{ history.field_name }} : </strong> &nbsp;
+                                                                            <small class="text-muted">{{ history.timestamp|date:"M d, Y H:i" }}</small>
+                                                                        </div>
+                                                                        <p class="mb-1">
+                                                                            <span class="text-danger fw-semibold">Changed From: </span> {{ history.old_value }}
+                                                                            <span class="text-success fw-semibold">To:</span> {{ history.new_value }}<br>
+                                                                            <span class="text-success fw-semibold">Date & Time:</span> {{ history.changed_at }}
+                                                                        </p>
+                                                                    </div>
+                                                                    {% endfor %}
+                                                                </div>
+                                                                {% else %}
+                                                                <p class="text-muted text-center mb-0">No job history available.</p>
+                                                                {% endif %}
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
+
+
 
 
 
@@ -829,6 +831,7 @@
                                                 <div class="modal fade"
                                                      id="exampleModal{{ i.id }}"
                                                      tabindex="-1"
+                                                      data-bs-backdrop="static"
                                                      aria-hidden="true">
                                                     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog modal-xl">
                                                         <div class="modal-content ">
@@ -837,6 +840,7 @@
                                                                 <button type="button"
                                                                         class="btn-close"
                                                                         data-bs-dismiss="modal"
+                                                                        
                                                                         aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body form-datas">

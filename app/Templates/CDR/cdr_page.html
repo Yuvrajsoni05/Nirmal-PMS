@@ -406,7 +406,8 @@
                                                             <form method="post"
                                                                   action="{% url "update_cdr" update_id=i.id %}"
                                                                   class="cdr-form"
-                                                                  enctype="multipart/form-data">
+                                                                  enctype="multipart/form-data"
+                                                                  autocomplete="off">
                                                                 {% csrf_token %}
                                                                 <input type="hidden" value="{{ i.id }}">
                                                                 <div class="row g-4">
@@ -420,7 +421,7 @@
                                                                                name="cdr_upload_date"
                                                                                value="{{ i.date|date:'Y-m-d' }}"
                                                                                required>
-                                                                        <div class="invalid-feedback" id="event_date_error">Please provide an event date.</div>
+                                                                        <div class="invalid-feedback" id="cdr_date_error">Please provide an CDR date.</div>
                                                                     </div>
                                                                     <!-- Company Name -->
                                                                     <div class="col-md-6">
@@ -438,8 +439,11 @@
                                                                                id="company_email"
                                                                                class="form-control"
                                                                                name="company_email"
-                                                                               value="{{ i.company_email }}">
+                                                                               value="{{ i.company_email }}"
+                                                                               required>
+                                                                                <div class="invalid-feedback" id="cdr_email_error">Please provide an  email</div>
                                                                     </div>
+                                                                   
                                                                     <!-- Job Name -->
                                                                     <div class="col-md-6">
                                                                         <label for="job_name" class="form-label fw-bold">Job Name</label>

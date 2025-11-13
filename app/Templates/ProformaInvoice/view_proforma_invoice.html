@@ -242,7 +242,7 @@
                                             </svg>
                                         </button>
                                     </td>
-    <script>
+                                        <script>
                                             let formIdToSubmit;
                                             document.addEventListener(
                                                 "DOMContentLoaded",
@@ -551,7 +551,7 @@
                                                                     <span class="value">{{ proforma.company_name }}</span>
                                                                 </div>
                                                                 <div class="info-block">
-                                                                    <span class="label">Contact:</span>
+                                                                    <span class="label">Company Contact:</span>
                                                                     <span class="value">{{ proforma.company_contact }}</span>
                                                                 </div>
                                                                 <div class="info-block">
@@ -920,6 +920,7 @@
                                                     data-bank_brnach_address  = "{{proforma.bank_details.bank_brnach_address}}"
                                                     data-bank_ifsc_code  = "{{proforma.bank_details.bank_ifsc_code }}"
                                                     data-bank_account_name =   "{{proforma.bank_details.account_name }}"
+                                                    data-terms = {{proforma.terms_note}}
                                                     data-jobs='[
                                                         {% for job in proforma.job_details.all %}
                                                         {
@@ -950,43 +951,41 @@
                 </div>
             </div>
         </div>
-        <!-- Section Navbar -->
         {% if proformaInvoices %}
-        <nav aria-label="Page navigation example">
-            <div class="pagination-info">
-                Page {{ proformaInvoices.number }} of {{ proformaInvoices.paginator.num_pages }}
-            </div>
-            <ul class="pagination justify-content-end">
-                {% if proformaInvoices.has_previous %}
-                <li class="page-item">
-                    <a
-                        class="page-link"
-                        href="?page={{ proformaInvoices.previous_page_number }}&search={{ request.GET.select_company }}&start_date={{request.GET.start_date}}&end_date={{request.GET.end_date}} "
-                        >Previous</a
-                    >
-                </li>
-                {% endif %} {% for i in proformaInvoices.paginator.page_range %}
-                <li
-                    class="page-item {% if proformaInvoices.number == i %}active{% endif %}"
-                >
-                    <a
-                        class="page-link"
-                        href="?page={{ i }}&search={{ request.GET.select_company }}&start_date={{request.GET.start_date}}&end_date={{request.GET.end_date}}"
-                        >{{ i }}</a
-                    >
-                </li>
-                {% endfor %} {% if proformaInvoices.has_next %}
-                <li class="page-item">
-                    <a
-                        class="page-link"
-                        href="?page={{ proformaInvoices.next_page_number }}&search={{ request.GET.select_company }}&start_date={{request.GET.start_date}}&end_date={{request.GET.end_date}}"
-                        >Next</a
-                    >
-                </li>
-                {% endif %}
-            </ul>
-        </nav>
+<nav aria-label="Page navigation example">
+    <div class="pagination-info">
+        Page {{ proformaInvoices.number }} of {{ proformaInvoices.paginator.num_pages }}
+    </div>
+    <ul class="pagination justify-content-end">
+        {% if proformaInvoices.has_previous %}
+        <li class="page-item">
+            <a class="page-link"
+               href="?page={{ proformaInvoices.previous_page_number }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}">
+               Previous
+            </a>
+        </li>
         {% endif %}
+
+        {% for i in proformaInvoices.paginator.page_range %}
+        <li class="page-item {% if proformaInvoices.number == i %}active{% endif %}">
+            <a class="page-link"
+               href="?page={{ i }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}">
+               {{ i }}
+            </a>
+        </li>
+        {% endfor %}
+
+        {% if proformaInvoices.has_next %}
+        <li class="page-item">
+            <a class="page-link"
+               href="?page={{ proformaInvoices.next_page_number }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}">
+               Next
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
     </div>
 </div>
 {% endblock main_block %} 

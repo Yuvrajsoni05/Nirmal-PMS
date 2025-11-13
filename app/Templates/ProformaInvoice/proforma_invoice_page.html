@@ -14,7 +14,7 @@
                 <div class="card-title">Proforma Details</div>
             </div>
             <div class="card-body">
-                <form method="post" id="proformaInvoiceForm" class="row g-4" action="{% url "proforma_invoice_create" %} ">
+                <form method="post" id="proformaInvoiceForm" autocomplete="off" class="row g-4" action="{% url "proforma_invoice_create" %} ">
                     {% csrf_token %}
 
                     <div class="col-md-4">
@@ -49,7 +49,7 @@
                     </div>
 
                     <div class="col-md-3">
-                        <label for="contact" class="form-label fw-semibold">Contact</label>
+                        <label for="contact" class="form-label fw-semibold">Company Contact</label>
                         <input type="tel" class="form-control" id="company_contact" name="company_contact" placeholder="9499561272" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel" >
                         <span class="invalid-feedback" id="company_contact_error">This field is required</span>
                     </div>
@@ -83,7 +83,7 @@
 
                     <div class="col-md-4">
                         <label for="billing_gstin_no" class="form-label fw-semibold">Billing GSTIN/UN.</label>
-                        <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No." >
+                        <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No.">
                         <span class="invalid-feedback" id="billing_gstin_no_error">This field is required</span>
                     </div>
                     
@@ -99,37 +99,43 @@
                                     <option value="JobWork on Cylinder">JobWork on Cylinder</option>
                                     <option value="Copper Engraved Cylinder">Copper Engraved Cylinder</option>
                                 </select>
-                                <span class="invalid-feedback">This field is required</span>
+                                <span class="invalid-feedback" id="title_input_error"  >This field is required</span>
                                 </div>
-
+                        
                                 <div class="col-md-4">
                                     <label for="job_name" class="form-label fw-semibold">Job Name</label>
-                                    <select name="job_name[]" id="job_name"class="form-control job-name" required>
-                                    <option value="" selected disabled>Select Job Name</option>
-                                    <option value="Printing">Printing</option>
-                                    <option value="Packaging">Packaging</option>
-                                    <option value="others">Other</option>
+                                    <select name="job_name[]" id="job_name" class="form-control job-name" >
+                                        <option value="" selected disabled>Select Job Name</option>
+                                        <option value="Printing">Printing</option>
+                                        <option value="Packaging">Packaging</option>
+                                        <option value="others">Other</option>
                                     </select>
-
                                     <input type="text" name="new_job" class="form-control mt-2 new-job" style="display:none;" placeholder="Enter new Job">
-                                    <span class="invalid-feedback" >This field is required</span>
+                                    <span class="invalid-feedback job-name-error" id="job-name-error"  style="display:none;">This field is required</span>
                                 </div>
 
                                 <div class="col-md-4">
                                     <label class="form-label fw-semibold">Pouch Open Size</label>
                                     <div class="input-group">
-                                    <input type="number" class="form-control pouch-diameter" name="pouch_diameter[]" placeholder="Diameter (e.g. 50)" step="any">
-                                    <input type="number" class="form-control pouch-height" name="pouch_height[]" placeholder="Height (e.g. 100)" step="any">
-                                    <input type="hidden" class="pouch-open-size" name="pouch_open_size[]">
+                                        <input type="number" class="form-control pouch-height" id="pouch_open_size_height" name="pouch_height[]" placeholder="Height (e.g. 100)" step="any">
+                                        <span class="invalid-feedback" id="pouch_open_height_error">Please provide Pouch Open Size  Height</span>  <span class="input-group-text bg-light border-1 fw-bold">×</span>
+                                        <input type="number" id="pouch_open_size_diameter" class="form-control pouch-diameter" name="pouch_diameter[]" placeholder="Diameter (e.g. 50)" step="any">
+                                        <span class="invalid-feedback" id="pouch_open_diameter_error">Please provide Pouch Open Size  Diameter</span>
+                                        
+                                        <input type="hidden" class="pouch-open-size" name="pouch_open_size[]">
                                     </div>
+                                    <span class="invalid-feedback pouch-open-size-error" style="display:none;">This field is required</span>
                                 </div>
 
                                 <div class="col-md-4 mt-3">
                                     <label class="form-label fw-semibold">Cylinder Size</label>
                                     <div class="input-group">
-                                    <input type="number" class="form-control cylinder-diameter" name="cylinder_diameter[]" placeholder="Diameter (e.g. 50)" step="any">
-                                    <input type="number" class="form-control cylinder-height" name="cylinder_height[]" placeholder="Height (e.g. 100)" step="any">
-                                    <input type="hidden" class="cylinder-size" name="cylinder_size[]">
+                                        <input type="number" class="form-control cylinder-height" name="cylinder_height[]" id="cylinder_height" placeholder="Height (e.g. 100)" step="any">
+                                        <span class="invalid-feedback" id="cylinder_height_error">Please provide Cylinder  Height</span> <span class="input-group-text bg-light border-1 fw-bold">×</span>
+                                        <input type="number" class="form-control cylinder-diameter" name="cylinder_diameter[]" id="cylinder_diameter" placeholder="Diameter (e.g. 50)" step="any">
+                                        <span class="invalid-feedback" id="cylinder_diameter_error">Please provide Cylinder Diameter</span>
+                                        
+                                        <input type="hidden" class="cylinder-size" name="cylinder_size[]">
                                     </div>
                                 </div>
 
@@ -279,6 +285,47 @@
     const bankDetailsInput = document.getElementById('bank_details');
     const bankDetailsError = document.getElementById('bank_details_error');
 
+
+
+    const InvoiceStatusInput = document.getElementById('invoice_status');
+    const InvoiceStatusError = document.getElementById('order_status_error');
+
+
+
+    const TitleInput = document.getElementById('title');
+    const TitleError = document.getElementById('title_input_error');
+
+    const jobNameInput = document.getElementById('job_name');
+    const newJobInput = document.querySelector('.new-job');
+    const jobNameError = document.querySelector('.job-name-error');
+
+    const cylinder_diameter_Input =
+        document.getElementById("cylinder_diameter");
+    const cylinder_diameter_Error = document.getElementById(
+        "cylinder_diameter_error"
+    );
+
+    const cylinder_height_Input = document.getElementById("cylinder_height");
+    const cylinder_height_Error = document.getElementById(
+        "cylinder_height_error"
+    );
+
+    const pouch_open_diameter_Input = document.getElementById(
+        "pouch_open_size_diameter"
+    );
+    const pouch_open_diameter_Error = document.getElementById(
+        "pouch_open_diameter_error"
+    );
+
+    const pouch_open_height_Input =
+        document.getElementById("pouch_open_size_height");
+    const pouch_open_height_Error = document.getElementById(
+        "pouch_open_height_error"
+    );
+
+
+
+
     const proformaForm = document.getElementById('proformaInvoiceForm');
 
     // Validation Functions
@@ -288,6 +335,17 @@
             return false;
         } else {
             invoiceNoError.style.display = 'none';
+            return true;
+        }
+    }
+
+
+    function validateJobName() {
+        if (jobNameInput.value === '' || (jobNameInput.value === 'others' && newJobInput.value.trim() === '')) {
+            jobNameError.style.display = 'block';
+            return false;
+        } else {
+            jobNameError.style.display = 'none';
             return true;
         }
     }
@@ -341,6 +399,18 @@
             return false;
         } else {
             companyNameError.style.display = 'none';
+            return true;
+        }
+    }
+
+
+
+       function validateTitle() {
+        if (TitleInput.value.trim() === '') {
+            TitleError.style.display = 'block';
+            return false;
+        } else {
+            TitleError.style.display = 'none';
             return true;
         }
     }
@@ -399,6 +469,20 @@
         }
     }
 
+
+
+    function validateInvoiceStatus() {
+        if (InvoiceStatusInput.value.trim() === '') {
+            InvoiceStatusError.style.display = 'block';
+            return false;
+        } else {
+            InvoiceStatusError.style.display = 'none';
+            return true;
+        }
+    }
+
+
+
     function validateTerms() {
         if (termsInput.value.trim() === '') {
             termsError.style.display = 'block';
@@ -441,7 +525,65 @@
         }
     }
 
+
+
+    function validateCylinderDiameter() {
+        if (cylinder_diameter_Input && cylinder_diameter_Error) {
+            if (cylinder_diameter_Input.value.trim() === "") {
+                cylinder_diameter_Error.style.display = "block";
+                return false;
+            } else {
+                cylinder_diameter_Error.style.display = "none";
+                return true;
+            }
+        }
+        return true;
+    }
+
+    function validateCylinderHeight() {
+        if (cylinder_height_Input && cylinder_height_Error) {
+            if (cylinder_height_Input.value.trim() === "") {
+                cylinder_height_Error.style.display = "block";
+                return false;
+            } else {
+                cylinder_height_Error.style.display = "none";
+                return true;
+            }
+        }
+        return true;
+    }
+
+
+    function validatePouchOpenDiameter() {
+        if (pouch_open_diameter_Input && pouch_open_diameter_Error) {
+            if (pouch_open_diameter_Input.value.trim() === "") {
+                pouch_open_diameter_Error.style.display = "block";
+                return false;
+            } else {
+                pouch_open_diameter_Error.style.display = "none";
+                return true;
+            }
+        }
+        return true;
+    }
+
+    function validatePouchOpenHeight() {
+        if (pouch_open_height_Input && pouch_open_height_Error) {
+            if (pouch_open_height_Input.value.trim() === "") {
+                pouch_open_height_Error.style.display = "block";
+                return false;
+            } else {
+                pouch_open_height_Error.style.display = "none";
+                return true;
+            }
+        }
+        return true;
+    }
+
     function validateForm() {
+        const isInvoiceStatus = validateInvoiceStatus();
+        const isTitleValid = validateTitle()
+        const isJobNameValid = validateJobName();
         const isPRPCValid = validatePRPCPrice();
         const isInvoiceNoValid = validateInvoiceNo();
         const isInvoiceDateValid = validateInvoiceDate();
@@ -457,6 +599,11 @@
         const isTaxableValueValid = validateTaxableValue();
         const isTotalAmountValid = validateTotalAmount();
         const isBankDetailsValid = validateBankDetails();
+        const isvalidateCylinderDiameter =  validateCylinderDiameter();
+        const isvalidateCylinderHeigh = validateCylinderHeight();
+
+        const isvalidatePouchOpenDiameter =  validatePouchOpenDiameter();
+        const isvalidatePouchOpenHeight = validatePouchOpenHeight();
 
         return (
             isInvoiceNoValid &&
@@ -473,10 +620,22 @@
             isTotalAmountValid &&
             isBankDetailsValid &&
             isQuantityValid &&
-            isPRPCValid
+            isPRPCValid &&
+            isJobNameValid && 
+            isvalidateCylinderDiameter &&
+            isvalidateCylinderHeigh &&
+            isvalidatePouchOpenHeight &&
+            isvalidatePouchOpenDiameter &&
+            isTitleValid &&
+            isInvoiceStatus
+
+
+
         );
     }
-
+    
+    jobNameInput.addEventListener('change', validateJobName);
+    newJobInput.addEventListener('input', validateJobName);
     invoiceNoInput.addEventListener('input', validateInvoiceNo);
     invoiceDateInput.addEventListener('input', validateInvoiceDate);
     modePaymentInput.addEventListener('input', validateModePayment);
@@ -492,6 +651,15 @@
     QuantityInput.addEventListener('input', validateQuantity);
     bankDetailsInput.addEventListener('input', validateBankDetails);
     PRPCInput.addEventListener('input' ,validatePRPCPrice);
+    cylinder_diameter_Input.addEventListener('input',validateCylinderDiameter);
+    cylinder_height_Input.addEventListener('input',validateCylinderHeight);
+    TitleInput.addEventListener('input',validateTitle);
+    pouch_open_diameter_Input.addEventListener('input',validatePouchOpenDiameter);
+    pouch_open_height_Input.addEventListener('input',validatePouchOpenHeight);
+    InvoiceStatusInput.addEventListener('input',validateInvoiceStatus);
+
+
+
 
     const loaderOverlay = document.getElementById("loader-overlay");
     proformaForm.addEventListener('submit', function (event) {
@@ -664,7 +832,7 @@ $(document).ready(function() {
     newSection.find('option.custom-job').remove();
     newSection.find('h5').after(`
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-    <button class="btn btn-danger me-md-2" id="close_job" type="button">X</button>
+    <button class="btn btn-danger me-md-2 SN" id="close_job" type="button">X</button>
   </div>
 `);
 

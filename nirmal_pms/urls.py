@@ -23,7 +23,7 @@ from .swagger import urlpatterns as swagger_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("accounts/", include("allauth.urls")),
+ 
     path('',include('app.urls')),
     path('api/', include(swagger_urls)),
 ]
