@@ -1,103 +1,62 @@
-from ast import Import
-from calendar import c
-from ctypes import util
+import json
+import logging
+import os
+import random
+import re
+from datetime import date, datetime, timedelta
+from decimal import Decimal
+from urllib import response
 
-import email
-from email.mime import image
-from genericpath import isfile
-from io import BytesIO
-import math
-from multiprocessing import context
-from operator import itruediv
-from pydoc import pager
-from traceback import print_tb
-from turtle import title
-from PIL import Image
-from django.views.decorators.http import require_GET
+import pandas as pd
+import requests
+from django.contrib import messages, sessions
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import (PasswordResetConfirmView,
+                                       PasswordResetDoneView,
+                                       PasswordResetView)
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.sessions.models import Session
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.files import File
+from django.core.files.base import ContentFile
+# mail
+from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
+from django.core.paginator import Paginator
 from django.db import utils
+from django.db.models import Q, Sum
+from django.db.models.signals import pre_delete
+from django.forms import fields
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.context_processors import request
+from django.template.loader import render_to_string
+from django.test import RequestFactory
+from django.urls import path, reverse_lazy
+from django.utils.html import strip_tags
+from django.utils.timezone import now
+from django.views.decorators.http import require_GET
+from django.views.generic import TemplateView
 from num2words import num2words
-from pyparsing import C
-from regex import P
+from rest_framework import serializers, status
+from rest_framework.serializers import Serializer, ValidationError
 
-
-
-
-
+from app.models import CDRDetail, Job_detail, ProformaInvoice
+from app.serializers import (CDRDataSerializer, JobDetailSerializer,
+                             JobUpdateSerializer)
 from app.templatetags import custom_tags
 from app.utils import email_check, file_name_convert
 
-from numpy import size
-from rest_framework.serializers import Serializer, ValidationError
-from django.test import RequestFactory
-from rest_framework import serializers, status
-import random
-from urllib import response
-
-from django.shortcuts import get_object_or_404, render, redirect
-import pandas as pd
-from django.views.decorators.cache import cache_control
-from django.views.decorators.cache import cache_control, never_cache
-from django.db.models.signals import pre_delete
-from django.template.context_processors import request
-from django.views.generic import TemplateView
-from datetime import date, datetime, timedelta
-from django.core.files.base import ContentFile
-
-from app.models import CDRDetail, Job_detail, ProformaInvoice
-from app.serializers import CDRDataSerializer, JobDetailSerializer, JobUpdateSerializer
-from .models import *
-from django.contrib import messages, sessions
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, authenticate, logout
-import requests
-
-import json
-from decimal import Decimal
-from django.core.paginator import Paginator
-
-from django.contrib.sessions.models import Session
-from django.utils.timezone import now
-from django.template.loader import render_to_string
-from django.utils.html import strip_tags
-import logging
-
-from django.db.models import Q
-from django.db.models import Sum
-from django.forms import fields
-from django.core.exceptions import ObjectDoesNotExist
-from django import template
-
-
-
-
-
-
-# mail
-from django.core.mail import send_mail
-from django.http import JsonResponse
-from django.core.mail import EmailMultiAlternatives
-import re
-
-from django.core.mail import EmailMessage
+from . import utils
 from .decorators import *
-from django.core.files import File
+from .models import *
 
 # Password
 
-from django.urls import path, reverse_lazy
-from django.contrib.auth.views import PasswordResetDoneView
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.views import (
-    PasswordResetView,
-    PasswordResetDoneView,
-    PasswordResetConfirmView,
-)
-import os
 
 
 # Swagger Setting
 
-from . import utils
 
 # Create your views here.
 
@@ -132,6 +91,7 @@ def password_reset_done(request):
 
 logger = logging.getLogger("myapp")
 
+
 def login_page(request):
     try:
         if request.method == "POST":
@@ -161,16 +121,16 @@ def login_page(request):
                     request.session.set_expiry(0)
 
                 login(request, user)
-                
+
                 messages.success(request, f"You are logged in {user.username} ")
-                
+
                 logger.info("user Login")
                 return redirect("dashboard_page")
-                
+
             else:
                 messages.error(request, "Invalid Username or Password")
                 logger.error(f"Invalid Username or Password")
-                
+
                 return redirect("login_page")
     except Exception as e:
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
@@ -362,7 +322,7 @@ def update_user(request, user_id):
 def dashboard_page(request):
     try:
         get_q = request.GET.get("q", "")
-        job_name_search = request.GET.get("job_name_search","")
+        job_name_search = request.GET.get("job_name_search", "")
         date_s = request.GET.get("date", "")
         date_e = request.GET.get("end_date", "")
         sorting = request.GET.get("sorting", "")
@@ -373,18 +333,14 @@ def dashboard_page(request):
         cylinder_made_in_sorting = request.GET.get("cylinder_made_in_sorting", "")
 
         db_sqlite3 = Job_detail.objects.all()
-
+        
         filters = Q()
         if get_q:
-            filters &= (
-             Q(company_name__icontains=get_q)
-            )
+            filters &= Q(company_name__icontains=get_q)
         if job_name_search:
-            filters &= (
-                Q(job_name__icontains=job_name_search)
-            )
+            filters &= Q(job_name__icontains=job_name_search)
         if date_s and date_e:
-            filters &= Q(date__range=[date_s, date_e])  
+            filters &= Q(date__range=[date_s, date_e])
         elif date_s:
             filters &= Q(date__icontains=date_s)
         elif date_e:
@@ -422,7 +378,7 @@ def dashboard_page(request):
         datas = p.get_page(page)
         total_job = db_sqlite3.count()
         company_name = CompanyName.objects.all().order_by("company_name")
-        job_names = Job_detail.objects.values('job_name').all().distinct()
+        job_names = Job_detail.objects.values("job_name").all().distinct()
         count_of_company = company_name.count()
 
         cylinder_company_names = CylinderMadeIn.objects.all()
@@ -430,12 +386,11 @@ def dashboard_page(request):
         count_of_cylinder_company = cylinder_company_names.count()
         nums = " " * datas.paginator.num_pages
 
-           
         context = {
             "nums": nums,
             "venues": datas,
             "total_job": total_job,
-            "job_names":job_names,
+            "job_names": job_names,
             "company_name": company_name,
             "cylinder_company_names": cylinder_company_names,
             "count_of_company": count_of_company,
@@ -452,7 +407,7 @@ def dashboard_page(request):
             "total_active_job": total_active_job,
             "job_status": job_status,
         }
-        
+
     except Exception as e:
         messages.warning(request, "Something went wrong  try again")
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
@@ -465,17 +420,18 @@ def dashboard_page(request):
 def delete_data(request, delete_id):
     print(delete_id)
     try:
-        folder_url = Job_detail.objects.values_list("folder_url", flat=True).get(id=delete_id)
-
+        folder_url = Job_detail.objects.values_list("folder_url", flat=True).get(
+            id=delete_id
+        )
 
         print(delete_id)
-        if folder_url and folder_url != 'nan':
+        if folder_url and folder_url != "nan":
             try:
                 print(folder_url)
                 url = os.environ.get("DELETE_WEBHOOK_JOB")
                 print(url)
                 response = requests.delete(f"{url}{delete_id}")
-                
+
                 messages.success(request, "Job Deleted successfully ")
                 return redirect("dashboard_page")
             except Exception as e:
@@ -513,13 +469,15 @@ def job_entry(request):
     company_name = CompanyName.objects.values("company_name").union(
         CDRDetail.objects.values("company_name")
     )
-
+    job_status = Job_detail._meta.get_field("job_status").choices
+    
     cylinder_company_names = CylinderMadeIn.objects.all()
     cdr_job_name = CDRDetail.objects.values("job_name").distinct()
     context = {
         "company_name": company_name,
         "cylinder_company_names": cylinder_company_names,
         "cdr_job_name": cdr_job_name,
+        "job_status":job_status
     }
     return render(request, "job_entry.html", context)
 
@@ -555,13 +513,9 @@ def add_job(request):
             correction = request.POST.get("correction")
             job_status = request.POST.get("job_status")
             files = request.FILES.getlist("files")
-            
-            
-            
-            
-            
+
             pouch_combination = f"{pouch_combination_1} + {pouch_combination_2} + {pouch_combination_3} + {pouch_combination_4}"
-            
+
             required_filed = {
                 "Date": date,
                 "Bill no": bill_no,
@@ -594,11 +548,8 @@ def add_job(request):
 
             file_dic = file_name_convert(files)
 
-            
             print(file_dic)
-            
-            
-            
+
             if new_job_name != "":
                 if new_job_name == "" or new_job_name == None:
                     messages.error(request, "Plz Provide Job Name")
@@ -613,15 +564,15 @@ def add_job(request):
                 else:
                     job_name = new_job_name
 
-            if Job_detail.objects.filter(
-                job_name__icontains=job_name, date__icontains=date
-            ).exists():
-                messages.error(
-                    request,
-                    "Job Name are already Exists on this date kindly Update job",
-                    extra_tags="custom-success-style",
-                )
-                return redirect("job_entry")
+            # if Job_detail.objects.filter(
+            #     job_name__icontains=job_name, date__icontains=date
+            # ).exists():
+            #     messages.error(
+            #         request,
+            #         "Job Name are already Exists on this date kindly Update job",
+            #         extra_tags="custom-success-style",
+            #     )
+            #     return redirect("job_entry")
 
             if new_company != "":
                 if CompanyName.objects.filter(
@@ -876,29 +827,44 @@ def update_job(request, update_id):
                 old_job = Job_detail.objects.get(id=update_id)
                 update_job_data = get_object_or_404(Job_detail, id=update_id)
                 job = old_job
-                
+
                 format_example = "%Y-%m-%d"
                 dt_obj = datetime.strptime(cylinder_date, format_example)
                 date_object = dt_obj.date()
                 print(date_object)
-                for field in ['job_status', 'cylinder_bill_no', 'correction' , 'cylinder_size' , 'prpc_sell' , 'prpc_purchase' , 'noc' , 'job_type' , 'job_name', 'company_name' , 'bill_no'  , 'pouch_open_size' , 'pouch_size' , 'cylinder_made_in','cylinder_date','date']:
-                    
-                    
+                for field in [
+                    "job_status",
+                    "cylinder_bill_no",
+                    "correction",
+                    "cylinder_size",
+                    "prpc_sell",
+                    "prpc_purchase",
+                    "noc",
+                    "job_type",
+                    "job_name",
+                    "company_name",
+                    "bill_no",
+                    "pouch_open_size",
+                    "pouch_size",
+                    "cylinder_made_in",
+                    "cylinder_date",
+                    "date",
+                ]:
+
                     old_value = getattr(old_job, field)
                     new_value = request.POST.get(field)
 
-                    
                     if str(old_value) != new_value:
-                        print(type(old_value) , type(new_value))
+                        print(type(old_value), type(new_value))
                         JobHistory.objects.create(
                             job=job,
                             field_name=field,
                             old_value=old_value,
                             new_value=new_value,
-                            chnage_user=request.user
+                            chnage_user=request.user,
                         )
                         setattr(job, field, new_value)
-                job.save()        
+                job.save()
 
                 update_job_data.company_name = company_name
                 update_job_data.date = date
@@ -934,11 +900,6 @@ def update_job(request, update_id):
         messages.error(request, f"Something went wrong try again {e}")
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
         return redirect("dashboard_page")
-    
-    
-    
-
-   
 
 
 @custom_login_required
@@ -1178,7 +1139,7 @@ def cdr_add(request):
                 extra_tags="custom-error-style",
             )
             return redirect("company_add_page")
-        
+
         if new_job_name != "":
             job_name = new_job_name
 
@@ -1261,10 +1222,6 @@ def cdr_add(request):
             "cdr_corrections": cdr_corrections_data,
         }
 
-       
-       
-        
-            
         file_dic = file_name_convert(cdr_files)
         try:
             url = os.environ.get("CREATE_WEBHOOK_CDR")
@@ -1273,7 +1230,7 @@ def cdr_add(request):
                 print("Positive Response : ", response)
                 messages.success(request, "CDR Upload Successfully ")
                 return redirect("company_add_page")
-            
+
             else:
                 cdr_data = CDRDetail.objects.create(
                     date=cdr_upload_date,
@@ -1284,34 +1241,26 @@ def cdr_add(request):
                 )
                 for file_key, file_data in file_dic.items():
                     file_obj = file_data[1]
-                    CDRImage.objects.create(
-                        cdr=cdr_data, image=file_obj
-                    )
-                    
+                    CDRImage.objects.create(cdr=cdr_data, image=file_obj)
+
                 cdr_data.save()
                 messages.success(request, "CDR Upload Successfully SQLite DB")
                 return redirect("company_add_page")
         except Exception as e:
             cdr_data = CDRDetail.objects.create(
-                    date=cdr_upload_date,
-                    company_name=company_name,
-                    company_email=company_email,
-                    cdr_corrections=cdr_corrections_data,
-                    job_name=job_name,
-                )
+                date=cdr_upload_date,
+                company_name=company_name,
+                company_email=company_email,
+                cdr_corrections=cdr_corrections_data,
+                job_name=job_name,
+            )
             for file_key, file_data in file_dic.items():
                 file_obj = file_data[1]
-                CDRImage.objects.create(
-                    cdr=cdr_data, image=file_obj
-                )
-                    
+                CDRImage.objects.create(cdr=cdr_data, image=file_obj)
+
             cdr_data.save()
             messages.success(request, "CDR Upload Successfully SQLite DB")
             return redirect("company_add_page")
-            
-
-              
-                
 
 
 @custom_login_required
@@ -1344,8 +1293,6 @@ def cdr_delete(request, delete_id):
         return redirect("company_add_page")
 
 
-
-
 @custom_login_required
 def cdr_update(request, update_id):
 
@@ -1363,8 +1310,6 @@ def cdr_update(request, update_id):
         get_date = CDRDetail.objects.values("date").get(id=id)
         date_formatte = get_date["date"].strftime("%Y-%m-%d")
 
-        
-        
         email_error = utils.email_validator(company_email)
         if email_error:
             messages.error(request, email_error, extra_tags="custom-success-style")
@@ -1374,11 +1319,11 @@ def cdr_update(request, update_id):
         ).exists():
             pass
         else:
-            if CDRDetail.objects.filter(
-                company_email=company_email
-            ).exists():
+            if CDRDetail.objects.filter(company_email=company_email).exists():
                 messages.error(
-                    request, "Choose Another Email This Email is already Exist", extra_tags="custom-success-style"
+                    request,
+                    "Choose Another Email This Email is already Exist",
+                    extra_tags="custom-success-style",
                 )
                 return redirect("company_add_page")
 
@@ -1397,7 +1342,6 @@ def cdr_update(request, update_id):
         if file_error:
             messages.error(request, file_error, extra_tags="custom-success-style")
             return redirect("job_entry")
-        
 
         file_dic = file_name_convert(cdr_files)
 
@@ -1449,7 +1393,7 @@ def cdr_update(request, update_id):
                 update_details.cdr_corrections = cdr_corrections
                 update_details.job_name = job_names
                 update_details.date = date
-                
+
                 for file_key, file_data in file_dic.items():
                     file_obj = file_data[1]
                     CDRImage.objects.create(cdr=update_details, image=file_obj)
@@ -1457,7 +1401,6 @@ def cdr_update(request, update_id):
                 messages.success(request, "Data Updated Successfully")
                 return redirect("company_add_page")
     return redirect("company_add_page")
-
 
 
 def offline_page(request):
@@ -1604,26 +1547,29 @@ def send_mail_data(request):
         "correction": correction,
         "note": note,
     }
-
-    print(job_info)
-    receiver_email = company_email_address
-    template_name = "Base/send_email.html"
-    convert_to_html_content = render_to_string(
-        template_name=template_name, context=job_info
-    )
-    email = EmailMultiAlternatives(
-        subject="Mail From Nirmal Ventures",
-        body="plain_message",
-        from_email=request.user.email,
-        to=[receiver_email],
-    )
-    email.attach_alternative(convert_to_html_content, "text/html")
-    for i in attachments:
-        email.attach(i.name, i.read(), i.content_type)
-    email.send()
+    
+    # print(job_info)
+    # receiver_email = company_email_address
+    # template_name = "Base/send_email.html"
+    # convert_to_html_content = render_to_string(
+    #     template_name=template_name, context=job_info
+    # )
+    # email = EmailMultiAlternatives(
+    #     subject="Mail From Nirmal Ventures",
+    #     body="plain_message",
+    #     from_email=request.user.email,
+    #     to=[receiver_email],
+    # )
+    # email.attach_alternative(convert_to_html_content, "text/html")
+    # for i in attachments:
+    #     email.attach(i.name, i.read(), i.content_type)
+    # email.send()
 
     messages.success(request, "Mail Send successfully")
-    return redirect("dashboard_page")
+    # return redirect("dashboard_page")
+    return render(request,'Base/send_email.html',context=job_info)
+
+
 
 @custom_login_required
 def company_name_suggestion(request):
@@ -1644,6 +1590,7 @@ def company_name_suggestion(request):
         print(email)
         return JsonResponse({"email": email, "jobs": jobs})
     return JsonResponse({"error": "Invalid request"}, status=400)
+
 
 @custom_login_required
 def company_name_suggestion_job(request):
@@ -1670,6 +1617,7 @@ def company_name_suggestion_job(request):
         return JsonResponse({"jobs": jobs})
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+
 @custom_login_required
 def file_convert(images):
     valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
@@ -1682,11 +1630,13 @@ def file_convert(images):
             }
     return None
 
+
 @custom_login_required
 def cdr_job_check(job_name, date):
     if CDRDetail.objects.filter(job_name__icontains=job_name, date=date).exists():
         return {"Error": "Job Name already exists on this date. Kindly update job"}
     return None
+
 
 @custom_login_required
 def cdr_company_check(company_name, company_email):
@@ -1701,109 +1651,138 @@ def cdr_company_check(company_name, company_email):
             return {"Error": "Choose Another Email"}
 
 
-
 @custom_login_required
 def ProformaInvoicePage(request):
-    company_list  = CompanyName.objects.values("company_name").distinct().union(
-        ProformaInvoice.objects.values("company_name").distinct()
+    company_list = (
+        CompanyName.objects.values("company_name")
+        .distinct()
+        .union(ProformaInvoice.objects.values("company_name").distinct())
     )
     bank_details = BankDetails.objects.all()
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
-    context = {"company_list":company_list,
-               "states":states,
-               "invoice_status":invoice_status,
-                "bank_details":bank_details,
+    context = {
+        "company_list": company_list,
+        "states": states,
+        "invoice_status": invoice_status,
+        "bank_details": bank_details,
     }
-    return render(request, "ProformaInvoice/proforma_invoice_page.html",context=context)
+    return render(
+        request, "ProformaInvoice/proforma_invoice_page.html", context=context
+    )
+
 
 def ViewProformaInvoice(request):
-    proformaInvoice = ProformaInvoice.objects.prefetch_related('bank_details', 'job_details').all().order_by('invoice_status', 'invoice_date')
-    company_name = ProformaInvoice.objects.values_list('company_name', flat=True).distinct()
-  
-    start_date = request.GET.get('start_date',"")
-    end_date =  request.GET.get("end_date","")
-    select_company = request.GET.get('select_company',"")
+    proformaInvoice = (
+        ProformaInvoice.objects.prefetch_related("bank_details", "job_details")
+        .all()
+        .order_by("invoice_status", "invoice_date")
+    )
+    company_name = ProformaInvoice.objects.values_list(
+        "company_name", flat=True
+    ).distinct()
+
+    start_date = request.GET.get("start_date", "")
+    end_date = request.GET.get("end_date", "")
+    select_company = request.GET.get("select_company", "")
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
-
-    
     
     if select_company and start_date and end_date:
         proformaInvoice = proformaInvoice.filter(
-            Q(invoice_date__range=[start_date, end_date]) &
-            Q(company_name__icontains=select_company)
+            Q(invoice_date__range=[start_date, end_date])
+            & Q(company_name__icontains=select_company)
         )
     elif select_company and start_date:
-        
-        proformaInvoice = proformaInvoice.filter(Q(invoice_date__icontains=start_date) & Q(company_name__icontains=select_company))
-    
+
+        proformaInvoice = proformaInvoice.filter(
+            Q(invoice_date__icontains=start_date)
+            & Q(company_name__icontains=select_company)
+        )
+
     elif start_date and end_date and select_company:
-        proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date]) & Q(company_name__icontains=select_company)
+        proformaInvoice = proformaInvoice.filter(
+            invoice_date__range=[start_date, end_date]
+        ) & Q(company_name__icontains=select_company)
     elif start_date and end_date.strip():
-        
-        proformaInvoice = proformaInvoice.filter(invoice_date__range=[start_date,end_date])
+
+        proformaInvoice = proformaInvoice.filter(
+            invoice_date__range=[start_date, end_date]
+        )
     elif start_date.strip():
         proformaInvoice = proformaInvoice.filter(Q(invoice_date__icontains=start_date))
     elif select_company.strip():
-        proformaInvoice = proformaInvoice.filter(Q(company_name__icontains=select_company))
-    
-    
-    
-        
-    P = Paginator(proformaInvoice,5)
+        proformaInvoice = proformaInvoice.filter(
+            Q(company_name__icontains=select_company)
+        )
+
+    P = Paginator(proformaInvoice, 5)
     page = request.GET.get("page")
-    proformaInvoice = P.get_page(page)  
+    proformaInvoice = P.get_page(page)
     nums = "a" * proformaInvoice.paginator.num_pages
-    
+
     try:
         for proforma in proformaInvoice:
             gst_value = str(proforma.gst).strip()
-            gst_value = re.sub(r'\s+', '', gst_value)  
+            gst_value = re.sub(r"\s+", "", gst_value)
             gst_value = gst_value.replace("'", '"')
-            
+
             proforma.gst = json.loads(gst_value)
-    except (json.JSONDecodeError, TypeError): 
+    except (json.JSONDecodeError, TypeError):
         cleaned = gst_value.replace("[", "").replace("]", "").replace('"', "")
         proforma.gst = [x for x in cleaned.split(",") if x]
-    
+
     context = {
-        "nums" :nums,
-       
+        "nums": nums,
         "proformaInvoices": proformaInvoice,
-        "company_name":company_name,
-        "states":states,
-        "invoice_status":invoice_status
+        "company_name": company_name,
+        "states": states,
+        "invoice_status": invoice_status,
     }
-    return render(request, "ProformaInvoice/view_proforma_invoice.html",context=context)
+    return render(
+        request, "ProformaInvoice/view_proforma_invoice.html", context=context
+    )
 
 
-
-def UpdateProformaInvoice(request,proforma_id):
-    if request.method  == "POST":
+def UpdateProformaInvoice(request, proforma_id):
+    if request.method == "POST":
         invoice_date = request.POST.get("invoice_date")
-        mode_payment  = request.POST.get("mode_payment")
+        mode_payment = request.POST.get("mode_payment")
         billing_address = request.POST.get("billing_address")
         billing_gstin = request.POST.get("billing_gstin_no")
         billing_state_name = request.POST.get("billing_state_name")
         quantity = request.POST.get("quantity")
-        pouch_open_size  = request.POST.get("pouch_open_size")
+        pouch_open_size = request.POST.get("pouch_open_size")
         cylinder_size = request.POST.get("cylinder_size")
         prpc_rate = request.POST.get("prpc_rate")
-      
+
         total = request.POST.getlist("total")
-        
+
         company_name = request.POST.get("company_name")
         company_email = request.POST.get("company_email")
         company_contact = request.POST.get("company_contact")
         title = request.POST.get("title")
         banking_details = request.POST.get("banking_details")
-        
-        
-        
-        print(invoice_date,mode_payment,billing_state_name,billing_address,billing_gstin,quantity,pouch_open_size,cylinder_size,prpc_rate,total,company_name,company_email,company_contact,title,banking_details)
+
+        print(
+            invoice_date,
+            mode_payment,
+            billing_state_name,
+            billing_address,
+            billing_gstin,
+            quantity,
+            pouch_open_size,
+            cylinder_size,
+            prpc_rate,
+            total,
+            company_name,
+            company_email,
+            company_contact,
+            title,
+            banking_details,
+        )
         print(proforma_id)
-        item = get_object_or_404(ProformaInvoice,id=proforma_id)
+        item = get_object_or_404(ProformaInvoice, id=proforma_id)
         item.invoice_date = invoice_date
         item.mode_payment = mode_payment
         item.billing_address = billing_address
@@ -1819,106 +1798,108 @@ def UpdateProformaInvoice(request,proforma_id):
         item.title = title
         item.banking_details = banking_details
         item.save()
-        messages.success(request,"Data  Successfully")
-        return redirect('view_proforma_invoice')
+        messages.success(request, "Data  Successfully")
+        return redirect("view_proforma_invoice")
     return redirect("view_proforma_invoice")
-
 
 
 @custom_login_required
 def ProformaSendMail(request):
-    if request.method == 'POST':
-        company_email  =  request.POST.get('company_email','')
-        total = request.POST.get('total')
+    if request.method == "POST":
+        company_email = request.POST.get("company_email", "")
+        total = request.POST.get("total")
         fields_to_send_mail = [
-            'invoice_no',
-            'invoice_date',
-            'company_name',
-            'company_email',
-            'company_contact',
-            'billing_address',
-            'billing_state_name',
-            'billing_gstin_no', 
-            'total',
-            'bank_name',
-            'bank_account_number',
-            'bank_brnach_address',
-            'bank_ifsc_code',
-            'term_note',
-            'gst',
-            'total_taxable_value',
-            'gst_value',
-            'mode_payment'  
+            "invoice_no",
+            "invoice_date",
+            "company_name",
+            "company_email",
+            "company_contact",
+            "billing_address",
+            "billing_state_name",
+            "billing_gstin_no",
+            "total",
+            "bank_name",
+            "bank_account_number",
+            "bank_brnach_address",
+            "bank_ifsc_code",
+            "term_note",
+            "gst",
+            "total_taxable_value",
+            "gst_value",
+            "mode_payment",
         ]
-        if company_email == None or company_email == '':
-            messages.error(request,"Company email is Required",extra_tags="custom-success-style")
-            return redirect('view_proforma_invoice')
-    
+        if company_email == None or company_email == "":
+            messages.error(
+                request, "Company email is Required", extra_tags="custom-success-style"
+            )
+            return redirect("view_proforma_invoice")
 
-        total_in_words = request.POST.get('total_in_words')
-        
+        total_in_words = request.POST.get("total_in_words")
+
         item_dic = {}
         for field in fields_to_send_mail:
-            field_value = request.POST.get(field, '')
-            if field_value: 
+            field_value = request.POST.get(field, "")
+            if field_value:
                 item_dic[field] = field_value
-        job_names = request.POST.getlist('job_name')
-        titles = request.POST.getlist('title')
-        quantities = request.POST.getlist('quantity')
-        pouch_sizes = request.POST.getlist('pouch_open_size')
-        cylinder_sizes = request.POST.getlist('cylinder_size')
-        prpc_rates = request.POST.getlist('prpc_rate')
-        taxable_value = request.POST.getlist('taxable_value')
-        date = datetime.now().strftime('%Y-%m-%d')
+        job_names = request.POST.getlist("job_name")
+        titles = request.POST.getlist("title")
+        quantities = request.POST.getlist("quantity")
+        pouch_sizes = request.POST.getlist("pouch_open_size")
+        cylinder_sizes = request.POST.getlist("cylinder_size")
+        prpc_rates = request.POST.getlist("prpc_rate")
+        taxable_value = request.POST.getlist("taxable_value")
+        date = datetime.now().strftime("%Y-%m-%d")
         job_list = []
-        for jn, tl, qt, ps, cs, pr ,tx in zip(job_names, titles, quantities, pouch_sizes, cylinder_sizes, prpc_rates,taxable_value):
-            job_list.append({
-                'job_name': jn,
-                'title': tl,
-                'quantity': qt,
-                'pouch_open_size': ps,
-                'cylinder_size': cs,
-                'prpc_rate': pr,
-                'taxable_value':tx
-            })
-        item_dic['jobs'] = job_list
-        item_dic['total_in_words'] = total_in_words
-        item_dic['date'] = date
-        
-        
-        
-        
+        for jn, tl, qt, ps, cs, pr, tx in zip(
+            job_names,
+            titles,
+            quantities,
+            pouch_sizes,
+            cylinder_sizes,
+            prpc_rates,
+            taxable_value,
+        ):
+            job_list.append(
+                {
+                    "job_name": jn,
+                    "title": tl,
+                    "quantity": qt,
+                    "pouch_open_size": ps,
+                    "cylinder_size": cs,
+                    "prpc_rate": pr,
+                    "taxable_value": tx,
+                }
+            )
+        item_dic["jobs"] = job_list
+        item_dic["total_in_words"] = total_in_words
+        item_dic["date"] = date
+
         email_error = utils.email_validator(company_email)
         if email_error:
             messages.error(request, email_error, extra_tags="custom-success-style")
             return redirect("view_proforma_invoice")
-        
-        
-        
+
         receiver_email = company_email
-        template_name =   "Base/proforma_send_mail.html"
+        template_name = "Base/proforma_send_mail.html"
         convert_to_html_content = render_to_string(
-            template_name=template_name,context={
-                'data':item_dic
-            }
+            template_name=template_name, context={"data": item_dic}
         )
         email = EmailMultiAlternatives(
             subject="Nirmal Group",
-            body = "plain message",
-            from_email= "soniyuvraj9499@gmail.com",
-            to = [receiver_email],
-            
+            body="plain message",
+            from_email="soniyuvraj9499@gmail.com",
+            to=[receiver_email],
         )
         email.attach_alternative(convert_to_html_content, "text/html")
         email.send()
-        messages.success(request,"mail send successfully")
+        messages.success(request, "mail send successfully")
         return redirect("view_proforma_invoice")
-    
+
     return redirect("proforma_sendmail")
 
 
 @custom_login_required
-def DeleteProformaInvoice(request,proforma_id):
+def DeleteProformaInvoice(request, proforma_id):
     if request.method == "POST":
         print(proforma_id)
         item = get_object_or_404(ProformaInvoice, id=proforma_id)
@@ -1927,148 +1908,151 @@ def DeleteProformaInvoice(request,proforma_id):
         messages.success(request, "Proforma Invoice Deleted Successfully")
         return redirect("view_proforma_invoice")
     return redirect("view_proforma_invoice")
-             
-        
+
+
 @custom_login_required
 def ProformaInvoiceCreate(request):
     if request.method == "POST":
-        invoice_no = request.POST.get("invoice_no","")
-        invoice_date = request.POST.get("invoice_date","")
-        mode_payment = request.POST.get("mode_payment","")
-        company_name = request.POST.get("company_name","")
-        company_contact = request.POST.get("company_contact","")
-        company_email = request.POST.get("company_email","")
-        billing_address = request.POST.get("billing_address","")
-        billing_state_name = request.POST.get("billing_state_name","")
-        billing_gstin_no = request.POST.get("billing_gstin_no","")
-        terms = request.POST.get("terms","")
-        totals = request.POST.get("total_amount","")
-        banking_details = request.POST.get("bank_details","")
-        new_company = request.POST.get("new_company","")
-        
+        invoice_no = request.POST.get("invoice_no", "")
+        invoice_date = request.POST.get("invoice_date", "")
+        mode_payment = request.POST.get("mode_payment", "")
+        company_name = request.POST.get("company_name", "")
+        company_contact = request.POST.get("company_contact", "")
+        company_email = request.POST.get("company_email", "")
+        billing_address = request.POST.get("billing_address", "")
+        billing_state_name = request.POST.get("billing_state_name", "")
+        billing_gstin_no = request.POST.get("billing_gstin_no", "")
+        terms = request.POST.get("terms", "")
+        totals = request.POST.get("total_amount", "")
+        banking_details = request.POST.get("bank_details", "")
+        new_company = request.POST.get("new_company", "")
+
         title = request.POST.getlist("title[]")
         job_names = request.POST.getlist("job_name[]")
-        
+
         quantities = request.POST.getlist("quantity[]")
         pouch_open_sizes = request.POST.getlist("pouch_open_size[]")
         cylinder_sizes = request.POST.getlist("cylinder_size[]")
         prpc_price = request.POST.getlist("prpc_price[]")
         gst_list = request.POST.getlist("gst[]")
-        gst_value  = request.POST.get("gst_value")
+        gst_value = request.POST.get("gst_value")
         taxable_value = request.POST.get("taxable_value")
-        invoice_status = request.POST.get('invoice_status')
-        
+        invoice_status = request.POST.get("invoice_status")
+
         print(banking_details)
         required_fields = {
-        'invoice no':invoice_no, 
-        'invoice date':invoice_date, 
-        'mode payment':mode_payment, 
-        'company name':company_name, 
-        'company contact':company_contact,
-        'company email':company_email, 
-        'billing address':billing_address, 
-        'billing state_name':billing_state_name, 
-        'billing GST in no':billing_gstin_no,
-        'terms':terms,
-        'totals':totals,
-        'banking details':banking_details,
-        'gst value':gst_value, 
-        'taxable value':taxable_value,
-        
+            "invoice no": invoice_no,
+            "invoice date": invoice_date,
+            "mode payment": mode_payment,
+            "company name": company_name,
+            "company contact": company_contact,
+            "company email": company_email,
+            "billing address": billing_address,
+            "billing state_name": billing_state_name,
+            "billing GST in no": billing_gstin_no,
+            "terms": terms,
+            "totals": totals,
+            "banking details": banking_details,
+            "gst value": gst_value,
+            "taxable value": taxable_value,
         }
-        bank_instance = BankDetails.objects.get(id=banking_details) if banking_details  else None
-        
+        bank_instance = (
+            BankDetails.objects.get(id=banking_details) if banking_details else None
+        )
+
         for field, required in required_fields.items():
             if not required:
                 messages.error(
                     request, f"{field} is Required", extra_tags="custom-success-style"
                 )
                 return redirect("proforma_invoice_page")
-         
+
         if company_name == "" or new_company != "":
             company_name = new_company
-            
-    
+
         if ProformaInvoice.objects.filter(invoice_no=invoice_no).exists():
-            messages.error(request,"Invoice number already exists",extra_tags="custom-success-style")
-            return redirect("proforma_invoice_page")
-        
-        try:
-            proforma =  ProformaInvoice.objects.create(
-                invoice_no = invoice_no,
-                invoice_date = invoice_date,
-                mode_payment = mode_payment,
-                company_name = company_name,
-                company_contact = company_contact,
-                company_email = company_email,
-                billing_address = billing_address,
-                billing_state_name = billing_state_name,
-                billing_gstin_no = billing_gstin_no,
-                terms_note  = terms,
-                bank_details = bank_instance,
-                gst = gst_list,
-                total = totals,
-                gst_value = gst_value,
-                total_taxable_value =  taxable_value,
-                invoice_status = invoice_status
-                
+            messages.error(
+                request,
+                "Invoice number already exists",
+                extra_tags="custom-success-style",
             )
-            
+            return redirect("proforma_invoice_page")
+
+        try:
+            proforma = ProformaInvoice.objects.create(
+                invoice_no=invoice_no,
+                invoice_date=invoice_date,
+                mode_payment=mode_payment,
+                company_name=company_name,
+                company_contact=company_contact,
+                company_email=company_email,
+                billing_address=billing_address,
+                billing_state_name=billing_state_name,
+                billing_gstin_no=billing_gstin_no,
+                terms_note=terms,
+                bank_details=bank_instance,
+                gst=gst_list,
+                total=totals,
+                gst_value=gst_value,
+                total_taxable_value=taxable_value,
+                invoice_status=invoice_status,
+            )
+
             for i in range(len(job_names)):
                 ProformaJob.objects.create(
-                    proforma_invoice = proforma,
-                    title = title[i],
+                    proforma_invoice=proforma,
+                    title=title[i],
                     job_name=job_names[i],
                     quantity=quantities[i],
                     pouch_open_size=pouch_open_sizes[i],
                     cylinder_size=cylinder_sizes[i],
-                    prpc_rate=prpc_price[i]
+                    prpc_rate=prpc_price[i],
                 )
             messages.success(request, "Proforma Invoice Created Successfully!")
-            return redirect("proforma_invoice_page")           
+            return redirect("proforma_invoice_page")
         except Exception as e:
-            messages.warning(request,"Something went Wrong")
+            messages.warning(request, "Something went Wrong")
             print(e)
-            return redirect('proforma_invoice_page')
-        
-    return redirect("proforma_invoice_page")   
+            return redirect("proforma_invoice_page")
+
+    return redirect("proforma_invoice_page")
+
 
 @require_GET
 def ProformaInvoicePageAJAX(request):
-    igst = request.GET.get('igsts')
-    cgst = request.GET.get('cgsts')
-    sgst = request.GET.get('sgsts')
-    quantities = request.GET.getlist('quantities[]')
-    prpc_prices = request.GET.getlist('prpc_prices[]') 
+    igst = request.GET.get("igsts")
+    cgst = request.GET.get("cgsts")
+    sgst = request.GET.get("sgsts")
+    quantities = request.GET.getlist("quantities[]")
+    prpc_prices = request.GET.getlist("prpc_prices[]")
 
     company_name = request.GET.get("company_name", "")
 
-        
-
     gst = int(igst) + int(cgst) + int(sgst)
-    
+
     quantities = [float(quantity) for quantity in quantities if quantity]
-   
-    prpc_prices = [float(prpc_price) for prpc_price in prpc_prices if prpc_price  ]
-   
+
+    prpc_prices = [float(prpc_price) for prpc_price in prpc_prices if prpc_price]
+
     # total_quantities = sum(quantities)
     # total_prpc_prices = sum(prpc_prices)
-    
-    taxable_value = sum(quantity * prpc_price for quantity, prpc_price in zip(quantities, prpc_prices))
-    gst_amount = taxable_value * (gst/100)
+
+    taxable_value = sum(
+        quantity * prpc_price for quantity, prpc_price in zip(quantities, prpc_prices)
+    )
+    gst_amount = taxable_value * (gst / 100)
     total_amount = taxable_value + gst_amount
-    
+
     total_amount = round(total_amount, 2)
     job_list = []
     company_contact = ""
     company_email = ""
     billing_address = ""
     if company_name:
-    
+
         demo = list(
-            ProformaJob.objects
-            .filter(proforma_invoice__company_name=company_name)
-            .values('job_name')
+            ProformaJob.objects.filter(proforma_invoice__company_name=company_name)
+            .values("job_name")
             .distinct()
         )
 
@@ -2084,44 +2068,58 @@ def ProformaInvoicePageAJAX(request):
         )
 
         job_list = job + demo
-        
-        company_contact = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_contact").distinct())
-        
-        company_email = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("company_email").distinct().union(
-            CDRDetail.objects.filter(company_name__iexact=company_name).values("company_email").distinct()
-        ))
-        
-        billing_address = list(ProformaInvoice.objects.filter(company_name__iexact=company_name).values("billing_address").distinct())
-    
-        
-        company_email = company_email[0]['company_email'] if company_email else ''
-        company_contact = company_contact[0]['company_contact'] if company_contact else ''
-        billing_address = billing_address[0]['billing_address'] if billing_address else ''
+
+        company_contact = list(
+            ProformaInvoice.objects.filter(company_name__iexact=company_name)
+            .values("company_contact")
+            .distinct()
+        )
+
+        company_email = list(
+            ProformaInvoice.objects.filter(company_name__iexact=company_name)
+            .values("company_email")
+            .distinct()
+            .union(
+                CDRDetail.objects.filter(company_name__iexact=company_name)
+                .values("company_email")
+                .distinct()
+            )
+        )
+
+        billing_address = list(
+            ProformaInvoice.objects.filter(company_name__iexact=company_name)
+            .values("billing_address")
+            .distinct()
+        )
+
+        company_email = company_email[0]["company_email"] if company_email else ""
+        company_contact = (
+            company_contact[0]["company_contact"] if company_contact else ""
+        )
+        billing_address = (
+            billing_address[0]["billing_address"] if billing_address else ""
+        )
     else:
         company_name = ""
-        
-    
-   
+
     context = {
-            "total_amount": total_amount,
-                "job":job_list,
-                "company_contact":company_contact,
-                "company_email":company_email,
-                "billing_address":billing_address,         
-                "taxable_value":taxable_value,
-                "gst_amount":gst_amount
-               }
+        "total_amount": total_amount,
+        "job": job_list,
+        "company_contact": company_contact,
+        "company_email": company_email,
+        "billing_address": billing_address,
+        "taxable_value": taxable_value,
+        "gst_amount": gst_amount,
+    }
     logger.debug(f"AJAX context: {context}")
     return JsonResponse(context)
-
-
 
 
 # API OF ALL Views
 
 from rest_framework.decorators import api_view
-from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 class JobList(APIView):
@@ -2347,10 +2345,7 @@ class CDRDetailAVS(APIView):
                 #     base, ext = os.path.splitext(filename)
                 #     thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
 
-                
-                CDRImage.objects.create(
-                    cdr=cdr_instance, image=i
-                )
+                CDRImage.objects.create(cdr=cdr_instance, image=i)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         else:
@@ -2377,4 +2372,3 @@ class CDRUpdateView(APIView):
             image_error = file_convert(images)
             if image_error:
                 return Response({"error": image_error})
-

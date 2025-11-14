@@ -39,7 +39,8 @@ LOGOUT_REDIRECT_URL = 'logout'
 LOGIN_REDIRECT_URL = "/dashboard"
 MESSAGE_TAGS = {
     messages.ERROR: 'bg-danger  alert-danger', 
-    # messages.SUCCESS: 'bg-primary'
+    messages.DEBUG: 'alert-info',
+ 
 } 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
@@ -64,13 +65,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
+    'debug_toolbar',
     'app',
     'rest_framework',
     'drf_yasg',
     'simple_history',
     
 ]
-
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -81,6 +85,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 
 ]
 

@@ -1,5 +1,6 @@
 from ast import mod
 from pyexpat import model
+from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
@@ -20,56 +21,105 @@ class Registration(AbstractUser):
     first_name = models.CharField(max_length=200, blank=True,null=True,)
     last_name = models.CharField(max_length=200,blank=True, null=True)
     email = models.EmailField(max_length=200, unique=True,validators=[validate_email])
+    
+    
+    
+
+
+
+
+class JobHeader(models.Model):
+    Job_Status = [
+        ("Pending","Pending"),
+        ("Confirmed","Confirmed")
+    ]
+    job_date = models.DateField()
+    bill_no = models.CharField(max_length=200)
+    company_name = models.CharField(max_length=300, blank=True, null=True)
+    correction = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    job_status  = models.CharField(max_length=200,choices=Job_Status)
+    
+    def __str__(self):
+        return self.company_name
+    
+
+
+class JobMaterial(models.Model):
+    job = models.ForeignKey(JobHeader, on_delete=models.CASCADE, related_name='job_materials')
+    job_name = models.CharField(max_length=200)
+    job_type = models.CharField(max_length=200)
+    noc = models.CharField(max_length=200)
+    prpc_purchase = models.CharField(max_length=200)
+    prpc_sell = models.CharField(max_length=200, blank=True, null=True)
+    cylinder_size = models.CharField(max_length=200)
+    cylinder_made_in = models.CharField(max_length=200)
+    pouch_size = models.CharField(max_length=200)
+    pouch_open_size = models.CharField(max_length=200)
+    pouch_combination = models.CharField(max_length=200)
+    cylinder_date = models.DateField(blank=True, null=True)
+    cylinder_bill_no = models.CharField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+
+ 
+
 
 class Job_detail(models.Model):
-        date = models.DateField()
-        bill_no = models.CharField(max_length=200)
-        company_name = models.CharField(max_length=300,blank=True, null=True)
-        job_name = models.CharField(max_length=200)
-        job_type  = models.CharField(max_length=200)
-        noc =  models.TextField(blank=True, null=True)
-        prpc_purchase = models.CharField(max_length=200)
-        prpc_sell = models.CharField(max_length=200,blank=True, null=True)
-        cylinder_size = models.CharField(max_length=200)
-        cylinder_made_in = models.CharField(max_length=200)
-        pouch_size = models.CharField(max_length=200)
-        pouch_open_size = models.CharField(max_length=200)
-        pouch_combination = models.CharField(max_length=200)
-        correction = models.TextField(blank=True, null=True)
-        folder_url = models.URLField()
-        image_links = models.CharField(max_length=1000,blank=True, null=True)
-        cylinder_date = models.DateField(blank=True, null=True)
-        cylinder_bill_no = models.CharField(blank=True, null=True)
-        job_status = models.CharField(max_length=200,blank=True, null=True)
-        created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
-        # history = HistoricalRecords()
+    job_status = [
+        ("In Progress","In Progress"),
+        ("Close Job","Close Job")
+    ]
+    date = models.DateField()
+    bill_no = models.CharField(max_length=200)
+    company_name = models.CharField(max_length=300,blank=True, null=True)
+    job_name = models.CharField(max_length=200)
+    job_type  = models.CharField(max_length=200)
+    noc =  models.TextField(blank=True, null=True)
+    prpc_purchase = models.CharField(max_length=200)
+    prpc_sell = models.CharField(max_length=200,blank=True, null=True)
+    cylinder_size = models.CharField(max_length=200)
+    cylinder_made_in = models.CharField(max_length=200)
+    pouch_size = models.CharField(max_length=200)
+    pouch_open_size = models.CharField(max_length=200)
+    pouch_combination = models.CharField(max_length=200)
+    correction = models.TextField(blank=True, null=True)
+    folder_url = models.URLField()
+    image_links = models.CharField(max_length=1000,blank=True, null=True)
+    cylinder_date = models.DateField(blank=True, null=True)
+    cylinder_bill_no = models.CharField(blank=True, null=True)
+    job_status = models.CharField(max_length=200,blank=True, null=True,choices=job_status)
+    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
+    
 
-        def __str__(self):
-            return self.company_name
+    def __str__(self):
+        return self.company_name
 
-        @property
-        def cdr_file_url(self):
-            cdr = CDRDetail.objects.filter(
-                company_name__iexact=self.company_name,
-                job_name__iexact=self.job_name
-            ).first() 
-            if cdr and cdr.file_url:
-                return cdr.file_url
-            return None
-        @property
-        def cdr_images_urls(self):
-            
-            cdr = CDRDetail.objects.filter(
-                company_name__iexact=self.company_name,
-                job_name__iexact=self.job_name
-            ).first()
-            if not cdr:
-                return []
-       
-            images = cdr.cdr_images.all()
-            
-            return [img.image.url for img in images if img.image]
+    @property
+    def cdr_file_url(self):
+        cdr = CDRDetail.objects.filter(
+            company_name__iexact=self.company_name,
+            job_name__iexact=self.job_name
+        ).first() 
+        if cdr and cdr.file_url:
+            return cdr.file_url
+        return None
+    @property
+    def cdr_images_urls(self):
         
+        cdr = CDRDetail.objects.filter(
+            company_name__iexact=self.company_name,
+            job_name__iexact=self.job_name
+        ).first()
+        if not cdr:
+            return []
+        images = cdr.cdr_images.all()
+        return [img.image.url for img in images if img.image]
+
+
+
+   
+    
+      
 class JobHistory(models.Model):
     job = models.ForeignKey(Job_detail, on_delete=models.CASCADE, related_name="job_history")
     field_name = models.CharField(max_length=200)
@@ -81,7 +131,6 @@ class JobHistory(models.Model):
     def __str__(self):
         return f"{self.job.job_name} - {self.field_name} changed"
 
-        
 class Jobimage(models.Model):
     job = models.ForeignKey(Job_detail,related_name='image', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='job_images/')
@@ -89,6 +138,11 @@ class Jobimage(models.Model):
     def __str__(self):
         return f"Image for Job ID: {self.job.id}"
     
+
+    
+    
+
+
     
 class CDRDetail(models.Model):
     date = models.DateField()

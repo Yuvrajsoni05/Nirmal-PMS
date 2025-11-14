@@ -78,253 +78,262 @@
                                     </div>
                                 </div>
                                 <!-- Job Details Section -->
-                                <div class="mb-4">
-                                    <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Job Details</h6>
-                                    <div class="row g-3">
-                                        <div class="col-12 col-sm-6 col-lg-4">
-                                            <label for="job_name" class="form-label fw-semibold text-dark">
-                                                Job Name <span class="text-danger">*</span>
-                                            </label>
-                                            <select id="job_name"
-                                                    name="job_name"
-                                                    class="form-control form-select border-1">
-                                                <option value="">Select Job Name</option>
-                                                {% for job in cdr_job_name %}<option value="{{ job.job_name }}">{{ job.job_name }}</option>{% endfor %}
-                                                <option value="others">Other</option>
-                                            </select>
-                                            <!-- Move this input outside the select -->
-                                            <input type="text"
-                                                   name="new_job_name"
-                                                   class="form-control border-1 mt-2"
-                                                   id="new_job_name"
-                                                   style="display: none"
-                                                   placeholder="Enter new job name">
-                                            <div class="invalid-feedback" id="job_name_error">Please provide Job Name</div>
+                                <div id="job-details-section" class="job-section">
+                                    <div class="mb-4 ">
+                                        <h5 class="text-primary fw-semibold mb-3 border-bottom pb-2">Job Details</h5>
+                                        <div class="row g-3">
+                                            <div class="col-12 col-sm-6 col-lg-4">
+                                                <label for="job_name" class="form-label fw-semibold text-dark">
+                                                    Job Name <span class="text-danger">*</span>
+                                                </label>
+                                                <select id="job_name"
+                                                        name="job_name"
+                                                        class="form-control form-select border-1">
+                                                    <option value="">Select Job Name</option>
+                                                    {% for job in cdr_job_name %}<option value="{{ job.job_name }}">{{ job.job_name }}</option>{% endfor %}
+                                                    <option value="others">Other</option>
+                                                </select>
+                                                <!-- Move this input outside the select -->
+                                                <input type="text"
+                                                    name="new_job_name"
+                                                    class="form-control border-1 mt-2"
+                                                    id="new_job_name"
+                                                    style="display: none"
+                                                    placeholder="Enter new job name">
+                                                <div class="invalid-feedback" id="job_name_error">Please provide Job Name</div>
+                                            </div>
+                                            <div class="col-12 col-sm-6 col-lg-4">
+                                                <label for="job_type" class="form-label fw-semibold text-dark">
+                                                    Job Type <span class="text-danger">*</span>
+                                                </label>
+                                                <select id="job_type"
+                                                        name="job_type"
+                                                        class="form-control form-select border-1">
+                                                    <option value="">Select Job Type</option>
+                                                    <option value="New Job">New Job</option>
+                                                    <option value="Damage Repair">Damage Repair</option>
+                                                    <option value="Job Work">Job Work</option>
+                                                </select>
+                                                <div class="invalid-feedback" id="job_type_error">Please provide Job Type</div>
+                                            </div>
+                                            <div class="col-12 col-lg-4">
+                                                <label for="noc" class="form-label fw-semibold text-dark">
+                                                    No. of Colors <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="textarea"
+                                                    class="form-control  border-1"
+                                                    id="noc"
+                                                    name="noc"
+                                                    placeholder="Enter Number of Colors">
+                                                <div class="invalid-feedback" id="noc_error">Please provide NOC</div>
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-sm-6 col-lg-4">
-                                            <label for="job_type" class="form-label fw-semibold text-dark">
-                                                Job Type <span class="text-danger">*</span>
-                                            </label>
-                                            <select id="job_type"
-                                                    name="job_type"
-                                                    class="form-control form-select border-1">
-                                                <option value="">Select Job Type</option>
-                                                <option value="New Job">New Job</option>
-                                                <option value="Damage Repair">Damage Repair</option>
-                                                <option value="Job Work">Job Work</option>
-                                            </select>
-                                            <div class="invalid-feedback" id="job_type_error">Please provide Job Type</div>
+                                    </div>
+                                    <!-- Cylinder Information Section -->
+                                    <div class="mb-4">
+                                        <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Cylinder Information</h6>
+                                        <div class="row g-3">
+                                            <div class="col-12 col-sm-6 col-lg-4">
+                                                <label for="prpc" class="form-label fw-semibold text-dark">
+                                                    Per Rate Per Cylinder (Purchase) <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-1">₹</span>
+                                                    <input type="text"
+                                                        class="form-control border-1"
+                                                        id="prpc_purchase"
+                                                        name="prpc_purchase"
+                                                        onkeyup="formatNumberWithCommas(this)"
+                                                        maxlength="10"
+                                                        placeholder="00">
+                                                    <div class="invalid-feedback" id="prpc_purchase_error">Please provide PRPC Purchase</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-sm-6 col-lg-4">
+                                                <label for="prpc_sell" class="form-label fw-semibold text-dark">
+                                                    Per Rate Per Cylinder (Sales) <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text bg-light border-1">₹</span>
+                                                    <input type="text"
+                                                        class="form-control border-1"
+                                                        id="prpc_sell"
+                                                        name="prpc_sell"
+                                                        onkeyup="formatNumberWithCommas(this)"
+                                                        maxlength="10"
+                                                        placeholder="00">
+                                                    <div class="invalid-feedback" id="prpc_sell_error">Please provide PRPC Sell</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-lg-4">
+                                                <label class="form-label fw-semibold text-dark">
+                                                    Cylinder Size <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group ">
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="cylinder_diameter"
+                                                        placeholder="Diameter"
+                                                        step="0.01"
+                                                        min="0">
+                                                    <div class="invalid-feedback" id="cylinder_diameter_error">Please provide Cylinder Diameter</div>
+                                                    <span class="input-group-text bg-light border-1 fw-bold">×</span>
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="cylinder_height"
+                                                        placeholder="Height"
+                                                        step="0.01"
+                                                        min="0">
+                                                    <div class="invalid-feedback" id="cylinder_height_error">Please provide Cylinder  Height</div>
+                                                </div>
+                                                <input type="hidden" id="cylinder_size" name="cylinder_size">
+                                            </div>
                                         </div>
-                                        <div class="col-12 col-lg-4">
-                                            <label for="noc" class="form-label fw-semibold text-dark">
-                                                No. of Colors <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="textarea"
-                                                   class="form-control  border-1"
-                                                   id="noc"
-                                                   name="noc"
-                                                   placeholder="Enter Number of Colors">
-                                            <div class="invalid-feedback" id="noc_error">Please provide NOC</div>
+                                        <div class="row g-3 mt-2">
+                                            <div class="col-12 col-md-4">
+                                                <label for="cylinder_made_in" class="form-label fw-semibold text-dark">
+                                                    Cylinder Made In <span class="text-danger">*</span>
+                                                </label>
+                                                <select name="cylinder_select"
+                                                        id="cylinder_made_in"
+                                                        class="form-control form-select border-1">
+                                                    <option value="">Select Company</option>
+                                                    {% for i in  cylinder_company_names %}
+                                                        <option value="{{ i.cylinder_made_in }}">{{ i.cylinder_made_in }}</option>
+                                                    {% endfor %}
+                                                    <option value="others">Other</option>
+                                                </select>
+                                                <input type="text"
+                                                    class="form-control border-1"
+                                                    style="display: none"
+                                                    id="cylinder_made_in_company_name"
+                                                    name="cylinder_made_in_company_name"
+                                                    placeholder="Cylinder Made In">
+                                                <div class="invalid-feedback" id="cylinder_made_in_error">Please provide Cylinder Made In</div>
+                                            </div>
+                                            <div class="col-12 col-sm-6 col-lg-4">
+                                                <label for="cylinder_date" class="form-label fw-semibold text-dark">
+                                                    Cylinder Date <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="date"
+                                                    class="form-control  border-1"
+                                                    id="cylinder_dates"
+                                                    value="{% now "Y-m-d" %}"
+                                                    name="cylinder_date"
+                                                    pattern="\d{2}-\d{2}-\d{4}">
+                                                <div class="invalid-feedback" id="cylinder_date_error">Please provide a Cylinder Date.</div>
+                                            </div>
+                                            <div class="col-12 col-sm-6 col-lg-4">
+                                                <label for="bill_no" class="form-label fw-semibold text-dark">
+                                                    Cylinder Bill No. <span class="text-danger">*</span>
+                                                </label>
+                                                <input type="text"
+                                                    class="form-control border-1"
+                                                    id="cylinder_bill_no"
+                                                    name="cylinder_bill_no"
+                                                    placeholder="Enter Cylinder Bill Number">
+                                                <div class="invalid-feedback" id="cylinder_bill_no_error">Please provide Cylinder Bill No.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Pouch Information Section -->
+                                    <div class="mb-4">
+                                        <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Pouch Information</h6>
+                                        <div class="row g-3">
+                                            <div class="col-12 col-lg-3">
+                                                <label class="form-label fw-semibold text-dark">
+                                                    Pouch Size <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group ">
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_diameter"
+                                                        placeholder="Diameter"
+                                                        step="0.01"
+                                                        min="0">
+                                                    <div class="invalid-feedback" id="pouch_diameter_error">Please provide Pouch Diameter</div>
+                                                    <span class="input-group-text bg-light border-1 fw-bold">×</span>
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_height"
+                                                        placeholder="Height"
+                                                        step="0.01"
+                                                        min="0">
+                                                    <div class="invalid-feedback" id="pouch_height_error">Please provide Pouch Height</div>
+                                                </div>
+                                                <input type="hidden" id="pouch_size" name="pouch_size">
+                                            </div>
+                                            <div class="col-12 col-lg-3">
+                                                <label class="form-label fw-semibold text-dark">
+                                                    Pouch Open Size <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group ">
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_open_diameter"
+                                                        placeholder="Diameter"
+                                                        step="0.01"
+                                                        min="0">
+                                                    <div class="invalid-feedback" id="pouch_open_diameter_error">Please provide Pouch Open Diameter</div>
+                                                    <span class="input-group-text bg-light border-1 fw-bold">×</span>
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_open_height"
+                                                        placeholder="Height"
+                                                        step="0.01"
+                                                        min="0">
+                                                    <div class="invalid-feedback" id="pouch_open_height_error">Please provide Pouch Open Height</div>
+                                                </div>
+                                                <input type="hidden" id="pouch_open_size" name="pouch_open_size">
+                                            </div>
+                                            <div class="col-12 col-lg-6">
+                                                <label for="pouch_combination" class="form-label fw-semibold text-dark">
+                                                    Pouch Combination (thickness) <span class="text-danger">*</span>
+                                                </label>
+                                                <div class="input-group ">
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_combination1"
+                                                        name="pouch_combination1"
+                                                        placeholder="Combination 1"
+                                                        step="0.01"
+                                                        min="0">
+                                                    <div class="invalid-feedback" id="pouch_combination1_error">Please provide Pouch Combination</div>
+                                                    <span class="input-group-text bg-light border-1 fw-bold">+</span>
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_combination2"
+                                                        name="pouch_combination2"
+                                                        placeholder="Combination 2"
+                                                        step="0.01"
+                                                        min="0">
+                                                    <div class="invalid-feedback" id="pouch_combination2_error">Please provide Pouch Combination</div>
+                                                    <span class="input-group-text bg-light border-1 fw-bold">+</span>
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_combination3"
+                                                        name="pouch_combination3"
+                                                        placeholder="Combination 3"
+                                                        step="0.01"
+                                                        min="0">
+                                                    <span class="input-group-text bg-light border-1 fw-bold">+</span>
+                                                    <input type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_combination4"
+                                                        name="pouch_combination4"
+                                                        placeholder="Combination 4"
+                                                        step="0.01"
+                                                        min="0">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Cylinder Information Section -->
-                                <div class="mb-4">
-                                    <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Cylinder Information</h6>
-                                    <div class="row g-3">
-                                        <div class="col-12 col-sm-6 col-lg-4">
-                                            <label for="prpc" class="form-label fw-semibold text-dark">
-                                                Per Rate Per Cylinder (Purchase) <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="input-group">
-                                                <span class="input-group-text bg-light border-1">₹</span>
-                                                <input type="text"
-                                                       class="form-control border-1"
-                                                       id="prpc_purchase"
-                                                       name="prpc_purchase"
-                                                       onkeyup="formatNumberWithCommas(this)"
-                                                       maxlength="10"
-                                                       placeholder="00">
-                                                <div class="invalid-feedback" id="prpc_purchase_error">Please provide PRPC Purchase</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-sm-6 col-lg-4">
-                                            <label for="prpc_sell" class="form-label fw-semibold text-dark">
-                                                Per Rate Per Cylinder (Sales) <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="input-group">
-                                                <span class="input-group-text bg-light border-1">₹</span>
-                                                <input type="text"
-                                                       class="form-control border-1"
-                                                       id="prpc_sell"
-                                                       name="prpc_sell"
-                                                       onkeyup="formatNumberWithCommas(this)"
-                                                       maxlength="10"
-                                                       placeholder="00">
-                                                <div class="invalid-feedback" id="prpc_sell_error">Please provide PRPC Sell</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-lg-4">
-                                            <label class="form-label fw-semibold text-dark">
-                                                Cylinder Size <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="input-group ">
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="cylinder_diameter"
-                                                       placeholder="Diameter"
-                                                       step="0.01"
-                                                       min="0">
-                                                <div class="invalid-feedback" id="cylinder_diameter_error">Please provide Cylinder Diameter</div>
-                                                <span class="input-group-text bg-light border-1 fw-bold">×</span>
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="cylinder_height"
-                                                       placeholder="Height"
-                                                       step="0.01"
-                                                       min="0">
-                                                <div class="invalid-feedback" id="cylinder_height_error">Please provide Cylinder  Height</div>
-                                            </div>
-                                            <input type="hidden" id="cylinder_size" name="cylinder_size">
-                                        </div>
-                                    </div>
-                                    <div class="row g-3 mt-2">
-                                        <div class="col-12 col-md-4">
-                                            <label for="cylinder_made_in" class="form-label fw-semibold text-dark">
-                                                Cylinder Made In <span class="text-danger">*</span>
-                                            </label>
-                                            <select name="cylinder_select"
-                                                    id="cylinder_made_in"
-                                                    class="form-control form-select border-1">
-                                                <option value="">Select Company</option>
-                                                {% for i in  cylinder_company_names %}
-                                                    <option value="{{ i.cylinder_made_in }}">{{ i.cylinder_made_in }}</option>
-                                                {% endfor %}
-                                                <option value="others">Other</option>
-                                            </select>
-                                            <input type="text"
-                                                   class="form-control border-1"
-                                                   style="display: none"
-                                                   id="cylinder_made_in_company_name"
-                                                   name="cylinder_made_in_company_name"
-                                                   placeholder="Cylinder Made In">
-                                            <div class="invalid-feedback" id="cylinder_made_in_error">Please provide Cylinder Made In</div>
-                                        </div>
-                                        <div class="col-12 col-sm-6 col-lg-4">
-                                            <label for="cylinder_date" class="form-label fw-semibold text-dark">
-                                                Cylinder Date <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="date"
-                                                   class="form-control  border-1"
-                                                   id="cylinder_dates"
-                                                   value="{% now "Y-m-d" %}"
-                                                   name="cylinder_date"
-                                                   pattern="\d{2}-\d{2}-\d{4}">
-                                            <div class="invalid-feedback" id="cylinder_date_error">Please provide a Cylinder Date.</div>
-                                        </div>
-                                        <div class="col-12 col-sm-6 col-lg-4">
-                                            <label for="bill_no" class="form-label fw-semibold text-dark">
-                                                Cylinder Bill No. <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="text"
-                                                   class="form-control border-1"
-                                                   id="cylinder_bill_no"
-                                                   name="cylinder_bill_no"
-                                                   placeholder="Enter Cylinder Bill Number">
-                                            <div class="invalid-feedback" id="cylinder_bill_no_error">Please provide Cylinder Bill No.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Pouch Information Section -->
-                                <div class="mb-4">
-                                    <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Pouch Information</h6>
-                                    <div class="row g-3">
-                                        <div class="col-12 col-lg-3">
-                                            <label class="form-label fw-semibold text-dark">
-                                                Pouch Size <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="input-group ">
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="pouch_diameter"
-                                                       placeholder="Diameter"
-                                                       step="0.01"
-                                                       min="0">
-                                                <div class="invalid-feedback" id="pouch_diameter_error">Please provide Pouch Diameter</div>
-                                                <span class="input-group-text bg-light border-1 fw-bold">×</span>
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="pouch_height"
-                                                       placeholder="Height"
-                                                       step="0.01"
-                                                       min="0">
-                                                <div class="invalid-feedback" id="pouch_height_error">Please provide Pouch Height</div>
-                                            </div>
-                                            <input type="hidden" id="pouch_size" name="pouch_size">
-                                        </div>
-                                        <div class="col-12 col-lg-3">
-                                            <label class="form-label fw-semibold text-dark">
-                                                Pouch Open Size <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="input-group ">
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="pouch_open_diameter"
-                                                       placeholder="Diameter"
-                                                       step="0.01"
-                                                       min="0">
-                                                <div class="invalid-feedback" id="pouch_open_diameter_error">Please provide Pouch Open Diameter</div>
-                                                <span class="input-group-text bg-light border-1 fw-bold">×</span>
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="pouch_open_height"
-                                                       placeholder="Height"
-                                                       step="0.01"
-                                                       min="0">
-                                                <div class="invalid-feedback" id="pouch_open_height_error">Please provide Pouch Open Height</div>
-                                            </div>
-                                            <input type="hidden" id="pouch_open_size" name="pouch_open_size">
-                                        </div>
-                                        <div class="col-12 col-lg-6">
-                                            <label for="pouch_combination" class="form-label fw-semibold text-dark">
-                                                Pouch Combination (thickness) <span class="text-danger">*</span>
-                                            </label>
-                                            <div class="input-group ">
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="pouch_combination1"
-                                                       name="pouch_combination1"
-                                                       placeholder="Combination 1"
-                                                       step="0.01"
-                                                       min="0">
-                                                <div class="invalid-feedback" id="pouch_combination1_error">Please provide Pouch Combination</div>
-                                                <span class="input-group-text bg-light border-1 fw-bold">+</span>
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="pouch_combination2"
-                                                       name="pouch_combination2"
-                                                       placeholder="Combination 2"
-                                                       step="0.01"
-                                                       min="0">
-                                                <div class="invalid-feedback" id="pouch_combination2_error">Please provide Pouch Combination</div>
-                                                <span class="input-group-text bg-light border-1 fw-bold">+</span>
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="pouch_combination3"
-                                                       name="pouch_combination3"
-                                                       placeholder="Combination 3"
-                                                       step="0.01"
-                                                       min="0">
-                                                <span class="input-group-text bg-light border-1 fw-bold">+</span>
-                                                <input type="number"
-                                                       class="form-control border-1"
-                                                       id="pouch_combination4"
-                                                       name="pouch_combination4"
-                                                       placeholder="Combination 4"
-                                                       step="0.01"
-                                                       min="0">
-                                            </div>
-                                        </div>
+                                
+                                    <div class="form-check form-check-inline">
+                                        <button type="button" id="add-job" class="btn btn-primary d-flex align-items-center">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add New Job
+                                        </button>   
                                     </div>
                                     <br>
                                     <!-- Job Status Section -->
@@ -340,8 +349,9 @@
                                                         class="form-control form-select border-1"
                                                         required>
                                                     <option value="">Select Job Status</option>
-                                                    <option style="background: #fffaeb; color: #dc6803;"  value="In Progress">In Progress</option>
-                                                    <option style="background: #ecfdf3; color: #039855;" value="Close Job">Close Job</option>
+                                                        {% for value, label in job_status %}
+                                                            <option value="{{ value }}">{{ label }}</option>
+                                                        {% endfor %}
                                                 </select>
                                             </div>
                                         </div>
@@ -436,6 +446,49 @@
         $("#job_name").empty().append('<option value="others">Other</option>');
     }
 });
-        </script>
-        <script src="{% static 'js/data_entry.js' %}"></script>
+</script>
+<script>
+$(document).ready(function () {
+
+    // === Add new Job Section dynamically ===
+    $('#add-job').on('click', function (e) {
+        e.preventDefault();
+
+        let newSection = $('.job-section:first').clone(true, true);
+
+        // Clear inputs/selects
+        newSection.find('input').val('');
+        newSection.find('select').prop('selectedIndex', 0);
+
+        // Remove custom job options
+        newSection.find('option.custom-job').remove();
+
+        // Hide "new job" element if it exists
+        newSection.find('.new-job').hide();
+
+        // Remove old close button first (avoid duplicates)
+        newSection.find('.close-job-btn').remove();
+
+        // Add close button
+        newSection.find('h5').after(`
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-danger me-md-2 close-job-btn" type="button">X</button>
+            </div>
+        `);
+
+        // Append cloned section
+        $('#job-details-section').append(newSection);
+    });
+
+    // === Remove job section ===
+    $(document).on('click', '.close-job-btn', function (e) {
+        e.preventDefault();
+        $(this).closest('.job-section').remove();
+    });
+
+});
+</script>
+
+
+<script src="{% static 'js/data_entry.js' %}"></script>
     {% endblock script %}

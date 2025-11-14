@@ -94,9 +94,15 @@
                             >
                                 <table width="100%">
                                     <tr>
-                                        <td><b>Bill No:</b> 11-VCR-DCR</td>
+                                        {% if bill_no %}
+                                        <td>
+                                            <b>Bill No:</b>
+                                            {{bill_no}}
+                                        </td>
+                                        {% endif %}
                                         <td align="right">
-                                            <b>Job Date:</b> 13/11/2025
+                                            <b>Job Date:</b> {% if date %} {{
+                                            date }} {% else %} none {% endif %}
                                         </td>
                                     </tr>
                                 </table>
@@ -113,14 +119,18 @@
                             >
                                 <table width="100%">
                                     <tr>
+                                        {% if company_name %}
                                         <td>
-                                            <b>Company Name:</b> Shree Nirmal
-                                            Ventures Pvt. Ltd.
+                                            <b>Company Name:</b>
+                                            {{company_name}}
                                         </td>
+                                        {% endif %} {% if company_email_address
+                                        %}
                                         <td align="right">
                                             <b>Company Email:</b>
-                                            xyz@example.com
+                                            {{ company_email_address }}
                                         </td>
+                                        {% endif %}
                                     </tr>
                                 </table>
                             </td>
@@ -194,18 +204,28 @@
                                     <tbody>
                                         <tr>
                                             <td>Title / Job Name</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            {% if job_name %}
+                                            <td>{{ job_name }}</td>
+                                            {% endif %} {% if prpc_sell %}
+                                            <td>{{ prpc_sell }}</td>
+                                            {% endif %}
+                                            
+                                            {% if cylinder_size %}
+                                                 <td></td>
+                                            {% endif %}
+                                                
+                                           
                                             <td></td>
                                         </tr>
+                                        {% if noc %}
                                         <tr>
                                             <td><b>No. of Color</b></td>
-                                            <td></td>
+                                            <td>{{ noc }}</td>
                                             <td></td>
                                             <td></td>
                                             <td></td>
                                         </tr>
+                                        {% endif %}
                                     </tbody>
                                 </table>
                             </td>
