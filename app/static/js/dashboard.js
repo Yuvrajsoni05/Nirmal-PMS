@@ -115,6 +115,7 @@ function printJobDetails(btn) {
     const correction = btn.dataset.correction || "N/A";
     const job_status = btn.dataset.job_status || "N/A";
     const folder_url = btn.dataset.folder_url || "N/A";
+    const noc = btn.dataset.noc || "N/A";
 
     // Create iframe for silent printing
     const iframe = document.createElement("iframe");
@@ -126,156 +127,247 @@ function printJobDetails(btn) {
     const doc = iframe.contentWindow.document;
     doc.open();
     doc.write(`
-   <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Job Details - Bill Format</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <title>Job Order Completed</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            padding: 20px;
-            margin: 0;
-            color: #333;
-        }
         @page {
-            margin: 20px;
+            size: A4;
+            margin: 0;
         }
-        h2, h4 {
+
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
+
+        .a4-container {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 20px auto;
+            background: white;
+            padding: 20mm;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .header-line {
+            border-bottom: 2px solid #0d6efd;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .company-logo {
+            max-width: 70px;
+        }
+
+        .company-name {
             color: #0d6efd;
-            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
         }
-        .table {
-            border-collapse: collapse;
-            width: 100%;
-            margin-top: 20px;
+
+        .section-title {
+            background-color: #0d6efd;
+            color: white;
+            padding: 8px 12px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            font-size: 0.9rem;
         }
-        .table td, .table th {
-            padding: 10px 12px;
-            text-align: left;
-            border: 1px solid #dee2e6;
+
+        .info-row {
+            padding: 8px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.9rem;
         }
-        .table th {
-            background-color: #f8f9fa;
-            color: #495057;
-            font-size: 1rem;
+
+        .label {
+            font-weight: bold;
+            color: #0d6efd;
         }
-        .table tr:nth-child(even) {
-            background-color: #f9f9f9;
+
+        table {
+            font-size: 0.85rem;
         }
-        .table .section-header {
-            background-color: #e9ecef;
+
+        table th {
+            background-color: #e7f1ff;
+            color: #000;
             font-weight: bold;
         }
+
+        .correction-box {
+            border: 2px dashed #0d6efd;
+            padding: 15px;
+            margin: 20px 0;
+            min-height: 60px;
+        }
+
+        .correction-title {
+            font-weight: bold;
+            color: #0d6efd;
+            margin-bottom: 8px;
+        }
+
         .footer {
             text-align: center;
             margin-top: 30px;
-            color: #6c757d;
-            font-size: 0.875rem;
+            padding-top: 15px;
+            border-top: 2px solid #0d6efd;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .a4-container {
+                width: 100%;
+                margin: 0;
+                padding: 15mm;
+                box-shadow: none;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .a4-container {
+                width: 100%;
+                margin: 0;
+                padding: 15px;
+                box-shadow: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="text-center mb-4">
-        <h2>Nirmal Group</h2>
-        <h4>Job Details Bill</h4>
-        <hr>
+
+    <div class="a4-container">
+        
+        <!-- HEADER -->
+        <div class="header-line">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <img src="https://nirmalgroup.com/wp-content/uploads/2024/11/Mask-group-2.png" 
+                         alt="Logo" class="company-logo">
+                </div>
+                <div class="col text-end">
+                    <div class="company-name">Shree Nirmal Ventures Pvt. Ltd.</div>
+                    <div style="font-size: 0.8rem; color: #666;">
+                        1601, 16th Floor, B Block, Navratna Corporate Park<br>
+                        Ambli Bopal Road, Ambli, Ahmedabad - 380058
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BASIC INFO -->
+        <div class="info-row">
+            <div class="row">
+                <div class="col-6">
+                    <span class="label">Bill No:</span> ${job_bill_no}
+                </div>
+                <div class="col-6 text-end">
+                    <span class="label">Job Date:</span> ${cylinder_date}
+                </div>
+            </div>
+        </div>
+
+        <div class="info-row">
+            <span class="label">Company Name:</span> ${company_name}
+        </div>
+
+        <div class="info-row">
+            <span class="label">Job Name:</span> ${job_name}
+        </div>
+
+        <!-- CYLINDER DETAILS -->
+        <div class="section-title">Cylinder Details</div>
+        
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="label" style="width: 30%;">Cylinder Size</td>
+                    <td>${cylinder_size}</td>
+                </tr>
+                <tr>
+                    <td class="label">Cylinder Made In</td>
+                    <td>${cylinder_made_in}</td>
+                </tr>
+                <tr>
+                    <td class="label">Cylinder Bill No</td>
+                    <td>${cylinder_bill_no}</td>
+                </tr>
+                <tr>
+                    <td class="label">No. of Colors</td>
+                    <td>${noc}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- POUCH DETAILS -->
+        <div class="section-title">Pouch Details</div>
+        
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="label" style="width: 30%;">Pouch Size</td>
+                    <td>${pouch_size}</td>
+                </tr>
+                <tr>
+                    <td class="label">Pouch Open Size</td>
+                    <td>${pouch_open_size}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- PRPC DETAILS -->
+        <div class="section-title">PRPC Details</div>
+        
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td class="label" style="width: 30%;">PRPC Purchase</td>
+                    <td>${prpc_purchase}</td>
+                </tr>
+                <tr>
+                    <td class="label">PRPC Sell</td>
+                    <td>${prpc_sell}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- CORRECTION -->
+        <div class="correction-box">
+            <div class="correction-title">Correction:</div>
+            <div>${correction}</div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            © Shree Nirmal Ventures Pvt. Ltd.
+        </div>
+
     </div>
 
-    <!-- Table for job details -->
-    <table class="table">
-        <!-- Job Information Section -->
-        <tr class="section-header">
-            <th colspan="2">Job Information</th>
-        </tr>
-        <tr>
-            <td><strong>Job ID</strong></td>
-            <td>${jobId}</td>
-        </tr>
-        <tr>
-            <td><strong>Job Name</strong></td>
-            <td>${job_name}</td>
-        </tr>
-        <tr>
-            <td><strong>Job Bill No</strong></td>
-            <td>${job_bill_no}</td>
-        </tr>
-        <tr>
-            <td><strong>Company Name</strong></td>
-            <td>${company_name}</td>
-        </tr>
-
-        <!-- Pricing Information Section -->
-        <tr class="section-header">
-            <th colspan="2">Pricing Information</th>
-        </tr>
-        <tr>
-            <td><strong>PRPC Purchase</strong></td>
-            <td>${prpc_purchase}</td>
-        </tr>
-        <tr>
-            <td><strong>PRPC Sell</strong></td>
-            <td>${prpc_sell}</td>
-        </tr>
-
-        <!-- Cylinder Details Section -->
-        <tr class="section-header">
-            <th colspan="2">Cylinder Details</th>
-        </tr>
-        <tr>
-            <td><strong>Cylinder Size</strong></td>
-            <td>${cylinder_size}</td>
-        </tr>
-        <tr>
-            <td><strong>Cylinder Bill No</strong></td>
-            <td>${cylinder_bill_no}</td>
-        </tr>
-
-        <!-- Pouch Details Section -->
-        <tr class="section-header">
-            <th colspan="2">Pouch Details</th>
-        </tr>
-        <tr>
-            <td><strong>Pouch Size</strong></td>
-            <td>${pouch_size}</td>
-        </tr>
-        <tr>
-            <td><strong>Pouch Open Size</strong></td>
-            <td>${pouch_open_size}</td>
-        </tr>
-        <tr>
-            <td><strong>Pouch Combination</strong></td>
-            <td>${pouch_combination}</td>
-        </tr>
-
-        <!-- Additional Information Section -->
-        <tr class="section-header">
-            <th colspan="2">Additional Information</th>
-        </tr>
-        <tr>
-            <td><strong>Correction</strong></td>
-            <td>${correction}</td>
-        </tr>
-        <tr>
-            <td><strong>Job Status</strong></td>
-            <td>${job_status}</td>
-        </tr>
-        <tr>
-            <td><strong>Folder URL</strong></td>
-            <td style="word-wrap: break-word; max-width: 300px;">${folder_url}</td>
-        </tr>
-    </table>
-
-    <!-- Footer -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
-
-
-
-            `);
+    `);
     doc.close();
 
     // Wait for content to load then print silently

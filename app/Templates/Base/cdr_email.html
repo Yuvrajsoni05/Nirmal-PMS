@@ -1,211 +1,129 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Job Order Completed</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <style>
-            body,
-            html {
-                font-family: "Arial", sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f4f7fc;
-            }
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml">
 
-            .container {
-                max-width: 800px;
-                margin: 20px auto;
-                background-color: #fff;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                overflow: hidden;
-            }
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Job Order Completed</title>
+</head>
 
-            /* Header styles */
-            .header-section {
-                background-color: #0066cc;
-                padding: 20px;
-                text-align: center;
-                color: #fff;
-                font-size: 24px;
-            }
+<body style="margin:0; padding:0; background-color:#f4f7fc; font-family: Arial, Helvetica, sans-serif;">
 
-            .form-logo img {
-                width: 150px;
-                margin-bottom: 10px;
-            }
+    <!-- MAIN WRAPPER -->
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0"
+        style="background-color:#f4f7fc; padding:20px 0;">
+        <tr>
+            <td align="center">
 
-            /* Bottom header */
-            .bottom-header {
-                display: flex;
-                justify-content: space-between;
-                padding: 15px;
-                border-bottom: 1px solid #e0e0e0;
-            }
+                <!-- INNER CONTAINER -->
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" border="0"
+                    style="background-color:#ffffff; border-radius:6px; box-shadow:0 0 10px rgba(0,0,0,0.08); padding:20px;">
 
-            .bottom-header p {
-                font-size: 14px;
-                margin: 0;
-            }
-
-            .bottom-header span {
-                font-weight: bold;
-            }
-
-            /* Table styles */
-            .form-list {
-                padding: 20px;
-            }
-
-            .form-list table {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: 14px;
-            }
-
-            .form-list td {
-                padding: 10px;
-                border: 1px solid #ddd;
-                text-align: left;
-            }
-
-            .form-list td:first-child {
-                background-color: #f8f8f8;
-                font-weight: bold;
-            }
-
-            /* Footer Section */
-            .footer-section {
-                padding: 20px;
-                background-color: #f8f8f8;
-                border-top: 1px solid #e0e0e0;
-                text-align: center;
-            }
-
-            .footer-top p {
-                font-size: 14px;
-                margin: 5px 0;
-            }
-
-            .footer-logo img {
-                width: 120px;
-                margin: 10px 0;
-            }
-
-            /* Button Styles */
-            .btn {
-                display: inline-block;
-                padding: 12px 25px;
-                background-color: #0066cc;
-                color: #fff;
-                text-decoration: none;
-                font-weight: bold;
-                border-radius: 5px;
-                transition: background-color 0.3s ease;
-                margin-top: 20px;
-            }
-
-            .btn:hover {
-                background-color: #004d99;
-            }
-
-            /* Responsive styles */
-            @media screen and (max-width: 600px) {
-                .container {
-                    width: 100%;
-                    padding: 10px;
-                }
-
-                .bottom-header {
-                    flex-direction: column;
-                    align-items: flex-start;
-                }
-
-                .footer-section {
-                    padding: 10px;
-                }
-
-                .footer-logo img {
-                    width: 100px;
-                }
-
-                .btn {
-                    width: 100%;
-                    text-align: center;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header-section">
-                <div class="form-logo">
-                    <img
-                        src="{% static 'assets/img/nirmal_logo.png' %}"
-                        alt="Nirmal Ventures Logo"
-                    />
-                </div>
-                <h2>Nirmal Ventures</h2>
-            </div>
-            <div class="bottom-header">
-                <p>Date: <span>26/08/2025</span></p>
-            </div>
-            <div class="form-list">
-                <table class="info-table">
-                    {% if date %}
+                    <!-- HEADER -->
                     <tr>
-                        <td>Date</td>
-                        <td>{{ date }}</td>
+                        <td style="border-bottom:2px solid #0066cc; padding-bottom:15px;">
+                            <table width="100%" cellspacing="0" cellpadding="0">
+                                <tr>
+
+                                    <td width="100" align="left">
+                                        <img src="https://nirmalgroup.com/wp-content/uploads/2024/11/Mask-group-2.png" alt="Nirmal Ventures Logo"
+                                            style="display:block; width:120px; height:auto;" />
+                                    </td>
+
+                                    <td align="right" style="font-size:13px; line-height:1.5;">
+                                        <b style="color:#5b21b6; font-size:16px;">Shree Nirmal Ventures Pvt. Ltd.</b><br />
+                                        1601, 16th Floor, B Block,<br />
+                                        Navratna Corporate Park, Nr. Jayantilal Park<br />
+                                        Ambli Bopal Road, Ambli, Ahmedabad - 380058<br>
+                                        <b>Date:</b> <span>{% now "Y-m-d" %}</span>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
-                    {% endif %} {% if Company_Name %}
+
+                    <!-- INFORMATION TABLE -->
                     <tr>
-                        <td>Company Name</td>
-                        <td>{{ Company_Name }}</td>
+                        <td style="padding:12px 0;">
+                            <table width="100%" cellspacing="0" cellpadding="8"
+                                style="border-collapse:collapse; font-size:13px;">
+                                {% if date %}
+                                <tr>
+                                    <td style="background:#f8f8f8; font-weight:bold; border:1px solid #ddd;">CDR Date</td>
+                                    <td style="border:1px solid #ddd;">{{ date }}</td>
+                                </tr>
+                                {% endif %}
+
+                                {% if Company_Name %}
+                                <tr>
+                                    <td style="background:#f8f8f8; font-weight:bold; border:1px solid #ddd;">Company
+                                        Name</td>
+                                    <td style="border:1px solid #ddd;">{{ Company_Name }}</td>
+                                </tr>
+                                {% endif %}
+
+                                {% if Company_Email %}
+                                <tr>
+                                    <td style="background:#f8f8f8; font-weight:bold; border:1px solid #ddd;">Company
+                                        Email</td>
+                                    <td style="border:1px solid #ddd;">{{ Company_Email }}</td>
+                                </tr>
+                                {% endif %}
+
+                                {% if cdr_job_name %}
+                                <tr>
+                                    <td style="background:#f8f8f8; font-weight:bold; border:1px solid #ddd;">Job Name
+                                    </td>
+                                    <td style="border:1px solid #ddd;">{{ cdr_job_name }}</td>
+                                </tr>
+                                {% endif %}
+
+                                {% if cdr_corrections %}
+                                <tr>
+                                    <td style="background:#f8f8f8; font-weight:bold; border:1px solid #ddd;">
+                                        Correction</td>
+                                    <td style="border:1px solid #ddd;">{{ cdr_corrections }}</td>
+                                </tr>
+                                {% endif %}
+
+                                {% if notes %}
+                                <tr>
+                                    <td style="background:#f8f8f8; font-weight:bold; border:1px solid #ddd;">Note</td>
+                                    <td style="border:1px solid #ddd;">{{ notes }}</td>
+                                </tr>
+                                {% endif %}
+                            </table>
+                        </td>
                     </tr>
-                    {% endif %} {% if Company_Email %}
+
+                    <!-- FOOTER -->
                     <tr>
-                        <td>Company Email</td>
-                        <td>{{ Company_Email }}</td>
+                        <td style="padding-top:20px; border-top:2px solid #0066cc; text-align:center;">
+
+                            <p style="font-size:14px; margin:5px 0;">Best Regards,</p>
+                            <p style="font-size:14px; margin:5px 0;">Nirmal Tubes and Containers Pvt Ltd</p>
+
+                            <img src="https://nirmalgroup.com/wp-content/uploads/2024/11/Mask-group-2.png"
+                                alt="Nirmal Ventures Logo" style="width:120px; margin:10px 0;" />
+
+                           
+
+                            <p style="font-size:12px; color:#777; margin-top:15px;">
+                                © {{ date|date:"Y" }} Nirmal Ventures |
+                                <a href="http://localhost:8000/" style="color:#0066cc;">www.nirmal.com</a>
+                            </p>
+
+                        </td>
                     </tr>
-                    {% endif %} {% if cdr_job_name %}
-                    <tr>
-                        <td>Job Name</td>
-                        <td>{{ cdr_job_name }}</td>
-                    </tr>
-                    {% endif %} {% if cdr_corrections %}
-                    <tr>
-                        <td>Correction</td>
-                        <td>{{ cdr_corrections }}</td>
-                    </tr>
-                    {% endif %} {% if notes %}
-                    <tr>
-                        <td>Note</td>
-                        <td>{{ notes }}</td>
-                    </tr>
-                    {% endif %}
+
                 </table>
-            </div>
-            <div class="footer-section">
-                <div class="footer-top">
-                    <p>Best Regards,</p>
-                    <p>Nirmal Tubes and Containers Pvt Ltd</p>
-                    <div class="footer-logo">
-                        <img
-                            src="https://nirmaltubes.com/wp-content/uploads/2024/01/Clip-path-group-1.svg"
-                            alt="Nirmal Ventures Logo"
-                        />
-                    </div>
-                </div>
-                <a href="http://localhost:8000/" class="btn"
-                    >Go to Nirmal Ventures</a
-                >
-                <div class="footer-bottom">
-                    &copy; {{ date|date:"Y" }} Nirmal Ventures |
-                    <a href="http://localhost:8000/">www.nirmal.com</a>
-                </div>
-            </div>
-        </div>
-    </body>
+
+            </td>
+        </tr>
+    </table>
+
+</body>
 </html>

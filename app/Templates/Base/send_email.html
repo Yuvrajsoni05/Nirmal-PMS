@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>Job Order Completed</title>
     </head>
 
@@ -12,9 +13,9 @@
             padding: 0;
             background-color: #f4f4f8;
             font-family: Arial, Helvetica, sans-serif;
-            color: #000000;
         "
     >
+        <!-- MAIN WRAPPER -->
         <table
             role="presentation"
             width="100%"
@@ -25,7 +26,9 @@
         >
             <tr>
                 <td align="center">
+                    <!-- INNER CONTAINER -->
                     <table
+                        role="presentation"
                         width="600"
                         cellspacing="0"
                         cellpadding="0"
@@ -43,21 +46,26 @@
                                 style="
                                     border-bottom: 2px solid #5b21b6;
                                     padding-bottom: 10px;
-                                    display: flex;
                                 "
                             >
-                                <table width="100%">
+                                <table
+                                    width="100%"
+                                    cellspacing="0"
+                                    cellpadding="0"
+                                >
                                     <tr>
-                                        <td width="80">
+                                        <td width="80" align="left">
                                             <img
-                                                src="./assets/Nirmallogo.png"
+                                                src="https://nirmalgroup.com/wp-content/uploads/2024/11/Mask-group-2.png"
                                                 alt="Company Logo"
                                                 style="
+                                                    display: block;
                                                     width: 80px;
                                                     height: auto;
                                                 "
                                             />
                                         </td>
+
                                         <td
                                             align="right"
                                             style="
@@ -95,14 +103,16 @@
                                 <table width="100%">
                                     <tr>
                                         {% if bill_no %}
-                                        <td>
-                                            <b>Bill No:</b>
-                                            {{bill_no}}
+                                        <td style="font-size: 13px">
+                                            <b>Bill No:</b> {{ bill_no }}
                                         </td>
                                         {% endif %}
-                                        <td align="right">
-                                            <b>Job Date:</b> {% if date %} {{
-                                            date }} {% else %} none {% endif %}
+
+                                        <td
+                                            align="right"
+                                            style="font-size: 13px"
+                                        >
+                                            <b>Job Date:</b> {% if date %} {{ date }} {% else %} none {% endif %}
                                         </td>
                                     </tr>
                                 </table>
@@ -120,15 +130,13 @@
                                 <table width="100%">
                                     <tr>
                                         {% if company_name %}
-                                        <td>
-                                            <b>Company Name:</b>
-                                            {{company_name}}
+                                        <td style="font-size: 13px">
+                                            <b>Company Name:</b> {{ company_name }}
                                         </td>
-                                        {% endif %} {% if company_email_address
-                                        %}
-                                        <td align="right">
-                                            <b>Company Email:</b>
-                                            {{ company_email_address }}
+                                        {% endif %} 
+                                        {% if company_email_address %}
+                                        <td align="right"style="font-size: 13px">
+                                            <b>Company Email:</b> {{ company_email_address }}
                                         </td>
                                         {% endif %}
                                     </tr>
@@ -157,66 +165,72 @@
                                                 color: #000;
                                             "
                                         >
+                                            {% if job_name %}
                                             <th
                                                 align="left"
-                                                style="width: 30%; padding: 8px"
+                                                style="padding: 8px; width: 30%"
                                             >
                                                 Job Name
                                             </th>
+                                            {% endif %} {% if prpc_sell %}
                                             <th
                                                 align="left"
                                                 style="
-                                                    width: 17.5%;
                                                     padding: 8px;
+                                                    width: 17.5%;
                                                 "
                                             >
                                                 PRPC
                                             </th>
+                                            {% endif %} {% if cylinder_size %}
                                             <th
                                                 align="left"
                                                 style="
-                                                    width: 17.5%;
                                                     padding: 8px;
+                                                    width: 17.5%;
                                                 "
                                             >
                                                 Cylinder Size
                                             </th>
+                                            {% endif %} {% if pouch_size %}
                                             <th
                                                 align="left"
                                                 style="
-                                                    width: 17.5%;
                                                     padding: 8px;
+                                                    width: 17.5%;
                                                 "
                                             >
                                                 Pouch Size
                                             </th>
+                                            {% endif %} {% if pouch_open_size %}
                                             <th
                                                 align="left"
                                                 style="
-                                                    width: 17.5%;
                                                     padding: 8px;
+                                                    width: 17.5%;
                                                 "
                                             >
                                                 Pouch Open Size
                                             </th>
+                                            {% endif %}
                                         </tr>
                                     </thead>
+
                                     <tbody>
                                         <tr>
-                                            <td>Title / Job Name</td>
                                             {% if job_name %}
                                             <td>{{ job_name }}</td>
                                             {% endif %} {% if prpc_sell %}
                                             <td>{{ prpc_sell }}</td>
+                                            {% endif %} {% if cylinder_size %}
+                                            <td>{{ cylinder_size }}</td>
+                                            {% endif %} {% if pouch_size %}
+                                            <td>{{ pouch_size }}</td>
+                                            {% endif %} {% if pouch_open_size %}
+                                            <td>{{ pouch_open_size }}</td>
                                             {% endif %}
-                                            
-                                            {% if cylinder_size %}
-                                                 <td></td>
-                                            {% endif %}
-                                                
-                                           
-                                            <td></td>
                                         </tr>
+
                                         {% if noc %}
                                         <tr>
                                             <td><b>No. of Color</b></td>
@@ -245,13 +259,15 @@
                                 </p>
                                 <div
                                     style="
-                                        min-height: 30px;
                                         background-color: #f9f9ff;
                                         border: 1px dashed #d1c4ff;
                                         padding: 8px;
                                         border-radius: 4px;
+                                        min-height: 30px;
                                     "
-                                ></div>
+                                >
+                                    {{ correction }}
+                                </div>
                             </td>
                         </tr>
 
@@ -260,8 +276,8 @@
                             <td
                                 style="
                                     padding-top: 10px;
-                                    font-size: 13px;
                                     border-top: 1px solid #5b21b6;
+                                    font-size: 13px;
                                 "
                             >
                                 <p style="margin: 0 0 5px 0; font-weight: bold">
@@ -269,13 +285,15 @@
                                 </p>
                                 <div
                                     style="
-                                        min-height: 30px;
                                         background-color: #f9f9ff;
                                         border: 1px dashed #d1c4ff;
                                         padding: 8px;
                                         border-radius: 4px;
+                                        min-height: 30px;
                                     "
-                                ></div>
+                                >
+                                    {{ note }}
+                                </div>
                             </td>
                         </tr>
 

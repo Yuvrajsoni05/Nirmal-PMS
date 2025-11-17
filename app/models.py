@@ -28,38 +28,38 @@ class Registration(AbstractUser):
 
 
 
-class JobHeader(models.Model):
-    Job_Status = [
-        ("Pending","Pending"),
-        ("Confirmed","Confirmed")
-    ]
-    job_date = models.DateField()
-    bill_no = models.CharField(max_length=200)
-    company_name = models.CharField(max_length=300, blank=True, null=True)
-    correction = models.TextField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-    job_status  = models.CharField(max_length=200,choices=Job_Status)
+# class JobHeader(models.Model):
+#     Job_Status = [
+#         ("Pending","Pending"),
+#         ("Confirmed","Confirmed")
+#     ]
+#     job_date = models.DateField()
+#     bill_no = models.CharField(max_length=200)
+#     company_name = models.CharField(max_length=300, blank=True, null=True)
+#     correction = models.TextField(blank=True, null=True)
+#     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+#     job_status  = models.CharField(max_length=200,choices=Job_Status)
     
-    def __str__(self):
-        return self.company_name
+#     def __str__(self):
+#         return self.company_name
     
 
 
-class JobMaterial(models.Model):
-    job = models.ForeignKey(JobHeader, on_delete=models.CASCADE, related_name='job_materials')
-    job_name = models.CharField(max_length=200)
-    job_type = models.CharField(max_length=200)
-    noc = models.CharField(max_length=200)
-    prpc_purchase = models.CharField(max_length=200)
-    prpc_sell = models.CharField(max_length=200, blank=True, null=True)
-    cylinder_size = models.CharField(max_length=200)
-    cylinder_made_in = models.CharField(max_length=200)
-    pouch_size = models.CharField(max_length=200)
-    pouch_open_size = models.CharField(max_length=200)
-    pouch_combination = models.CharField(max_length=200)
-    cylinder_date = models.DateField(blank=True, null=True)
-    cylinder_bill_no = models.CharField(blank=True, null=True)
-    created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+# class JobMaterial(models.Model):
+#     job = models.ForeignKey(JobHeader, on_delete=models.CASCADE, related_name='job_materials')
+#     job_name = models.CharField(max_length=200)
+#     job_type = models.CharField(max_length=200)
+#     noc = models.CharField(max_length=200)
+#     prpc_purchase = models.CharField(max_length=200)
+#     prpc_sell = models.CharField(max_length=200, blank=True, null=True)
+#     cylinder_size = models.CharField(max_length=200)
+#     cylinder_made_in = models.CharField(max_length=200)
+#     pouch_size = models.CharField(max_length=200)
+#     pouch_open_size = models.CharField(max_length=200)
+#     pouch_combination = models.CharField(max_length=200)
+#     cylinder_date = models.DateField(blank=True, null=True)
+#     cylinder_bill_no = models.CharField(blank=True, null=True)
+#     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
  
 

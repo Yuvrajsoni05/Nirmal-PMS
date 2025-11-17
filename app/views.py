@@ -490,32 +490,35 @@ def add_job(request):
             date = request.POST.get("job_date")
             bill_no = request.POST.get("bill_no").strip()
             company_name = request.POST.get("company_name", "").strip()
-            job_name = request.POST.get("job_name")
-            new_job_name = request.POST.get("new_job_name", "").strip()
-            job_type = request.POST.get("job_type").strip()
-            noc = request.POST.get("noc").strip()
-            prpc_purchase = request.POST.get("prpc_purchase").strip()
-            prpc_sell = request.POST.get("prpc_sell").strip()
-            cylinder_size = request.POST.get("cylinder_size").strip()
-            cylinder_made_in_s = request.POST.get("cylinder_select").strip()
-            cylinder_date = request.POST.get("cylinder_date")
-            cylinder_bill_no = request.POST.get("cylinder_bill_no").strip()
-            pouch_size = request.POST.get("pouch_size")
-            pouch_open_size = request.POST.get("pouch_open_size")
-            pouch_combination_1 = request.POST.get("pouch_combination1").strip()
-            pouch_combination_2 = request.POST.get("pouch_combination2").strip()
-            pouch_combination_3 = request.POST.get("pouch_combination3").strip()
-            pouch_combination_4 = request.POST.get("pouch_combination4").strip()
+            job_name = request.POST.getlist("job_name[]")
+            new_job_name = request.POST.getlist("new_job_name[]")
+            job_type = request.POST.getlist("job_type[]")
+            noc = request.POST.getlist("noc[]")
+            prpc_purchase = request.POST.getlist("prpc_purchase[]")
+            prpc_sell = request.POST.getlist("prpc_sell[]")
+            cylinder_size = request.POST.getlist("cylinder_size[]")
+            cylinder_made_in_s = request.POST.getlist("cylinder_select[]")
+            cylinder_date = request.POST.getlist("cylinder_date[]")
+            cylinder_bill_no = request.POST.getlist("cylinder_bill_no[]")
+            pouch_size = request.POST.getlist("pouch_size[]")
+            pouch_open_size = request.POST.getlist("pouch_open_size[]")
+ 
+            pouch_combination = request.POST.getlist('pouch_combination[]')
             new_company = request.POST.get("new_company")
-            new_cylinder_company_name = request.POST.get(
+            new_cylinder_company_name = request.POST.getlist(
                 "cylinder_made_in_company_name"
             )
+            
             correction = request.POST.get("correction")
             job_status = request.POST.get("job_status")
             files = request.FILES.getlist("files")
 
-            pouch_combination = f"{pouch_combination_1} + {pouch_combination_2} + {pouch_combination_3} + {pouch_combination_4}"
 
+            print(pouch_combination)
+            
+            print("This New Job : ",new_job_name)
+            print("This Job ",job_name)
+            
             required_filed = {
                 "Date": date,
                 "Bill no": bill_no,
@@ -531,7 +534,10 @@ def add_job(request):
                 "Cylinder Bill No": cylinder_bill_no,
                 "Cylinder Date": cylinder_date,
                 "Prpc Sell": prpc_sell,
+                "Job Status" :job_status
             }
+            
+            
             for i, r in required_filed.items():
                 if not r:
                     messages.error(
@@ -554,13 +560,7 @@ def add_job(request):
                 if new_job_name == "" or new_job_name == None:
                     messages.error(request, "Plz Provide Job Name")
                     return redirect("data-entry")
-                if Job_detail.objects.filter(job_name__icontains=new_job_name).exists():
-                    messages.error(
-                        request,
-                        "Job Name Already Exists",
-                        extra_tags="custom-success-style",
-                    )
-                    return redirect("job_entry")
+                
                 else:
                     job_name = new_job_name
 
@@ -574,38 +574,38 @@ def add_job(request):
             #     )
             #     return redirect("job_entry")
 
-            if new_company != "":
-                if CompanyName.objects.filter(
-                    company_name__icontains=new_company
-                ).exists():
-                    messages.error(
-                        request,
-                        "Company Name Already Exists",
-                        extra_tags="custom-success-style",
-                    )
-                    return redirect("job_entry")
-                add_company = CompanyName.objects.create(company_name=new_company)
-                add_company.save()
-                company_name = new_company
-            if company_name == "" or company_name == None:
-                messages.error(request, "Plz Provide Company Name")
-                return redirect("data-entry")
+            # if new_company != "":
+            #     if CompanyName.objects.filter(
+            #         company_name__icontains=new_company
+            #     ).exists():
+            #         messages.error(
+            #             request,
+            #             "Company Name Already Exists",
+            #             extra_tags="custom-success-style",
+            #         )
+            #         return redirect("job_entry")
+            #     add_company = CompanyName.objects.create(company_name=new_company)
+            #     add_company.save()
+            #     company_name = new_company
+            # if company_name == "" or company_name == None:
+            #     messages.error(request, "Plz Provide Company Name")
+            #     return redirect("data-entry")
 
-            if new_cylinder_company_name != "":
-                if CylinderMadeIn.objects.filter(
-                    cylinder_made_in__icontains=new_cylinder_company_name
-                ).exists():
-                    messages.error(
-                        request,
-                        "Company Name Already Exists",
-                        extra_tags="custom-success-style",
-                    )
-                    return redirect("job_entry")
-                add_new_cylinder_company = CylinderMadeIn.objects.create(
-                    cylinder_made_in=new_cylinder_company_name
-                )
-                add_new_cylinder_company.save()
-                cylinder_made_in_s = new_cylinder_company_name
+            # if new_cylinder_company_name != "":
+            #     if CylinderMadeIn.objects.filter(
+            #         cylinder_made_in__icontains=new_cylinder_company_name
+            #     ).exists():
+            #         messages.error(
+            #             request,
+            #             "Company Name Already Exists",
+            #             extra_tags="custom-success-style",
+            #         )
+            #         return redirect("job_entry")
+            #     add_new_cylinder_company = CylinderMadeIn.objects.create(
+            #         cylinder_made_in=new_cylinder_company_name
+            #     )
+            #     add_new_cylinder_company.save()
+            #     cylinder_made_in_s = new_cylinder_company_name
 
             data = {
                 "date": date,
@@ -623,75 +623,76 @@ def add_job(request):
                 "pouch_combination": pouch_combination,
                 "correction": correction,
             }
+            
+        return redirect("job_entry")
+    #     try:
+    #         url = os.environ.get("CREATE_WEBHOOK_JOB")
+    #         response = requests.post(f"{url}", data=data, files=file_dic)
+    #         if response.status_code == 200:
+    #             data_string = response.text
+    #             data_dict = json.loads(data_string)
+    #             id_number = data_dict["id"]
+    #             cylinder_data = Job_detail.objects.all().get(id=id_number)
+    #             cylinder_data.cylinder_date = cylinder_date
+    #             cylinder_data.cylinder_bill_no = cylinder_bill_no
+    #             cylinder_data.job_status = job_status
+    #             cylinder_data.save()
+    #             messages.success(request, "Job successfully Added")
+    #             return redirect("dashboard_page")
+    #         else:
+    #             job_data = Job_detail.objects.create(
+    #                 date=date,
+    #                 bill_no=bill_no,
+    #                 company_name=company_name,
+    #                 job_name=job_name,
+    #                 job_type=job_type,
+    #                 noc=noc,
+    #                 prpc_sell=prpc_sell,
+    #                 prpc_purchase=prpc_purchase,
+    #                 cylinder_size=cylinder_size,
+    #                 cylinder_made_in=cylinder_made_in_s,
+    #                 pouch_size=pouch_size,
+    #                 pouch_open_size=pouch_open_size,
+    #                 pouch_combination=pouch_combination,
+    #                 correction=correction,
+    #                 job_status=job_status,
+    #                 cylinder_date=cylinder_date,
+    #                 cylinder_bill_no=cylinder_bill_no,
+    #             )
+    #             for file_key, file_data in file_dic.items():
+    #                 file_obj = file_data[1]
+    #                 Jobimage.objects.create(job=job_data, image=file_obj)
+    #             job_data.save()
+    #             messages.success(request, "Data  successfully Add on sqlite 3")
+    #             return redirect("dashboard_page")
 
-        try:
-            url = os.environ.get("CREATE_WEBHOOK_JOB")
-            response = requests.post(f"{url}", data=data, files=file_dic)
-            if response.status_code == 200:
-                data_string = response.text
-                data_dict = json.loads(data_string)
-                id_number = data_dict["id"]
-                cylinder_data = Job_detail.objects.all().get(id=id_number)
-                cylinder_data.cylinder_date = cylinder_date
-                cylinder_data.cylinder_bill_no = cylinder_bill_no
-                cylinder_data.job_status = job_status
-                cylinder_data.save()
-                messages.success(request, "Job successfully Added")
-                return redirect("dashboard_page")
-            else:
-                job_data = Job_detail.objects.create(
-                    date=date,
-                    bill_no=bill_no,
-                    company_name=company_name,
-                    job_name=job_name,
-                    job_type=job_type,
-                    noc=noc,
-                    prpc_sell=prpc_sell,
-                    prpc_purchase=prpc_purchase,
-                    cylinder_size=cylinder_size,
-                    cylinder_made_in=cylinder_made_in_s,
-                    pouch_size=pouch_size,
-                    pouch_open_size=pouch_open_size,
-                    pouch_combination=pouch_combination,
-                    correction=correction,
-                    job_status=job_status,
-                    cylinder_date=cylinder_date,
-                    cylinder_bill_no=cylinder_bill_no,
-                )
-                for file_key, file_data in file_dic.items():
-                    file_obj = file_data[1]
-                    Jobimage.objects.create(job=job_data, image=file_obj)
-                job_data.save()
-                messages.success(request, "Data  successfully Add on sqlite 3")
-                return redirect("dashboard_page")
-
-        except Exception as e:
-            logger.error(f"Something went wrong: {str(e)}", exc_info=True)
-            job_data = Job_detail.objects.create(
-                date=date,
-                bill_no=bill_no,
-                company_name=company_name,
-                job_name=job_name,
-                job_type=job_type,
-                noc=noc,
-                prpc_sell=prpc_sell,
-                prpc_purchase=prpc_purchase,
-                cylinder_size=cylinder_size,
-                cylinder_made_in=cylinder_made_in_s,
-                pouch_size=pouch_size,
-                pouch_open_size=pouch_open_size,
-                pouch_combination=pouch_combination,
-                correction=correction,
-                job_status=job_status,
-                cylinder_date=cylinder_date,
-                cylinder_bill_no=cylinder_bill_no,
-            )
-            for file_key, file_data in file_dic.items():
-                file_obj = file_data[1]
-                Jobimage.objects.create(job=job_data, image=file_obj)
-            job_data.save()
-            messages.success(request, "Data successfully Add ")
-            return redirect("dashboard_page")
+    #     except Exception as e:
+    #         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
+    #         job_data = Job_detail.objects.create(
+    #             date=date,
+    #             bill_no=bill_no,
+    #             company_name=company_name,
+    #             job_name=job_name,
+    #             job_type=job_type,
+    #             noc=noc,
+    #             prpc_sell=prpc_sell,
+    #             prpc_purchase=prpc_purchase,
+    #             cylinder_size=cylinder_size,
+    #             cylinder_made_in=cylinder_made_in_s,
+    #             pouch_size=pouch_size,
+    #             pouch_open_size=pouch_open_size,
+    #             pouch_combination=pouch_combination,
+    #             correction=correction,
+    #             job_status=job_status,
+    #             cylinder_date=cylinder_date,
+    #             cylinder_bill_no=cylinder_bill_no,
+    #         )
+    #         for file_key, file_data in file_dic.items():
+    #             file_obj = file_data[1]
+    #             Jobimage.objects.create(job=job_data, image=file_obj)
+    #         job_data.save()
+    #         messages.success(request, "Data successfully Add ")
+    #         return redirect("dashboard_page")
 
     except Exception as e:
         messages.error(request, f"Something went wrong {e}")
@@ -1045,7 +1046,7 @@ def cdr_page(request):
     search = request.GET.get("search", " ").strip()
     date = request.GET.get("date", "").strip()
     end_date = request.GET.get("end_date", "").strip()
-    # print(date)
+
     company_name_sorting = request.GET.get("company_name_sorting", "")
     job_name_sorting = request.GET.get("job_name_sorting", "")
     date_sorting = request.GET.get("date_sorting", "")
@@ -1100,7 +1101,7 @@ def cdr_page(request):
     p = Paginator(cdr_data, 10)
     page = request.GET.get("page")
     cdr_emails = CDRDetail.objects.values("company_email").distinct()
-    cdr_company_name = CDRDetail.objects.values("company_name").distinct()
+    cdr_company_name = CDRDetail.objects.values("company_name").distinct().union(Job_detail.objects.values('job_name').distinct())
     cdr_job_name = CDRDetail.objects.values("job_name").distinct()
 
     datas = p.get_page(page)
@@ -1204,15 +1205,15 @@ def cdr_add(request):
             company_add_in = CompanyName.objects.create(company_name=company_name)
             company_add_in.save()
 
-        if CDRDetail.objects.filter(
-            job_name__icontains=job_name, date=cdr_upload_date
-        ).exists():
-            messages.error(
-                request,
-                "Job Name already exists on this date. Kindly update job.",
-                extra_tags="custom-success-style",
-            )
-            return redirect("company_add_page")
+        # if CDRDetail.objects.filter(
+        #     job_name__icontains=job_name, date=cdr_upload_date
+        # ).exists():
+        #     messages.error(
+        #         request,
+        #         "Job Name already exists on this date. Kindly update job.",
+        #         extra_tags="custom-success-style",
+        #     )
+        #     return redirect("company_add_page")
 
         data = {
             "company_name": company_name,
@@ -1327,16 +1328,16 @@ def cdr_update(request, update_id):
                 )
                 return redirect("company_add_page")
 
-        if date != date_formatte:
-            if CDRDetail.objects.filter(
-                job_name__icontains=job_names, date=date
-            ).exists():
-                messages.error(
-                    request,
-                    "CDR Job Name are already Exists on this date kindly Update job",
-                    extra_tags="custom-success-style",
-                )
-                return redirect("company_add_page")
+        # if date != date_formatte:
+        #     if CDRDetail.objects.filter(
+        #         job_name__icontains=job_names, date=date
+        #     ).exists():
+        #         messages.error(
+        #             request,
+        #             "CDR Job Name are already Exists on this date kindly Update job",
+        #             extra_tags="custom-success-style",
+        #         )
+        #         return redirect("company_add_page")
 
         file_error = utils.file_validation(cdr_files)
         if file_error:
@@ -1471,6 +1472,7 @@ def cdr_sendmail_data(request):
         email.send()
         messages.success(request, "Mail Send successfully")
         return redirect("company_add_page")
+        # return render(request, 'Base/cdr_email.html',context=CDR_INFO)
     return redirect("company_add_page")
 
 
@@ -1548,26 +1550,26 @@ def send_mail_data(request):
         "note": note,
     }
     
-    # print(job_info)
-    # receiver_email = company_email_address
-    # template_name = "Base/send_email.html"
-    # convert_to_html_content = render_to_string(
-    #     template_name=template_name, context=job_info
-    # )
-    # email = EmailMultiAlternatives(
-    #     subject="Mail From Nirmal Ventures",
-    #     body="plain_message",
-    #     from_email=request.user.email,
-    #     to=[receiver_email],
-    # )
-    # email.attach_alternative(convert_to_html_content, "text/html")
-    # for i in attachments:
-    #     email.attach(i.name, i.read(), i.content_type)
-    # email.send()
+    print(job_info)
+    receiver_email = company_email_address
+    template_name = "Base/send_email.html"
+    convert_to_html_content = render_to_string(
+        template_name=template_name, context=job_info
+    )
+    email = EmailMultiAlternatives(
+        subject="Mail From Nirmal Ventures",
+        body="plain_message",
+        from_email=request.user.email,
+        to=[receiver_email],
+    )
+    email.attach_alternative(convert_to_html_content, "text/html")
+    for i in attachments:
+        email.attach(i.name, i.read(), i.content_type)
+    email.send()
 
     messages.success(request, "Mail Send successfully")
-    # return redirect("dashboard_page")
-    return render(request,'Base/send_email.html',context=job_info)
+    return redirect("dashboard_page")
+    # return render(request,'Base/send_email.html',context=job_info)
 
 
 
@@ -1579,7 +1581,7 @@ def company_name_suggestion(request):
         jobs = list(
             CDRDetail.objects.filter(company_name__iexact=company_name)
             .values("job_name")
-            .distinct()
+            .distinct().union(Job_detail.objects.values('job_name').distinct())
         )
 
         email = list(

@@ -1,53 +1,82 @@
-const diameterInput = document.getElementById("cylinder_diameter");
-const heightInput = document.getElementById("cylinder_height");
-const combinedInput = document.getElementById("cylinder_size");
+$(document).on(
+    "input",
+    "[name='cylinder_diameter[]'], [name='cylinder_height[]']",
+    function () {
+        const section = $(this).closest(".col-12"); // parent container for each row
+        const height = section.find("[name='cylinder_height[]']").val();
+        const diameter = section.find("[name='cylinder_diameter[]']").val();
 
-function updateCylinderSize() {
-    const diameter = diameterInput.value.trim();
-    const height = heightInput.value.trim();
-    if (diameter && height) {
-        combinedInput.value = `${diameter} x ${height}`;
-    } else {
-        combinedInput.value = "";
+        if (height && diameter) {
+            // If both diameter and height are provided, store the formatted size
+            const cylinderSize = `${diameter} x ${height}`;
+            section.find("[name='cylinder_size[]']").val(cylinderSize);
+        }
     }
-}
+);
 
-diameterInput.addEventListener("input", updateCylinderSize);
-heightInput.addEventListener("input", updateCylinderSize);
+$(document).on(
+    "input",
+    "[name='pouch_diameter[]'], [name='pouch_height[]']",
+    function () {
+        const section = $(this).closest(".col-12"); // parent container for each row
+        const pouch_height = section.find("[name='pouch_height[]']").val();
+        const pouch_diameter = section.find("[name='pouch_diameter[]']").val();
 
-const pouchOpenDiameterInput = document.getElementById("pouch_open_diameter");
-const pouchOpenHeightInput = document.getElementById("pouch_open_height");
-const pouchOpenSizeInput = document.getElementById("pouch_open_size");
-
-function updatePouchOpenSize() {
-    const diameter = pouchOpenDiameterInput.value.trim();
-    const height = pouchOpenHeightInput.value.trim();
-    if (diameter && height) {
-        pouchOpenSizeInput.value = `${diameter} x ${height}`;
-    } else {
-        pouchOpenSizeInput.value = "";
+        if (pouch_height && pouch_diameter) {
+            const pouchSize = `${pouch_height} x ${pouch_diameter}`;
+            section.find("[name='pouch_size[]']").val(pouchSize);
+        }
     }
-}
+);
 
-pouchOpenDiameterInput.addEventListener("input", updatePouchOpenSize);
-pouchOpenHeightInput.addEventListener("input", updatePouchOpenSize);
+$(document).on(
+    "input",
+    "[name='pouch_open_height[]'], [name='pouch_open_diameter[]']",
+    function () {
+        const section = $(this).closest(".col-12");
+        const pouch_open_height = section
+            .find("[name='pouch_open_height[]']")
+            .val();
+        const pouch_open_diameter = section
+            .find("[name='pouch_open_diameter[]']")
+            .val();
 
-const pouchDiameterInput = document.getElementById("pouch_diameter");
-const pouchHeightInput = document.getElementById("pouch_height");
-const pouchSizeInput = document.getElementById("pouch_size");
-
-function updatePouchSize() {
-    const diameter = pouchDiameterInput.value.trim();
-    const height = pouchHeightInput.value.trim();
-    if (diameter && height) {
-        pouchSizeInput.value = `${diameter} x ${height}`;
-    } else {
-        pouchSizeInput.value = "";
+        if (pouch_open_height && pouch_open_diameter) {
+            const pouch_open_Size = `${pouch_open_height} x ${pouch_open_diameter}`;
+            section.find("[name='pouch_open_size[]']").val(pouch_open_Size);
+        }
     }
-}
+);
 
-pouchDiameterInput.addEventListener("input", updatePouchSize);
-pouchHeightInput.addEventListener("input", updatePouchSize);
+$(document).on(
+    "input",
+    "[name='pouch_combination1[]'] , [name='pouch_combination2[]'],[name='pouch_combination3[]'], [name='pouch_combination4[]']",
+    function () {
+        const section = $(this).closest(".col-12");
+        const pouch_combination1 = section
+            .find("[name='pouch_combination1[]']")
+            .val();
+        const pouch_combination2 = section
+            .find("[name='pouch_combination2[]']")
+            .val();
+        const pouch_combination3 = section
+            .find("[name='pouch_combination3[]']")
+            .val();
+        const pouch_combination4 = section
+            .find("[name='pouch_combination3[]']")
+            .val();
+
+        if (
+            pouch_combination1 &&
+            pouch_combination2 &&
+            pouch_combination3 &&
+            pouch_combination4
+        ) {
+            const pouch_combination = `${pouch_combination1} + ${pouch_combination2} + ${pouch_combination3} + ${pouch_combination4}`;
+            section.find("[name='pouch_combination[]']").val(pouch_combination);
+        }
+    }
+);
 
 function formatNumberWithCommas(input) {
     let value = input.value;
@@ -242,6 +271,31 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         return true;
     }
+    if (Job_Name_Input) {
+        Job_Name_Input.addEventListener("change", function () {
+            if (this.value === "others") {
+                new_job_name.style.display = "block";
+                new_job_name.focus();
+                Job_Name_Error.style.display = "none";
+            } else {
+                new_job_name.style.display = "none";
+                new_job_name.value = "";
+                Job_Name_Error.style.display = "none";
+            }
+        });
+    }
+    function validateJob() {
+        if (JobInput && JobError) {
+            if (JobInput.value.trim() === "") {
+                JobError.style.display = "block";
+                return false;
+            } else {
+                JobError.style.display = "none";
+                return true;
+            }
+        }
+        return true;
+    }
 
     if (CompanyInput) {
         CompanyInput.addEventListener("change", function () {
@@ -253,20 +307,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 new_company.style.display = "none";
                 new_company.value = "";
                 CompanyError.style.display = "none";
-            }
-        });
-    }
-
-    if (Job_Name_Input) {
-        Job_Name_Input.addEventListener("change", function () {
-            if (this.value === "others") {
-                new_job_name.style.display = "block";
-                new_job_name.focus();
-                Job_Name_Error.style.display = "none";
-            } else {
-                new_job_name.style.display = "none";
-                new_job_name.value = "";
-                Job_Name_Error.style.display = "none";
             }
         });
     }
@@ -291,19 +331,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 return false;
             } else {
                 Cylinder_Date_Error.style.display = "none";
-                return true;
-            }
-        }
-        return true;
-    }
-
-    function validateJob() {
-        if (JobInput && JobError) {
-            if (JobInput.value.trim() === "") {
-                JobError.style.display = "block";
-                return false;
-            } else {
-                JobError.style.display = "none";
                 return true;
             }
         }
@@ -736,5 +763,3 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
-
-
