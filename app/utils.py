@@ -38,16 +38,9 @@ def validator_password(password):
         return "Password must contain at least one special character."
     
     
-    
-    
-    
 valid_extension = [".jpeg", ".jpg", ".png", ".ai"]  
 def file_validation(files):
-    
-    print(files)
-    if len(files) > 2:
-        return "You can upload only 2 files"
-    
+
     for file in files:
         ext = os.path.splitext(file.name)[1].lower()  
         if not ext:
@@ -55,8 +48,6 @@ def file_validation(files):
         
         if ext not in valid_extension:
             return "Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed"
-        
-        
         
 
 def file_name_convert(files):
@@ -70,7 +61,6 @@ def file_name_convert(files):
             file.name = new_file_name
             file_key = f"{new_file_name}"
             file_dic[file_key] = (file.name, file, file.content_type)
-    # print(file_dic)        
     return file_dic
         
      

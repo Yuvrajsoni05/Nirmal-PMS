@@ -8,7 +8,7 @@ $(document).on(
 
         if (height && diameter) {
             // If both diameter and height are provided, store the formatted size
-            const cylinderSize = `${diameter} x ${height}`;
+            const cylinderSize = `${height} x ${diameter}`;
             section.find("[name='cylinder_size[]']").val(cylinderSize);
         }
     }
@@ -115,651 +115,398 @@ function formatNumberWithCommas(input) {
         input.value = formattedInteger;
     }
 }
+document.addEventListener("DOMContentLoaded", function () {
+    const proformaForm   = document.getElementById("job_detail_form");
+    const loaderOverlay  = document.getElementById("loader-overlay");
 
-const mySelect = document.getElementById("company_name");
-const new_company = document.getElementById("new_company");
+    // Basic Information
+    const jobDate        = document.getElementById("job_date");
+    const jobDateError   = document.getElementById("job_date_error");
 
-const cylinder_select = document.getElementById("cylinder_made_in");
-const new_company_cylinder = document.getElementById(
-    "cylinder_made_in_company_name"
-);
-const otherCompanyError = document.getElementById("otherCompanyError");
+    const billInput      = document.getElementById("bill_no");
+    const billError      = document.getElementById("bill_no_error");
 
-if (cylinder_select && new_company_cylinder) {
-    cylinder_select.addEventListener("change", function () {
-        if (this.value === "others") {
-            new_company_cylinder.style.display = "block";
-            new_company_cylinder.focus();
+    const companyName        = document.getElementById("company_name");
+    const companyNameError   = document.getElementById("company_name_error");
+    const newCompanyInput    = document.getElementById("new_company");
 
-            if (otherCompanyError) {
-                otherCompanyError.style.display = "none";
+    // Job Details (first job-section)
+    const jobName        = document.getElementById("job_name");
+    const jobNameError   = document.getElementById("job_name_error");
+
+    const jobType        = document.getElementById("job_type");
+    const jobTypeError   = document.getElementById("job_type_error");
+
+    const nocInput       = document.getElementById("noc");
+    const nocError       = document.getElementById("noc_error");
+
+    // Cylinder Information
+    const prpcPurchase       = document.getElementById("prpc_purchase");
+    const prpcPurchaseError  = document.getElementById("prpc_purchase_error");
+
+    const prpcSell       = document.getElementById("prpc_sell");
+    const prpcSellError  = document.getElementById("prpc_sell_error");
+
+    const cylinderDiameter      = document.querySelector('input[name="cylinder_diameter[]"]');
+    const cylinderDiameterError = document.querySelector('div[name="cylinder_diameter_error"]');
+
+    const cylinderHeight        = document.querySelector('input[name="cylinder_height[]"]');
+    const cylinderHeightError   = document.querySelector('div[name="cylinder_height_error"]');
+
+    const cylinderMadeIn        = document.getElementById("cylinder_made_in");
+    const cylinderMadeInError   = document.getElementById("cylinder_made_in_error");
+    const cylinderMadeInOther   = document.getElementById("cylinder_made_in_company_name");
+
+    const cylinderDate      = document.getElementById("cylinder_dates");
+    const cylinderDateError = document.getElementById("cylinder_date_error");
+
+    const cylinderBillNo      = document.getElementById("cylinder_bill_no");
+    const cylinderBillNoError = document.getElementById("cylinder_bill_no_error");
+
+    // Pouch Information
+    const pouchDiameter      = document.getElementById("pouch_diameter");
+    const pouchDiameterError = document.getElementById("pouch_diameter_error");
+
+    const pouchHeight        = document.getElementById("pouch_height");
+    const pouchHeightError   = document.getElementById("pouch_height_error");
+
+    const pouchOpenDiameter      = document.getElementById("pouch_open_diameter");
+    const pouchOpenDiameterError = document.getElementById("pouch_open_diameter_error");
+
+    const pouchOpenHeight        = document.getElementById("pouch_open_height");
+    const pouchOpenHeightError   = document.getElementById("pouch_open_height_error");
+
+    const pouchCombination1      = document.getElementById("pouch_combination1");
+    const pouchCombination1Error = document.getElementById("pouch_combination1_error");
+
+    const pouchCombination2      = document.getElementById("pouch_combination2");
+    const pouchCombination2Error = document.getElementById("pouch_combination2_error");
+
+    // Job Status
+    const jobStatus      = document.getElementById("job_status");
+    const jobStatusError = document.getElementById("job_status_error"); // add this div in HTML
+
+    // ---------- BASIC VALIDATIONS ----------
+
+    function validateJobDate() {
+        if (!jobDate || jobDate.value.trim() === "") {
+            jobDateError.style.display = "block";
+            return false;
+        }
+        jobDateError.style.display = "none";
+        return true;
+    }
+
+    function validateInvoiceNo() {
+        if (!billInput || billInput.value.trim() === "") {
+            billError.style.display = "block";
+            return false;
+        }
+        billError.style.display = "none";
+        return true;
+    }
+
+    function validateCompanyName() {
+        if (!companyName) return true;
+
+        const value = companyName.value.trim();
+
+        // If nothing selected
+        if (value === "") {
+            companyNameError.style.display = "block";
+            newCompanyInput.style.display = "none";
+            return false;
+        }
+
+        // If "other" selected, new_company required
+        if (value === "other") {
+            newCompanyInput.style.display = "block";
+            if (newCompanyInput.value.trim() === "") {
+                companyNameError.textContent = "Please provide New Company Name.";
+                companyNameError.style.display = "block";
+                return false;
             }
         } else {
-            new_company_cylinder.style.display = "none";
-            new_company_cylinder.value = "";
-            if (otherCompanyError) {
-                otherCompanyError.style.display = "none";
-            }
+            newCompanyInput.style.display = "none";
         }
-    });
-}
 
-document.addEventListener("DOMContentLoaded", function () {
-    const Cylinder_Bill_no = document.getElementById("cylinder_bill_no");
-    const Cylinder_Bill_no_Error = document.getElementById(
-        "cylinder_bill_no_error"
-    );
-
-    const Cylinder_Date_Input = document.getElementById("cylinder_dates");
-    const Cylinder_Date_Error = document.getElementById("cylinder_date_error");
-
-    const JobInput = document.getElementById("job_date");
-    const JobError = document.getElementById("job_date_error");
-
-    const BillInput = document.getElementById("bill_no");
-    const BillError = document.getElementById("bill_no_error");
-
-    const CompanyInput = document.getElementById("company_name");
-    const CompanyError = document.getElementById("company_name_error");
-
-    const Job_Name_Input = document.getElementById("job_name");
-
-    const new_job_name = document.getElementById("new_job_name");
-    const Job_Name_Error = document.getElementById("job_name_error");
-
-    const Job_Type_Input = document.getElementById("job_type");
-    const Job_Type_Error = document.getElementById("job_type_error");
-
-    const NOC_Input = document.getElementById("noc");
-    const NOC_Error = document.getElementById("noc_error");
-
-    const prpc_purchase_Input = document.getElementById("prpc_purchase");
-    const prpc_purchase_Error = document.getElementById("prpc_purchase_error");
-
-    const prpc_sell_Input = document.getElementById("prpc_sell");
-    const prpc_sell_Error = document.getElementById("prpc_sell_error");
-
-    const cylinder_diameter_Input =
-        document.getElementById("cylinder_diameter");
-    const cylinder_diameter_Error = document.getElementById(
-        "cylinder_diameter_error"
-    );
-
-    const cylinder_height_Input = document.getElementById("cylinder_height");
-    const cylinder_height_Error = document.getElementById(
-        "cylinder_height_error"
-    );
-
-    const pouch_diameter_Input = document.getElementById("pouch_diameter");
-    const pouch_diameter_Error = document.getElementById(
-        "pouch_diameter_error"
-    );
-
-    const pouch_height_Input = document.getElementById("pouch_height");
-    const pouch_height_Error = document.getElementById("pouch_height_error");
-
-    const pouch_open_diameter_Input = document.getElementById(
-        "pouch_open_diameter"
-    );
-    const pouch_open_diameter_Error = document.getElementById(
-        "pouch_open_diameter_error"
-    );
-
-    const pouch_open_height_Input =
-        document.getElementById("pouch_open_height");
-    const pouch_open_height_Error = document.getElementById(
-        "pouch_open_height_error"
-    );
-
-    const cylinder_made_in_Input = document.getElementById("cylinder_made_in");
-    const cylinder_made_in_Error = document.getElementById(
-        "cylinder_made_in_error"
-    );
-
-    const pouch_combination1_Input =
-        document.getElementById("pouch_combination1");
-    const pouch_combination1_Error = document.getElementById(
-        "pouch_combination1_error"
-    );
-
-    const pouch_combination2_Input =
-        document.getElementById("pouch_combination2");
-    const pouch_combination2_Error = document.getElementById(
-        "pouch_combination2_error"
-    );
-
-    const myForm = document.getElementById("job_detail_form");
-
-    function validateCompany() {
-        if (CompanyInput && CompanyError) {
-            if (CompanyInput.value === "other") {
-                if (new_company && new_company.value.trim() === "") {
-                    CompanyError.style.display = "block";
-                    return false;
-                } else {
-                    CompanyError.style.display = "none";
-                    return true;
-                }
-            } else if (CompanyInput.value.trim() === "") {
-                CompanyError.style.display = "block";
-                return false;
-            } else {
-                CompanyError.style.display = "none";
-                return true;
-            }
-        }
+        companyNameError.textContent = "Please provide Company Name.";
+        companyNameError.style.display = "none";
         return true;
     }
 
     function validateJobName() {
-        if (Job_Name_Input && Job_Name_Error) {
-            if (Job_Name_Input.value === "others") {
-                if (new_job_name && new_job_name.value.trim() === "") {
-                    Job_Name_Error.style.display = "block";
-                    return false;
-                } else {
-                    Job_Name_Error.style.display = "none";
-                    return true;
-                }
-            } else if (Job_Name_Input.value.trim() === "") {
-                Job_Name_Error.style.display = "block";
-                return false;
-            } else {
-                Job_Name_Error.style.display = "none";
-                return true;
-            }
+        if (!jobName || jobName.value.trim() === "") {
+            jobNameError.style.display = "block";
+            return false;
         }
-        return true;
-    }
-    if (Job_Name_Input) {
-        Job_Name_Input.addEventListener("change", function () {
-            if (this.value === "others") {
-                new_job_name.style.display = "block";
-                new_job_name.focus();
-                Job_Name_Error.style.display = "none";
-            } else {
-                new_job_name.style.display = "none";
-                new_job_name.value = "";
-                Job_Name_Error.style.display = "none";
-            }
-        });
-    }
-    function validateJob() {
-        if (JobInput && JobError) {
-            if (JobInput.value.trim() === "") {
-                JobError.style.display = "block";
-                return false;
-            } else {
-                JobError.style.display = "none";
-                return true;
-            }
-        }
-        return true;
-    }
-
-    if (CompanyInput) {
-        CompanyInput.addEventListener("change", function () {
-            if (this.value === "other") {
-                new_company.style.display = "block";
-                new_company.focus();
-                CompanyError.style.display = "none";
-            } else {
-                new_company.style.display = "none";
-                new_company.value = "";
-                CompanyError.style.display = "none";
-            }
-        });
-    }
-
-    function validateCylinderBillNo() {
-        if (Cylinder_Bill_no && Cylinder_Bill_no_Error) {
-            if (Cylinder_Bill_no.value.trim() === "") {
-                Cylinder_Bill_no_Error.style.display = "block";
-                return false;
-            } else {
-                Cylinder_Bill_no_Error.style.display = "none";
-                return true;
-            }
-        }
-        return true;
-    }
-
-    function validateCylinderDate() {
-        if (Cylinder_Date_Input && Cylinder_Date_Error) {
-            if (Cylinder_Date_Input.value.trim() === "") {
-                Cylinder_Date_Error.style.display = "block";
-                return false;
-            } else {
-                Cylinder_Date_Error.style.display = "none";
-                return true;
-            }
-        }
-        return true;
-    }
-
-    function validateBill() {
-        if (BillInput && BillError) {
-            if (BillInput.value.trim() === "") {
-                BillError.style.display = "block";
-                return false;
-            } else {
-                BillError.style.display = "none";
-                return true;
-            }
-        }
-        return true;
-    }
-
-    function validateCompany() {
-        if (CompanyInput && CompanyError) {
-            if (CompanyInput.value === "other") {
-                const newCompanyInput = document.getElementById("new_company");
-                if (newCompanyInput && newCompanyInput.value.trim() === "") {
-                    CompanyError.style.display = "block";
-                    return false;
-                } else {
-                    CompanyError.style.display = "none";
-                    return true;
-                }
-            } else if (CompanyInput.value.trim() === "") {
-                CompanyError.style.display = "block";
-                return false;
-            } else {
-                CompanyError.style.display = "none";
-                return true;
-            }
-        }
-        return true;
-    }
-
-    function validateJobName() {
-        if (Job_Name_Input && Job_Name_Error) {
-            if (Job_Name_Input.value === "others") {
-                const newJobInput = document.getElementById("new_job_name");
-                if (newJobInput && newJobInput.value.trim() === "") {
-                    Job_Name_Error.style.display = "block";
-                    return false;
-                } else {
-                    Job_Name_Error.style.display = "none";
-                    return true;
-                }
-            } else if (Job_Name_Input.value.trim() === "") {
-                Job_Name_Error.style.display = "block";
-                return false;
-            } else {
-                Job_Name_Error.style.display = "none";
-                return true;
-            }
-        }
+        jobNameError.style.display = "none";
         return true;
     }
 
     function validateJobType() {
-        if (Job_Type_Input && Job_Type_Error) {
-            if (Job_Type_Input.value.trim() === "") {
-                Job_Type_Error.style.display = "block";
-                return false;
-            } else {
-                Job_Type_Error.style.display = "none";
-                return true;
-            }
+        if (!jobType || jobType.value.trim() === "") {
+            jobTypeError.style.display = "block";
+            return false;
         }
+        jobTypeError.style.display = "none";
         return true;
     }
 
-    function validateNOC() {
-        if (NOC_Input && NOC_Error) {
-            if (NOC_Input.value.trim() === "") {
-                NOC_Error.style.display = "block";
-                return false;
-            } else {
-                NOC_Error.style.display = "none";
-                return true;
-            }
+    function validateNoc() {
+        if (!nocInput || nocInput.value.trim() === "") {
+            nocError.style.display = "block";
+            return false;
         }
+        nocError.style.display = "none";
         return true;
     }
 
     function validatePrpcPurchase() {
-        if (prpc_purchase_Input && prpc_purchase_Error) {
-            if (prpc_purchase_Input.value.trim() === "") {
-                prpc_purchase_Error.style.display = "block";
-                return false;
-            } else {
-                prpc_purchase_Error.style.display = "none";
-                return true;
-            }
+        if (!prpcPurchase || prpcPurchase.value.trim() === "") {
+            prpcPurchaseError.style.display = "block";
+            return false;
         }
+        prpcPurchaseError.style.display = "none";
         return true;
     }
 
     function validatePrpcSell() {
-        if (prpc_sell_Input && prpc_sell_Error) {
-            if (prpc_sell_Input.value.trim() === "") {
-                prpc_sell_Error.style.display = "block";
-                return false;
-            } else {
-                prpc_sell_Error.style.display = "none";
-                return true;
-            }
+        if (!prpcSell || prpcSell.value.trim() === "") {
+            prpcSellError.style.display = "block";
+            return false;
         }
+        prpcSellError.style.display = "none";
         return true;
     }
 
     function validateCylinderDiameter() {
-        if (cylinder_diameter_Input && cylinder_diameter_Error) {
-            if (cylinder_diameter_Input.value.trim() === "") {
-                cylinder_diameter_Error.style.display = "block";
-                return false;
-            } else {
-                cylinder_diameter_Error.style.display = "none";
-                return true;
-            }
+        if (!cylinderDiameter || cylinderDiameter.value.trim() === "") {
+            if (cylinderDiameterError) cylinderDiameterError.style.display = "block";
+            return false;
         }
+        if (cylinderDiameterError) cylinderDiameterError.style.display = "none";
         return true;
     }
 
     function validateCylinderHeight() {
-        if (cylinder_height_Input && cylinder_height_Error) {
-            if (cylinder_height_Input.value.trim() === "") {
-                cylinder_height_Error.style.display = "block";
-                return false;
-            } else {
-                cylinder_height_Error.style.display = "none";
-                return true;
-            }
+        if (!cylinderHeight || cylinderHeight.value.trim() === "") {
+            if (cylinderHeightError) cylinderHeightError.style.display = "block";
+            return false;
         }
+        if (cylinderHeightError) cylinderHeightError.style.display = "none";
+        return true;
+    }
+
+    function validateCylinderMadeIn() {
+        if (!cylinderMadeIn) return true;
+
+        const value = cylinderMadeIn.value.trim();
+
+        if (value === "") {
+            cylinderMadeInError.style.display = "block";
+            cylinderMadeInOther.style.display = "none";
+            return false;
+        }
+
+        if (value === "others") {
+            cylinderMadeInOther.style.display = "block";
+            if (cylinderMadeInOther.value.trim() === "") {
+                cylinderMadeInError.textContent = "Please provide Cylinder Made In company name.";
+                cylinderMadeInError.style.display = "block";
+                return false;
+            }
+        } else {
+            cylinderMadeInOther.style.display = "none";
+        }
+
+        cylinderMadeInError.textContent = "Please provide Cylinder Made In";
+        cylinderMadeInError.style.display = "none";
+        return true;
+    }
+
+    function validateCylinderDate() {
+        if (!cylinderDate || cylinderDate.value.trim() === "") {
+            cylinderDateError.style.display = "block";
+            return false;
+        }
+        cylinderDateError.style.display = "none";
+        return true;
+    }
+
+    function validateCylinderBillNo() {
+        if (!cylinderBillNo || cylinderBillNo.value.trim() === "") {
+            cylinderBillNoError.style.display = "block";
+            return false;
+        }
+        cylinderBillNoError.style.display = "none";
         return true;
     }
 
     function validatePouchDiameter() {
-        if (pouch_diameter_Input && pouch_diameter_Error) {
-            if (pouch_diameter_Input.value.trim() === "") {
-                pouch_diameter_Error.style.display = "block";
-                return false;
-            } else {
-                pouch_diameter_Error.style.display = "none";
-                return true;
-            }
+        if (!pouchDiameter || pouchDiameter.value.trim() === "") {
+            pouchDiameterError.style.display = "block";
+            return false;
         }
+        pouchDiameterError.style.display = "none";
         return true;
     }
 
     function validatePouchHeight() {
-        if (pouch_height_Input && pouch_height_Error) {
-            if (pouch_height_Input.value.trim() === "") {
-                pouch_height_Error.style.display = "block";
-                return false;
-            } else {
-                pouch_height_Error.style.display = "none";
-                return true;
-            }
+        if (!pouchHeight || pouchHeight.value.trim() === "") {
+            pouchHeightError.style.display = "block";
+            return false;
         }
+        pouchHeightError.style.display = "none";
         return true;
     }
 
     function validatePouchOpenDiameter() {
-        if (pouch_open_diameter_Input && pouch_open_diameter_Error) {
-            if (pouch_open_diameter_Input.value.trim() === "") {
-                pouch_open_diameter_Error.style.display = "block";
-                return false;
-            } else {
-                pouch_open_diameter_Error.style.display = "none";
-                return true;
-            }
+        if (!pouchOpenDiameter || pouchOpenDiameter.value.trim() === "") {
+            pouchOpenDiameterError.style.display = "block";
+            return false;
         }
+        pouchOpenDiameterError.style.display = "none";
         return true;
     }
 
     function validatePouchOpenHeight() {
-        if (pouch_open_height_Input && pouch_open_height_Error) {
-            if (pouch_open_height_Input.value.trim() === "") {
-                pouch_open_height_Error.style.display = "block";
-                return false;
-            } else {
-                pouch_open_height_Error.style.display = "none";
-                return true;
-            }
+        if (!pouchOpenHeight || pouchOpenHeight.value.trim() === "") {
+            pouchOpenHeightError.style.display = "block";
+            return false;
         }
-        return true;
-    }
-
-    function validateCylinderMade() {
-        if (cylinder_made_in_Input && cylinder_made_in_Error) {
-            if (cylinder_made_in_Input.value === "others") {
-                const newCylinderCompanyInput = document.getElementById(
-                    "cylinder_made_in_company_name"
-                );
-                if (
-                    newCylinderCompanyInput &&
-                    newCylinderCompanyInput.value.trim() === ""
-                ) {
-                    cylinder_made_in_Error.style.display = "block";
-                    return false;
-                } else {
-                    cylinder_made_in_Error.style.display = "none";
-                    return true;
-                }
-            } else if (cylinder_made_in_Input.value.trim() === "") {
-                cylinder_made_in_Error.style.display = "block";
-                return false;
-            } else {
-                cylinder_made_in_Error.style.display = "none";
-                return true;
-            }
-        }
+        pouchOpenHeightError.style.display = "none";
         return true;
     }
 
     function validatePouchCombination1() {
-        if (pouch_combination1_Input && pouch_combination1_Error) {
-            if (pouch_combination1_Input.value.trim() === "") {
-                pouch_combination1_Error.style.display = "block";
-                return false;
-            } else {
-                pouch_combination1_Error.style.display = "none";
-                return true;
-            }
+        if (!pouchCombination1 || pouchCombination1.value.trim() === "") {
+            pouchCombination1Error.style.display = "block";
+            return false;
         }
+        pouchCombination1Error.style.display = "none";
         return true;
     }
 
     function validatePouchCombination2() {
-        if (pouch_combination2_Input && pouch_combination2_Error) {
-            if (pouch_combination2_Input.value.trim() === "") {
-                pouch_combination2_Error.style.display = "block";
-                return false;
-            } else {
-                pouch_combination2_Error.style.display = "none";
-                return true;
-            }
+        if (!pouchCombination2 || pouchCombination2.value.trim() === "") {
+            pouchCombination2Error.style.display = "block";
+            return false;
         }
+        pouchCombination2Error.style.display = "none";
         return true;
     }
 
+    function validateJobStatus() {
+        if (!jobStatus || jobStatus.value.trim() === "") {
+            if (jobStatusError) jobStatusError.style.display = "block";
+            return false;
+        }
+        if (jobStatusError) jobStatusError.style.display = "none";
+        return true;
+    }
+
+    // ---------- FORM VALIDATION WRAPPER ----------
+
     function validateForm() {
-        const validators = [
-            validateCylinderBillNo(),
-            validateCylinderDate(),
-            validateJob(),
-            validateBill(),
-            validateCompany(),
-            validateJobName(),
-            validateJobType(),
-            validateNOC(),
-            validatePrpcPurchase(),
-            validatePrpcSell(),
-            validateCylinderDiameter(),
-            validateCylinderHeight(),
-            validatePouchDiameter(),
-            validatePouchHeight(),
-            validatePouchOpenDiameter(),
-            validatePouchOpenHeight(),
-            validateCylinderMade(),
-            validatePouchCombination1(),
-            validatePouchCombination2(),
-        ];
+        const vJobDate          = validateJobDate();
+        const vInvoice          = validateInvoiceNo();
+        const vCompany          = validateCompanyName();
 
-        return validators.every((isValid) => isValid);
-    }
+        const vJobName          = validateJobName();
+        const vJobType          = validateJobType();
+        const vNoc              = validateNoc();
 
-    if (Cylinder_Bill_no) {
-        Cylinder_Bill_no.addEventListener("input", validateCylinderBillNo);
-        Cylinder_Bill_no.addEventListener("blur", validateCylinderBillNo);
-    }
+        const vPrpcPurchase     = validatePrpcPurchase();
+        const vPrpcSell         = validatePrpcSell();
+        const vCylDia           = validateCylinderDiameter();
+        const vCylHeight        = validateCylinderHeight();
+        const vCylMadeIn        = validateCylinderMadeIn();
+        const vCylDate          = validateCylinderDate();
+        const vCylBill          = validateCylinderBillNo();
 
-    if (Cylinder_Date_Input) {
-        Cylinder_Date_Input.addEventListener("input", validateCylinderDate);
-        Cylinder_Date_Input.addEventListener("blur", validateCylinderDate);
-    }
+        const vPouchDia         = validatePouchDiameter();
+        const vPouchHeight      = validatePouchHeight();
+        const vPouchOpenDia     = validatePouchOpenDiameter();
+        const vPouchOpenHeight  = validatePouchOpenHeight();
+        const vPouchComb1       = validatePouchCombination1();
+        const vPouchComb2       = validatePouchCombination2();
 
-    if (JobInput) {
-        JobInput.addEventListener("input", validateJob);
-        JobInput.addEventListener("blur", validateJob);
-    }
+        const vJobStatus        = validateJobStatus();
 
-    if (BillInput) {
-        BillInput.addEventListener("input", validateBill);
-        BillInput.addEventListener("blur", validateBill);
-    }
-
-    if (CompanyInput) {
-        CompanyInput.addEventListener("input", validateCompany);
-        CompanyInput.addEventListener("blur", validateCompany);
-    }
-
-    if (Job_Name_Input) {
-        Job_Name_Input.addEventListener("input", validateJobName);
-        Job_Name_Input.addEventListener("blur", validateJobName);
-    }
-
-    if (Job_Type_Input) {
-        Job_Type_Input.addEventListener("input", validateJobType);
-        Job_Type_Input.addEventListener("blur", validateJobType);
-    }
-
-    if (NOC_Input) {
-        NOC_Input.addEventListener("input", validateNOC);
-        NOC_Input.addEventListener("blur", validateNOC);
-    }
-
-    if (prpc_purchase_Input) {
-        prpc_purchase_Input.addEventListener("input", validatePrpcPurchase);
-        prpc_purchase_Input.addEventListener("blur", validatePrpcPurchase);
-    }
-
-    if (prpc_sell_Input) {
-        prpc_sell_Input.addEventListener("input", validatePrpcSell);
-        prpc_sell_Input.addEventListener("blur", validatePrpcSell);
-    }
-
-    if (cylinder_diameter_Input) {
-        cylinder_diameter_Input.addEventListener(
-            "input",
-            validateCylinderDiameter
-        );
-        cylinder_diameter_Input.addEventListener(
-            "blur",
-            validateCylinderDiameter
+        return (
+            vJobDate &&
+            vInvoice &&
+            vCompany &&
+            vJobName &&
+            vJobType &&
+            vNoc &&
+            vPrpcPurchase &&
+            vPrpcSell &&
+            vCylDia &&
+            vCylHeight &&
+            vCylMadeIn &&
+            vCylDate &&
+            vCylBill &&
+            vPouchDia &&
+            vPouchHeight &&
+            vPouchOpenDia &&
+            vPouchOpenHeight &&
+            vPouchComb1 &&
+            vPouchComb2 &&
+            vJobStatus
         );
     }
 
-    if (cylinder_height_Input) {
-        cylinder_height_Input.addEventListener("input", validateCylinderHeight);
-        cylinder_height_Input.addEventListener("blur", validateCylinderHeight);
-    }
+    // ---------- LIVE VALIDATION EVENTS ----------
 
-    if (pouch_diameter_Input) {
-        pouch_diameter_Input.addEventListener("input", validatePouchDiameter);
-        pouch_diameter_Input.addEventListener("blur", validatePouchDiameter);
-    }
+    if (jobDate) jobDate.addEventListener("change", validateJobDate);
+    if (billInput) billInput.addEventListener("input", validateInvoiceNo);
 
-    if (pouch_height_Input) {
-        pouch_height_Input.addEventListener("input", validatePouchHeight);
-        pouch_height_Input.addEventListener("blur", validatePouchHeight);
-    }
+    if (companyName) companyName.addEventListener("change", validateCompanyName);
+    if (newCompanyInput) newCompanyInput.addEventListener("input", validateCompanyName);
 
-    if (pouch_open_diameter_Input) {
-        pouch_open_diameter_Input.addEventListener(
-            "input",
-            validatePouchOpenDiameter
-        );
-        pouch_open_diameter_Input.addEventListener(
-            "blur",
-            validatePouchOpenDiameter
-        );
-    }
+    if (jobName) jobName.addEventListener("change", validateJobName);
+    if (jobType) jobType.addEventListener("change", validateJobType);
+    if (nocInput) nocInput.addEventListener("input", validateNoc);
 
-    if (pouch_open_height_Input) {
-        pouch_open_height_Input.addEventListener(
-            "input",
-            validatePouchOpenHeight
-        );
-        pouch_open_height_Input.addEventListener(
-            "blur",
-            validatePouchOpenHeight
-        );
-    }
+    if (prpcPurchase) prpcPurchase.addEventListener("input", validatePrpcPurchase);
+    if (prpcSell) prpcSell.addEventListener("input", validatePrpcSell);
 
-    if (cylinder_made_in_Input) {
-        cylinder_made_in_Input.addEventListener("input", validateCylinderMade);
-        cylinder_made_in_Input.addEventListener("blur", validateCylinderMade);
-    }
+    if (cylinderDiameter) cylinderDiameter.addEventListener("input", validateCylinderDiameter);
+    if (cylinderHeight) cylinderHeight.addEventListener("input", validateCylinderHeight);
+    if (cylinderMadeIn) cylinderMadeIn.addEventListener("change", validateCylinderMadeIn);
+    if (cylinderMadeInOther) cylinderMadeInOther.addEventListener("input", validateCylinderMadeIn);
+    if (cylinderDate) cylinderDate.addEventListener("change", validateCylinderDate);
+    if (cylinderBillNo) cylinderBillNo.addEventListener("input", validateCylinderBillNo);
 
-    if (pouch_combination1_Input) {
-        pouch_combination1_Input.addEventListener(
-            "input",
-            validatePouchCombination1
-        );
-        pouch_combination1_Input.addEventListener(
-            "blur",
-            validatePouchCombination1
-        );
-    }
+    if (pouchDiameter) pouchDiameter.addEventListener("input", validatePouchDiameter);
+    if (pouchHeight) pouchHeight.addEventListener("input", validatePouchHeight);
+    if (pouchOpenDiameter) pouchOpenDiameter.addEventListener("input", validatePouchOpenDiameter);
+    if (pouchOpenHeight) pouchOpenHeight.addEventListener("input", validatePouchOpenHeight);
+    if (pouchCombination1) pouchCombination1.addEventListener("input", validatePouchCombination1);
+    if (pouchCombination2) pouchCombination2.addEventListener("input", validatePouchCombination2);
 
-    const newCompanyInput = document.getElementById("new_company");
-    const newJobNameInput = document.getElementById("new_job_name");
-    const newCylinderCompanyInput = document.getElementById(
-        "cylinder_made_in_company_name"
-    );
+    if (jobStatus) jobStatus.addEventListener("change", validateJobStatus);
 
-    if (newCompanyInput) {
-        newCompanyInput.addEventListener("input", validateCompany);
-        newCompanyInput.addEventListener("blur", validateCompany);
-    }
+    // ---------- FORM SUBMIT ----------
 
-    if (newJobNameInput) {
-        newJobNameInput.addEventListener("input", validateJobName);
-        newJobNameInput.addEventListener("blur", validateJobName);
-    }
+    proformaForm.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-    if (newCylinderCompanyInput) {
-        newCylinderCompanyInput.addEventListener("input", validateCylinderMade);
-        newCylinderCompanyInput.addEventListener("blur", validateCylinderMade);
-    }
-
-    if (myForm) {
-        const loaderOverlay = document.getElementById("loader-overlay");
-
-        myForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-
-            if (validateForm()) {
-                if (loaderOverlay) {
-                    loaderOverlay.style.display = "flex";
-                }
-
-                requestAnimationFrame(() => {
-                    myForm.submit();
-                });
-            } else {
-                const firstError = document.querySelector(
-                    '[style*="display: block"]'
-                );
-                if (firstError) {
-                    firstError.scrollIntoView({ behavior: "smooth" });
-                }
+        if (validateForm()) {
+            if (loaderOverlay) {
+                loaderOverlay.style.display = "flex";
             }
-        });
-    }
+
+            requestAnimationFrame(() => {
+                proformaForm.submit();
+            });
+        } else {
+            const firstError = document.querySelector(".invalid-feedback[style*='display: block']");
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+        }
+    });
 });

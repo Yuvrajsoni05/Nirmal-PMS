@@ -106,8 +106,11 @@
                                     <label for="job_name" class="form-label fw-semibold">Job Name</label>
                                     <select name="job_name[]" id="job_name" class="form-control job-name" >
                                         <option value="" selected disabled>Select Job Name</option>
-                                        <option value="Printing">Printing</option>
-                                        <option value="Packaging">Packaging</option>
+                                        {% for i in job_names %}
+                                        <option >
+                                            {{i.job_name}}
+                                        
+                                        </option>{% endfor %}
                                         <option value="others">Other</option>
                                     </select>
                                     <input type="text" name="new_job" class="form-control mt-2 new-job" style="display:none;" placeholder="Enter new Job">
@@ -751,11 +754,12 @@ $(document).ready(function() {
                     // Only update job dropdown when company changes
                     var jobSelect = $('.job-section:first').find('.job-name');
                     jobSelect.empty().append('<option value="" selected>Select Job</option>');
-                    if (response.job && Array.isArray(response.job)) {
-                        response.job.forEach(function(i) {
-                            jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
-                        });
-                    }
+                   
+                    response.job.forEach(function(i) {
+                        jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
+                    });
+                    
+                    console.log(response.job)
                     jobSelect.append('<option value="others">Other</option>');
                 }
 

@@ -1,514 +1,990 @@
-{% extends "Base/base.html" %}
-{% comment %} {% block title %}Add New Data{% endblock %} {% endcomment %}
-{% load humanize %}
-{% load static %}
-{% block style %}
-{% endblock style %}
-{% block main_block %}
-    <div class="page-inner">
-        <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
-            <div>
-                <h3 class="fw-bold mb-3">Add New Job</h3>
-            </div>
+{% extends "Base/base.html" %} {% load humanize %} {% load static %} {% block style %} {% endblock style %} {% block main_block %}
+<div class="page-inner">
+    <div
+        class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+    >
+        <div>
+            <h3 class="fw-bold mb-3">Add New Job</h3>
         </div>
-        <div class="container-fluid py-2 px-1">
-            <div class="row justify-content-center">
-                <div class="col-12 col-xl-12 col-xxl-12">
-                    <div class="card shadow-sm border-0 rounded-3">
-                        <div class="card-header bg-primary text-white py-3 rounded-top">
-                            <h4 class="mb-0 fw-semibold">
-                                <i class="bi bi-plus-circle me-2"></i>Add New Job
-                            </h4>
-                        </div>
-                        <div class="card-body p-4">
-                            <form action="{% url 'add_data' %}"
-                                  id="job_detail_form"
-                                  method="post"
-                                  autocomplete="off"
-                                  enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <!-- Basic Information Section -->
-                                <div class="mb-4">
-                                    <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Basic Information</h6>
-                                    <div class="row g-3">
-                                        <div class="col-12 col-sm-6 col-lg-4">
-                                            <label for="job_date" class="form-label fw-semibold text-dark">
-                                                Date <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="date"
-                                                   class="form-control  border-1"
-                                                   value="{% now "Y-m-d" %}"
-                                                   id="job_date"
-                                                   name="job_date"
-                                                   pattern="\d{2}-\d{2}-\d{4}">
-                                            <div class="invalid-feedback" id="job_date_error">Please provide a Date.</div>
+    </div>
+
+    <div class="container-fluid py-2 px-1">
+        <div class="row justify-content-center">
+            <div class="col-12 col-xl-12 col-xxl-12">
+                <div class="card shadow-sm border-0 rounded-3">
+                    <div
+                        class="card-header bg-primary text-white py-3 rounded-top"
+                    >
+                        <h4 class="mb-0 fw-semibold">
+                            <i class="bi bi-plus-circle me-2"></i>Add New Job
+                        </h4>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <form
+                            action="{% url 'add_data' %}"
+                            id="job_detail_form"
+                            method="post"
+                            autocomplete="off"
+                            enctype="multipart/form-data"
+                        >
+                            {% csrf_token %}
+
+                            <!-- Basic Information Section -->
+                            <div class="mb-4">
+                                <h6
+                                    class="text-primary fw-semibold mb-3 border-bottom pb-2"
+                                >
+                                    Basic Information
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-12 col-sm-6 col-lg-4">
+                                        <label
+                                            for="job_date"
+                                            class="form-label fw-semibold text-dark"
+                                        >
+                                            Date
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="date" class="form-control
+                                        border-1" value="{% now "Y-m-d" %}"
+                                        id="job_date" name="job_date"
+                                        pattern="\d{2}-\d{2}-\d{4}">
+                                        <div
+                                            class="invalid-feedback"
+                                            id="job_date_error"
+                                        >
+                                            Please provide a Date.
                                         </div>
-                                        <div class="col-12 col-sm-6 col-lg-4">
-                                            <label for="bill_no" class="form-label fw-semibold text-dark">
-                                                Bill No. <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="text"
-                                                   class="form-control border-1"
-                                                   id="bill_no"
-                                                   name="bill_no"
-                                                   placeholder="Enter Bill Number">
-                                            <div class="invalid-feedback" id="bill_no_error">Please provide  Bill No.</div>
+                                    </div>
+
+                                    <div class="col-12 col-sm-6 col-lg-4">
+                                        <label
+                                            for="bill_no"
+                                            class="form-label fw-semibold text-dark"
+                                        >
+                                            Bill No.
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            class="form-control border-1"
+                                            id="bill_no"
+                                            name="bill_no"
+                                            placeholder="Enter Bill Number"
+                                        />
+                                        <div
+                                            class="invalid-feedback"
+                                            id="bill_no_error"
+                                            style="display: none"
+                                        >
+                                            Please provide Bill No.
                                         </div>
-                                        <div class="col-12 col-lg-4">
-                                            <label for="company_name" class="form-label fw-semibold text-dark">
-                                                Company Name <span class="text-danger">*</span>
-                                            </label>
-                                            <select id="company_name"
-                                                    name="company_name"
-                                                    class="form-control form-select border-1">
-                                                <option value="">Select Company</option>
-                                                {% for company in company_name %}
-                                                    <option value="{{ company.company_name }}">{{ company.company_name }}</option>
-                                                {% endfor %}
-                                                <option value="other">Other</option>
-                                                <input type="text"
-                                                       name="new_company"
-                                                       class="form-control  border-1"
-                                                       id="new_company"
-                                                       style="display: none"
-                                                       placeholder="Enter New Company Name">
-                                            </select>
-                                            <div class="invalid-feedback" id="company_name_error">Please provide Company Name.</div>
+                                    </div>
+
+                                    <div class="col-12 col-lg-4">
+                                        <label
+                                            for="company_name"
+                                            class="form-label fw-semibold text-dark"
+                                        >
+                                            Company Name
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select
+                                            id="company_name"
+                                            name="company_name"
+                                            class="form-control form-select border-1"
+                                        >
+                                            <option value="">
+                                                Select Company
+                                            </option>
+                                            {% for company in company_name %}
+                                            <option
+                                                value="{{ company.company_name }}"
+                                            >
+                                                {{ company.company_name }}
+                                            </option>
+                                            {% endfor %}
+                                            <option value="other">Other</option>
+                                        </select>
+
+                                        <!-- New company input (outside select) -->
+                                        <input
+                                            type="text"
+                                            name="new_company"
+                                            class="form-control border-1 mt-2"
+                                            id="new_company"
+                                            style="display: none"
+                                            placeholder="Enter New Company Name"
+                                        />
+
+                                        <div
+                                            class="invalid-feedback"
+                                            id="company_name_error"
+                                        >
+                                            Please provide Company Name.
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Job Details Section -->
-                                <div id="job-details-section">
-                                <!-- ONE job section template -->
+                            </div>
+
+                            <!-- Job Details Section Wrapper -->
+                            <div id="job-details-section">
                                 <div class="job-section">
-                                    <!-- everything you pasted goes INSIDE here -->
-                                    <div class="mb-4 ">
-                                        <h5 class="text-primary fw-semibold mb-3 border-bottom pb-2">Job Details</h5>
+                                    <!-- Job Details Section -->
+                                    <div class="mb-4">
+                                        <h5
+                                            class="text-primary fw-semibold mb-3 border-bottom pb-2"
+                                        >
+                                            Job Details
+                                        </h5>
                                         <div class="row g-3">
-                                            <div class="col-12 col-sm-6 col-lg-4">
-                                                <label for="job_name" class="form-label fw-semibold text-dark">
-                                                    Job Name <span class="text-danger">*</span>
+                                            <div
+                                                class="col-12 col-sm-6 col-lg-4"
+                                            >
+                                                <label
+                                                    for="job_name"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Job Name
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
-                                                <select id="job_name"
-                                                        name="job_name[]"
-                                                        class="form-control form-select border-1">
-                                                    <option value="">Select Job Name</option>
-                                                    {% for job in cdr_job_name %}<option value="{{ job.job_name }}">{{ job.job_name }}</option>{% endfor %}
-                                                    <option value="others">Other</option>
+                                                <select
+                                                    name="job_name[]"
+                                                    class="form-control form-select"
+                                                    id="job_name"
+                                                >
+                                                    <option value="">
+                                                        Select Job Name
+                                                    </option>
+                                                    {% for job in cdr_job_name %}
+                                                    <option
+                                                        value="{{ job.job_name }}"
+                                                    >
+                                                        {{ job.job_name }}
+                                                    </option>
+                                                    {% endfor %}
+                                                    <option value="others">
+                                                        Other
+                                                    </option>
                                                 </select>
-                                                <!-- Move this input outside the select -->
-                                                <input type="text"
+
+                                                <input
+                                                    type="text"
                                                     name="new_job_name[]"
-                                                    class="form-control border-1 mt-2"
-                                                    id="new_job_name"
+                                                    class="form-control mt-2"
                                                     style="display: none"
-                                                    placeholder="Enter new job name">
-                                                <div class="invalid-feedback" id="job_name_error">Please provide Job Name</div>
+                                                    placeholder="Enter new job name"
+                                                />
+                                                <input
+                                                    type="hidden"
+                                                    name="job_name_real[]"
+                                                />
+                                                <div
+                                                    class="invalid-feedback"
+                                                    id="job_name_error"
+                                                >
+                                                    Please provide Job Name
+                                                </div>
                                             </div>
-                                            <div class="col-12 col-sm-6 col-lg-4">
-                                                <label for="job_type" class="form-label fw-semibold text-dark">
-                                                    Job Type <span class="text-danger">*</span>
+
+                                            <div
+                                                class="col-12 col-sm-6 col-lg-4"
+                                            >
+                                                <label
+                                                    for="job_type"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Job Type
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
-                                                <select id="job_type"
-                                                        name="job_type[]"
-                                                        class="form-control form-select border-1">
-                                                    <option value="">Select Job Type</option>
-                                                    <option value="New Job">New Job</option>
-                                                    <option value="Damage Repair">Damage Repair</option>
-                                                    <option value="Job Work">Job Work</option>
+                                                <select
+                                                    id="job_type"
+                                                    name="job_type[]"
+                                                    class="form-control form-select border-1"
+                                                >
+                                                    <option value="">
+                                                        Select Job Type
+                                                    </option>
+                                                    <option value="New Job">
+                                                        New Job
+                                                    </option>
+                                                    <option
+                                                        value="Damage Repair"
+                                                    >
+                                                        Damage Repair
+                                                    </option>
+                                                    <option value="Job Work">
+                                                        Job Work
+                                                    </option>
                                                 </select>
-                                                <div class="invalid-feedback" id="job_type_error">Please provide Job Type</div>
+                                                <div
+                                                    class="invalid-feedback"
+                                                    id="job_type_error"
+                                                >
+                                                    Please provide Job Type
+                                                </div>
                                             </div>
+
                                             <div class="col-12 col-lg-4">
-                                                <label for="noc" class="form-label fw-semibold text-dark">
-                                                    No. of Colors <span class="text-danger">*</span>
+                                                <label
+                                                    for="noc"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    No. of Colors
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
-                                                <input type="textarea"
-                                                    class="form-control  border-1"
+                                                <input
+                                                    type="text"
+                                                    class="form-control border-1"
                                                     id="noc"
                                                     name="noc[]"
-                                                    placeholder="Enter Number of Colors">
-                                                <div class="invalid-feedback" id="noc_error">Please provide NOC</div>
+                                                    placeholder="Enter Number of Colors"
+                                                />
+                                                <div
+                                                    class="invalid-feedback"
+                                                    id="noc_error"
+                                                >
+                                                    Please provide NOC
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
                                     <!-- Cylinder Information Section -->
                                     <div class="mb-4">
-                                        <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Cylinder Information</h6>
+                                        <h6
+                                            class="text-primary fw-semibold mb-3 border-bottom pb-2"
+                                        >
+                                            Cylinder Information
+                                        </h6>
                                         <div class="row g-3">
-                                            <div class="col-12 col-sm-6 col-lg-4">
-                                                <label for="prpc" class="form-label fw-semibold text-dark">
-                                                    Per Rate Per Cylinder (Purchase) <span class="text-danger">*</span>
+                                            <div
+                                                class="col-12 col-sm-6 col-lg-4"
+                                            >
+                                                <label
+                                                    for="prpc_purchase"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Per Rate Per Cylinder
+                                                    (Purchase)
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
                                                 <div class="input-group">
-                                                    <span class="input-group-text bg-light border-1">₹</span>
-                                                    <input type="text"
+                                                    <span
+                                                        class="input-group-text bg-light border-1"
+                                                        >₹</span
+                                                    >
+                                                    <input
+                                                        type="text"
                                                         class="form-control border-1"
                                                         id="prpc_purchase"
                                                         name="prpc_purchase[]"
                                                         onkeyup="formatNumberWithCommas(this)"
                                                         maxlength="10"
-                                                        placeholder="00">
-                                                    <div class="invalid-feedback" id="prpc_purchase_error">Please provide PRPC Purchase</div>
+                                                        placeholder="00"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        id="prpc_purchase_error"
+                                                    >
+                                                        Please provide PRPC
+                                                        Purchase
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-sm-6 col-lg-4">
-                                                <label for="prpc_sell" class="form-label fw-semibold text-dark">
-                                                    Per Rate Per Cylinder (Sales) <span class="text-danger">*</span>
+
+                                            <div
+                                                class="col-12 col-sm-6 col-lg-4"
+                                            >
+                                                <label
+                                                    for="prpc_sell"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Per Rate Per Cylinder
+                                                    (Sales)
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
                                                 <div class="input-group">
-                                                    <span class="input-group-text bg-light border-1">₹</span>
-                                                    <input type="text"
+                                                    <span
+                                                        class="input-group-text bg-light border-1"
+                                                        >₹</span
+                                                    >
+                                                    <input
+                                                        type="text"
                                                         class="form-control border-1"
                                                         id="prpc_sell"
                                                         name="prpc_sell[]"
                                                         onkeyup="formatNumberWithCommas(this)"
                                                         maxlength="10"
-                                                        placeholder="00">
-                                                    <div class="invalid-feedback" id="prpc_sell_error">Please provide PRPC Sell</div>
+                                                        placeholder="00"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        id="prpc_sell_error"
+                                                    >
+                                                        Please provide PRPC Sell
+                                                    </div>
                                                 </div>
                                             </div>
+
                                             <div class="col-12 col-lg-4">
-                                                <label class="form-label fw-semibold text-dark">
-                                                    Cylinder Size <span class="text-danger">*</span>
+                                                <label
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Cylinder Size
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
                                                 <div class="input-group">
-                                                    <input type="number"
-                                                        class="form-control border-1"
-                                                        name="cylinder_diameter[]"
-                                                        placeholder="Diameter"
-                                                        step="0.01"
-                                                        min="0">
-                                                    <div class="invalid-feedback" name="cylinder_diameter_error">Please provide Cylinder Diameter</div>
-                                                    <span class="input-group-text bg-light border-1 fw-bold">×</span>
-                                                    <input type="number"
+                                                    
+
+                                                    <input
+                                                        type="number"
                                                         class="form-control border-1"
                                                         name="cylinder_height[]"
                                                         placeholder="Height"
                                                         step="0.01"
-                                                        min="0">
-                                                    <div class="invalid-feedback" name="cylinder_height_error">Please provide Cylinder Height</div>
+                                                        min="0"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        name="cylinder_height_error"
+                                                    >
+                                                        Please provide Cylinder
+                                                        Height
+                                                    </div>
+                                                    <span
+                                                        class="input-group-text bg-light border-1 fw-bold"
+                                                        >×</span
+                                                    >
+                                                    <input
+                                                        type="number"
+                                                        class="form-control border-1"
+                                                        name="cylinder_diameter[]"
+                                                        placeholder="Diameter"
+                                                        step="0.01"
+                                                        min="0"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        name="cylinder_diameter_error"
+                                                    >
+                                                        Please provide Cylinder
+                                                        Diameter
+                                                    </div>
+
+                                                    
                                                 </div>
-                                                <input type="hidden" name="cylinder_size[]">
+                                                <input
+                                                    type="hidden"
+                                                    name="cylinder_size[]"
+                                                />
                                             </div>
                                         </div>
+
                                         <div class="row g-3 mt-2">
                                             <div class="col-12 col-md-4">
-                                                <label for="cylinder_made_in" class="form-label fw-semibold text-dark">
-                                                    Cylinder Made In <span class="text-danger">*</span>
+                                                <label
+                                                    for="cylinder_made_in"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Cylinder Made In
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
-                                                <select name="cylinder_select[]"
-                                                        id="cylinder_made_in"
-                                                        class="form-control form-select border-1">
-                                                    <option value="">Select Company</option>
-                                                    {% for i in  cylinder_company_names %}
-                                                        <option value="{{ i.cylinder_made_in }}">{{ i.cylinder_made_in }}</option>
+                                                <select
+                                                    name="cylinder_select[]"
+                                                    id="cylinder_made_in"
+                                                    class="form-control form-select border-1"
+                                                >
+                                                    <option value="">
+                                                        Select Company
+                                                    </option>
+                                                    {% for i in cylinder_company_names %}
+                                                    <option
+                                                        value="{{ i.cylinder_made_in }}"
+                                                    >
+                                                        {{ i.cylinder_made_in }}
+                                                    </option>
                                                     {% endfor %}
-                                                    <option value="others">Other</option>
+                                                    <option value="others">
+                                                        Other
+                                                    </option>
                                                 </select>
-                                                <input type="text"
-                                                    class="form-control border-1"
+
+                                                <input
+                                                    type="text"
+                                                    class="form-control border-1 mt-2"
                                                     style="display: none"
                                                     id="cylinder_made_in_company_name"
                                                     name="cylinder_made_in_company_name"
-                                                    placeholder="Cylinder Made In">
-                                                <div class="invalid-feedback" id="cylinder_made_in_error">Please provide Cylinder Made In</div>
+                                                    placeholder="Cylinder Made In"
+                                                />
+
+                                                <div
+                                                    class="invalid-feedback"
+                                                    id="cylinder_made_in_error"
+                                                >
+                                                    Please provide Cylinder Made
+                                                    In
+                                                </div>
                                             </div>
-                                            <div class="col-12 col-sm-6 col-lg-4">
-                                                <label for="cylinder_date" class="form-label fw-semibold text-dark">
-                                                    Cylinder Date <span class="text-danger">*</span>
+
+                                            <div
+                                                class="col-12 col-sm-6 col-lg-4"
+                                            >
+                                                <label
+                                                    for="cylinder_dates"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Cylinder Date
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
                                                 <input type="date"
-                                                    class="form-control  border-1"
-                                                    id="cylinder_dates"
-                                                    value="{% now "Y-m-d" %}"
-                                                    name="cylinder_date[]"
-                                                    pattern="\d{2}-\d{2}-\d{4}">
-                                                <div class="invalid-feedback" id="cylinder_date_error">Please provide a Cylinder Date.</div>
+                                                class="form-control border-1"
+                                                id="cylinder_dates" value="{%
+                                                now "Y-m-d" %}"
+                                                name="cylinder_date[]"
+                                                pattern="\d{2}-\d{2}-\d{4}">
+                                                <div
+                                                    class="invalid-feedback"
+                                                    id="cylinder_date_error"
+                                                >
+                                                    Please provide a Cylinder
+                                                    Date.
+                                                </div>
                                             </div>
-                                            <div class="col-12 col-sm-6 col-lg-4">
-                                                <label for="bill_no" class="form-label fw-semibold text-dark">
-                                                    Cylinder Bill No. <span class="text-danger">*</span>
+
+                                            <div
+                                                class="col-12 col-sm-6 col-lg-4"
+                                            >
+                                                <label
+                                                    for="cylinder_bill_no"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Cylinder Bill No.
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
-                                                <input type="text"
+                                                <input
+                                                    type="text"
                                                     class="form-control border-1"
                                                     id="cylinder_bill_no"
                                                     name="cylinder_bill_no[]"
-                                                    placeholder="Enter Cylinder Bill Number">
-                                                <div class="invalid-feedback" id="cylinder_bill_no_error">Please provide Cylinder Bill No.</div>
+                                                    placeholder="Enter Cylinder Bill Number"
+                                                />
+                                                <div
+                                                    class="invalid-feedback"
+                                                    id="cylinder_bill_no_error"
+                                                >
+                                                    Please provide Cylinder Bill
+                                                    No.
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+
                                     <!-- Pouch Information Section -->
                                     <div class="mb-4">
-                                        <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Pouch Information</h6>
+                                        <h6
+                                            class="text-primary fw-semibold mb-3 border-bottom pb-2"
+                                        >
+                                            Pouch Information
+                                        </h6>
                                         <div class="row g-3">
                                             <div class="col-12 col-lg-3">
-                                                <label class="form-label fw-semibold text-dark">
-                                                    Pouch Size <span class="text-danger">*</span>
+                                                <label
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Pouch Size
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
-                                                <div class="input-group ">
-                                                    <input type="number"
+                                                <div class="input-group">
+                                                   
+
+                                                    <input
+                                                        type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_height"
+                                                        name="pouch_height[]"
+                                                        placeholder="Height"
+                                                        step="0.01"
+                                                        min="0"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        id="pouch_height_error"
+                                                    >
+                                                        Please provide Pouch
+                                                        Height
+                                                    </div> <span
+                                                        class="input-group-text bg-light border-1 fw-bold"
+                                                        >×</span
+                                                    >
+                                                    <input
+                                                        type="number"
                                                         class="form-control border-1"
                                                         id="pouch_diameter"
                                                         name="pouch_diameter[]"
                                                         placeholder="Diameter"
                                                         step="0.01"
-                                                        min="0">
-                                                    <div class="invalid-feedback" id="pouch_diameter_error">Please provide Pouch Diameter</div>
-                                                    <span class="input-group-text bg-light border-1 fw-bold">×</span>
-                                                    <input type="number"
-                                                        class="form-control border-1"
-                                                        name="pouch_height[]"
-                                                        id="pouch_height"
-                                                        placeholder="Height"
-                                                        step="0.01"
-                                                        min="0">
-                                                    <div class="invalid-feedback" id="pouch_height_error">Please provide Pouch Height</div>
+                                                        min="0"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        id="pouch_diameter_error"
+                                                    >
+                                                        Please provide Pouch
+                                                        Diameter
+                                                    </div>
+
+                                                    
                                                 </div>
-                                                <input type="hidden" id="pouch_size" name="pouch_size[]">
+                                                <input
+                                                    type="hidden"
+                                                    id="pouch_size"
+                                                    name="pouch_size[]"
+                                                />
                                             </div>
+
                                             <div class="col-12 col-lg-3">
-                                                <label class="form-label fw-semibold text-dark">
-                                                    Pouch Open Size <span class="text-danger">*</span>
+                                                <label
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Pouch Open Size
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
-                                                <div class="input-group ">
-                                                    <input type="number"
-                                                        class="form-control border-1"
-                                                        id="pouch_open_diameter"
-                                                        name="pouch_open_diameter[]"
-                                                        placeholder="Diameter"
-                                                        step="0.01"
-                                                        min="0">
-                                                    <div class="invalid-feedback" id="pouch_open_diameter_error">Please provide Pouch Open Diameter</div>
-                                                    <span class="input-group-text bg-light border-1 fw-bold">×</span>
-                                                    <input type="number"
+                                                <div class="input-group">
+                                                    
+
+                                                    <input
+                                                        type="number"
                                                         class="form-control border-1"
                                                         id="pouch_open_height"
                                                         name="pouch_open_height[]"
                                                         placeholder="Height"
                                                         step="0.01"
-                                                        min="0">
-                                                    <div class="invalid-feedback" id="pouch_open_height_error">Please provide Pouch Open Height</div>
+                                                        min="0"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        id="pouch_open_height_error"
+                                                    >
+                                                        Please provide Pouch
+                                                        Open Height
+                                                    </div>
+                                                    <span
+                                                        class="input-group-text bg-light border-1 fw-bold"
+                                                        >×</span
+                                                    >
+                                                    <input
+                                                        type="number"
+                                                        class="form-control border-1"
+                                                        id="pouch_open_diameter"
+                                                        name="pouch_open_diameter[]"
+                                                        placeholder="Diameter"
+                                                        step="0.01"
+                                                        min="0"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        id="pouch_open_diameter_error"
+                                                    >
+                                                        Please provide Pouch
+                                                        Open Diameter
+                                                    </div>
+
+                                                    
                                                 </div>
-                                                <input type="hidden" id="pouch_open_size" name="pouch_open_size[]">
+                                                <input
+                                                    type="hidden"
+                                                    id="pouch_open_size"
+                                                    name="pouch_open_size[]"
+                                                />
                                             </div>
+
                                             <div class="col-12 col-lg-6">
-                                                <label for="pouch_combination" class="form-label fw-semibold text-dark">
-                                                    Pouch Combination (thickness) <span class="text-danger">*</span>
+                                                <label
+                                                    for="pouch_combination1"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Pouch Combination
+                                                    (thickness)
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
-                                                <div class="input-group ">
-                                                    <input type="number"
+                                                <div class="input-group">
+                                                    <input
+                                                        type="number"
                                                         class="form-control border-1"
                                                         id="pouch_combination1"
                                                         name="pouch_combination1[]"
                                                         placeholder="Combination 1"
                                                         step="0.01"
-                                                        min="0">
-                                                    <div class="invalid-feedback" id="pouch_combination1_error">Please provide Pouch Combination</div>
-                                                    <span class="input-group-text bg-light border-1 fw-bold">+</span>
-                                                    <input type="number"
+                                                        min="0"
+                                                        value="0"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        id="pouch_combination1_error"
+                                                    >
+                                                        Please provide Pouch
+                                                        Combination
+                                                    </div>
+
+                                                    <span
+                                                        class="input-group-text bg-light border-1 fw-bold"
+                                                        >+</span
+                                                    >
+
+                                                    <input
+                                                        type="number"
                                                         class="form-control border-1"
                                                         id="pouch_combination2"
                                                         name="pouch_combination2[]"
                                                         placeholder="Combination 2"
                                                         step="0.01"
-                                                        min="0">
-                                                    <div class="invalid-feedback" id="pouch_combination2_error">Please provide Pouch Combination</div>
-                                                    <span class="input-group-text bg-light border-1 fw-bold">+</span>
-                                                    <input type="number"
+                                                        min="0"
+                                                        value="0"
+                                                    />
+                                                    <div
+                                                        class="invalid-feedback"
+                                                        id="pouch_combination2_error"
+                                                    >
+                                                        Please provide Pouch
+                                                        Combination
+                                                    </div>
+
+                                                    <span
+                                                        class="input-group-text bg-light border-1 fw-bold"
+                                                        >+</span
+                                                    >
+
+                                                    <input
+                                                        type="number"
                                                         class="form-control border-1"
                                                         id="pouch_combination3"
                                                         name="pouch_combination3[]"
                                                         placeholder="Combination 3"
                                                         step="0.01"
-                                                        min="0">
-                                                    <span class="input-group-text bg-light border-1 fw-bold">+</span>
-                                                    <input type="number"
+                                                        min="0"
+                                                        value="0"
+                                                    />
+
+                                                    <span
+                                                        class="input-group-text bg-light border-1 fw-bold"
+                                                        >+</span
+                                                    >
+
+                                                    <input
+                                                        type="number"
                                                         class="form-control border-1"
                                                         id="pouch_combination4"
                                                         name="pouch_combination4[]"
                                                         placeholder="Combination 4"
                                                         step="0.01"
-                                                        min="0">
+                                                        min="0"
+                                                        value="0"
+                                                    />
                                                 </div>
-                                                    <input type="hidden"
-                                                        class="form-control border-1"
-                                                        id="pouch_combination"
-                                                        name="pouch_combination[]"
-                                                        
-                                                    >
-                                                        
+
+                                                <input
+                                                    type="hidden"
+                                                    class="form-control border-1"
+                                                    id="pouch_combination"
+                                                    name="pouch_combination[]"
+                                                />
+                                            </div>
+                                            <br>
+                                            <!-- File Upload Section -->
+                                            <div class="mb-4">
+                                                <h6
+                                                    class="text-primary fw-semibold mb-3 border-bottom pb-2"
+                                                >
+                                                    File Upload
+                                                </h6>
+                                                <div class="row g-3">
+                                                    <div class="col-12">
+                                                        <label
+                                                            for="files"
+                                                            class="form-label fw-semibold text-dark"
+                                                            >Upload Image</label
+                                                        >
+                                                        <div
+                                                            class="border border-2 border-dashed rounded-3 p-4 text-center bg-light"
+                                                        >
+                                                            <input
+                                                                class="form-control border-0 bg-transparent"
+                                                                type="file"
+                                                                id="files"
+                                                                name="files[]"
+                                                                multiple
+                                                                accept=".jpeg,.png,.jpg,.ai"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                    <div class="form-check form-check-inline">
-                                        <button type="button" id="add-job" class="btn btn-primary d-flex align-items-center">
-                                            <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add New Job
-                                        </button>   
-                                    </div>
-                                    <br>
-                                    <!-- Job Status Section -->
-                                    <div class="mb-4">
-                                        <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Job Status</h6>
-                                        <div class="row g-3">
-                                            <div class="col-4">
-                                                <label for="correction" class="form-label fw-semibold text-dark">
-                                                    Job Status <span class="text-danger">*</span>
-                                                </label>
-                                                <select id="job_status"
-                                                        name="job_status"
-                                                        class="form-control form-select border-1"
-                                                        required>
-                                                    <option value="">Select Job Status</option>
-                                                        {% for value, label in job_status %}
-                                                            <option value="{{ value }}">{{ label }}</option>
-                                                        {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Additional Information Section -->
-                                    <div class="mb-4">
-                                        <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">Additional Information</h6>
-                                        <div class="row g-3">
-                                            <div class="col-12">
-                                                <label for="correction" class="form-label fw-semibold text-dark">Correction</label>
-                                                <textarea class="form-control  border-1"
-                                                          id="correction"
-                                                          name="correction"
-                                                          rows="4"
-                                                          placeholder="Enter correction details or special instructions..."></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- File Upload Section -->
-                                    <div class="mb-4">
-                                        <h6 class="text-primary fw-semibold mb-3 border-bottom pb-2">File Upload</h6>
-                                        <div class="row g-3">
-                                            <div class="col-12">
-                                                <label for="image" class="form-label fw-semibold text-dark">Upload Image</label>
-                                                <div class="border border-2 border-dashed rounded-3 p-4 text-center bg-light">
-                                                    <input class="form-control  border-0 bg-transparent"
-                                                           type="file"
-                                                           id="files"
-                                                           name="files"
-                                                           multiple
-                                                           accept=".jpeg,.png,.jpg,.ai">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- Action Buttons -->
-                                    <div class="d-flex flex-column flex-sm-row gap-3 justify-content-end pt-3 border-top">
-                                        <a href="{% url "job_entry" %}">
-                                            <button type="button"
-                                                    class="btn btn-outline-secondary btn-lg px-4 order-2 order-sm-1">
-                                                <i class="bi bi-arrow-clockwise me-2"></i>Reset Form
-                                            </button>
-                                        </a>
-                                        <button type="submit"
-                                                id="myButton"
-                                                class="btn btn-primary btn-lg px-4 order-1 order-sm-2">
-                                            Submit Job  <span class="spinner" style="display: none;"></span>
-                                        </button>
-                                    </div>
-                                </form>
+
+                                <!-- Add Job button (for dynamic extra job sections) -->
+                                <div class="form-check form-check-inline">
+                                    <button
+                                        type="button"
+                                        id="add-job"
+                                        class="btn btn-primary d-flex align-items-center"
+                                    >
+                                        <i
+                                            class="fa fa-plus"
+                                            aria-hidden="true"
+                                        ></i
+                                        >&nbsp;&nbsp;Add New Job
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+
+                            <br />
+
+                            <!-- Job Status Section -->
+                            <div class="mb-4">
+                                <h6
+                                    class="text-primary fw-semibold mb-3 border-bottom pb-2"
+                                >
+                                    Job Status
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-4">
+                                        <label
+                                            for="job_status"
+                                            class="form-label fw-semibold text-dark"
+                                        >
+                                            Job Status
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <select
+                                            id="job_status"
+                                            name="job_status"
+                                            class="form-control form-select border-1"
+                                            required
+                                        >
+                                            <option value="">
+                                                Select Job Status
+                                            </option>
+                                            {% for value, label in job_status %}
+                                            <option value="{{ value }}">
+                                                {{ label }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Additional Information Section -->
+                            <div class="mb-4">
+                                <h6
+                                    class="text-primary fw-semibold mb-3 border-bottom pb-2"
+                                >
+                                    Additional Information
+                                </h6>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label
+                                            for="correction"
+                                            class="form-label fw-semibold text-dark"
+                                        >
+                                            Correction
+                                        </label>
+                                        <textarea
+                                            class="form-control border-1"
+                                            id="correction"
+                                            name="correction"
+                                            rows="4"
+                                            placeholder="Enter correction details or special instructions..."
+                                        ></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div
+                                class="d-flex flex-column flex-sm-row gap-3 justify-content-end pt-3 border-top"
+                            >
+                                <a href="{% url 'job_entry' %}">
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-secondary btn-lg px-4 order-2 order-sm-1"
+                                    >
+                                        <i
+                                            class="bi bi-arrow-clockwise me-2"
+                                        ></i
+                                        >Reset Form
+                                    </button>
+                                </a>
+
+                                <button
+                                    type="submit"
+                                    id="myButton"
+                                    class="btn btn-primary btn-lg px-4 order-1 order-sm-2"
+                                >
+                                    Submit Job
+                                    <span
+                                        class="spinner"
+                                        style="display: none"
+                                    ></span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    {% endblock main_block %}
-    {% block script %}
-        <script>
-            
-            
+    </div>
+</div>
+
+{% endblock main_block %} {% block script %}
+
+<script>
     $("#company_name").change(function () {
-    let companyName = $(this).val();
-    if (companyName === "other") {
-        $("#new_company").show();
-    } else {
-        $("#new_company").hide();
-    }
+        let companyName = $(this).val();
+        if (companyName === "other") {
+            $("#new_company").show();
+        } else {
+            $("#new_company").hide();
+        }
 
-    // Existing AJAX call for company name
-    if (companyName) {
-        $.ajax({
-            url: '{% url "company_name_suggestion_job" %}',
-            data: { company_name: companyName },
-            success: function (data) {
-                $("#job_name")
-                    .empty()
-                    .append('<option value="">Select Job</option>');
-                $("#job_name").append('<option value="others">Other</option>');
+        if (companyName) {
+            $.ajax({
+                url: '{% url "company_name_suggestion_job" %}',
+                data: { company_name: companyName },
+                success: function (data) {
+                    $("#job_name")
+                        .empty()
+                        .append('<option value="">Select Job</option>');
 
-                $.each(data.jobs, function (index, job) {
+                    $.each(data.jobs, function (index, job) {
+                        $("#job_name").append(
+                            '<option value="' +
+                                job.job_name +
+                                '">' +
+                                job.job_name +
+                                "</option>"
+                        );
+                    });
                     $("#job_name").append(
-                        '<option value="' + job.job_name + '">' +
-                            job.job_name +
-                            "</option>"
+                        '<option value="others">Other</option>'
                     );
-                });
-            },
-        });
-    } else {
-        $("#job_name").empty().append('<option value="">Select Job</option>');
-        $("#job_name").empty().append('<option value="others">Other</option>');
-    }
-});
+                },
+            });
+        } else {
+            $("#job_name")
+                .empty()
+                .append('<option value="">Select Job</option>');
+            $("#job_name")
+                .empty()
+                .append('<option value="others">Other</option>');
+        }
+    });
 </script>
 
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
+        $(document)
+            .off("click", "#add-job")
+            .on("click", "#add-job", function (e) {
+                e.preventDefault();
 
-    // === Add new Job Section dynamically ===
-    $(document).off('click', '#add-job').on('click', '#add-job', function(e) {
-        e.preventDefault();
+                let newSection = $(
+                    "#job-details-section .job-section:first"
+                ).clone();
 
-       
-        let newSection = $('#job-details-section .job-section:first').clone();
+                newSection.find("input").val("");
+                newSection.find("select").prop("selectedIndex", 0);
+                newSection.find(".close-job-btn").closest(".d-grid").remove();
 
-       
-        newSection.find('input').val('');
-        newSection.find('select').prop('selectedIndex', 0);
-
-        
-        newSection.find('#new_job_name').hide();
-        newSection.find('#cylinder_made_in_company_name').hide();
-
-        
-        newSection.find('#cylinder_dates').val("{{ now_date|default:'' }}"); // or remove this line
-
-      
-        newSection.find('.close-job-btn').closest('.d-grid').remove();
-
-   
-        newSection.find('h5').after(`
+                newSection.find("h5").after(`
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button class="btn btn-danger me-md-2 close-job-btn" type="button">X</button>
             </div>
         `);
-        
-        $('#job-details-section').append(newSection);
+
+                $("#job-details-section").append(newSection);
+            });
+
+        $(document)
+            .off("click", ".close-job-btn")
+            .on("click", ".close-job-btn", function (e) {
+                e.preventDefault();
+
+                if ($("#job-details-section .job-section").length > 1) {
+                    $(this).closest(".job-section").remove();
+                }
+            });
     });
-
-    
-    $(document).off('click', '.close-job-btn').on('click', '.close-job-btn', function(e) {
-        e.preventDefault();
-
-    
-        if ($('#job-details-section .job-section').length > 1) {
-            $(this).closest('.job-section').remove();
-        }
-    });
-
-});
 </script>
 
+<script>
+    document.addEventListener("input", function (e) {
+        if (e.target.matches('select[name="job_name[]"]')) {
+            const jobSelect = e.target;
+            const block = jobSelect.closest("div");
+            const newJobInput = block.querySelector(
+                'input[name="new_job_name[]"]'
+            );
+            const hiddenField = block.querySelector(
+                'input[name="job_name_real[]"]'
+            );
 
+            if (jobSelect.value === "others") {
+                newJobInput.style.display = "block";
+            } else {
+                newJobInput.style.display = "none";
+                newJobInput.value = "";
+            }
+
+            // Set value for backend
+            hiddenField.value =
+                jobSelect.value === "others"
+                    ? newJobInput.value.trim()
+                    : jobSelect.value;
+        }
+
+        if (e.target.matches('input[name="new_job_name[]"]')) {
+            const newJobInput = e.target;
+            const block = newJobInput.closest("div");
+            const jobSelect = block.querySelector('select[name="job_name[]"]');
+            const hiddenField = block.querySelector(
+                'input[name="job_name_real[]"]'
+            );
+
+            // Update value for backend
+            hiddenField.value = newJobInput.value.trim();
+        }
+    });
+</script>
 
 <script src="{% static 'js/data_entry.js' %}"></script>
-    {% endblock script %}
+{% endblock script %}

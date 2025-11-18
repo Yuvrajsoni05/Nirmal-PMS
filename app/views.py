@@ -6,8 +6,10 @@ import re
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 from urllib import response
+from urllib.request import Request
 
 import pandas as pd
+from regex import P
 import requests
 from django.contrib import messages, sessions
 from django.contrib.auth import authenticate, login, logout
@@ -490,8 +492,8 @@ def add_job(request):
             date = request.POST.get("job_date")
             bill_no = request.POST.get("bill_no").strip()
             company_name = request.POST.get("company_name", "").strip()
-            job_name = request.POST.getlist("job_name[]")
-            new_job_name = request.POST.getlist("new_job_name[]")
+            job_name = request.POST.getlist("job_name_real[]")
+            
             job_type = request.POST.getlist("job_type[]")
             noc = request.POST.getlist("noc[]")
             prpc_purchase = request.POST.getlist("prpc_purchase[]")
@@ -511,14 +513,9 @@ def add_job(request):
             
             correction = request.POST.get("correction")
             job_status = request.POST.get("job_status")
-            files = request.FILES.getlist("files")
+            files = request.FILES.getlist("files[]")
 
-
-            print(pouch_combination)
-            
-            print("This New Job : ",new_job_name)
-            print("This Job ",job_name)
-            
+            print(job_name)
             required_filed = {
                 "Date": date,
                 "Bill no": bill_no,
@@ -542,7 +539,7 @@ def add_job(request):
                 if not r:
                     messages.error(
                         request,
-                        f"This {r} Filed Was Required",
+                        f"This {i} Filed Was Required",
                         extra_tags="custom-success-style",
                     )
                     return redirect("job_entry")
@@ -554,77 +551,78 @@ def add_job(request):
 
             file_dic = file_name_convert(files)
 
-            print(file_dic)
-
-            if new_job_name != "":
-                if new_job_name == "" or new_job_name == None:
-                    messages.error(request, "Plz Provide Job Name")
-                    return redirect("data-entry")
-                
-                else:
-                    job_name = new_job_name
-
-            # if Job_detail.objects.filter(
-            #     job_name__icontains=job_name, date__icontains=date
-            # ).exists():
-            #     messages.error(
-            #         request,
-            #         "Job Name are already Exists on this date kindly Update job",
-            #         extra_tags="custom-success-style",
-            #     )
-            #     return redirect("job_entry")
-
-            # if new_company != "":
-            #     if CompanyName.objects.filter(
-            #         company_name__icontains=new_company
-            #     ).exists():
-            #         messages.error(
-            #             request,
-            #             "Company Name Already Exists",
-            #             extra_tags="custom-success-style",
-            #         )
-            #         return redirect("job_entry")
-            #     add_company = CompanyName.objects.create(company_name=new_company)
-            #     add_company.save()
-            #     company_name = new_company
-            # if company_name == "" or company_name == None:
-            #     messages.error(request, "Plz Provide Company Name")
-            #     return redirect("data-entry")
-
-            # if new_cylinder_company_name != "":
-            #     if CylinderMadeIn.objects.filter(
-            #         cylinder_made_in__icontains=new_cylinder_company_name
-            #     ).exists():
-            #         messages.error(
-            #             request,
-            #             "Company Name Already Exists",
-            #             extra_tags="custom-success-style",
-            #         )
-            #         return redirect("job_entry")
-            #     add_new_cylinder_company = CylinderMadeIn.objects.create(
-            #         cylinder_made_in=new_cylinder_company_name
-            #     )
-            #     add_new_cylinder_company.save()
-            #     cylinder_made_in_s = new_cylinder_company_name
-
-            data = {
-                "date": date,
-                "bill_no": bill_no,
-                "company_name": company_name,
-                "job_type": job_type,
-                "job_name": job_name,
-                "noc": noc,
-                "prpc_sell": prpc_sell,
-                "prpc_purchase": prpc_purchase,
-                "cylinder_size": cylinder_size,
-                "cylinder_made_in": cylinder_made_in_s,
-                "pouch_size": pouch_size,
-                "pouch_open_size": pouch_open_size,
-                "pouch_combination": pouch_combination,
-                "correction": correction,
-            }
+        
             
+            if new_company != "":
+                if CompanyName.objects.filter(
+                    company_name__icontains=new_company
+                ).exists():
+                    messages.error(
+                        request,
+                        "Company Name Already Exists",
+                        extra_tags="custom-success-style",
+                    )
+                    return redirect("job_entry")
+                add_company = CompanyName.objects.create(company_name=new_company)
+                add_company.save()
+                company_name = new_company
+            if company_name == "" or company_name == None:
+                messages.error(request, "Plz Provide Company Name")
+                return redirect("data-entry")
+            
+            
+            files_per_job = len(files) // len(job_name)
+            for i in range(len(job_name)):
+                job = Job_detail.objects.create(
+                    date=date,
+                    bill_no=bill_no,
+                    company_name=company_name,
+                    job_name=job_name[i],
+                    job_type=job_type[i],
+                    noc=noc[i],
+                    prpc_sell=prpc_sell[i],
+                    prpc_purchase=prpc_purchase[i],
+                    cylinder_size=cylinder_size[i],
+                    cylinder_made_in=cylinder_made_in_s[i],
+                    pouch_size=pouch_size[i],
+                    pouch_open_size=pouch_open_size[i],
+                    pouch_combination=pouch_combination[i],
+                    correction=correction,
+                    job_status=job_status,
+                    cylinder_date=cylinder_date[i],
+                    cylinder_bill_no=cylinder_bill_no[i],
+                )
+                start_idx = i * files_per_job
+                end_idx = start_idx + files_per_job
+                job_files = files[start_idx:end_idx]
+
+                for file in job_files:
+                    file_obj = file
+                    Jobimage.objects.create(job=job, image=file_obj)
+
+                job.save()
+            messages.success(request, "Data successfully Add ")
+            return redirect("dashboard_page")
+    except Exception as e:
+        messages.error(request, f"Something went wrong {e}")
+        logger.error(f"Something went wrong: {str(e)}", exc_info=True)
         return redirect("job_entry")
+    # data = {
+    #             "date": date,
+    #             "bill_no": bill_no,
+    #             "company_name": company_name,
+    #             "job_type": job_type,
+    #             "job_name": job_name,
+    #             "noc": noc,
+    #             "prpc_sell": prpc_sell,
+    #             "prpc_purchase": prpc_purchase,
+    #             "cylinder_size": cylinder_size,
+    #             "cylinder_made_in": cylinder_made_in_s,
+    #             "pouch_size": pouch_size,
+    #             "pouch_open_size": pouch_open_size,
+    #             "pouch_combination": pouch_combination,
+    #             "correction": correction,
+    #         }
     #     try:
     #         url = os.environ.get("CREATE_WEBHOOK_JOB")
     #         response = requests.post(f"{url}", data=data, files=file_dic)
@@ -694,10 +692,7 @@ def add_job(request):
     #         messages.success(request, "Data successfully Add ")
     #         return redirect("dashboard_page")
 
-    except Exception as e:
-        messages.error(request, f"Something went wrong {e}")
-        logger.error(f"Something went wrong: {str(e)}", exc_info=True)
-        return redirect("job_entry")
+    
 
 
 @custom_login_required
@@ -1101,7 +1096,7 @@ def cdr_page(request):
     p = Paginator(cdr_data, 10)
     page = request.GET.get("page")
     cdr_emails = CDRDetail.objects.values("company_email").distinct()
-    cdr_company_name = CDRDetail.objects.values("company_name").distinct().union(Job_detail.objects.values('job_name').distinct())
+    cdr_company_name = CDRDetail.objects.values("company_name").distinct().union(CompanyName.objects.values('company_name').distinct())
     cdr_job_name = CDRDetail.objects.values("job_name").distinct()
 
     datas = p.get_page(page)
@@ -1655,19 +1650,19 @@ def cdr_company_check(company_name, company_email):
 
 @custom_login_required
 def ProformaInvoicePage(request):
-    company_list = (
-        CompanyName.objects.values("company_name")
-        .distinct()
-        .union(ProformaInvoice.objects.values("company_name").distinct())
-    )
+    company_list = list(Job_detail.objects.values("company_name").distinct().union(CDRDetail.objects.values("company_name")))
+    
+    job_name = list(Job_detail.objects.values("job_name").distinct())
     bank_details = BankDetails.objects.all()
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
+    print(job_name)
     context = {
         "company_list": company_list,
         "states": states,
         "invoice_status": invoice_status,
         "bank_details": bank_details,
+        "job_names":job_name,
     }
     return render(
         request, "ProformaInvoice/proforma_invoice_page.html", context=context
@@ -2028,7 +2023,7 @@ def ProformaInvoicePageAJAX(request):
     quantities = request.GET.getlist("quantities[]")
     prpc_prices = request.GET.getlist("prpc_prices[]")
 
-    company_name = request.GET.get("company_name", "")
+    company = request.GET.get("company_name", "")
 
     gst = int(igst) + int(cgst) + int(sgst)
 
@@ -2046,50 +2041,58 @@ def ProformaInvoicePageAJAX(request):
     total_amount = taxable_value + gst_amount
 
     total_amount = round(total_amount, 2)
-    job_list = []
+    
     company_contact = ""
     company_email = ""
     billing_address = ""
-    if company_name:
+    if company:
 
-        demo = list(
-            ProformaJob.objects.filter(proforma_invoice__company_name=company_name)
-            .values("job_name")
-            .distinct()
-        )
-
+        # proforma_job = list(
+        #     ProformaJob.objects.filter(proforma_invoice__company_name=company_name)
+        #     .values("job_name")
+        #     .distinct()
+            
+        # )
+        
         job = list(
-            CDRDetail.objects.filter(company_name__iexact=company_name)
+            Job_detail.objects.filter(company_name=company)
+            .values("job_name")
+            .distinct().union(
+                CDRDetail.objects.filter(company_name=company)
+            .values("job_name")
+            .distinct().union(
+                ProformaJob.objects.filter(proforma_invoice__company_name=company)
             .values("job_name")
             .distinct()
-            .union(
-                Job_detail.objects.filter(company_name__iexact=company_name)
-                .values("job_name")
-                .distinct()
             )
+            )
+            
         )
-
-        job_list = job + demo
+        print(company)
+        print(job)
+        
+        
+      
 
         company_contact = list(
-            ProformaInvoice.objects.filter(company_name__iexact=company_name)
+            ProformaInvoice.objects.filter(company_name__iexact=company)
             .values("company_contact")
             .distinct()
         )
 
         company_email = list(
-            ProformaInvoice.objects.filter(company_name__iexact=company_name)
+            ProformaInvoice.objects.filter(company_name__iexact=company)
             .values("company_email")
             .distinct()
             .union(
-                CDRDetail.objects.filter(company_name__iexact=company_name)
+                CDRDetail.objects.filter(company_name__iexact=company)
                 .values("company_email")
                 .distinct()
             )
         )
 
         billing_address = list(
-            ProformaInvoice.objects.filter(company_name__iexact=company_name)
+            ProformaInvoice.objects.filter(company_name__iexact=company)
             .values("billing_address")
             .distinct()
         )
@@ -2102,19 +2105,21 @@ def ProformaInvoicePageAJAX(request):
             billing_address[0]["billing_address"] if billing_address else ""
         )
     else:
-        company_name = ""
+        company = ""
 
     context = {
         "total_amount": total_amount,
-        "job": job_list,
+        "job": job,
         "company_contact": company_contact,
         "company_email": company_email,
         "billing_address": billing_address,
         "taxable_value": taxable_value,
         "gst_amount": gst_amount,
     }
+    print(context)
     logger.debug(f"AJAX context: {context}")
     return JsonResponse(context)
+
 
 
 # API OF ALL Views
