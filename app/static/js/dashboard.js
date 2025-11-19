@@ -265,7 +265,7 @@ function printJobDetails(btn) {
                          alt="Logo" class="company-logo">
                 </div>
                 <div class="col text-end">
-                    <div class="company-name">Shree Nirmal Ventures Pvt. Ltd.</div>
+                    <div class="company-name">Shrri nirmal ventures private limited. Ltd.</div>
                     <div style="font-size: 0.8rem; color: #666;">
                         1601, 16th Floor, B Block, Navratna Corporate Park<br>
                         Ambli Bopal Road, Ambli, Ahmedabad - 380058
@@ -358,7 +358,7 @@ function printJobDetails(btn) {
 
         <!-- FOOTER -->
         <div class="footer">
-            © Shree Nirmal Ventures Pvt. Ltd.
+            © shrri nirmal ventures private limited.
         </div>
 
     </div>

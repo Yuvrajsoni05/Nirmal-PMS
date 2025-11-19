@@ -4,35 +4,7 @@
 {% load static %}
 {% block styles %}
     <style>
-    .input-wrapper {
-        position: relative;
-     
-    }
-    .input-wrapper label {
-      position: absolute;
-      top: -0.6rem; /* push above border */
-      left: 1.75rem;
-      background: #FFFFFF; /* same as background to cover border */
-      padding: 0 4px;
-      font-size: 0.8rem;
-      color: #aaa;
-    }
-   .nexticon {
-    position: absolute;
-    right: -20px;
    
-    width: 20px;
-    border-radius: 20px;
-    color: #000000ff;
-}
-.previcon {
-    position: absolute;
-    left: -20px;
-    
-    width: 20px;
-    border-radius: 20px;
-    color: #000000ff;
-}
 
     </style>
 {% endblock styles %}
@@ -44,9 +16,8 @@
             <div class="page-title">
                 <h2 class="fw-bold mb-3">
                     Welcome Back  {{ user.first_name }} {{ user.last_name }} !
-                    <h1></h1>
+
                 </h2>
-                {% comment %} <h3 class="fw-bold mb-3">Dashboard  {{ user.username }}<h1></h1></h3> {% endcomment %}
             </div>
             <div class="page-actions ms-md-auto py-2 py-md-0">
                 <a href="{% url "job_entry" %}" class="btn btn-primary btn-round">Add New Job</a>
@@ -118,76 +89,109 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-round">
-                        <!-- Card Header with Search Form -->
                         <div class="card-header">
                             <div class="card-head-row card-tools-still-right">
                                 <div class="card-title">Job Details</div>
+
                                 <div class="card-tools">
                                     <form method="get"
-                                          class="d-flex flex-wrap align-items-center"
-                                          action="{% url 'dashboard_page' %}">
-                                        <div class="me-2 mb-2 col-12 col-md-auto input-wrapper">
-                                            <label for="readonlyInput">Start Date</label>
-                                            <input type="date"
-                                                   class="form-control"
-                                                   id="date"
-                                                   name="date"
-                                                   placeholder="Start Date"
-                                                   value="{{ request.GET.date }}">
-                                        </div>
-                                        <div class="me-2 mb-2 col-12 col-md-auto input-wrapper">
-                                            <label for="readonlyInput">End Date</label>
-                                            <input type="date"
-                                                   class="form-control"
-                                                   id="end_date"
-                                                   name="end_date"
-                                                   placeholder="End Date"
-                                                   value="{{ request.GET.end_date }}">
-                                        </div>
-                                        <div class="form-outline me-2 mb-2 col-12 col-md-auto" style="width: 300px;">
-                                            <select class="form-select form-control" name="q" id="q">
-                                                <option value="" >{% if  request.GET.q  %}
-                                                {{ request.GET.q }}
-                                                {% else %}
-                                                Select Company Name
-                                                {% endif %}   </option>
-                                                {% for company in company_name  %}
-                                                <option value="{{ company.company_name }}" >{{ company.company_name }}</option>
-                                                {% endfor %}
-                                            </select>
-                                           
-                                        </div>
-                                             <div class="form-outline me-2 mb-2 col-12 col-md-auto" style="width: 300px;">
-                                            <select class="form-select form-control" name="job_name_search" id="job_name_search">
-                                                <option value="" >{% if  request.GET.job_name_search  %}
-                                                {{ request.GET.job_name_search }}
-                                                {% else %}
-                                                Select Job Name
-                                                {% endif %}  </option>
+                                        action="{% url 'dashboard_page' %}"
+                                        class="d-flex flex-wrap align-items-end gap-2">
 
-                                                {% for job in job_names  %}
-                                                
-                                                <option value="{{ job.job_name }}" >{{ job.job_name }}</option>
-                                                {% endfor %}
-                                                
-                                            </select>
-                                           
+                                        <!-- Start Date -->
+                                        <div class="col-12 col-md-auto">
+                                            <label for="date" class="form-label mb-1 fw-bold">Start Date</label>
+                                            <input type="date"
+                                                class="form-control"
+                                                id="date"
+                                                name="date"
+                                                placeholder="Start Date"
+                                                value="{{ request.GET.date|default_if_none:'' }}">
                                         </div>
-                                        <button type="submit"
-                                                class="btn btn-primary w-sm-25 w-md-auto me-2 mb-2"
-                                                data-mdb-ripple-init>
-                                            <i class="fa fa-search"></i>
-                                        </button>
-                                        <a href="{% url 'dashboard_page' %}">
-                                            <button type="button"
-                                                    name="reset"
-                                                    class="btn btn-secondary col-12 col-md-auto mb-2"
-                                                    data-mdb-ripple-init>Reset</button>
-                                        </a>
+
+                                        <!-- End Date -->
+                                        <div class="col-12 col-md-auto">
+                                            <label for="end_date" class="form-label mb-1 fw-bold">End Date</label>
+                                            <input type="date"
+                                                class="form-control"
+                                                id="end_date"
+                                                name="end_date"
+                                                placeholder="End Date"
+                                                value="{{ request.GET.end_date|default_if_none:'' }}">
+                                        </div>
+
+                                        <!-- Company Name -->
+                                        <div class="col-12 col-md-auto" >
+                                            <label for="q" class="form-label mb-1 fw-bold">Company Search</label>
+                                            <select class="form-select form-control"
+                                                    name="q"
+                                                    id="q">
+                                                {% if request.GET.q %}
+                                                    <!-- Show the selected value as first option -->
+                                                    <option value="{{ request.GET.q }}">{{ request.GET.q }}</option>
+                                                    <option value="">All Companies</option>
+                                                {% else %}
+                                                    <option value="">Select Company Name</option>
+                                                {% endif %}
+
+                                                {% for company in company_name %}
+                                                    {% if company.company_name != request.GET.q %}
+                                                        <option value="{{ company.company_name }}">
+                                                            {{ company.company_name }}
+                                                        </option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <!-- Job Name -->
+                                        <div class="col-12 col-md-auto" style="min-width: 220px;">
+                                            <label for="job_name_search" class="form-label mb-1 fw-bold">Job Name</label>
+                                            <select class="form-select form-control"
+                                                    name="job_name_search"
+                                                    id="job_name_search">
+                                                {% if request.GET.job_name_search %}
+                                                    <!-- Show the selected value as first option -->
+                                                    <option value="{{ request.GET.job_name_search }}">
+                                                        {{ request.GET.job_name_search }}
+                                                    </option>
+                                                    <option value="">All Job Names</option>
+                                                {% else %}
+                                                    <option value="">Select Job Name</option>
+                                                {% endif %}
+
+                                                {% for job in job_names %}
+                                                    {% if job.job_name != request.GET.job_name_search %}
+                                                        <option value="{{ job.job_name }}">
+                                                            {{ job.job_name }}
+                                                        </option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <!-- Search Button -->
+                                        <div class="col-12 col-md-auto">
+                                            <button type="submit"
+                                                    class="btn btn-primary w-100 w-md-auto"
+                                                    data-mdb-ripple-init>
+                                                <i class="fa fa-search me-1"></i> Search
+                                            </button>
+                                        </div>
+
+                                        <!-- Reset Button -->
+                                        <div class="col-12 col-md-auto">
+                                            <a href="{% url 'dashboard_page' %}"
+                                            class="btn btn-secondary w-100 w-md-auto"
+                                            data-mdb-ripple-init>
+                                                Reset
+                                            </a>
+                                        </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
+
                         <!-- Table Content -->
                         <div class="card-body p-0">
                             <div class="table-responsive">
@@ -385,15 +389,7 @@
                                                             </svg>
                                                         </button>
                                                     </form>
-                                                        <script>
-                                                                let formIdToSubmit;
-                                                                function setFormId(id) {
-                                                                    formIdToSubmit = id;
-                                                                }
-                                                                function submitForm() {
-                                                                    document.getElementById('delete-form-' + formIdToSubmit).submit();
-                                                                }
-                                                        </script>
+                                                        
                                                             <!-- Edit Button -->
                                                             <button type="button"
                                                                     class="btn btn-sm btn-outline-primary"
@@ -1133,6 +1129,14 @@
     
     
     {% block script %}
-    
+    <script>
+        let formIdToSubmit;
+        function setFormId(id) {
+            formIdToSubmit = id;
+        }
+        function submitForm() {
+            document.getElementById('delete-form-' + formIdToSubmit).submit();
+        }
+    </script>
         <script src="{% static 'js/dashboard.js' %}"></script>
     {% endblock script %}

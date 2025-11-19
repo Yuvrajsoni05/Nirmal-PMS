@@ -686,7 +686,7 @@
 <script>
 $(document).ready(function() {
 
-    $(document).on('input change', '#billing_state_name, #company_name, input[name="gst[]"], .item_check', function() {
+    $(document).on('change', '#billing_state_name, #company_name, input[name="gst[]"], .item_check', function() {
         var changedField = $(this).attr('id');
         var billing_state_name = $('#billing_state_name').val();
         var company_name = $('#company_name').val();
@@ -696,7 +696,7 @@ $(document).ready(function() {
         var cgst = $('#cgst').is(':checked') ? 9 : 0;
         var sgst = $('#sgst').is(':checked') ? 9 : 0;
 
-        // Collect all quantities and rates
+       
         var quantities = $('input[name="quantity[]"]').map(function() {
             return $(this).val() || 0;
         }).get();
@@ -704,7 +704,7 @@ $(document).ready(function() {
             return $(this).val() || 0;
         }).get();
 
-        // Toggle "new company" input
+  
         if (company_name === "others") {
             $("#new_company").show();
         } else {
@@ -745,25 +745,30 @@ $(document).ready(function() {
                 prpc_prices: prpc_prices
             },
             success: function(response) {
-                // === Update company details only when company changes ===
-                if (changedField === 'company_name' && response.company_email) {
+                
+                if (changedField === 'company_name' || response.company_email) {
                     $('#company_email').val(response.company_email);
                     $('#company_contact').val(response.company_contact);
                     $('#billing_address').val(response.billing_address);
 
-                    // Only update job dropdown when company changes
+                   
                     var jobSelect = $('.job-section:first').find('.job-name');
                     jobSelect.empty().append('<option value="" selected>Select Job</option>');
                    
-                    response.job.forEach(function(i) {
-                        jobSelect.append('<option value="' + i.job_name + '">' + i.job_name + '</option>');
+                    $.each(response.job, function (index, job) {
+                        $("#job_name").append(
+                            '<option value="' +
+                                job.job_name +
+                                '">' +
+                                job.job_name +
+                                "</option>"
+                        );
                     });
                     
                     console.log(response.job)
                     jobSelect.append('<option value="others">Other</option>');
                 }
-
-                // === Update totals only ===
+               
                 if (response.total_amount !== undefined) {
                     $('#total_amount').val(Number(response.total_amount).toFixed(2));
                 }
@@ -780,7 +785,7 @@ $(document).ready(function() {
         });
     });
 
-    // === Dynamic Job Section Logic ===
+   
     $(document).on('change', '.job-name', function() {
         const section = $(this).closest('.job-section');
         const newJobInput = section.find('.new-job');
@@ -807,7 +812,7 @@ $(document).ready(function() {
         }
     });
 
-    // === Pouch and Cylinder Size Calculation ===
+    
     $(document).on('input', '.pouch-diameter, .pouch-height', function() {
         const section = $(this).closest('.job-section');
         const diameter = section.find('.pouch-diameter').val();
@@ -826,7 +831,7 @@ $(document).ready(function() {
         }
     });
    
-    // === Add new Job Section dynamically ===
+    
     $('#add-job').on('click', function(e) {
     e.preventDefault();
     let newSection = $('.job-section:first').clone();

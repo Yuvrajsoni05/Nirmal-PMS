@@ -192,6 +192,7 @@ class BankDetails(models.Model):
     
     def __str__(self):
         return f"{self.bank_name}"
+    
 
 class ProformaInvoice(models.Model):
     

@@ -88,7 +88,7 @@
                                             class="form-control form-select"
                                             placeholder="Select or type to job name...">
                                         <option value="">Select a job...</option>
-                                        {% for job in cdr_job_names %}<option value="{{ job.job_name }}">{{ job.job_name }}</option>{% endfor %}
+                               
                                         <option value="others">Other</option>
                                     </select>
                                     <input type="text"
@@ -195,12 +195,24 @@
                                                value="{{ request.GET.end_date }}">
                                     </div>
                                     <div class="form-outline me-2 mb-2 col-12 col-md-auto" data-mdb-input-init>
-                                        <input type="text"
+
+                                        <select id='search' name="search" class="form-select form-control" >
+                                            <option value="" 
+                                             > {% if  request.GET.search  %}
+                                                {{ request.GET.search }}
+                                                {% else %}
+                                                Select Company Name {% endif %}</option>
+                                                {% for company in cdr_company_name  %}
+                                                <option value="{{ company.company_name }}"> {{company.company_name}} </option>
+
+                                                {% endfor %}
+                                        </select>
+                                        {% comment %} <input type="text"
                                                name="search"
                                                id="search"
                                                class="form-control"
                                                value="{{ request.GET.search }}"
-                                               placeholder="Search Field">
+                                               placeholder="Search Field"> {% endcomment %}
                                     </div>
                                     <button type="submit"
                                             class="btn btn-primary w-sm-25 w-md-auto me-2 mb-2"
@@ -303,7 +315,7 @@
                                                     <script>
                                                         let formIdToSubmit;
 
-                                                        // Set the form ID for deletion
+                                                        
                                                         document.addEventListener('DOMContentLoaded', function () {
                                                             const deleteButtons = document.querySelectorAll('.btn-outline-danger');
                                                             deleteButtons.forEach(button => {
@@ -771,8 +783,8 @@ $("#company_name").change(function () {
      
                     $("#company_email").append('<option value="other">Other</option>');
                 }
+                
 
-    
                 $.each(data.jobs, function (index, job) {
                     $("#job_name").append(
                         '<option value="' + job.job_name + '">' + job.job_name + "</option>"

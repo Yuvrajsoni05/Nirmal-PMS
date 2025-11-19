@@ -44,60 +44,62 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card card-round">
-                <div class="card-header">
-                    <div class="card-head-row card-tools-still-right">
-                        <div class="card-title">View Proforma Invoices</div>
-                        <div class="card-tools">
+                    <div class="card-header">
+                        <div class="card-head-row card-tools-still-right">
+                        <div class="card-title mb-3 mb-md-0">
+                            View Proforma Invoices
+                        </div>
+
+                        <div class="card-tools w-100 w-md-auto">
                             <form method="get" action="">
-                                <div class="d-flex flex-wrap gap-2 align-items-end">
+                                <div class="row g-2 align-items-end">
                                     <!-- Start Date -->
-                                    <div class="flex-fill input-wrapper" style="min-width: 150px;">
-                                        <label for="readonlyInput">Start Date</label>
-                                        <input type="date" 
-                                            class="form-control" 
-                                            id="start_date" 
-                                            name="start_date" 
-                                            placeholder="Start Date"
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <label for="start_date" class="form-label fw-bold mb-1">Start Date</label>
+                                        <input type="date"
+                                            class="form-control"
+                                            id="start_date"
+                                            name="start_date"
                                             value="{{ request.GET.start_date }}">
                                     </div>
-                                    
+
                                     <!-- End Date -->
-                                    <div class="flex-fill input-wrapper" style="min-width: 150px;">
-                                        <label>End Date</label>
-                                        <input type="date" 
-                                            class="form-control" 
-                                            id="end_date" 
-                                            name="end_date" 
-                                            placeholder="End Date"
+                                    <div class="col-12 col-sm-6 col-md-3">
+                                        <label for="end_date" class="form-label fw-bold mb-1">End Date</label>
+                                        <input type="date"
+                                            class="form-control"
+                                            id="end_date"
+                                            name="end_date"
                                             value="{{ request.GET.end_date }}">
                                     </div>
-                                    
+
                                     <!-- Company Select -->
-                                    <div class="flex-fill" style="min-width: 400px;">
-                                        <select class="form-select form-select-sm form-control" 
+                                    <div class="col-12 col-md-4">
+                                        <label for="select_company" class="form-label mb-1 fw-bold">Company</label>
+                                        <select class="form-select form-control form-select-sm"
                                                 id="select_company"
                                                 name="select_company">
                                             <option value="" {% if not request.GET.select_company %}selected{% endif %}>
                                                 Select Company Name
                                             </option>
                                             {% for company in company_name %}
-                                                <option value="{{ company }}" 
+                                                <option value="{{ company }}"
                                                         {% if request.GET.select_company == company %}selected{% endif %}>
                                                     {{ company }}
                                                 </option>
                                             {% endfor %}
                                         </select>
                                     </div>
-                                    
+
                                     <!-- Action Buttons -->
-                                    <div class="d-flex gap-2">
-                                        <button type="submit" 
-                                                class="btn btn-primary "
+                                    <div class="col-12 col-md-2 d-flex gap-2 mt-2 mt-md-0">
+                                        <button type="submit"
+                                                class="btn btn-primary flex-fill"
                                                 title="Search">
                                             <i class="fa fa-search"></i>
                                         </button>
-                                        <a href="{% url 'view_proforma_invoice' %}" 
-                                        class="btn btn-secondary "
+                                        <a href="{% url 'view_proforma_invoice' %}"
+                                        class="btn btn-secondary flex-fill"
                                         title="Reset">
                                             Reset
                                         </a>
@@ -106,8 +108,6 @@
                             </form>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -121,7 +121,7 @@
                                         <a href="">Invoices no.</a>
                                     </th>
                                     <th scope="col">
-                                        <a href="">Invoices Date</a>
+                                        <a href="?invoice_date_sorting = {% if request.GET.invoice_date_sorting == 'asc' %} desc {% else %} asc {% endif %}">Invoices Date</a>
                                     </th>
                                     <th scope="col">Mode / Payment</th>
                                     <th scope="col">
@@ -242,39 +242,7 @@
                                             </svg>
                                         </button>
                                     </td>
-                                        <script>
-                                            let formIdToSubmit;
-                                            document.addEventListener(
-                                                "DOMContentLoaded",
-                                                function () {
-                                                    const deleteButtons =
-                                                        document.querySelectorAll(
-                                                            ".btn-outline-danger"
-                                                        );
-                                                    deleteButtons.forEach(
-                                                        (button) => {
-                                                            button.addEventListener(
-                                                                "click",
-                                                                function () {
-                                                                    formIdToSubmit =
-                                                                        this
-                                                                            .dataset
-                                                                            .id;
-                                                                }
-                                                            );
-                                                        }
-                                                    );
-                                                }
-                                            );
-                                            function submitForm() {
-                                                document
-                                                    .getElementById(
-                                                        "delete-form-" +
-                                                            formIdToSubmit
-                                                    )
-                                                    .submit();
-                                            }
-                                        </script>
+                                        
 
                                         
                                         <!-- Modal -->
@@ -348,177 +316,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <!-- Proforma Invoice Update Modal -->
-                                    {% comment %} <div class="modal fade" id="proformaupdate{{ proforma.id }}" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-xl modal-dialog-centered">
-                                            <div class="modal-content">
-                                                <!-- Modal Header -->
-                                                <div class="modal-header bg-light">
-                                                    <h5 class="modal-title">Proforma Invoice Update {{ proforma.id }}</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-
-                                                <!-- Modal Body -->
-                                                <div class="modal-body">
-                                                    <form method="post" action="{% url "update_proforma_invoice" proforma_id=proforma.id  %}" class="cdr-form" enctype="multipart/form-data">
-                                                        {% csrf_token %}
-                                                        <input type="hidden" value="{{ proforma.id }}" />
-
-                                                        <div class="row g-4">
-                                                            <!-- Invoice Number -->
-                                                            <div class="col-md-6">
-                                                                <label for="invoice_no" class="form-label fw-bold">Invoice No.</label>
-                                                                <input type="text" class="form-control" id="invoice_no" name="invoice_no" 
-                                                                    value="{{ proforma.invoice_no }}" readonly />
-                                                            </div>
-
-                                                            <!-- Invoice Date -->
-                                                            <div class="col-md-6">
-                                                                <label for="invoice_date" class="form-label fw-bold">Proforma Invoice Date</label>
-                                                                <input type="date" class="form-control" id="invoice_date" name="invoice_date" 
-                                                                    value="{{ proforma.invoice_date|date:'Y-m-d' }}" required />
-                                                            </div>
-
-                                                            <!-- Mode of Payment -->
-                                                            <div class="col-md-6">
-                                                                <label for="mode_payment" class="form-label fw-bold">Mode / Payment</label>
-                                                                <input type="text" class="form-control" id="mode_payment" name="mode_payment" 
-                                                                    value="{{ proforma.mode_payment }}" required />
-                                                            </div>
-
-                                                            <!-- Company Name -->
-                                                            <div class="col-md-6">
-                                                                <label for="company_name" class="form-label fw-bold">Company Name</label>
-                                                                <input type="text" class="form-control" id="company_name" name="company_name" 
-                                                                    value="{{ proforma.company_name }}" readonly />
-                                                            </div>
-
-                                                            <!-- Company Email -->
-                                                            <div class="col-md-6">
-                                                                <label for="company_email" class="form-label fw-bold">Company Email</label>
-                                                                <input type="email" class="form-control" id="company_email" name="company_email" 
-                                                                    value="{{ proforma.company_email }}" />
-                                                            </div>
-
-                                                            <!-- Company Contact -->
-                                                            <div class="col-md-6">
-                                                                <label for="company_contact" class="form-label fw-bold">Company Contact</label>
-                                                                <input type="tel" class="form-control" id="company_contact" name="company_contact" 
-                                                                    value="{{ proforma.company_contact }}"  />
-                                                            </div>
-
-                                                            <!-- Job Name -->
-                                                            <div class="col-md-6">
-                                                                <label for="job_name" class="form-label fw-bold">Job Name</label>
-                                                                <input type="text" class="form-control" id="job_name" name="job_name" 
-                                                                    value="{{ proforma.job_name }}" readonly />
-                                                            </div>
-
-                                                            <!-- Title -->
-                                                            <div class="col-md-6">
-                                                                <label for="title" class="form-label fw-bold">Title</label>
-                                                                <input type="text" class="form-control" id="title" name="title" 
-                                                                    placeholder="Enter title" value="{{ proforma.title }}" />
-                                                            </div>
-
-                                                            <!-- Billing Address -->
-                                                            <div class="col-md-6">
-                                                                <label for="billing_address" class="form-label fw-bold">Billing Address</label>
-                                                                <input type="text" class="form-control" id="billing_address" name="billing_address" 
-                                                                    placeholder="Enter billing address" value="{{ proforma.billing_address }}" />
-                                                            </div>
-
-                                                            <!-- Billing GSTIN No -->
-                                                            <div class="col-md-6">
-                                                                <label for="billing_gstin_no" class="form-label fw-bold">Billing GSTIN No.</label>
-                                                                <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" 
-                                                                    placeholder="Enter GSTIN number" value="{{ proforma.billing_gstin_no }}" />
-                                                            </div>
-
-                                                            <!-- Billing State Name -->
-                                                            <div class="col-md-6">
-                                                                <label for="billing_state_name" class="form-label fw-bold">Billing State Name</label>
-                                                                <select class="form-control form-select" id="billing_state_name" name="billing_state_name" required>
-                                                                    <option value="" selected disabled>Select State</option>
-                                                                    {% for value, label in states %}
-                                                                        <option value="{{ value }}" {% if proforma.billing_state_name == value %}selected{% endif %}>
-                                                                            {{ label }}
-                                                                        </option>
-                                                                    {% endfor %}
-                                                                </select>
-                                                                                                                                                                                                                                                                                                    </div>
-
-                                                            <!-- Quantity -->
-                                                            <div class="col-md-6">
-                                                                <label for="quantity" class="form-label fw-bold">Quantity</label>
-                                                                <input type="number" class="form-control" id="quantity" name="quantity" 
-                                                                    placeholder="Enter quantity" value="{{ proforma.quantity }}" />
-                                                            </div>
-
-                                                            <!-- Pouch Open Size -->
-                                                            <div class="col-md-6">
-                                                                <label for="pouch_open_size" class="form-label fw-bold">Pouch Open Size</label>
-                                                                <input type="text" class="form-control" id="pouch_open_size" name="pouch_open_size" 
-                                                                    placeholder="Enter pouch size"  value="{{ proforma.pouch_open_size }}" />
-                                                            </div>
-
-                                                            <!-- Cylinder Size -->
-                                                            <div class="col-md-6">
-                                                                <label for="cylinder_size" class="form-label fw-bold">Cylinder Size</label>
-                                                                <input type="text" class="form-control" id="cylinder_size" name="cylinder_size" 
-                                                                    placeholder="Enter cylinder size" value="{{ proforma.cylinder_size }}" />
-                                                            </div>
-
-                                                            <!-- PRPC Rate -->
-                                                            <div class="col-md-6">
-                                                                <label for="prpc_rate" class="form-label fw-bold">PRPC Rate</label>
-                                                                <input type="number" step="0.01" class="form-control" id="prpc_rate" name="prpc_rate" 
-                                                                    placeholder="Enter PRPC rate" value="{{ proforma.prpc_rate }}" />
-                                                            </div>
-
-                                                            <!-- GST -->
-                                                            
-                                                            <!-- Total -->
-                                                            <div class="col-md-6">
-                                                                <label for="total" class="form-label fw-bold">Total Amount</label>
-                                                                <input type="number" step="0.01" class="form-control" id="total" name="total" 
-                                                                    placeholder="Total amount" value="{{ proforma.total }}" readonly />
-                                                            </div>
-
-                                                            <!-- Banking Details -->
-                                                            <div class="col-md-6">
-                                                                <label for="banking_details" class="form-label fw-bold">Banking Details</label>
-                                                                <input type="text" class="form-control" id="banking_details" name="banking_details" 
-                                                                    placeholder="Enter banking details" value="{{ proforma.banking_details }}" />
-                                                            </div>
-
-                                                            <!-- Terms Note -->
-                                                            <div class="col-md-6">
-                                                                <label for="term_note" class="form-label fw-bold">Terms & Conditions</label>
-                                                                <input type="text" class="form-control" id="term_note" name="term_note" 
-                                                                    placeholder="Enter terms and conditions" value="{{ proforma.terms_note }}" />
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Form Actions -->
-                                                        <div class="mt-4 d-flex justify-content-end gap-2">
-                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                                Close
-                                                            </button>
-                                                            <button type="submit" class="btn btn-primary">
-                                                                Save Changes
-                                                            </button>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> {% endcomment %}
-
-
-
-                                    
+                                    </div> 
                                     <div class="modal fade" id="viewModal{{ proforma.id }}" tabindex="-1" aria-labelledby="viewModalLabel{{ proforma.id }}" style="width: 100%;" aria-hidden="true">
                                         <div class="modal-dialog modal-xl modal-dialog-scrollable">
                                             <div class="modal-content border-0 shadow-lg">
@@ -1035,6 +833,38 @@
 
 <script src="{% static 'js/proforma.js' %}"></script>
 
-
+<script>
+                                            let formIdToSubmit;
+                                            document.addEventListener(
+                                                "DOMContentLoaded",
+                                                function () {
+                                                    const deleteButtons =
+                                                        document.querySelectorAll(
+                                                            ".btn-outline-danger"
+                                                        );
+                                                    deleteButtons.forEach(
+                                                        (button) => {
+                                                            button.addEventListener(
+                                                                "click",
+                                                                function () {
+                                                                    formIdToSubmit =
+                                                                        this
+                                                                            .dataset
+                                                                            .id;
+                                                                }
+                                                            );
+                                                        }
+                                                    );
+                                                }
+                                            );
+                                            function submitForm() {
+                                                document
+                                                    .getElementById(
+                                                        "delete-form-" +
+                                                            formIdToSubmit
+                                                    )
+                                                    .submit();
+                                            }
+                                        </script>
 
 {% endblock script %}

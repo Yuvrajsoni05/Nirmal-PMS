@@ -50,31 +50,23 @@ $(document).on(
 
 $(document).on(
     "input",
-    "[name='pouch_combination1[]'] , [name='pouch_combination2[]'],[name='pouch_combination3[]'], [name='pouch_combination4[]']",
+    "[name='pouch_combination1[]'], [name='pouch_combination2[]'], [name='pouch_combination3[]'], [name='pouch_combination4[]']",
     function () {
         const section = $(this).closest(".col-12");
-        const pouch_combination1 = section
-            .find("[name='pouch_combination1[]']")
-            .val();
-        const pouch_combination2 = section
-            .find("[name='pouch_combination2[]']")
-            .val();
-        const pouch_combination3 = section
-            .find("[name='pouch_combination3[]']")
-            .val();
-        const pouch_combination4 = section
-            .find("[name='pouch_combination3[]']")
-            .val();
 
-        if (
-            pouch_combination1 &&
-            pouch_combination2 &&
-            pouch_combination3 &&
-            pouch_combination4
-        ) {
-            const pouch_combination = `${pouch_combination1} + ${pouch_combination2} + ${pouch_combination3} + ${pouch_combination4}`;
-            section.find("[name='pouch_combination[]']").val(pouch_combination);
-        }
+      
+        const pouch_combination1 =
+            section.find("[name='pouch_combination1[]']").val() || "0";
+        const pouch_combination2 =
+            section.find("[name='pouch_combination2[]']").val() || "0";
+        const pouch_combination3 =
+            section.find("[name='pouch_combination3[]']").val() || "0";
+        const pouch_combination4 =
+            section.find("[name='pouch_combination4[]']").val() || "0";
+
+        const pouch_combination = `${pouch_combination1} + ${pouch_combination2} + ${pouch_combination3} + ${pouch_combination4}`;
+
+        section.find("[name='pouch_combination[]']").val(pouch_combination);
     }
 );
 
@@ -116,74 +108,96 @@ function formatNumberWithCommas(input) {
     }
 }
 document.addEventListener("DOMContentLoaded", function () {
-    const proformaForm   = document.getElementById("job_detail_form");
-    const loaderOverlay  = document.getElementById("loader-overlay");
+    const proformaForm = document.getElementById("job_detail_form");
+    const loaderOverlay = document.getElementById("loader-overlay");
 
     // Basic Information
-    const jobDate        = document.getElementById("job_date");
-    const jobDateError   = document.getElementById("job_date_error");
+    const jobDate = document.getElementById("job_date");
+    const jobDateError = document.getElementById("job_date_error");
 
-    const billInput      = document.getElementById("bill_no");
-    const billError      = document.getElementById("bill_no_error");
+    const billInput = document.getElementById("bill_no");
+    const billError = document.getElementById("bill_no_error");
 
-    const companyName        = document.getElementById("company_name");
-    const companyNameError   = document.getElementById("company_name_error");
-    const newCompanyInput    = document.getElementById("new_company");
+    const companyName = document.getElementById("company_name");
+    const companyNameError = document.getElementById("company_name_error");
+    const newCompanyInput = document.getElementById("new_company");
 
     // Job Details (first job-section)
-    const jobName        = document.getElementById("job_name");
-    const jobNameError   = document.getElementById("job_name_error");
+    const jobName = document.getElementById("job_name");
+    const jobNameError = document.getElementById("job_name_error");
 
-    const jobType        = document.getElementById("job_type");
-    const jobTypeError   = document.getElementById("job_type_error");
+    const jobType = document.getElementById("job_type");
+    const jobTypeError = document.getElementById("job_type_error");
 
-    const nocInput       = document.getElementById("noc");
-    const nocError       = document.getElementById("noc_error");
+    const nocInput = document.getElementById("noc");
+    const nocError = document.getElementById("noc_error");
 
     // Cylinder Information
-    const prpcPurchase       = document.getElementById("prpc_purchase");
-    const prpcPurchaseError  = document.getElementById("prpc_purchase_error");
+    const prpcPurchase = document.getElementById("prpc_purchase");
+    const prpcPurchaseError = document.getElementById("prpc_purchase_error");
 
-    const prpcSell       = document.getElementById("prpc_sell");
-    const prpcSellError  = document.getElementById("prpc_sell_error");
+    const prpcSell = document.getElementById("prpc_sell");
+    const prpcSellError = document.getElementById("prpc_sell_error");
 
-    const cylinderDiameter      = document.querySelector('input[name="cylinder_diameter[]"]');
-    const cylinderDiameterError = document.querySelector('div[name="cylinder_diameter_error"]');
+    const cylinderDiameter = document.querySelector(
+        'input[name="cylinder_diameter[]"]'
+    );
+    const cylinderDiameterError = document.querySelector(
+        'div[name="cylinder_diameter_error"]'
+    );
 
-    const cylinderHeight        = document.querySelector('input[name="cylinder_height[]"]');
-    const cylinderHeightError   = document.querySelector('div[name="cylinder_height_error"]');
+    const cylinderHeight = document.querySelector(
+        'input[name="cylinder_height[]"]'
+    );
+    const cylinderHeightError = document.querySelector(
+        'div[name="cylinder_height_error"]'
+    );
 
-    const cylinderMadeIn        = document.getElementById("cylinder_made_in");
-    const cylinderMadeInError   = document.getElementById("cylinder_made_in_error");
-    const cylinderMadeInOther   = document.getElementById("cylinder_made_in_company_name");
+    const cylinderMadeIn = document.getElementById("cylinder_made_in");
+    const cylinderMadeInError = document.getElementById(
+        "cylinder_made_in_error"
+    );
+    const cylinderMadeInOther = document.getElementById(
+        "cylinder_made_in_company_name"
+    );
 
-    const cylinderDate      = document.getElementById("cylinder_dates");
+    const cylinderDate = document.getElementById("cylinder_dates");
     const cylinderDateError = document.getElementById("cylinder_date_error");
 
-    const cylinderBillNo      = document.getElementById("cylinder_bill_no");
-    const cylinderBillNoError = document.getElementById("cylinder_bill_no_error");
+    const cylinderBillNo = document.getElementById("cylinder_bill_no");
+    const cylinderBillNoError = document.getElementById(
+        "cylinder_bill_no_error"
+    );
 
     // Pouch Information
-    const pouchDiameter      = document.getElementById("pouch_diameter");
+    const pouchDiameter = document.getElementById("pouch_diameter");
     const pouchDiameterError = document.getElementById("pouch_diameter_error");
 
-    const pouchHeight        = document.getElementById("pouch_height");
-    const pouchHeightError   = document.getElementById("pouch_height_error");
+    const pouchHeight = document.getElementById("pouch_height");
+    const pouchHeightError = document.getElementById("pouch_height_error");
 
-    const pouchOpenDiameter      = document.getElementById("pouch_open_diameter");
-    const pouchOpenDiameterError = document.getElementById("pouch_open_diameter_error");
+    const pouchOpenDiameter = document.getElementById("pouch_open_diameter");
+    const pouchOpenDiameterError = document.getElementById(
+        "pouch_open_diameter_error"
+    );
 
-    const pouchOpenHeight        = document.getElementById("pouch_open_height");
-    const pouchOpenHeightError   = document.getElementById("pouch_open_height_error");
+    const pouchOpenHeight = document.getElementById("pouch_open_height");
+    const pouchOpenHeightError = document.getElementById(
+        "pouch_open_height_error"
+    );
 
-    const pouchCombination1      = document.getElementById("pouch_combination1");
-    const pouchCombination1Error = document.getElementById("pouch_combination1_error");
+    const pouchCombination1 = document.getElementById("pouch_combination1");
+    const pouchCombination1Error = document.getElementById(
+        "pouch_combination1_error"
+    );
 
-    const pouchCombination2      = document.getElementById("pouch_combination2");
-    const pouchCombination2Error = document.getElementById("pouch_combination2_error");
+    const pouchCombination2 = document.getElementById("pouch_combination2");
+    const pouchCombination2Error = document.getElementById(
+        "pouch_combination2_error"
+    );
 
     // Job Status
-    const jobStatus      = document.getElementById("job_status");
+    const jobStatus = document.getElementById("job_status");
     const jobStatusError = document.getElementById("job_status_error"); // add this div in HTML
 
     // ---------- BASIC VALIDATIONS ----------
@@ -222,7 +236,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (value === "other") {
             newCompanyInput.style.display = "block";
             if (newCompanyInput.value.trim() === "") {
-                companyNameError.textContent = "Please provide New Company Name.";
+                companyNameError.textContent =
+                    "Please provide New Company Name.";
                 companyNameError.style.display = "block";
                 return false;
             }
@@ -282,7 +297,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function validateCylinderDiameter() {
         if (!cylinderDiameter || cylinderDiameter.value.trim() === "") {
-            if (cylinderDiameterError) cylinderDiameterError.style.display = "block";
+            if (cylinderDiameterError)
+                cylinderDiameterError.style.display = "block";
             return false;
         }
         if (cylinderDiameterError) cylinderDiameterError.style.display = "none";
@@ -291,7 +307,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function validateCylinderHeight() {
         if (!cylinderHeight || cylinderHeight.value.trim() === "") {
-            if (cylinderHeightError) cylinderHeightError.style.display = "block";
+            if (cylinderHeightError)
+                cylinderHeightError.style.display = "block";
             return false;
         }
         if (cylinderHeightError) cylinderHeightError.style.display = "none";
@@ -312,7 +329,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (value === "others") {
             cylinderMadeInOther.style.display = "block";
             if (cylinderMadeInOther.value.trim() === "") {
-                cylinderMadeInError.textContent = "Please provide Cylinder Made In company name.";
+                cylinderMadeInError.textContent =
+                    "Please provide Cylinder Made In company name.";
                 cylinderMadeInError.style.display = "block";
                 return false;
             }
@@ -409,30 +427,30 @@ document.addEventListener("DOMContentLoaded", function () {
     // ---------- FORM VALIDATION WRAPPER ----------
 
     function validateForm() {
-        const vJobDate          = validateJobDate();
-        const vInvoice          = validateInvoiceNo();
-        const vCompany          = validateCompanyName();
+        const vJobDate = validateJobDate();
+        const vInvoice = validateInvoiceNo();
+        const vCompany = validateCompanyName();
 
-        const vJobName          = validateJobName();
-        const vJobType          = validateJobType();
-        const vNoc              = validateNoc();
+        const vJobName = validateJobName();
+        const vJobType = validateJobType();
+        const vNoc = validateNoc();
 
-        const vPrpcPurchase     = validatePrpcPurchase();
-        const vPrpcSell         = validatePrpcSell();
-        const vCylDia           = validateCylinderDiameter();
-        const vCylHeight        = validateCylinderHeight();
-        const vCylMadeIn        = validateCylinderMadeIn();
-        const vCylDate          = validateCylinderDate();
-        const vCylBill          = validateCylinderBillNo();
+        const vPrpcPurchase = validatePrpcPurchase();
+        const vPrpcSell = validatePrpcSell();
+        const vCylDia = validateCylinderDiameter();
+        const vCylHeight = validateCylinderHeight();
+        const vCylMadeIn = validateCylinderMadeIn();
+        const vCylDate = validateCylinderDate();
+        const vCylBill = validateCylinderBillNo();
 
-        const vPouchDia         = validatePouchDiameter();
-        const vPouchHeight      = validatePouchHeight();
-        const vPouchOpenDia     = validatePouchOpenDiameter();
-        const vPouchOpenHeight  = validatePouchOpenHeight();
-        const vPouchComb1       = validatePouchCombination1();
-        const vPouchComb2       = validatePouchCombination2();
+        const vPouchDia = validatePouchDiameter();
+        const vPouchHeight = validatePouchHeight();
+        const vPouchOpenDia = validatePouchOpenDiameter();
+        const vPouchOpenHeight = validatePouchOpenHeight();
+        const vPouchComb1 = validatePouchCombination1();
+        const vPouchComb2 = validatePouchCombination2();
 
-        const vJobStatus        = validateJobStatus();
+        const vJobStatus = validateJobStatus();
 
         return (
             vJobDate &&
@@ -463,29 +481,43 @@ document.addEventListener("DOMContentLoaded", function () {
     if (jobDate) jobDate.addEventListener("change", validateJobDate);
     if (billInput) billInput.addEventListener("input", validateInvoiceNo);
 
-    if (companyName) companyName.addEventListener("change", validateCompanyName);
-    if (newCompanyInput) newCompanyInput.addEventListener("input", validateCompanyName);
+    if (companyName)
+        companyName.addEventListener("change", validateCompanyName);
+    if (newCompanyInput)
+        newCompanyInput.addEventListener("input", validateCompanyName);
 
     if (jobName) jobName.addEventListener("change", validateJobName);
     if (jobType) jobType.addEventListener("change", validateJobType);
     if (nocInput) nocInput.addEventListener("input", validateNoc);
 
-    if (prpcPurchase) prpcPurchase.addEventListener("input", validatePrpcPurchase);
+    if (prpcPurchase)
+        prpcPurchase.addEventListener("input", validatePrpcPurchase);
     if (prpcSell) prpcSell.addEventListener("input", validatePrpcSell);
 
-    if (cylinderDiameter) cylinderDiameter.addEventListener("input", validateCylinderDiameter);
-    if (cylinderHeight) cylinderHeight.addEventListener("input", validateCylinderHeight);
-    if (cylinderMadeIn) cylinderMadeIn.addEventListener("change", validateCylinderMadeIn);
-    if (cylinderMadeInOther) cylinderMadeInOther.addEventListener("input", validateCylinderMadeIn);
-    if (cylinderDate) cylinderDate.addEventListener("change", validateCylinderDate);
-    if (cylinderBillNo) cylinderBillNo.addEventListener("input", validateCylinderBillNo);
+    if (cylinderDiameter)
+        cylinderDiameter.addEventListener("input", validateCylinderDiameter);
+    if (cylinderHeight)
+        cylinderHeight.addEventListener("input", validateCylinderHeight);
+    if (cylinderMadeIn)
+        cylinderMadeIn.addEventListener("change", validateCylinderMadeIn);
+    if (cylinderMadeInOther)
+        cylinderMadeInOther.addEventListener("input", validateCylinderMadeIn);
+    if (cylinderDate)
+        cylinderDate.addEventListener("change", validateCylinderDate);
+    if (cylinderBillNo)
+        cylinderBillNo.addEventListener("input", validateCylinderBillNo);
 
-    if (pouchDiameter) pouchDiameter.addEventListener("input", validatePouchDiameter);
+    if (pouchDiameter)
+        pouchDiameter.addEventListener("input", validatePouchDiameter);
     if (pouchHeight) pouchHeight.addEventListener("input", validatePouchHeight);
-    if (pouchOpenDiameter) pouchOpenDiameter.addEventListener("input", validatePouchOpenDiameter);
-    if (pouchOpenHeight) pouchOpenHeight.addEventListener("input", validatePouchOpenHeight);
-    if (pouchCombination1) pouchCombination1.addEventListener("input", validatePouchCombination1);
-    if (pouchCombination2) pouchCombination2.addEventListener("input", validatePouchCombination2);
+    if (pouchOpenDiameter)
+        pouchOpenDiameter.addEventListener("input", validatePouchOpenDiameter);
+    if (pouchOpenHeight)
+        pouchOpenHeight.addEventListener("input", validatePouchOpenHeight);
+    if (pouchCombination1)
+        pouchCombination1.addEventListener("input", validatePouchCombination1);
+    if (pouchCombination2)
+        pouchCombination2.addEventListener("input", validatePouchCombination2);
 
     if (jobStatus) jobStatus.addEventListener("change", validateJobStatus);
 
@@ -503,9 +535,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 proformaForm.submit();
             });
         } else {
-            const firstError = document.querySelector(".invalid-feedback[style*='display: block']");
+            const firstError = document.querySelector(
+                ".invalid-feedback[style*='display: block']"
+            );
             if (firstError) {
-                firstError.scrollIntoView({ behavior: "smooth", block: "center" });
+                firstError.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                });
             }
         }
     });

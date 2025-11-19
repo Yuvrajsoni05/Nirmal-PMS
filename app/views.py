@@ -9,7 +9,6 @@ from urllib import response
 from urllib.request import Request
 
 import pandas as pd
-from regex import P
 import requests
 from django.contrib import messages, sessions
 from django.contrib.auth import authenticate, login, logout
@@ -39,11 +38,13 @@ from django.utils.html import strip_tags
 from django.utils.timezone import now
 from django.views.decorators.http import require_GET
 from django.views.generic import TemplateView
+from yaml import compose_all
 from num2words import num2words
+from regex import P
 from rest_framework import serializers, status
 from rest_framework.serializers import Serializer, ValidationError
 
-from app.models import CDRDetail, Job_detail, ProformaInvoice
+from app.models import CDRDetail, Job_detail, ProformaInvoice, ProformaJob
 from app.serializers import (CDRDataSerializer, JobDetailSerializer,
                              JobUpdateSerializer)
 from app.templatetags import custom_tags
@@ -113,7 +114,6 @@ def login_page(request):
                     messages.error(request, "Email not found.")
                     return redirect("login_page")
                 user = authenticate(request, username=user_login, password=password)
-
             else:
                 user = authenticate(request, username=username_email, password=password)
             if user is not None:
@@ -121,14 +121,10 @@ def login_page(request):
                     request.session.set_expiry(60 * 60 * 24 * 30)
                 else:
                     request.session.set_expiry(0)
-
                 login(request, user)
-
                 messages.success(request, f"You are logged in {user.username} ")
-
                 logger.info("user Login")
                 return redirect("dashboard_page")
-
             else:
                 messages.error(request, "Invalid Username or Password")
                 logger.error(f"Invalid Username or Password")
@@ -140,6 +136,7 @@ def login_page(request):
         return redirect("login_page")
 
     return render(request, "Registration/login_page.html")
+
 
 
 @custom_login_required
@@ -334,45 +331,56 @@ def dashboard_page(request):
         cylinder_date_sorting = request.GET.get("cylinder_date_sorting", "")
         cylinder_made_in_sorting = request.GET.get("cylinder_made_in_sorting", "")
 
-        db_sqlite3 = Job_detail.objects.all()
-        
         filters = Q()
+
+        # --- Filters ---
         if get_q:
             filters &= Q(company_name__icontains=get_q)
         if job_name_search:
             filters &= Q(job_name__icontains=job_name_search)
+
+        # Date filters
         if date_s and date_e:
             filters &= Q(date__range=[date_s, date_e])
         elif date_s:
             filters &= Q(date__icontains=date_s)
         elif date_e:
             filters &= Q(date__icontains=date_e)
+        
+        
+        
+        print(filters)
         db_sqlite3 = Job_detail.objects.filter(filters)
         job_status = Job_detail.objects.values("job_status").distinct()
-        if job_name_sorting == "asc":
-            db_sqlite3 = db_sqlite3.order_by("job_name")
-        elif job_name_sorting == "desc":
-            db_sqlite3 = db_sqlite3.order_by("-job_name")
-        elif date_sorting == "asc":
-            db_sqlite3 = db_sqlite3.order_by("date")
-        elif date_sorting == "desc":
-            db_sqlite3 = db_sqlite3.order_by("-date")
-        elif cylinder_date_sorting == "asc":
-            db_sqlite3 = db_sqlite3.order_by("cylinder_date")
-        elif cylinder_date_sorting == "desc":
-            db_sqlite3 = db_sqlite3.order_by("-cylinder_date")
-        elif company_name_sorting == "asc":
-            db_sqlite3 = db_sqlite3.order_by("company_name")
-        elif company_name_sorting == "desc":
-            db_sqlite3 = db_sqlite3.order_by("-company_name")
-        elif cylinder_made_in_sorting == "asc":
-            db_sqlite3 = db_sqlite3.order_by("cylinder_made_in")
-        elif cylinder_made_in_sorting == "desc":
-            db_sqlite3 = db_sqlite3.order_by("-cylinder_made_in")
-        elif sorting == "asc":
-            db_sqlite3 = db_sqlite3.order_by("id")
-        elif sorting == "desc":
-            db_sqlite3 = db_sqlite3.order_by("-id")
+
+       
+        sorting_map = {
+            "asc": "id",
+            "desc": "-id",
+            "job_name_asc": "job_name",
+            "job_name_desc": "-job_name",
+            "date_asc": "date",
+            "date_desc": "-date",
+            "cyl_date_asc": "cylinder_date",
+            "cyl_date_desc": "-cylinder_date",
+            "company_asc": "company_name",
+            "company_desc": "-company_name",
+            "madein_asc": "cylinder_made_in",
+            "madein_desc": "-cylinder_made_in",
+        }
+        print(type(sorting_map))
+        sort_key = (
+            f"job_name_{job_name_sorting}" if job_name_sorting else
+            f"date_{date_sorting}" if date_sorting else
+            f"cyl_date_{cylinder_date_sorting}" if cylinder_date_sorting else
+            f"company_{company_name_sorting}" if company_name_sorting else
+            f"madein_{cylinder_made_in_sorting}" if cylinder_made_in_sorting else
+            sorting
+        )
+        print(type(sort_key))
+
+        if sort_key in sorting_map:
+            db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
         else:
             db_sqlite3 = db_sqlite3.order_by("-job_status", "date")
         p = Paginator(db_sqlite3, 10)
@@ -452,7 +460,7 @@ def delete_data(request, delete_id):
                 else:
                     img.delete()
             delete_data.delete()
-            messages.success(request, "Job Deleted successfully w")
+            messages.success(request, "Job Deleted successfully")
             return redirect("dashboard_page")
     except Exception as e:
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
@@ -469,7 +477,9 @@ def base_html(request):
 def job_entry(request):
 
     company_name = CompanyName.objects.values("company_name").union(
-        CDRDetail.objects.values("company_name")
+        CDRDetail.objects.values("company_name").union(ProformaInvoice.objects.values(
+        'company_name'
+        ))
     )
     job_status = Job_detail._meta.get_field("job_status").choices
     
@@ -515,7 +525,7 @@ def add_job(request):
             job_status = request.POST.get("job_status")
             files = request.FILES.getlist("files[]")
 
-            print(job_name)
+      
             required_filed = {
                 "Date": date,
                 "Bill no": bill_no,
@@ -550,9 +560,6 @@ def add_job(request):
                 return redirect("job_entry")
 
             file_dic = file_name_convert(files)
-
-        
-            
             if new_company != "":
                 if CompanyName.objects.filter(
                     company_name__icontains=new_company
@@ -1096,11 +1103,15 @@ def cdr_page(request):
     p = Paginator(cdr_data, 10)
     page = request.GET.get("page")
     cdr_emails = CDRDetail.objects.values("company_email").distinct()
-    cdr_company_name = CDRDetail.objects.values("company_name").distinct().union(CompanyName.objects.values('company_name').distinct())
+    cdr_company = list(CDRDetail.objects.values("company_name").distinct().union(CompanyName.objects.values('company_name').distinct()))
+    prforma        =  list(ProformaInvoice.objects.values('company_name').distinct())
     cdr_job_name = CDRDetail.objects.values("job_name").distinct()
 
     datas = p.get_page(page)
     nums = "a" * datas.paginator.num_pages
+    
+    
+    cdr_company_name = cdr_company + prforma
     context = {
         "nums": nums,
         "cdr_details": datas,
@@ -1456,7 +1467,7 @@ def cdr_sendmail_data(request):
             template_name=template_name, context=CDR_INFO
         )
         email = EmailMultiAlternatives(
-            subject="Mail From Nirmal Ventures",
+            subject=f"CDR Details {cdr_job_name}",
             body="plain_message",
             from_email="Soniyuvraj9499@gmail.com",
             to=[receiver_email],
@@ -1545,16 +1556,16 @@ def send_mail_data(request):
         "note": note,
     }
     
-    print(job_info)
+
     receiver_email = company_email_address
     template_name = "Base/send_email.html"
     convert_to_html_content = render_to_string(
         template_name=template_name, context=job_info
     )
     email = EmailMultiAlternatives(
-        subject="Mail From Nirmal Ventures",
+        subject=f"Job Details {job_name}",
         body="plain_message",
-        from_email=request.user.email,
+        from_email='soniyuvraj949@gmail.com',
         to=[receiver_email],
     )
     email.attach_alternative(convert_to_html_content, "text/html")
@@ -1571,20 +1582,27 @@ def send_mail_data(request):
 @custom_login_required
 def company_name_suggestion(request):
     company_name = request.GET.get("company_name", "")
+    
     if company_name:
 
-        jobs = list(
-            CDRDetail.objects.filter(company_name__iexact=company_name)
-            .values("job_name")
-            .distinct().union(Job_detail.objects.values('job_name').distinct())
+        cdr_jobs = list(
+                CDRDetail.objects.filter(company_name__iexact=company_name)
+                .values("job_name")
+                .distinct()
+            )
+        job_details = list(Job_detail.objects.filter(
+            company_name__iexact=company_name).values("job_name").distinct()
         )
-
+        
+        proforma_job =list(ProformaJob.objects.filter(proforma_invoice__company_name=company_name).values("job_name"))
+       
+        jobs=  cdr_jobs + job_details + proforma_job
+        
         email = list(
             CDRDetail.objects.filter(company_name__iexact=company_name)
-            .values("company_email")
-            .distinct()
+            .values("company_email").distinct().union(ProformaInvoice.objects.filter(company_name=company_name).values("company_email").distinct())
         )
-        print(email)
+ 
         return JsonResponse({"email": email, "jobs": jobs})
     return JsonResponse({"error": "Invalid request"}, status=400)
 
@@ -1594,11 +1612,9 @@ def company_name_suggestion_job(request):
     company_name = request.GET.get("company_name", "")
 
     if company_name:
-        jobs = list(
-            Job_detail.objects.filter(company_name__iexact=company_name)
-            .values("job_name")
-            .distinct()
-        )
+        proforma_job =list(ProformaJob.objects.filter(proforma_invoice__company_name=company_name).values("job_name"))
+    
+                
         job_detail = (
             Job_detail.objects.filter(company_name__iexact=company_name)
             .values("job_name")
@@ -1609,7 +1625,7 @@ def company_name_suggestion_job(request):
             .values("job_name")
             .distinct()
         )
-        jobs = list(job_detail.union(cdr_job))
+        jobs = list(job_detail.union(cdr_job)) + list(proforma_job)
 
         return JsonResponse({"jobs": jobs})
     return JsonResponse({"error": "Invalid request"}, status=400)
@@ -1650,7 +1666,8 @@ def cdr_company_check(company_name, company_email):
 
 @custom_login_required
 def ProformaInvoicePage(request):
-    company_list = list(Job_detail.objects.values("company_name").distinct().union(CDRDetail.objects.values("company_name")))
+    company_list = CompanyName.objects.values('company_name').distinct().union(ProformaInvoice.objects.values('company_name'))
+  
     
     job_name = list(Job_detail.objects.values("job_name").distinct())
     bank_details = BankDetails.objects.all()
@@ -1882,7 +1899,7 @@ def ProformaSendMail(request):
             template_name=template_name, context={"data": item_dic}
         )
         email = EmailMultiAlternatives(
-            subject="Nirmal Group",
+            subject=f"Proforma Details {job_names}",
             body="plain message",
             from_email="soniyuvraj9499@gmail.com",
             to=[receiver_email],
@@ -2017,108 +2034,101 @@ def ProformaInvoiceCreate(request):
 
 @require_GET
 def ProformaInvoicePageAJAX(request):
+    def safe_int(value, default=0):
+        try:
+            return int(value)
+        except (TypeError, ValueError):
+            return default
+
+    def safe_float(value, default=0.0):
+        try:
+            return float(value)
+        except (TypeError, ValueError):
+            return default
+
+
     igst = request.GET.get("igsts")
     cgst = request.GET.get("cgsts")
     sgst = request.GET.get("sgsts")
     quantities = request.GET.getlist("quantities[]")
     prpc_prices = request.GET.getlist("prpc_prices[]")
-
     company = request.GET.get("company_name", "")
 
-    gst = int(igst) + int(cgst) + int(sgst)
+    igst_val = safe_int(igst)
+    cgst_val = safe_int(cgst)
+    sgst_val = safe_int(sgst)
+    gst = igst_val + cgst_val + sgst_val
 
-    quantities = [float(quantity) for quantity in quantities if quantity]
+   
+    quantities = [safe_float(q) for q in quantities if q not in (None, "", "0", 0)]
+    prpc_prices = [safe_float(p) for p in prpc_prices if p not in (None, "", "0", 0)]
 
-    prpc_prices = [float(prpc_price) for prpc_price in prpc_prices if prpc_price]
+    taxable_value = sum(q * p for q, p in zip(quantities, prpc_prices))
+    gst_amount = taxable_value * (gst / 100) if gst else 0
+    total_amount = round(taxable_value + gst_amount, 2)
 
-    # total_quantities = sum(quantities)
-    # total_prpc_prices = sum(prpc_prices)
-
-    taxable_value = sum(
-        quantity * prpc_price for quantity, prpc_price in zip(quantities, prpc_prices)
-    )
-    gst_amount = taxable_value * (gst / 100)
-    total_amount = taxable_value + gst_amount
-
-    total_amount = round(total_amount, 2)
-    
+   
+    job = []  
     company_contact = ""
     company_email = ""
     billing_address = ""
+
     if company:
+    
+        job_qs = Job_detail.objects.filter(company_name=company) \
+            .values("job_name").distinct()
 
-        # proforma_job = list(
-        #     ProformaJob.objects.filter(proforma_invoice__company_name=company_name)
-        #     .values("job_name")
-        #     .distinct()
-            
-        # )
-        
-        job = list(
-            Job_detail.objects.filter(company_name=company)
-            .values("job_name")
-            .distinct().union(
-                CDRDetail.objects.filter(company_name=company)
-            .values("job_name")
-            .distinct().union(
-                ProformaJob.objects.filter(proforma_invoice__company_name=company)
-            .values("job_name")
-            .distinct()
-            )
-            )
-            
-        )
-        print(company)
-        print(job)
-        
-        
-      
-
-        company_contact = list(
-            ProformaInvoice.objects.filter(company_name__iexact=company)
-            .values("company_contact")
-            .distinct()
+        job_qs = job_qs.union(
+            CDRDetail.objects.filter(company_name=company)
+            .values("job_name").distinct(),
+            ProformaJob.objects.filter(proforma_invoice__company_name=company)
+            .values("job_name").distinct(),
         )
 
-        company_email = list(
-            ProformaInvoice.objects.filter(company_name__iexact=company)
-            .values("company_email")
-            .distinct()
-            .union(
-                CDRDetail.objects.filter(company_name__iexact=company)
-                .values("company_email")
-                .distinct()
-            )
+        job = list(job_qs)
+        print("JOB LIST FOR COMPANY:", company, job)
+
+
+        company_contact_qs = ProformaInvoice.objects.filter(
+            company_name__iexact=company
+        ).values("company_contact").distinct()
+
+     
+        company_email_qs = ProformaInvoice.objects.filter(
+            company_name__iexact=company
+        ).values("company_email").distinct().union(
+            CDRDetail.objects.filter(company_name__iexact=company)
+            .values("company_email").distinct()
         )
 
-        billing_address = list(
-            ProformaInvoice.objects.filter(company_name__iexact=company)
-            .values("billing_address")
-            .distinct()
-        )
+     
+        billing_address_qs = ProformaInvoice.objects.filter(
+            company_name__iexact=company
+        ).values("billing_address").distinct()
 
-        company_email = company_email[0]["company_email"] if company_email else ""
         company_contact = (
-            company_contact[0]["company_contact"] if company_contact else ""
+            company_contact_qs[0]["company_contact"] if company_contact_qs else ""
+        )
+        company_email = (
+            company_email_qs[0]["company_email"] if company_email_qs else ""
         )
         billing_address = (
-            billing_address[0]["billing_address"] if billing_address else ""
+            billing_address_qs[0]["billing_address"] if billing_address_qs else ""
         )
-    else:
-        company = ""
 
     context = {
         "total_amount": total_amount,
-        "job": job,
+        "job": job, 
         "company_contact": company_contact,
         "company_email": company_email,
         "billing_address": billing_address,
         "taxable_value": taxable_value,
         "gst_amount": gst_amount,
     }
-    print(context)
+
     logger.debug(f"AJAX context: {context}")
     return JsonResponse(context)
+
 
 
 

@@ -67,7 +67,7 @@ function printProforma(button) {
     <table>
         <tr>
             <td style="width: 45%">
-                <b>Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.)</b><br />
+                <b>Shrri nirmal ventures private limited. Ltd. (Pack. Div.)</b><br />
                 1601, 16th Floor, B Block,<br />
                 Navratna Corporate Park, Nr. Jayantilal Park<br />
                 Ambli Bopal Road, Ambli, Ahmedabad - 380058<br />

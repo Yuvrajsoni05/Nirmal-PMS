@@ -2,7 +2,6 @@ function togglePassword(inputId, button) {
     var input = document.getElementById(inputId);
     var icon = button.querySelector("i");
 
-    // Toggle input type between password and text
     if (input.type === "password") {
         input.type = "text";
         icon.classList.remove("fa-eye");

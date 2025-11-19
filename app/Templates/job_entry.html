@@ -1,4 +1,5 @@
-{% extends "Base/base.html" %} {% load humanize %} {% load static %} {% block style %} {% endblock style %} {% block main_block %}
+{% extends "Base/base.html" %} {% load humanize %} {% load static %} {% block
+style %} {% endblock style %} {% block main_block %}
 <div class="page-inner">
     <div
         class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
@@ -159,7 +160,8 @@
                                                     <option value="">
                                                         Select Job Name
                                                     </option>
-                                                    {% for job in cdr_job_name %}
+                                                    {% for job in cdr_job_name
+                                                    %}
                                                     <option
                                                         value="{{ job.job_name }}"
                                                     >
@@ -348,8 +350,6 @@
                                                     >
                                                 </label>
                                                 <div class="input-group">
-                                                    
-
                                                     <input
                                                         type="number"
                                                         class="form-control border-1"
@@ -384,8 +384,6 @@
                                                         Please provide Cylinder
                                                         Diameter
                                                     </div>
-
-                                                    
                                                 </div>
                                                 <input
                                                     type="hidden"
@@ -413,7 +411,8 @@
                                                     <option value="">
                                                         Select Company
                                                     </option>
-                                                    {% for i in cylinder_company_names %}
+                                                    {% for i in
+                                                    cylinder_company_names %}
                                                     <option
                                                         value="{{ i.cylinder_made_in }}"
                                                     >
@@ -518,8 +517,6 @@
                                                     >
                                                 </label>
                                                 <div class="input-group">
-                                                   
-
                                                     <input
                                                         type="number"
                                                         class="form-control border-1"
@@ -535,7 +532,8 @@
                                                     >
                                                         Please provide Pouch
                                                         Height
-                                                    </div> <span
+                                                    </div>
+                                                    <span
                                                         class="input-group-text bg-light border-1 fw-bold"
                                                         >×</span
                                                     >
@@ -555,8 +553,6 @@
                                                         Please provide Pouch
                                                         Diameter
                                                     </div>
-
-                                                    
                                                 </div>
                                                 <input
                                                     type="hidden"
@@ -575,8 +571,6 @@
                                                     >
                                                 </label>
                                                 <div class="input-group">
-                                                    
-
                                                     <input
                                                         type="number"
                                                         class="form-control border-1"
@@ -613,8 +607,6 @@
                                                         Please provide Pouch
                                                         Open Diameter
                                                     </div>
-
-                                                    
                                                 </div>
                                                 <input
                                                     type="hidden"
@@ -643,7 +635,6 @@
                                                         placeholder="Combination 1"
                                                         step="0.01"
                                                         min="0"
-                                                        value="0"
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -666,7 +657,6 @@
                                                         placeholder="Combination 2"
                                                         step="0.01"
                                                         min="0"
-                                                        value="0"
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -689,7 +679,6 @@
                                                         placeholder="Combination 3"
                                                         step="0.01"
                                                         min="0"
-                                                        value="0"
                                                     />
 
                                                     <span
@@ -705,7 +694,6 @@
                                                         placeholder="Combination 4"
                                                         step="0.01"
                                                         min="0"
-                                                        value="0"
                                                     />
                                                 </div>
 
@@ -716,7 +704,7 @@
                                                     name="pouch_combination[]"
                                                 />
                                             </div>
-                                            <br>
+                                            <br />
                                             <!-- File Upload Section -->
                                             <div class="mb-4">
                                                 <h6
@@ -902,9 +890,7 @@
         } else {
             $("#job_name")
                 .empty()
-                .append('<option value="">Select Job</option>');
-            $("#job_name")
-                .empty()
+                .append('<option value="">Select Job</option>')
                 .append('<option value="others">Other</option>');
         }
     });
