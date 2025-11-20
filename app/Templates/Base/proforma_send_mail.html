@@ -120,8 +120,8 @@
                 <tr>
                     <td style="width: 45%">
                         <b
-                            >shrri nirmal ventures private limited (Pack. Div.) {{
-                            data.date }}</b
+                            >shrri nirmal ventures private limited (Pack. Div.)
+                            {{ data.date }}</b
                         ><br />
                         1601, 16th Floor, B Block,<br />
                         Navratna Corporate Park, Nr. Jayantilal Park<br />
@@ -214,14 +214,13 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 4%">Sl No.</th>
-                        <th style="width: 27%">Description of Services</th>
-                        <th style="width: 8%">HSN/SAC</th>
-                        <th style="width: 8%">HSN Code</th>
-                        <th style="width: 8%">Quantity</th>
-                        <th style="width: 10%">Rate</th>
-                        <th style="width: 5%">per</th>
-                        <th style="width: 12%">Amount</th>
+                        <th>Sl No.</th>
+                        <th colspan="2">Description of Services</th>
+                        <th>HSN Code</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>per</th>
+                        <th>Amount</th>
                     </tr>
                 </thead>
 
@@ -237,7 +236,7 @@
                         >
                             {{ forloop.counter }}
                         </td>
-                        <td style="padding: 6px 4px">
+                        <td colspan="2" style="padding: 6px 4px">
                             <b>{{ job.title }}</b><br />
                             <span style="font-style: italic; font-size: 12px">
                                 {{ job.job_name }}<br />
@@ -245,7 +244,6 @@
                                 Cylinder Size: {{ job.cylinder_size }}
                             </span>
                         </td>
-                        <td class="text-right" style="padding: 6px 4px">-</td>
                         <td class="text-right" style="padding: 6px 4px">-</td>
                         <td class="text-right" style="padding: 6px 4px">
                             {{ job.quantity }} Nos.
@@ -309,8 +307,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 50%">HSN/SAC</th>
-
+                        <th style="width: 50%"></th>
                         <th style="width: 12%">Taxable Value</th>
                         <th style="width: 8%">IGST<br />Rate</th>
                         <th style="width: 15%">IGST Amount</th>

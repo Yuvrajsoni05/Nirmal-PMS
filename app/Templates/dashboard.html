@@ -3,8 +3,23 @@
 {% load humanize %}
 {% load static %}
 {% block styles %}
-    <style>
+<style>
+   .nexticon {
+    position: absolute;
+    right: -20px;
    
+    width: 20px;
+    border-radius: 20px;
+    color: #000000ff;
+}
+.previcon {
+    position: absolute;
+    left: -20px;
+    
+    width: 20px;
+    border-radius: 20px;
+    color: #000000ff;
+}
 
     </style>
 {% endblock styles %}
@@ -227,7 +242,7 @@
                                             <th scope="col">Open Size</th>
                                             <th scope="col">Combination</th>
                                             <th scope="col">Correction</th>
-                                            <th scope="col">Folder id</th>
+                                            <th scope="col">Images </th>
                                             <th scope="col" class="sticky-right">Job Status</th>
                                             <th scope="col">CDR Links</th>
                                             <th scope="col"> Job History </th>
@@ -383,7 +398,7 @@
                                                             <!-- Delete Button -->
                                                             <form method="post" action="{% url 'delete_data' delete_id=i.id %}" class="d-inline" id="delete-form-{{ i.id }}">
                                                         {% csrf_token %}
-                                                        <button type="button" class="btn btn-sm btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#confirmationModal" onclick="setFormId({{ i.id }})">
+                                                        <button type="button" class="btn btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#confirmationModal" onclick="setFormId({{ i.id }})">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
                                                                 <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
                                                             </svg>
@@ -423,6 +438,7 @@
                                                     </td>
                                                 </tr>
                                                 <!-- Modals for each row -->
+
                                                 <!-- Modal Structure -->
                                                         <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
                                                             <div class="modal-dialog">
@@ -910,13 +926,13 @@
                                                                         <!-- NOC -->
                                                                         <div class="col-md-6">
                                                                             <label for="noc" class="form-label fw-bold">NOC (No. of Colors)</label>
-                                                                            <input type="textarea"
-                                                                                   id="noc"
-                                                                                   class="form-control"
-                                                                                   name="noc"
-                                                                                   value="{{ i.noc }}"
-                                                                                   required>
+                                                                            <textarea
+                                                                                id="noc"
+                                                                                class="form-control"
+                                                                                name="noc"
+                                                                                required>{{ i.noc }}</textarea>
                                                                         </div>
+
                                                                         <!-- PRPC -->
                                                                         <div class="col-md-6">
                                                                             <label for="prpc" class="form-label fw-bold">PRPC Purchase (Per Rate Per Cylinder )</label>
@@ -1012,26 +1028,26 @@
                                                                                                class="form-control "
                                                                                                name="pouch_combination1"
                                                                                                value="{{ pc.0|cut:" " }}"
-                                                                                               required>
+                                                                                               required readonly>
                                                                                         <span class="input-group-text bg-light border-1 fw-bold">+</span>
                                                                                         <input type="text"
                                                                                                id="pouch_combination"
                                                                                                class="form-control "
                                                                                                name="pouch_combination2"
                                                                                                value="{{ pc.1|cut:" " }}"
-                                                                                               required>
+                                                                                               required readonly>
                                                                                         <span class="input-group-text bg-light border-1 fw-bold">+</span>
                                                                                         <input type="text"
                                                                                                id="pouch_combination"
                                                                                                class="form-control "
                                                                                                name="pouch_combination3"
-                                                                                               value="{{ pc.2|cut:" " }}">
+                                                                                               value="{{ pc.2|cut:" " }}" readonly>
                                                                                         <span class="input-group-text bg-light border-1 fw-bold">+</span>
                                                                                         <input type="text"
                                                                                                id="pouch_combination"
                                                                                                class="form-control "
                                                                                                name="pouch_combination4"
-                                                                                               value="{{ pc.3|cut:" " }}">
+                                                                                               value="{{ pc.3|cut:" " }}" readonly>
                                                                                     </div>
                                                                                 {% endwith %}
                                                                             </div>

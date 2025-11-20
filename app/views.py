@@ -1,56 +1,31 @@
 import json
 import logging
 import os
-import random
 import re
-from datetime import date, datetime, timedelta
-from decimal import Decimal
-from urllib import response
-from urllib.request import Request
+from datetime import datetime
 
-import pandas as pd
 import requests
-from django.contrib import messages, sessions
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import (PasswordResetConfirmView,
                                        PasswordResetDoneView,
                                        PasswordResetView)
-from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.sessions.models import Session
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.files import File
-from django.core.files.base import ContentFile
 # mail
-from django.core.mail import EmailMessage, EmailMultiAlternatives, send_mail
+from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import Paginator
 from django.db import utils
-from django.db.models import Q, Sum
-from django.db.models.signals import pre_delete
-from django.forms import fields
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.template.context_processors import request
 from django.template.loader import render_to_string
-from django.test import RequestFactory
-from django.urls import path, reverse_lazy
-from django.utils.html import strip_tags
-from django.utils.timezone import now
+from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
-from django.views.generic import TemplateView
-from yaml import compose_all
-from num2words import num2words
-from regex import P
-from rest_framework import serializers, status
-from rest_framework.serializers import Serializer, ValidationError
 
 from app.models import CDRDetail, Job_detail, ProformaInvoice, ProformaJob
-from app.serializers import (CDRDataSerializer, JobDetailSerializer,
-                             JobUpdateSerializer)
-from app.templatetags import custom_tags
-from app.utils import email_check, file_name_convert
+from app.utils import file_name_convert
 
-from . import utils
+from . import utils 
 from .decorators import *
 from .models import *
 
@@ -333,7 +308,7 @@ def dashboard_page(request):
 
         filters = Q()
 
-        # --- Filters ---
+        
         if get_q:
             filters &= Q(company_name__icontains=get_q)
         if job_name_search:
@@ -349,7 +324,6 @@ def dashboard_page(request):
         
         
         
-        print(filters)
         db_sqlite3 = Job_detail.objects.filter(filters)
         job_status = Job_detail.objects.values("job_status").distinct()
 
@@ -368,7 +342,7 @@ def dashboard_page(request):
             "madein_asc": "cylinder_made_in",
             "madein_desc": "-cylinder_made_in",
         }
-        print(type(sorting_map))
+      
         sort_key = (
             f"job_name_{job_name_sorting}" if job_name_sorting else
             f"date_{date_sorting}" if date_sorting else
@@ -377,7 +351,7 @@ def dashboard_page(request):
             f"madein_{cylinder_made_in_sorting}" if cylinder_made_in_sorting else
             sorting
         )
-        print(type(sort_key))
+   
 
         if sort_key in sorting_map:
             db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
@@ -387,21 +361,22 @@ def dashboard_page(request):
         page = request.GET.get("page")
         datas = p.get_page(page)
         total_job = db_sqlite3.count()
-        company_name = CompanyName.objects.all().order_by("company_name")
-        job_names = Job_detail.objects.values("job_name").all().distinct()
-        count_of_company = company_name.count()
+
+        company_names = Job_detail.objects.values('company_name').distinct()
+        job_names = Job_detail.objects.values("job_name").distinct()
+        count_of_company = CompanyName.objects.all().order_by("company_name").count()
 
         cylinder_company_names = CylinderMadeIn.objects.all()
         total_active_job = Job_detail.objects.filter(job_status="In Progress").count()
         count_of_cylinder_company = cylinder_company_names.count()
         nums = " " * datas.paginator.num_pages
-
+       
         context = {
             "nums": nums,
             "venues": datas,
             "total_job": total_job,
             "job_names": job_names,
-            "company_name": company_name,
+            "company_name": company_names,
             "cylinder_company_names": cylinder_company_names,
             "count_of_company": count_of_company,
             "count_of_cylinder_company": count_of_cylinder_company,
@@ -417,7 +392,7 @@ def dashboard_page(request):
             "total_active_job": total_active_job,
             "job_status": job_status,
         }
-
+        
     except Exception as e:
         messages.warning(request, "Something went wrong  try again")
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
@@ -428,18 +403,18 @@ def dashboard_page(request):
 
 @custom_login_required
 def delete_data(request, delete_id):
-    print(delete_id)
+   
     try:
         folder_url = Job_detail.objects.values_list("folder_url", flat=True).get(
             id=delete_id
         )
 
-        print(delete_id)
+        
         if folder_url and folder_url != "nan":
             try:
-                print(folder_url)
+                
                 url = os.environ.get("DELETE_WEBHOOK_JOB")
-                print(url)
+            
                 response = requests.delete(f"{url}{delete_id}")
 
                 messages.success(request, "Job Deleted successfully ")
@@ -451,10 +426,10 @@ def delete_data(request, delete_id):
         else:
             delete_data = get_object_or_404(Job_detail, id=delete_id)
             delete_images = delete_data.image.all()
-            print(delete_images)
+            
             for img in delete_images:
                 path = img.image.path
-                print(path)
+               
                 if os.path.isfile(path):
                     os.remove(path)
                 else:
@@ -469,7 +444,7 @@ def delete_data(request, delete_id):
 
 
 @custom_login_required
-def base_html(request):
+def base_html(request): 
     return render(request, "Base/base.html")
 
 
@@ -488,7 +463,7 @@ def job_entry(request):
     context = {
         "company_name": company_name,
         "cylinder_company_names": cylinder_company_names,
-        "cdr_job_name": cdr_job_name,
+        "job_name": cdr_job_name,
         "job_status":job_status
     }
     return render(request, "job_entry.html", context)
@@ -498,10 +473,12 @@ def job_entry(request):
 def add_job(request):
 
     try:
+        
         if request.method == "POST":
-            date = request.POST.get("job_date")
-            bill_no = request.POST.get("bill_no").strip()
-            company_name = request.POST.get("company_name", "").strip()
+            job_indexes = [] 
+            date = request.POST.get("job_date" ,'')
+            bill_no = request.POST.get("bill_no"  ,'')
+            company_name = request.POST.get("company_name", "")
             job_name = request.POST.getlist("job_name_real[]")
             
             job_type = request.POST.getlist("job_type[]")
@@ -509,7 +486,7 @@ def add_job(request):
             prpc_purchase = request.POST.getlist("prpc_purchase[]")
             prpc_sell = request.POST.getlist("prpc_sell[]")
             cylinder_size = request.POST.getlist("cylinder_size[]")
-            cylinder_made_in_s = request.POST.getlist("cylinder_select[]")
+            cylinder_made_in_s = request.POST.getlist("cylinder_made_in_real[]")
             cylinder_date = request.POST.getlist("cylinder_date[]")
             cylinder_bill_no = request.POST.getlist("cylinder_bill_no[]")
             pouch_size = request.POST.getlist("pouch_size[]")
@@ -517,15 +494,13 @@ def add_job(request):
  
             pouch_combination = request.POST.getlist('pouch_combination[]')
             new_company = request.POST.get("new_company")
-            new_cylinder_company_name = request.POST.getlist(
-                "cylinder_made_in_company_name"
-            )
+           
             
             correction = request.POST.get("correction")
             job_status = request.POST.get("job_status")
             files = request.FILES.getlist("files[]")
 
-      
+
             required_filed = {
                 "Date": date,
                 "Bill no": bill_no,
@@ -541,9 +516,8 @@ def add_job(request):
                 "Cylinder Bill No": cylinder_bill_no,
                 "Cylinder Date": cylinder_date,
                 "Prpc Sell": prpc_sell,
-                "Job Status" :job_status
-            }
-            
+                "Job Status": job_status
+            }            
             
             for i, r in required_filed.items():
                 if not r:
@@ -554,19 +528,27 @@ def add_job(request):
                     )
                     return redirect("job_entry")
 
-            file_error = utils.file_validation(files)
-            if file_error:
-                messages.error(request, file_error, extra_tags="custom-success-style")
-                return redirect("job_entry")
+            # file_error = utils.file_validation(files)
+            # if file_error:
+            #     messages.error(request, file_error, extra_tags="custom-success-style")
+            #     return redirect("job_entry")
 
-            file_dic = file_name_convert(files)
+            if cylinder_made_in_s:
+                for value in cylinder_made_in_s:
+                    if CylinderMadeIn.objects.filter(cylinder_made_in__iexact=value).exists():
+                        pass
+                    else:
+                        CylinderMadeIn.objects.create(
+                            cylinder_made_in=value
+                        )
+          
             if new_company != "":
                 if CompanyName.objects.filter(
                     company_name__icontains=new_company
                 ).exists():
                     messages.error(
                         request,
-                        "Company Name Already Exists",
+                        "company name already exists",
                         extra_tags="custom-success-style",
                     )
                     return redirect("job_entry")
@@ -577,8 +559,7 @@ def add_job(request):
                 messages.error(request, "Plz Provide Company Name")
                 return redirect("data-entry")
             
-            
-            files_per_job = len(files) // len(job_name)
+            file_dic = file_name_convert(files)
             for i in range(len(job_name)):
                 job = Job_detail.objects.create(
                     date=date,
@@ -599,13 +580,11 @@ def add_job(request):
                     cylinder_date=cylinder_date[i],
                     cylinder_bill_no=cylinder_bill_no[i],
                 )
-                start_idx = i * files_per_job
-                end_idx = start_idx + files_per_job
-                job_files = files[start_idx:end_idx]
-
-                for file in job_files:
-                    file_obj = file
-                    Jobimage.objects.create(job=job, image=file_obj)
+                files_for_this_job = request.FILES.getlist(f"files[{i}][]")
+                file = file_name_convert(files_for_this_job)
+                for f in file:
+                    
+                    Jobimage.objects.create(job=job, image=f)
 
                 job.save()
             messages.success(request, "Data successfully Add ")
@@ -730,6 +709,7 @@ def update_job(request, update_id):
             job_status = request.POST.get("job_status")
             files = request.FILES.getlist("files")
             pouch_combination = f"{pouch_combination1} + {pouch_combination2} + {pouch_combination3} + {pouch_combination4}"
+            
 
         demo = Job_detail.objects.values("date").get(id=update_id)
         date_formatte = demo["date"].strftime("%Y-%m-%d")
@@ -829,12 +809,12 @@ def update_job(request, update_id):
             try:
                 old_job = Job_detail.objects.get(id=update_id)
                 update_job_data = get_object_or_404(Job_detail, id=update_id)
+                print(Job_detail.objects.values("pouch_combination").get(id=update_id))
                 job = old_job
-
-                format_example = "%Y-%m-%d"
-                dt_obj = datetime.strptime(cylinder_date, format_example)
-                date_object = dt_obj.date()
-                print(date_object)
+                
+                
+                
+                print(pouch_combination)
                 for field in [
                     "job_status",
                     "cylinder_bill_no",
@@ -843,6 +823,7 @@ def update_job(request, update_id):
                     "prpc_sell",
                     "prpc_purchase",
                     "noc",
+                   
                     "job_type",
                     "job_name",
                     "company_name",
@@ -852,13 +833,15 @@ def update_job(request, update_id):
                     "cylinder_made_in",
                     "cylinder_date",
                     "date",
+                    
                 ]:
-
+                    
                     old_value = getattr(old_job, field)
+                    
                     new_value = request.POST.get(field)
-
+                    
                     if str(old_value) != new_value:
-                        print(type(old_value), type(new_value))
+                        
                         JobHistory.objects.create(
                             job=job,
                             field_name=field,
@@ -887,7 +870,7 @@ def update_job(request, update_id):
                 update_job_data.cylinder_date = cylinder_date
                 update_job_data.job_status = job_status
                 update_job_data.pouch_combination = pouch_combination
-
+                
                 for file_key, file_data in file_dic.items():
                     file_obj = file_data[1]
                     Jobimage.objects.create(job=update_job_data, image=file_obj)
@@ -1045,9 +1028,9 @@ def user_password(request):
 
 @custom_login_required
 def cdr_page(request):
-    search = request.GET.get("search", " ").strip()
-    date = request.GET.get("date", "").strip()
-    end_date = request.GET.get("end_date", "").strip()
+    search = request.GET.get("search", "")
+    date = request.GET.get("date", "")
+    end_date = request.GET.get("end_date", "")
 
     company_name_sorting = request.GET.get("company_name_sorting", "")
     job_name_sorting = request.GET.get("job_name_sorting", "")
@@ -1104,14 +1087,14 @@ def cdr_page(request):
     page = request.GET.get("page")
     cdr_emails = CDRDetail.objects.values("company_email").distinct()
     cdr_company = list(CDRDetail.objects.values("company_name").distinct().union(CompanyName.objects.values('company_name').distinct()))
-    prforma        =  list(ProformaInvoice.objects.values('company_name').distinct())
+    proforma    =  list(ProformaInvoice.objects.values('company_name').distinct())
     cdr_job_name = CDRDetail.objects.values("job_name").distinct()
 
     datas = p.get_page(page)
     nums = "a" * datas.paginator.num_pages
     
     
-    cdr_company_name = cdr_company + prforma
+    cdr_company_name = cdr_company + proforma
     context = {
         "nums": nums,
         "cdr_details": datas,
@@ -1129,15 +1112,15 @@ def cdr_page(request):
 @custom_login_required
 def cdr_add(request):
     if request.method == "POST":
-        company_name = request.POST.get("company_name", "").strip()
-        company_email = request.POST.get("company_email", "").strip()
-        cdr_upload_date = request.POST.get("cdr_upload_date", "").strip()
-        cdr_files = request.FILES.getlist("cdr_files", "")
-        job_name = request.POST.get("job_name", "").strip()
+        company_name = request.POST.get("company_name","").strip()
+        company_email = request.POST.get("company_email","").strip()
+        cdr_upload_date = request.POST.get("cdr_upload_date","").strip()
+        cdr_files = request.FILES.getlist("cdr_files","")
+        job_name = request.POST.get("job_name","").strip()
         cdr_corrections_data = request.POST.get("cdr_corrections")
-        new_company_name = request.POST.get("new_company_name", "").strip()
-        new_company_email = request.POST.get("new_company_email", "").strip()
-        new_job_name = request.POST.get("new_job_name", "").strip()
+        new_company_name = request.POST.get("new_company_name","").strip()
+        new_company_email = request.POST.get("new_company_email","").strip()
+        new_job_name = request.POST.get("new_job_name","").strip()
 
         if not job_name or not cdr_upload_date:
             messages.error(
@@ -1174,17 +1157,12 @@ def cdr_add(request):
                     request, f"{field} is Required", extra_tags="custom-success-style"
                 )
                 return redirect("company_add_page")
-
         if not cdr_files:
             messages.error(
                 request, "CDR File is Required", extra_tags="custom-success-style"
             )
             return redirect("company_add_page")
-        if len(cdr_files) > 2:
-            messages.error(
-                request, "You can upload only 2 files", extra_tags="custom-error-style"
-            )
-            return redirect("company_add_page")
+        
 
         if CDRDetail.objects.filter(
             company_name=company_name, company_email=company_email
@@ -1210,17 +1188,6 @@ def cdr_add(request):
         else:
             company_add_in = CompanyName.objects.create(company_name=company_name)
             company_add_in.save()
-
-        # if CDRDetail.objects.filter(
-        #     job_name__icontains=job_name, date=cdr_upload_date
-        # ).exists():
-        #     messages.error(
-        #         request,
-        #         "Job Name already exists on this date. Kindly update job.",
-        #         extra_tags="custom-success-style",
-        #     )
-        #     return redirect("company_add_page")
-
         data = {
             "company_name": company_name,
             "company_email": company_email,
@@ -1266,7 +1233,7 @@ def cdr_add(request):
                 CDRImage.objects.create(cdr=cdr_data, image=file_obj)
 
             cdr_data.save()
-            messages.success(request, "CDR Upload Successfully SQLite DB")
+            messages.success(request, "CDR Upload Successfully ")
             return redirect("company_add_page")
 
 
@@ -1334,17 +1301,7 @@ def cdr_update(request, update_id):
                 )
                 return redirect("company_add_page")
 
-        # if date != date_formatte:
-        #     if CDRDetail.objects.filter(
-        #         job_name__icontains=job_names, date=date
-        #     ).exists():
-        #         messages.error(
-        #             request,
-        #             "CDR Job Name are already Exists on this date kindly Update job",
-        #             extra_tags="custom-success-style",
-        #         )
-        #         return redirect("company_add_page")
-
+        
         file_error = utils.file_validation(cdr_files)
         if file_error:
             messages.error(request, file_error, extra_tags="custom-success-style")
@@ -1777,25 +1734,6 @@ def UpdateProformaInvoice(request, proforma_id):
         company_contact = request.POST.get("company_contact")
         title = request.POST.get("title")
         banking_details = request.POST.get("banking_details")
-
-        print(
-            invoice_date,
-            mode_payment,
-            billing_state_name,
-            billing_address,
-            billing_gstin,
-            quantity,
-            pouch_open_size,
-            cylinder_size,
-            prpc_rate,
-            total,
-            company_name,
-            company_email,
-            company_contact,
-            title,
-            banking_details,
-        )
-        print(proforma_id)
         item = get_object_or_404(ProformaInvoice, id=proforma_id)
         item.invoice_date = invoice_date
         item.mode_payment = mode_payment
@@ -1821,7 +1759,6 @@ def UpdateProformaInvoice(request, proforma_id):
 def ProformaSendMail(request):
     if request.method == "POST":
         company_email = request.POST.get("company_email", "")
-        total = request.POST.get("total")
         fields_to_send_mail = [
             "invoice_no",
             "invoice_date",
@@ -2046,7 +1983,6 @@ def ProformaInvoicePageAJAX(request):
         except (TypeError, ValueError):
             return default
 
-
     igst = request.GET.get("igsts")
     cgst = request.GET.get("cgsts")
     sgst = request.GET.get("sgsts")
@@ -2129,263 +2065,3 @@ def ProformaInvoicePageAJAX(request):
     logger.debug(f"AJAX context: {context}")
     return JsonResponse(context)
 
-
-
-
-# API OF ALL Views
-
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
-
-class JobList(APIView):
-    def get(self, request):
-        if request.method == "GET":
-            job = Job_detail.objects.all()
-            serializer = JobDetailSerializer(job, many=True)
-            return Response(serializer.data)
-
-    def post(self, request):
-        job_name = request.data.get("job_name")
-        new_job = request.data.get("new_job_name")
-
-        date = request.data.get("date")
-        company_name = request.data.get("company_name")
-        new_company = request.data.get("new_company")
-        images = request.FILES.getlist("images")
-
-        if company_name and new_company == "":
-            return Response(
-                {"Error": "Please provide company Name"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
-        for i in images:
-            ext = os.path.splitext(i.name)[1]
-            if ext.lower() not in valid_extension:
-                return Response(
-                    {
-                        "Error": "Invalid file  Only .jpg, .jpeg, .png and .ai are allowed."
-                    },
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-
-        if Job_detail.objects.filter(date=date, job_name=job_name).exists():
-            return Response(
-                {
-                    "Error": "Job Name already exists on this date. Kindly update the job."
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-        if not company_name:
-
-            company_name = new_company
-            if CompanyName.objects.filter(
-                company_name__icontains=company_name
-            ).exists():
-                return Response({"Error": "Company name already Exists"})
-            add_company = CompanyName.objects.create(company_name=company_name)
-
-        if not job_name:
-            job_name = new_job
-
-        file_dic = {}
-        for i, file in enumerate(images):
-            _, file_extension = os.path.splitext(file.name)
-            random_number = random.randint(1, 100)
-            new_file_name = f"{date}_{random_number}{file_extension}"
-
-            file.name = new_file_name
-            file_key = f"{new_file_name}"
-            file_dic[file_key] = (file.name, file, file.content_type)
-
-        mutable_data = request.data.copy()
-        mutable_data["company_name"] = company_name
-        mutable_data["job_name"] = job_name
-
-        serializer = JobDetailSerializer(data=mutable_data)
-        if serializer.is_valid():
-            job_instance = serializer.save()
-            for img_key, (filename, image, content_type) in file_dic.items():
-                job_image = Jobimage.objects.create(job=job_instance, image=image)
-
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class JobDetailAV(APIView):
-    def get(self, request, pk):
-        try:
-            job = Job_detail.objects.get(pk=pk)
-
-        except Job_detail.DoesNotExist:
-            return Response(
-                {"Error": "Job dose not exist"}, status=status.HTTP_404_NOT_FOUND
-            )
-
-        serializer = JobUpdateSerializer(job)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        if request.method == "PUT":
-            job = Job_detail.objects.get(pk=pk)
-            demo = Job_detail.objects.values("date").get(id=pk)
-            date_formatte = demo["date"].strftime("%Y-%m-%d")
-            new_date = request.data.get("date")
-            images = request.FILES.getlist("images")
-
-            valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
-            for i in images:
-                ext = os.path.splitext(i.name)[1]
-                if ext.lower() not in valid_extension:
-                    return Response(
-                        {
-                            "Error": "Invalid file  Only .jpg, .jpeg, .png and .ai are allowed."
-                        },
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-
-            file_dic = {}
-            for i, file in enumerate(images):
-                _, file_extension = os.path.splitext(file.name)
-                random_number = random.randint(1, 100)
-                new_file_name = f"{date}_{random_number}{file_extension}"
-                file.name = new_file_name
-                file_key = f"{new_file_name}"
-                file_dic[file_key] = (file.name, file, file.content_type)
-
-            if new_date != date_formatte:
-                if Job_detail.objects.filter(date=new_date).exists():
-                    return Response(
-                        {"Error": "A job with the same date already exists."},
-                        status=status.HTTP_400_BAD_REQUEST,
-                    )
-
-            serializer = JobUpdateSerializer(job, data=request.data)
-            if serializer.is_valid():
-                job_instance = serializer.save()
-                for img_key, (filename, image, content_type) in file_dic.items():
-                    job_image = Jobimage.objects.create(job=job_instance, image=image)
-                return Response(serializer.data)
-            else:
-                return Response(serializer.errors, status=status.HTTP_404_NOT_FOUND)
-
-    def delete(self, request, pk):
-        if request.method == "DELETE":
-            job = Job_detail.objects.get(pk=pk)
-            delete_images = job.image.all()
-            for img in delete_images:
-                path = img.image.path
-                if os.path.isfile(path):
-                    os.remove(path)
-                else:
-                    img.delete()
-
-            job.delete()
-            return Response(
-                {"success": "Job Deleted Successfully "}, status=status.HTTP_200_OK
-            )
-
-
-class CDRDetailAVS(APIView):
-    serializer_class = CDRDataSerializer
-
-    def get(self, request):
-        if request.method == "GET":
-            cdr = CDRDetail.objects.all()
-            serializer = CDRDataSerializer(cdr, many=True)
-            return Response(serializer.data)
-
-    def post(self, request):
-        job_name = request.data.get("job_name")
-        images = request.FILES.getlist("images")
-        date = request.data.get("date")
-        company_name = request.data.get("company_name")
-        company_email = request.data.get("company_email")
-
-        print(images)
-        image_error = file_convert(images)
-        if image_error:
-            return Response(image_error, status=status.HTTP_404_NOT_FOUND)
-
-        job_error = cdr_job_check(job_name, date)
-        if job_error:
-            return Response(job_error, status=status.HTTP_400_BAD_REQUEST)
-
-        company_name_error = cdr_company_check(company_name, company_email)
-        if company_name_error:
-            return Response(company_name_error, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = self.serializer_class(data=request.data)
-        if serializer.is_valid():
-
-            cdr_instance = serializer.save()
-
-            for i in images:
-                print("This Is I  ", i)
-                filename = i.name
-                size_limit = 2 * 1024 * 1024
-                print(size_limit)
-                file_size = i.size
-                # thumbnail_file = None
-
-                _, file_extension = os.path.splitext(i.name)
-                random_number = random.randint(1, 100)
-                new_file_name = f"{date}_{random_number}{file_extension}"
-                i.name = new_file_name
-
-                # if file_size > size_limit:
-                #     img = Image.open(i)
-                #     base, ext = os.path.splitext(new_file_name)
-                #     print(base)
-                #     quality = 80
-                #     for f in range(10):
-                #         io = BytesIO()
-                #         img.save(io, format="WEBP", optimize=True, quality=quality)
-                #         size = io.tell()
-                #         print(size)
-                #         print(f"This is Size of {size:2f}")
-
-                #         if size <= size_limit:
-
-                #             thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
-                #             break
-                #         quality -= 5
-                # else:
-                #     img = Image.open(i)
-                #     io = BytesIO()
-                #     img.save(io, format="WEBP", optimize=True, quality=40)
-                #     io.seek(0)
-                #     base, ext = os.path.splitext(filename)
-                #     thumbnail_file = File(io, name=f"{base}_thumbnail{ext}")
-
-                CDRImage.objects.create(cdr=cdr_instance, image=i)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class CDRUpdateView(APIView):
-    def get(self, request, pk):
-        try:
-            cdr = CDRDetail.objects.get(pk=pk)
-        except Exception as e:
-            logger.error(f"Something went wrong: {str(e)}", exc_info=True)
-            return Response({"error": "CDR Dose not exist"})
-        serializer = CDRDataSerializer(cdr)
-        return Response(serializer.data)
-
-    def put(self, request, pk):
-        if request.method == "PUT":
-            cdr = CDRDetail.objects.get(pk=pk)
-            date = CDRDetail.objects.values("date").get(pk=pk)
-            date_formatte = date["date"].strftime("%Y-%m-%d")
-            images = request.FILES.getlist("image")
-
-            image_error = file_convert(images)
-            if image_error:
-                return Response({"error": image_error})

@@ -303,7 +303,7 @@
                                             <td class="text-truncate">
                                                 <form method="post" action="{% url 'delete_cdr' delete_id=i.id %}" class="d-inline" id="delete-form-{{ i.id }}">
                                                         {% csrf_token %}
-                                                        <button type="button" class="btn btn-sm btn-outline-danger ms-1" 
+                                                        <button type="button" class="btn btn-outline-danger ms-1" 
                                                                 data-bs-toggle="modal" data-bs-target="#confirmationModal" 
                                                                 data-id="{{ i.id }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
@@ -312,24 +312,7 @@
                                                         </button>
                                                     </form>
 
-                                                    <script>
-                                                        let formIdToSubmit;
-
-                                                        
-                                                        document.addEventListener('DOMContentLoaded', function () {
-                                                            const deleteButtons = document.querySelectorAll('.btn-outline-danger');
-                                                            deleteButtons.forEach(button => {
-                                                                button.addEventListener('click', function () {
-                                                                    formIdToSubmit = this.dataset.id;
-                                                                });
-                                                            });
-                                                        });
-
-                                                        // Submit the form if user confirms
-                                                        function submitForm() {
-                                                            document.getElementById('delete-form-' + formIdToSubmit).submit();
-                                                        }
-                                                    </script>
+                                                   
 
                                                     <!-- Modal -->
                                                     <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
@@ -725,7 +708,28 @@
 {% endblock main_block %}
 {% block script %}
     <script src="{% static 'js/cdr_page.js' %}"></script>
-    <script>
+   
+<script>
+let formIdToSubmit;
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteButtons = document.querySelectorAll('.btn-outline-danger');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function () {
+            formIdToSubmit = this.dataset.id;
+        });
+    });
+});
+
+
+function submitForm() {
+    document.getElementById('delete-form-' + formIdToSubmit).submit();
+}
+</script>
+  
+    
+<script>
 function validateUpdateForm(form) {
     let valid = true;
     let requiredFields = [

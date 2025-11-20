@@ -217,7 +217,7 @@
                                         <form action="{% url "delete_proforma_invoice" proforma_id=proforma.id  %}" method="POST"  class="d-inline" id="delete-form-{{ proforma.id }}" >
                                             {% csrf_token %}
                                             <button
-                                                type="button"name="delete_proforma_invoice" class="btn btn-sm btn-outline-danger ms-1"data-bs-toggle="modal"data-bs-target="#confirmationModal" data-id="{{ proforma.id }}" >
+                                                type="button"name="delete_proforma_invoice" class="btn btn-outline-danger ms-1"data-bs-toggle="modal"data-bs-target="#confirmationModal" data-id="{{ proforma.id }}" >
                                                 <i class="fa fa-trash" aria-hidden="true"></i>
                                             </button>
                                         </form>

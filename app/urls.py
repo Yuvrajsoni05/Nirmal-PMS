@@ -1,9 +1,8 @@
 from django.contrib import admin
-from django.urls import path, include
-from .views import *
 from django.contrib.auth import views as auth_views
+from django.urls import include, path
 
-from app.views import JobDetailAV
+from .views import *
 
 urlpatterns = [
     path("", login_page, name="login_page"),
@@ -59,10 +58,5 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     path("reset_done", password_reset_done, name="password_reset_complete"),
-    # cbv
-    # path('cdr_cbv_page',CDRPageView.as_view(),name='cdr_cbv_page'),
-    # DRF
-    path("job-list/", JobList.as_view(), name="job-list"),
-    path("job-list/<int:pk>/", JobDetailAV.as_view(), name="job-detail"),
-    path("cdr-list", CDRDetailAVS.as_view(), name="cdr-list"),
+
 ]

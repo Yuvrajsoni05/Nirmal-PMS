@@ -18,7 +18,7 @@ function printProforma(button) {
                             <span style="margin-left: 150px"></span><br />
                         </span>
                     </td>
-                    <td class="text-right" style="padding: 6px 4px">-</td>
+                    <td class="text-right" style="padding: 6px 4px"></td>
                     <td class="text-right" style="padding: 6px 4px">-</td>
                     <td class="text-right" style="padding: 6px 4px">
                         ${job.quantity} Nos.
@@ -121,14 +121,13 @@ function printProforma(button) {
     <table>
         <thead>
             <tr>
-                <th style="width:4%">Sl No.</th>
-                <th style="width:27%">Description of Services</th>
-                <th style="width:8%">HSN/SAC</th>
-                <th style="width:8%">HSN Code</th>
-                <th style="width:8%">Quantity</th>
-                <th style="width:10%">Rate</th>
-                <th style="width:5%">Per</th>
-                <th style="width:12%">Amount</th>
+                <th>Sl No.</th>
+                <th colspan="2">Description of Services</th>
+                <th>HSN Code</th>
+                <th>Quantity</th>
+                <th>Rate</th>
+                <th>per</th>
+                <th>Amount</th>
             </tr>
         </thead>
         <tbody class="products-section">
@@ -163,7 +162,7 @@ function printProforma(button) {
     <table>
         <thead>
             <tr>
-                <th style="width:50%">HSN/SAC</th>
+                <th style="width:50%"></th>
                 <th style="width:12%">Taxable Value</th>
                 <th style="width:8%">IGST<br/>Rate</th>
                 <th style="width:15%">IGST Amount</th>

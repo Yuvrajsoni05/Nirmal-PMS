@@ -81,7 +81,7 @@ class Job_detail(models.Model):
     cylinder_made_in = models.CharField(max_length=200)
     pouch_size = models.CharField(max_length=200)
     pouch_open_size = models.CharField(max_length=200)
-    pouch_combination = models.CharField(max_length=200)
+    pouch_combination = models.CharField(max_length=200,blank=True,null=True)
     correction = models.TextField(blank=True, null=True)
     folder_url = models.URLField()
     image_links = models.CharField(max_length=1000,blank=True, null=True)

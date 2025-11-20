@@ -1,5 +1,7 @@
-{% extends "Base/base.html" %} {% load humanize %} {% load static %} {% block
-style %} {% endblock style %} {% block main_block %}
+{% extends "Base/base.html" %} {% load humanize %} {% load static %}
+{% block style %}
+ 
+{% endblock style %} {% block main_block %}
 <div class="page-inner">
     <div
         class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
@@ -50,7 +52,7 @@ style %} {% endblock style %} {% block main_block %}
                                         <input type="date" class="form-control
                                         border-1" value="{% now "Y-m-d" %}"
                                         id="job_date" name="job_date"
-                                        pattern="\d{2}-\d{2}-\d{4}">
+                                        >
                                         <div
                                             class="invalid-feedback"
                                             id="job_date_error"
@@ -160,8 +162,7 @@ style %} {% endblock style %} {% block main_block %}
                                                     <option value="">
                                                         Select Job Name
                                                     </option>
-                                                    {% for job in cdr_job_name
-                                                    %}
+                                                    {% for job in job_name %}
                                                     <option
                                                         value="{{ job.job_name }}"
                                                     >
@@ -394,51 +395,40 @@ style %} {% endblock style %} {% block main_block %}
 
                                         <div class="row g-3 mt-2">
                                             <div class="col-12 col-md-4">
-                                                <label
-                                                    for="cylinder_made_in"
-                                                    class="form-label fw-semibold text-dark"
-                                                >
-                                                    Cylinder Made In
-                                                    <span class="text-danger"
-                                                        >*</span
-                                                    >
+                                                <label for="cylinder_made_in" class="form-label fw-semibold text-dark">
+                                                    Cylinder Made In <span class="text-danger">*</span>
                                                 </label>
+
                                                 <select
-                                                    name="cylinder_select[]"
-                                                    id="cylinder_made_in"
-                                                    class="form-control form-select border-1"
+                                                    name="cylinder_made_in_select[]"
+                                                    class="form-control form-select border-1 cylinder-made-in-select"
                                                 >
-                                                    <option value="">
-                                                        Select Company
-                                                    </option>
-                                                    {% for i in
-                                                    cylinder_company_names %}
-                                                    <option
-                                                        value="{{ i.cylinder_made_in }}"
-                                                    >
+                                                    <option value="">Select Company</option>
+                                                    {% for i in cylinder_company_names %}
+                                                    <option value="{{ i.cylinder_made_in }}">
                                                         {{ i.cylinder_made_in }}
                                                     </option>
                                                     {% endfor %}
-                                                    <option value="others">
-                                                        Other
-                                                    </option>
+                                                    <option value="others">Other</option>
                                                 </select>
 
+                                                <!-- Text input shown when "Other" is selected -->
                                                 <input
                                                     type="text"
-                                                    class="form-control border-1 mt-2"
+                                                    class="form-control border-1 mt-2 cylinder-made-in-other"
                                                     style="display: none"
-                                                    id="cylinder_made_in_company_name"
-                                                    name="cylinder_made_in_company_name"
+                                                    name="cylinder_made_in_other[]"
                                                     placeholder="Cylinder Made In"
                                                 />
 
-                                                <div
-                                                    class="invalid-feedback"
-                                                    id="cylinder_made_in_error"
-                                                >
-                                                    Please provide Cylinder Made
-                                                    In
+                                                <!-- Hidden real field that you read in Django -->
+                                                <input
+                                                    type="hidden"
+                                                    name="cylinder_made_in_real[]"
+                                                />
+
+                                                <div class="invalid-feedback" id="cylinder_made_in_error">
+                                                    Please provide Cylinder Made In
                                                 </div>
                                             </div>
 
@@ -456,10 +446,7 @@ style %} {% endblock style %} {% block main_block %}
                                                 </label>
                                                 <input type="date"
                                                 class="form-control border-1"
-                                                id="cylinder_dates" value="{%
-                                                now "Y-m-d" %}"
-                                                name="cylinder_date[]"
-                                                pattern="\d{2}-\d{2}-\d{4}">
+                                                id="cylinder_dates" value="{% now "Y-m-d" %}" name="cylinder_date[]">
                                                 <div
                                                     class="invalid-feedback"
                                                     id="cylinder_date_error"
@@ -722,11 +709,10 @@ style %} {% endblock style %} {% block main_block %}
                                                         <div
                                                             class="border border-2 border-dashed rounded-3 p-4 text-center bg-light"
                                                         >
-                                                            <input
+                                                             <input
                                                                 class="form-control border-0 bg-transparent"
                                                                 type="file"
-                                                                id="files"
-                                                                name="files[]"
+                                                                name="files[0][]"
                                                                 multiple
                                                                 accept=".jpeg,.png,.jpg,.ai"
                                                             />
@@ -897,39 +883,50 @@ style %} {% endblock style %} {% block main_block %}
 </script>
 
 <script>
-    $(document).ready(function () {
-        $(document)
-            .off("click", "#add-job")
-            .on("click", "#add-job", function (e) {
-                e.preventDefault();
+$(document).ready(function () {
 
-                let newSection = $(
-                    "#job-details-section .job-section:first"
-                ).clone();
 
-                newSection.find("input").val("");
-                newSection.find("select").prop("selectedIndex", 0);
-                newSection.find(".close-job-btn").closest(".d-grid").remove();
+    function updateJobIndexes() {
+        $("#job-details-section .job-section").each(function (idx) {
+            $(this).attr("data-job-index", idx);
 
-                newSection.find("h5").after(`
+            // Update file input name
+            $(this).find('input[type="file"]').attr("name", `files[${idx}][]`);
+        });
+    }
+
+    $(document).on("click", "#add-job", function (e) {
+        e.preventDefault();
+
+        let newSection = $("#job-details-section .job-section:first").clone();
+
+        newSection.find("input").val("");
+        newSection.find("select").prop("selectedIndex", 0);
+
+       
+        newSection.find(".close-job-btn").closest(".d-grid").remove();
+
+        newSection.find("h5").after(`
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button class="btn btn-danger me-md-2 close-job-btn" type="button">X</button>
             </div>
         `);
 
-                $("#job-details-section").append(newSection);
-            });
-
-        $(document)
-            .off("click", ".close-job-btn")
-            .on("click", ".close-job-btn", function (e) {
-                e.preventDefault();
-
-                if ($("#job-details-section .job-section").length > 1) {
-                    $(this).closest(".job-section").remove();
-                }
-            });
+        $("#job-details-section").append(newSection);
+        updateJobIndexes();
     });
+
+
+    $(document).on("click", ".close-job-btn", function (e) {
+        e.preventDefault();
+        if ($("#job-details-section .job-section").length > 1) {
+            $(this).closest(".job-section").remove();
+        }
+    });
+    updateJobIndexes();
+
+});
+
 </script>
 
 <script>
@@ -968,6 +965,45 @@ style %} {% endblock style %} {% block main_block %}
 
             // Update value for backend
             hiddenField.value = newJobInput.value.trim();
+        }
+    });
+</script>
+<script>
+    document.addEventListener("input", function (e) {
+        // 1) Handle select change
+        if (e.target.matches('select[name="cylinder_made_in_select[]"]')) {
+            const selectEl = e.target;
+            const block = selectEl.closest(".col-12"); // or a closer wrapper
+            const otherInput = block.querySelector(
+                'input[name="cylinder_made_in_other[]"]'
+            );
+            const hiddenField = block.querySelector(
+                'input[name="cylinder_made_in_real[]"]'
+            );
+
+            if (selectEl.value === "others") {
+                otherInput.style.display = "block";
+            } else {
+                otherInput.style.display = "none";
+                otherInput.value = "";
+            }
+
+            // Set value for backend
+            hiddenField.value =
+                selectEl.value === "others"
+                    ? otherInput.value.trim()
+                    : selectEl.value;
+        }
+
+        // 2) Handle typing in "Other" input
+        if (e.target.matches('input[name="cylinder_made_in_other[]"]')) {
+            const otherInput = e.target;
+            const block = otherInput.closest(".col-12"); // same wrapper as above
+            const hiddenField = block.querySelector(
+                'input[name="cylinder_made_in_real[]"]'
+            );
+
+            hiddenField.value = otherInput.value.trim();
         }
     });
 </script>
