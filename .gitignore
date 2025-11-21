@@ -1,3 +1,13 @@
 .env
 /media
 /venv
+/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+build/
+*.debug.log
+*.sqlite3
+.pyc

@@ -3,6 +3,10 @@
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <title>{% block title %}Dashboard{% endblock %}</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css"
+            rel="stylesheet"
+        />
         <meta
             content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
             name="viewport"
@@ -128,6 +132,7 @@
             </div>
             {% endfor %} {% endif %}
         </div>
+
         <!--   Core JS Files   -->
         <script src="{% static 'assets/js/core/jquery-3.7.1.min.js' %}"></script>
         <script src="{% static 'assets/js/core/popper.min.js' %}"></script>
@@ -155,6 +160,20 @@
         {% endcomment %}
         <!-- Kaiadmin JS -->
         <script src="{% static 'assets/js/kaiadmin.min.js' %}"></script>
+
+        <link
+            href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css"
+            rel="stylesheet"
+        />
+        <script type="module">
+            import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+
+            createChat({
+                webhookUrl:
+                    "http://localhost:5678/webhook/4d6327ef-aac3-4bb7-a0ae-e751339b93e2/chat",
+            });
+        </script>
+
         {% comment %} {% endcomment %}
         <script>
             // Check internet connectivity on page load
@@ -198,6 +217,7 @@
                 });
             });
         </script>
+
         {% block script %} {% endblock script %}
     </body>
 </html>

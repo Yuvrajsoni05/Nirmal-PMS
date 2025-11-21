@@ -186,7 +186,7 @@ function printJobDetails(btn) {
                 <body>
                     <div class="text-center mb-4">
                         <h2 style="color: #0d6efd; margin-bottom: 5px;">Nirmal Group</h2>
-                        <h4 style="margin-bottom: 20px;">Job Details Report</h4>
+                        <h4 style="margin-bottom: 20px;">CDR Details    </h4>
                         <hr>
                     </div>
                     

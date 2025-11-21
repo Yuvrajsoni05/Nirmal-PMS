@@ -104,7 +104,7 @@
                         
                                 <div class="col-md-4">
                                     <label for="job_name" class="form-label fw-semibold">Job Name</label>
-                                    <select name="job_name[]" id="job_name" class="form-control job-name" >
+                                    <select name="job_name" id="job_name" class="form-control job-name" >
                                         <option value="" selected disabled>Select Job Name</option>
                                         {% for i in job_names %}
                                         <option >
@@ -686,17 +686,16 @@
 <script>
 $(document).ready(function() {
 
-    $(document).on('change', '#billing_state_name, #company_name, input[name="gst[]"], .item_check', function() {
-        var changedField = $(this).attr('id');
+    $(document).on('input change', '#billing_state_name, #company_name, input[name="gst[]"], .item_check, input[name="quantity[]"], input[name="prpc_price[]"], .pouch-diameter, .pouch-height, .cylinder-diameter, .cylinder-height, .new-job, .job-name', function() {
+        var changedField = $(this).attr('id') || $(this).attr('name');
         var billing_state_name = $('#billing_state_name').val();
         var company_name = $('#company_name').val();
-        
+
         // GST Checkbox values
         var igst = $('#igst').is(':checked') ? 18 : 0;
         var cgst = $('#cgst').is(':checked') ? 9 : 0;
         var sgst = $('#sgst').is(':checked') ? 9 : 0;
 
-       
         var quantities = $('input[name="quantity[]"]').map(function() {
             return $(this).val() || 0;
         }).get();
@@ -704,7 +703,6 @@ $(document).ready(function() {
             return $(this).val() || 0;
         }).get();
 
-  
         if (company_name === "others") {
             $("#new_company").show();
         } else {
@@ -730,8 +728,7 @@ $(document).ready(function() {
             sgst = 0;
             cgst = 0;
         }
-        console.log("Company name changed to:", company_name);
-        // Send data to server
+
         $.ajax({
             url: "{% url 'proforma_invoice_ajax' %}",
             type: "GET",
@@ -745,30 +742,42 @@ $(document).ready(function() {
                 prpc_prices: prpc_prices
             },
             success: function(response) {
-                
+                // update company details if provided
                 if (changedField === 'company_name' || response.company_email) {
-                    $('#company_email').val(response.company_email);
-                    $('#company_contact').val(response.company_contact);
-                    $('#billing_address').val(response.billing_address);
-
-                   
-                    var jobSelect = $('.job-section:first').find('.job-name');
-                    jobSelect.empty().append('<option value="" selected>Select Job</option>');
-                   
-                    $.each(response.job, function (index, job) {
-                        $("#job_name").append(
-                            '<option value="' +
-                                job.job_name +
-                                '">' +
-                                job.job_name +
-                                "</option>"
-                        );
-                    });
-                    
-                    console.log(response.job)
-                    jobSelect.append('<option value="others">Other</option>');
+                    $('#company_email').val(response.company_email || '');
+                    $('#company_contact').val(response.company_contact || '');
+                    $('#billing_address').val(response.billing_address || '');
                 }
-               
+
+                // Only update job dropdowns when the server returned job data or when company_name changed.
+                if ((response.job && response.job.length) || changedField === 'company_name') {
+                    $('.job-name').each(function() {
+                        var $select = $(this);
+                        var previous = $select.val();
+                        $select.empty().append('<option value="" selected disabled>Select Job Name</option>');
+                        if (response.job && response.job.length) {
+                            $.each(response.job, function(index, job) {
+                                $select.append('<option value="' + job.job_name + '">' + job.job_name + '</option>');
+                            });
+                        }
+                        $select.append('<option value="others">Other</option>');
+
+                        // restore previous selection if it still exists (including custom-job)
+                        if (previous) {
+                            if ($select.find('option[value="' + previous + '"]').length) {
+                                $select.val(previous);
+                            } else {
+                                // if previously a custom value, re-add it so user selection isn't lost
+                                if (previous !== 'others' && previous !== '') {
+                                    $select.append('<option class="custom-job" value="' + previous + '" selected>' + previous + '</option>');
+                                } else {
+                                    $select.prop('selectedIndex', 0);
+                                }
+                            }
+                        }
+                    });
+                }
+
                 if (response.total_amount !== undefined) {
                     $('#total_amount').val(Number(response.total_amount).toFixed(2));
                 }
@@ -818,7 +827,7 @@ $(document).ready(function() {
         const diameter = section.find('.pouch-diameter').val();
         const height = section.find('.pouch-height').val();
         if (diameter && height) {
-            section.find('.pouch-open-size').val(`${diameter}x${height}`);
+            section.find('.pouch-open-size').val(`${height}x${diameter}`);
         }
     });
 
@@ -827,7 +836,7 @@ $(document).ready(function() {
         const diameter = section.find('.cylinder-diameter').val();
         const height = section.find('.cylinder-height').val();
         if (diameter && height) {
-            section.find('.cylinder-size').val(`${diameter}x${height}`);
+            section.find('.cylinder-size').val(`${height}x${diameter}`);
         }
     });
    

@@ -72,6 +72,7 @@ INSTALLED_APPS = [
 ]
 INTERNAL_IPS = [
     "127.0.0.1",
+    "192.168.29.94"
 ]
 
 MIDDLEWARE = [
@@ -84,6 +85,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    
 
 ]
 

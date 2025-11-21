@@ -255,9 +255,24 @@ class ProformaInvoice(models.Model):
     
     
     def total_worlds(self):
-        total_world = self.total.split('.')
-        total_in_words = num2words(total_world[0], lang='en_IN').title()
-        return total_in_words
+        """
+        Return total in words (Indian numbering); if total is missing/invalid or too large for num2words,
+        fall back to a formatted numeric string to avoid OverflowError.
+        """
+        if not self.total:
+            return ""
+        total_str = str(self.total).replace(',', '').strip()
+        # get integer part before decimal
+        int_part = total_str.split('.')[0]
+        try:
+            num = int(int_part)
+        except (ValueError, TypeError):
+            return ""
+        try:
+            return num2words(num, lang='en_IN').title()
+        except OverflowError:
+            # num2words can't handle very large numbers; return formatted integer with commas as fallback
+            return f"{num:,}"
     
     
     def __str__(self):

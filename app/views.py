@@ -1,5 +1,6 @@
 import json
 import logging
+from operator import inv
 import os
 import re
 from datetime import datetime
@@ -295,16 +296,16 @@ def update_user(request, user_id):
 @custom_login_required
 def dashboard_page(request):
     try:
-        get_q = request.GET.get("q", "")
-        job_name_search = request.GET.get("job_name_search", "")
-        date_s = request.GET.get("date", "")
-        date_e = request.GET.get("end_date", "")
-        sorting = request.GET.get("sorting", "")
-        date_sorting = request.GET.get("date_sorting", "")
-        company_name_sorting = request.GET.get("company_name_sorting", "")
-        job_name_sorting = request.GET.get("job_name_sorting", "")
-        cylinder_date_sorting = request.GET.get("cylinder_date_sorting", "")
-        cylinder_made_in_sorting = request.GET.get("cylinder_made_in_sorting", "")
+        get_q = request.GET.get("q", "").strip()
+        job_name_search = request.GET.get("job_name_search", "").strip()
+        date_s = request.GET.get("date", "").strip()
+        date_e = request.GET.get("end_date", "").strip()
+        sorting = request.GET.get("sorting", "").strip()
+        date_sorting = request.GET.get("date_sorting", "").strip()
+        company_name_sorting = request.GET.get("company_name_sorting", "").strip()
+        job_name_sorting = request.GET.get("job_name_sorting", "").strip()
+        cylinder_date_sorting = request.GET.get("cylinder_date_sorting", "").strip()
+        cylinder_made_in_sorting = request.GET.get("cylinder_made_in_sorting", "").strip()
 
         filters = Q()
 
@@ -382,7 +383,7 @@ def dashboard_page(request):
             "count_of_cylinder_company": count_of_cylinder_company,
             # 'total_sales':total_sales,
             "datas": datas,
-            # 'total_purchase':total_purchase,
+          
             "sorting": sorting,
             "company_name_sorting": company_name_sorting,
             "job_name_sorting": job_name_sorting,
@@ -1375,13 +1376,13 @@ def offline_page(request):
 def cdr_sendmail_data(request):
 
     if request.method == "POST":
-        date = request.POST.get("date", " ")
-        cdr_company_name = request.POST.get("cdr_company_name", " ")
-        cdr_company_address = request.POST.get("cdr_company_address", " ")
+        date = request.POST.get("date", "")
+        cdr_company_name = request.POST.get("cdr_company_name", "")
+        cdr_company_address = request.POST.get("cdr_company_address", "")
         attachments = request.FILES.getlist("attachment")
-        cdr_job_name = request.POST.get("cdr_job_name", " ")
-        cdr_corrections = request.POST.get("cdr_corrections", " ")
-        cdr_notes = request.POST.get("notes", " ")
+        cdr_job_name = request.POST.get("cdr_job_name", "")
+        cdr_corrections = request.POST.get("cdr_corrections", "")
+        cdr_notes = request.POST.get("notes", "")
         correction_check = request.POST.get("correction_check", "")
         cdr_date_check = request.POST.get("cdr_date_check")
 
@@ -1624,8 +1625,6 @@ def cdr_company_check(company_name, company_email):
 @custom_login_required
 def ProformaInvoicePage(request):
     company_list = CompanyName.objects.values('company_name').distinct().union(ProformaInvoice.objects.values('company_name'))
-  
-    
     job_name = list(Job_detail.objects.values("job_name").distinct())
     bank_details = BankDetails.objects.all()
     states = ProformaInvoice.INDIAN_STATES
@@ -1653,12 +1652,26 @@ def ViewProformaInvoice(request):
         "company_name", flat=True
     ).distinct()
 
+    date_sorting = request.GET.get("invoice_date_sorting", "")
+    company_name_sorting = request.GET.get("company_name_sorting", "")
+    print(date_sorting)
     start_date = request.GET.get("start_date", "")
     end_date = request.GET.get("end_date", "")
     select_company = request.GET.get("select_company", "")
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
     
+    if company_name_sorting == "asc":
+        proformaInvoice = proformaInvoice.order_by("company_name")
+    elif company_name_sorting == "desc":
+        proformaInvoice = proformaInvoice.order_by("-company_name")
+    elif date_sorting == "asc":
+        proformaInvoice = proformaInvoice.order_by("invoice_date")
+    elif date_sorting == "desc":
+        proformaInvoice = proformaInvoice.order_by("-invoice_date")
+        
+        
+        
     if select_company and start_date and end_date:
         proformaInvoice = proformaInvoice.filter(
             Q(invoice_date__range=[start_date, end_date])
@@ -1836,7 +1849,7 @@ def ProformaSendMail(request):
             template_name=template_name, context={"data": item_dic}
         )
         email = EmailMultiAlternatives(
-            subject=f"Proforma Details {job_names}",
+            subject=f"Proforma Details {item_dic.get('invoice_no','')}",
             body="plain message",
             from_email="soniyuvraj9499@gmail.com",
             to=[receiver_email],
@@ -1864,22 +1877,22 @@ def DeleteProformaInvoice(request, proforma_id):
 @custom_login_required
 def ProformaInvoiceCreate(request):
     if request.method == "POST":
-        invoice_no = request.POST.get("invoice_no", "")
-        invoice_date = request.POST.get("invoice_date", "")
-        mode_payment = request.POST.get("mode_payment", "")
-        company_name = request.POST.get("company_name", "")
-        company_contact = request.POST.get("company_contact", "")
-        company_email = request.POST.get("company_email", "")
-        billing_address = request.POST.get("billing_address", "")
-        billing_state_name = request.POST.get("billing_state_name", "")
-        billing_gstin_no = request.POST.get("billing_gstin_no", "")
-        terms = request.POST.get("terms", "")
-        totals = request.POST.get("total_amount", "")
-        banking_details = request.POST.get("bank_details", "")
-        new_company = request.POST.get("new_company", "")
+        invoice_no = request.POST.get("invoice_no", "").strip()
+        invoice_date = request.POST.get("invoice_date", "").strip()
+        mode_payment = request.POST.get("mode_payment", "").strip()
+        company_name = request.POST.get("company_name", "").strip()
+        company_contact = request.POST.get("company_contact", "").strip()
+        company_email = request.POST.get("company_email", "").strip()
+        billing_address = request.POST.get("billing_address", "").strip()
+        billing_state_name = request.POST.get("billing_state_name", "").strip()
+        billing_gstin_no = request.POST.get("billing_gstin_no", "").strip()
+        terms = request.POST.get("terms", "").strip()
+        totals = request.POST.get("total_amount", "").strip()
+        banking_details = request.POST.get("bank_details", "").strip()
+        new_company = request.POST.get("new_company", "").strip()
 
         title = request.POST.getlist("title[]")
-        job_names = request.POST.getlist("job_name[]")
+        job_names = request.POST.getlist("job_name")
 
         quantities = request.POST.getlist("quantity[]")
         pouch_open_sizes = request.POST.getlist("pouch_open_size[]")
@@ -1995,15 +2008,13 @@ def ProformaInvoicePageAJAX(request):
     sgst_val = safe_int(sgst)
     gst = igst_val + cgst_val + sgst_val
 
-   
+    
     quantities = [safe_float(q) for q in quantities if q not in (None, "", "0", 0)]
     prpc_prices = [safe_float(p) for p in prpc_prices if p not in (None, "", "0", 0)]
 
     taxable_value = sum(q * p for q, p in zip(quantities, prpc_prices))
     gst_amount = taxable_value * (gst / 100) if gst else 0
     total_amount = round(taxable_value + gst_amount, 2)
-
-   
     job = []  
     company_contact = ""
     company_email = ""
@@ -2062,6 +2073,6 @@ def ProformaInvoicePageAJAX(request):
         "gst_amount": gst_amount,
     }
 
-    logger.debug(f"AJAX context: {context}")
+    # logger.error(f"AJAX context: {context}")
     return JsonResponse(context)
 
