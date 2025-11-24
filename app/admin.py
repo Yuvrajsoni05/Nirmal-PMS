@@ -46,6 +46,9 @@ admin.site.register(CDRDetail,AdminCDRDetail)
 
 
 
+admin.site.register(PartyEmail)
+admin.site.register(PartyContact)
+admin.site.register(Party)
 
 admin.site.register(CDRImage)
     

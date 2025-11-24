@@ -9,6 +9,7 @@ from django.forms import CharField
 
 
 
+
 from num2words import num2words
 
 
@@ -192,8 +193,36 @@ class BankDetails(models.Model):
     
     def __str__(self):
         return f"{self.bank_name}"
-    
 
+
+
+class Party(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
+    party_name = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.party_name}"
+  
+
+
+class PartyEmail(models.Model):
+    party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_emails')
+    email = models.EmailField(max_length=200)
+
+    def __str__(self):
+        return f"{self.party.party_name} - {self.email}"
+
+
+class PartyContact(models.Model):
+    party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_contacts')
+    party_number = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.party.party_name} - {self.party_number}"
+
+    
+    
+    
 class ProformaInvoice(models.Model):
     
     Invoice_Status = [
@@ -251,18 +280,15 @@ class ProformaInvoice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     total = models.CharField(max_length=200,blank=True, null=True)
     invoice_status = models.CharField(max_length=200,choices=Invoice_Status,blank=True, null=True)
+    party_details = models.ForeignKey(Party,on_delete=models.SET_NULL,blank=True,null=True,related_name='party_details') 
     
     
     
     def total_worlds(self):
-        """
-        Return total in words (Indian numbering); if total is missing/invalid or too large for num2words,
-        fall back to a formatted numeric string to avoid OverflowError.
-        """
+
         if not self.total:
             return ""
         total_str = str(self.total).replace(',', '').strip()
-        # get integer part before decimal
         int_part = total_str.split('.')[0]
         try:
             num = int(int_part)
@@ -271,15 +297,15 @@ class ProformaInvoice(models.Model):
         try:
             return num2words(num, lang='en_IN').title()
         except OverflowError:
-            # num2words can't handle very large numbers; return formatted integer with commas as fallback
             return f"{num:,}"
-    
     
     def __str__(self):
         return f"Proforma Invoice: {self.invoice_no}"
 
-    
-        
+
+
+
+
 class ProformaJob(models.Model):
     proforma_invoice = models.ForeignKey(ProformaInvoice,on_delete=models.CASCADE,related_name="job_details")
     title = models.CharField(max_length=200)
@@ -288,6 +314,7 @@ class ProformaJob(models.Model):
     pouch_open_size = models.CharField(max_length=200)
     cylinder_size = models.CharField(max_length=200)
     prpc_rate = models.CharField(max_length=200)
+    
     
     @property
     def taxable_value(self):
@@ -303,20 +330,4 @@ class ProformaJob(models.Model):
     
     
 
-class Company(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    company_name = models.CharField(max_length=200,blank=True,null=True)
 
-  
-
-class CompanyEmail(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='emails')
-    email = models.EmailField(max_length=200)
-
-    def __str__(self):
-        return f"{self.company.name} - {self.email}"
-
-
-class CompanyContact(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='contacts')
-    contact_number = models.CharField(max_length=20)

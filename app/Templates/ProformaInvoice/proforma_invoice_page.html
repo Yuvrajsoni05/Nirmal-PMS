@@ -49,14 +49,23 @@
                     </div>
 
                     <div class="col-md-3">
-                        <label for="contact" class="form-label fw-semibold">Company Contact</label>
+                        <label for="contact" class="form-label fw-semibold">Party Contact</label>
                         <input type="tel" class="form-control" id="company_contact" name="company_contact" placeholder="9499561272" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel" >
                         <span class="invalid-feedback" id="company_contact_error">This field is required</span>
                     </div>
 
                     <div class="col-md-3">
-                        <label for="email" class="form-label fw-semibold">Company Email</label>
-                        <input type="email" class="form-control" id="company_email" name="company_email" placeholder="customer@example.com">
+                        <label for="company_email" class="form-label fw-semibold">Party Email</label>
+                        <select class="form-control form-select" id="company_email" name="company_email">
+                            <option value="" selected disabled>Select Company Email</option>
+                            {% for company in company_list %}
+                                {% if company.company_email %}
+                                    <option value="{{ company.company_email }}">{{ company.company_email }}</option>
+                                {% endif %}
+                            {% endfor %}
+                            <option value="others">Other</option>
+                        </select>
+                        <input type="email" id="new_company_email" name="new_company_email" class="form-control mt-2" placeholder="Enter company email" style="display: none;">
                         <span class="invalid-feedback" id="company_email_error">This field is required</span>
                     </div>
 
@@ -742,14 +751,36 @@ $(document).ready(function() {
                 prpc_prices: prpc_prices
             },
             success: function(response) {
-                // update company details if provided
-                if (changedField === 'company_name' || response.company_email) {
-                    $('#company_email').val(response.company_email || '');
+              
+                if (changedField === 'company_name') {
+                  
                     $('#company_contact').val(response.company_contact || '');
                     $('#billing_address').val(response.billing_address || '');
                 }
+                if ((response.emails && response.emails.length) || changedField === 'company_name') {
+                    var $select = $('#company_email');
+                    var previous = $select.val();
+                    $select.empty().append('<option value="" selected disabled>Select Company Email</option>');
+                    if (response.emails && response.emails.length) {
+                        $.each(response.emails, function(index, email) {
+                            $select.append('<option value="' + email.party_emails__email + '">' + email.party_emails__email + '</option>');
+                        });
+                    }
+                    $select.append('<option value="others">Other</option>');
 
-                // Only update job dropdowns when the server returned job data or when company_name changed.
+                    if (previous) {
+                        if ($select.find('option[value="' + previous + '"]').length) {
+                            $select.val(previous);
+                        } else {
+                            if (previous !== 'others' && previous !== '') {
+                                $select.append('<option class="custom-email" value="' + previous + '" selected>' + previous + '</option>');
+                            } else {
+                                $select.prop('selectedIndex', 0);
+                            }
+                        }
+                    }
+                }
+             
                 if ((response.job && response.job.length) || changedField === 'company_name') {
                     $('.job-name').each(function() {
                         var $select = $(this);
@@ -762,12 +793,11 @@ $(document).ready(function() {
                         }
                         $select.append('<option value="others">Other</option>');
 
-                        // restore previous selection if it still exists (including custom-job)
                         if (previous) {
                             if ($select.find('option[value="' + previous + '"]').length) {
                                 $select.val(previous);
                             } else {
-                                // if previously a custom value, re-add it so user selection isn't lost
+                               
                                 if (previous !== 'others' && previous !== '') {
                                     $select.append('<option class="custom-job" value="' + previous + '" selected>' + previous + '</option>');
                                 } else {
@@ -854,7 +884,7 @@ $(document).ready(function() {
   </div>
 `);
 
-
+    
 
     $('#job-container').append(newSection);
     jobIndex++;

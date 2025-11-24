@@ -596,6 +596,7 @@
                                                 <div class="modal fade"
                                                      id="emailModal{{ i.id }}"
                                                      tabindex="-1"
+                                                     data-bs-backdrop="static"
                                                      role="dialog"
                                                      aria-labelledby="exampleModalCenterTitle"
                                                      aria-hidden="true">
@@ -772,7 +773,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="d-flex gap-2 pt-3">
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                                         <button type="submit" class="btn btn-primary">Send Mail</button>
                                                                     </div>
                                                                 </form>
@@ -784,6 +785,7 @@
                                                 <div class="modal fade"
                                                      id="staticBackdrop{{ i.id }}"
                                                      tabindex="-1"
+                                                     
                                                      role="dialog"
                                                      aria-labelledby="exampleModalCenterTitle"
                                                      aria-hidden="true">
@@ -799,14 +801,14 @@
 
 
                                                 <!-- Model Correction Job -->
-                                                <div class="modal fade" id="OldBackdrop{{ i.id }}" tabindex="-1" aria-hidden="true">
+                                                <div class="modal fade"  id="OldBackdrop{{ i.id }}" tabindex="-1" aria-hidden="true">
                                                     <div class="modal-dialog modal-lg">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
                                                                 <h5 class="modal-title">
                                                                     <i class="bi bi-clock-history me-2"></i> Job History <b>{{ i.job_name }}</b>
                                                                 </h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body" style="max-height: 50vh; overflow-y: auto;">
                                                                 {% if i.job_history.all %}
@@ -1082,7 +1084,7 @@
                                                                         <!-- Form Actions -->
                                                                         <div class="col-12">
                                                                             <a href="{% url "dashboard_page" %}">
-                                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                                                             </a>
                                                                             <button type="submit" class="btn btn-primary">Save changes</button>
                                                                         </div>

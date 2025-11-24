@@ -38,14 +38,14 @@ def validator_password(password):
         return "Password must contain at least one special character."
     
     
-valid_extension = [".jpeg", ".jpg", ".png", ".ai"]  
+valid_extension = [".jpeg", ".jpg", ".png", ".ai",".cdr" ,".JPEG", ".JPG", ".PNG", ".AI", ".CDR"]  
 def file_validation(files):
 
     for file in files:
         ext = os.path.splitext(file.name)[1].lower()  
         if not ext:
             return "Invalid file. File must have an extension."
-        
+
         if ext not in valid_extension:
             return "Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed"
         
