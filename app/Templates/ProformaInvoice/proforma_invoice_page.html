@@ -36,21 +36,26 @@
                     </div>
 
                     <div class="col-md-6">
-                        <label for="company_name" class="form-label fw-semibold">Customer / Company Name</label>
+                        <label for="company_name" class="form-label fw-semibold">Customer / Party Name</label>
                         <select class="form-control form-select" id="company_name" name="company_name" >
-                            <option value="" selected disabled>Select Customer / Company Name</option>
-                            {% for company in company_list %}
-                                <option value="{{ company.company_name }}">{{ company.company_name }}</option>
+                            <option value="" selected disabled>Select Customer / Party Name</option>
+                            {% for party in party_name_list %}
+                                <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                             {% endfor %}
                             <option value="others">Other</option>
                         </select>
+
                         <input type="text" id="new_company"  name="new_company" style="display: none" placeholder="New Company Name"  name="new_company" class="form-control">
                         <span class="invalid-feedback"  id="company_name_error">This field is required</span>
                     </div>
 
                     <div class="col-md-3">
-                        <label for="contact" class="form-label fw-semibold">Party Contact</label>
-                        <input type="tel" class="form-control" id="company_contact" name="company_contact" placeholder="9499561272" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel" >
+                        <label for="company_contact" class="form-label fw-semibold">Party Contact</label>
+                        <select class="form-control form-select" id="company_contact" name="company_contact">
+                            <option value="" selected disabled>Select Company Contact</option>
+                            <option value="others">Other</option>
+                        </select>
+                        <input type="number" id="new_company_contact" name="new_company_contact" class="form-control mt-2" placeholder="Enter company contact" style="display: none;" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel">
                         <span class="invalid-feedback" id="company_contact_error">This field is required</span>
                     </div>
 
@@ -753,10 +758,33 @@ $(document).ready(function() {
             success: function(response) {
               
                 if (changedField === 'company_name') {
-                  
-                    $('#company_contact').val(response.company_contact || '');
+                   
                     $('#billing_address').val(response.billing_address || '');
                 }
+                if ((response.contacts && response.contacts.length) || changedField === 'company_name') {
+                    var $select = $('#company_contact');
+                    var previous = $select.val();
+                    $select.empty().append('<option value="" selected disabled>Select Company Contact</option>');
+                    if (response.contacts && response.contacts.length) {
+                        $.each(response.contacts, function(index, contact) {
+                            $select.append('<option value="' + contact.party_contacts__party_number + '">' + contact.party_contacts__party_number + '</option>');
+                        });
+                    }
+                    $select.append('<option value="others">Other</option>');
+
+                    if (previous) {
+                        if ($select.find('option[value="' + previous + '"]').length) {
+                            $select.val(previous);
+                        } else {
+                            if (previous !== 'others' && previous !== '') {
+                                $select.append('<option class="custom-contact" value="' + previous + '" selected>' + previous + '</option>');
+                            } else {
+                                $select.prop('selectedIndex', 0);
+                            }
+                        }
+                    }
+                }
+                           
                 if ((response.emails && response.emails.length) || changedField === 'company_name') {
                     var $select = $('#company_email');
                     var previous = $select.val();
@@ -848,6 +876,51 @@ $(document).ready(function() {
             dropdown.append(`<option class="custom-job" value="${newJobName}" selected>${newJobName}</option>`);
         } else {
             dropdown.val('others');
+        }
+    });
+
+   
+    $(document).on('change', '#company_email', function() {
+        const val = $(this).val();
+        if (val === 'others') {
+            $('#new_company_email').show().focus();
+        } else {
+            $('#new_company_email').hide().val('');
+            $('#company_email option.custom-email').remove();
+        }
+    });
+
+    $(document).on('input', '#new_company_email', function() {
+        const email = $(this).val().trim();
+        const $dropdown = $('#company_email');
+        $dropdown.find('option.custom-email').remove();
+
+        if (email !== '') {
+            $dropdown.append(`<option class="custom-email" value="${email}" selected>${email}</option>`);
+        } else {
+            $dropdown.val('others');
+        }
+    });
+
+    $(document).on('change', '#company_contact', function() {
+        const val = $(this).val();
+        if (val === 'others') {
+            $('#new_company_contact').show().focus();
+        } else {
+            $('#new_company_contact').hide().val('');
+            $('#company_contact option.custom-contact').remove();
+        }
+    });
+
+    $(document).on('input', '#new_company_contact', function() {
+        const contact = $(this).val().trim();
+        const $dropdown = $('#company_contact');
+        $dropdown.find('option.custom-contact').remove();
+
+        if (contact !== '') {
+            $dropdown.append(`<option class="custom-contact" value="${contact}" selected>${contact}</option>`);
+        } else {
+            $dropdown.val('others');
         }
     });
 

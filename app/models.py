@@ -27,6 +27,29 @@ class Registration(AbstractUser):
     
 
 
+class Party(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
+    party_name = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.party_name}"
+
+
+  
+class PartyEmail(models.Model):
+    party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_emails')
+    email = models.EmailField(max_length=200)
+
+    def __str__(self):
+        return f"{self.party.party_name} - {self.email}"
+
+
+class PartyContact(models.Model):
+    party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_contacts')
+    party_number = models.CharField(max_length=20)
+
+    def __str__(self):
+        return f"{self.party.party_name} - {self.party_number}"
 
 
 # class JobHeader(models.Model):
@@ -132,6 +155,8 @@ class JobHistory(models.Model):
     def __str__(self):
         return f"{self.job.job_name} - {self.field_name} changed"
 
+
+
 class Jobimage(models.Model):
     job = models.ForeignKey(Job_detail,related_name='image', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='job_images/')
@@ -142,15 +167,13 @@ class Jobimage(models.Model):
 
     
     
-
-
     
 class CDRDetail(models.Model):
     date = models.DateField()
-    company_name = models.CharField(max_length=200)
+    party_details =  models.ForeignKey(Party,on_delete=models.SET_NULL,blank=True,null=True,related_name='cdr_party_details')
+    party_email_used = models.ForeignKey(PartyEmail,on_delete=models.SET_NULL,null=True, blank=True)
+    party_contact_used = models.ForeignKey(PartyContact,on_delete=models.SET_NULL,null=True, blank=True)
     job_name =  models.CharField(max_length=200,blank=True, null=True)
-    company_email = models.EmailField(blank=True, null=True,)
-    # cdr_upload = models.FileField(upload_to='cdr_file/',blank=True, null=True)
     file_url = models.URLField(max_length=200,blank=True, null=True)
     image_url = models.URLField(max_length=900,blank=True, null=True)
     cdr_corrections = models.TextField(max_length=900,blank=True, null=True)
@@ -196,29 +219,6 @@ class BankDetails(models.Model):
 
 
 
-class Party(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    party_name = models.CharField(max_length=200, blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.party_name}"
-  
-
-
-class PartyEmail(models.Model):
-    party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_emails')
-    email = models.EmailField(max_length=200)
-
-    def __str__(self):
-        return f"{self.party.party_name} - {self.email}"
-
-
-class PartyContact(models.Model):
-    party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_contacts')
-    party_number = models.CharField(max_length=20)
-
-    def __str__(self):
-        return f"{self.party.party_name} - {self.party_number}"
 
     
     
@@ -261,14 +261,10 @@ class ProformaInvoice(models.Model):
         ("West Bengal", "West Bengal"),
     ]
 
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
     invoice_no = models.CharField(max_length=200)
     invoice_date = models.DateField()
     mode_payment = models.CharField(max_length=300,default="100%")
-    company_name = models.CharField(max_length=300)
-    company_contact = models.CharField(max_length=200)
-    company_email = models.EmailField(max_length=200)
     billing_address = models.TextField()
     billing_gstin_no = models.CharField(max_length=100)
     billing_state_name = models.CharField(max_length=200, choices=INDIAN_STATES)
@@ -280,7 +276,9 @@ class ProformaInvoice(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     total = models.CharField(max_length=200,blank=True, null=True)
     invoice_status = models.CharField(max_length=200,choices=Invoice_Status,blank=True, null=True)
-    party_details = models.ForeignKey(Party,on_delete=models.SET_NULL,blank=True,null=True,related_name='party_details') 
+    party_details = models.ForeignKey(Party,on_delete=models.SET_NULL,blank=True,null=True,related_name='party_details')
+    party_contact_used = models.ForeignKey(PartyContact,on_delete=models.SET_NULL,null=True, blank=True)
+    party_email_used = models.ForeignKey(PartyEmail,on_delete=models.SET_NULL,null=True, blank=True)
     
     
     

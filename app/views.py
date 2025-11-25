@@ -456,10 +456,8 @@ def base_html(request):
 def job_entry(request):
 
     company_name = CompanyName.objects.values("company_name").union(
-        CDRDetail.objects.values("company_name").union(ProformaInvoice.objects.values(
-        'company_name'
-        ))
-    )
+        CDRDetail.objects.values("company_name"))
+    
     job_status = Job_detail._meta.get_field("job_status").choices
     
     cylinder_company_names = CylinderMadeIn.objects.all()
@@ -1032,7 +1030,6 @@ def cdr_page(request):
     search = request.GET.get("search", "")
     date = request.GET.get("date", "")
     end_date = request.GET.get("end_date", "")
-
     company_name_sorting = request.GET.get("company_name_sorting", "")
     job_name_sorting = request.GET.get("job_name_sorting", "")
     date_sorting = request.GET.get("date_sorting", "")
@@ -1044,8 +1041,8 @@ def cdr_page(request):
             Q(date__icontains=date)
             & (
                 Q(job_name__icontains=search)
-                | Q(company_name__icontains=search)
-                | Q(company_email__icontains=search)
+                | Q(company__icontains=search)
+                | Q(company_0email__icontains=search)
             )
         )
 
@@ -1073,7 +1070,6 @@ def cdr_page(request):
         order_by = "-job_name"
     elif date_sorting == "asc":
         order_by = "date"
-        print(cdr_data)
     elif date_sorting == "desc":
         order_by = "-date"
     elif sorting == "desc":
@@ -1086,17 +1082,18 @@ def cdr_page(request):
 
     p = Paginator(cdr_data, 10)
     page = request.GET.get("page")
-    cdr_emails = CDRDetail.objects.values("company_email").distinct()
-    cdr_company = CDRDetail.objects.values("company_name").distinct().union(CompanyName.objects.values('company_name').distinct())
-    proforma    =  ProformaInvoice.objects.values('company_name').distinct()
+    # cdr_emails = CDRDetail.objects.values("company_email").distinct()
+    party_name = Party.objects.values("party_name").distinct()
     cdr_job_name = CDRDetail.objects.values("job_name").distinct()
+
+
 
     datas = p.get_page(page)
     nums = "a" * datas.paginator.num_pages
     
     
-    cdr_company_name = cdr_company.union(proforma)
-    print(cdr_company_name)
+    print(party_name)
+
     context = {
         "nums": nums,
         "cdr_details": datas,
@@ -1104,8 +1101,8 @@ def cdr_page(request):
         "search": search,
         "date": date,
         "end_date": end_date,
-        "cdr_email": cdr_emails,
-        "cdr_company_name": cdr_company_name,
+        # "cdr_email": cdr_emails,
+        "party_names": party_name,
         "cdr_job_names": cdr_job_name,
     }
     return render(request, "CDR/cdr_page.html", context)
@@ -1184,45 +1181,17 @@ def cdr_add(request):
                 )
                 return redirect("company_add_page")
 
-        
         if CompanyName.objects.filter(company_name__icontains=company_name).exists():
             pass
         else:
             company_add_in = CompanyName.objects.create(company_name=company_name)
             company_add_in.save()
-        data = {
-            "company_name": company_name,
-            "company_email": company_email,
-            "cdr_upload_date": cdr_upload_date,
-            "job_name": job_name,
-            "cdr_corrections": cdr_corrections_data,
-        }
+            
+            
+       
 
         file_dic = file_name_convert(cdr_files)
         try:
-            url = os.environ.get("CREATE_WEBHOOK_CDR")
-            response = requests.post(f"{url}", data=data, files=file_dic)
-            if response.status_code == 200:
-                print("Positive Response : ", response)
-                messages.success(request, "CDR Upload Successfully ")
-                return redirect("company_add_page")
-
-            else:
-                cdr_data = CDRDetail.objects.create(
-                    date=cdr_upload_date,
-                    company_name=company_name,
-                    company_email=company_email,
-                    cdr_corrections=cdr_corrections_data,
-                    job_name=job_name,
-                )
-                for file_key, file_data in file_dic.items():
-                    file_obj = file_data[1]
-                    CDRImage.objects.create(cdr=cdr_data, image=file_obj)
-
-                cdr_data.save()
-                messages.success(request, "CDR Upload Successfully SQLite DB")
-                return redirect("company_add_page")
-        except Exception as e:
             cdr_data = CDRDetail.objects.create(
                 date=cdr_upload_date,
                 company_name=company_name,
@@ -1237,41 +1206,31 @@ def cdr_add(request):
             cdr_data.save()
             messages.success(request, "CDR Upload Successfully ")
             return redirect("company_add_page")
-
+        except Exception as e:
+            logger.error(f"Something went wrong: {str(e)}", exc_info=True)
+            messages.error(request, f"Something went wrong {e}")
+            return redirect("company_add_page")
+        
 
 @custom_login_required
 def cdr_delete(request, delete_id):
-    url = os.environ.get("DELETE_WEBHOOK_CDR")
-    folder_url = CDRDetail.objects.get(id=delete_id).file_url
-    print(folder_url)
-    if folder_url:
-        response = requests.delete(f"{url}{delete_id}")
-        if response.status_code == 200:
-            messages.success(request, "CDR File Deleted successfully ")
-            return redirect("company_add_page")
+    delete = get_object_or_404(CDRDetail, id=delete_id)
+    print(delete)
+    delete_image = delete.cdr_images.all()
+    for img in delete_image:
+        path = img.image.path
+        print(path)
+        if os.path.isfile(path):
+            os.remove(path)
         else:
-            messages.warning(request, "Your Credentials will Expire")
-            return redirect("company_add_page")
-
-    else:
-        delete = get_object_or_404(CDRDetail, id=delete_id)
-        print(delete)
-        delete_image = delete.cdr_images.all()
-        for img in delete_image:
-            path = img.image.path
-            print(path)
-            if os.path.isfile(path):
-                os.remove(path)
-            else:
-                img.delete()
-        delete.delete()
-        messages.success(request, "Data Delete successfully")
-        return redirect("company_add_page")
+            img.delete()
+    delete.delete()
+    messages.success(request, "Data Delete successfully")
+    return redirect("company_add_page")
 
 
 @custom_login_required
 def cdr_update(request, update_id):
-
     id = update_id
     if request.method == "POST":
         date = request.POST.get("cdr_upload_date")
@@ -1283,8 +1242,8 @@ def cdr_update(request, update_id):
 
         cdr_corrections = request.POST.get("cdr_corrections")
 
-        get_date = CDRDetail.objects.values("date").get(id=id)
-        date_formatte = get_date["date"].strftime("%Y-%m-%d")
+        
+        
 
         email_error = utils.email_validator(company_email)
         if email_error:
@@ -1303,7 +1262,6 @@ def cdr_update(request, update_id):
                 )
                 return redirect("company_add_page")
 
-        
         file_error = utils.file_validation(cdr_files)
         if file_error:
             messages.error(request, file_error, extra_tags="custom-success-style")
@@ -1324,48 +1282,19 @@ def cdr_update(request, update_id):
             CDRDetail.objects.filter(company_email=email_string).update(
                 company_email=company_email
             )
-        url = os.environ.get("UPDATE_WEBHOOK_CDR")
-        if not cdr_files:
-            update_details = get_object_or_404(CDRDetail, id=id)
-            update_details.company_email = company_email
-            update_details.cdr_corrections = cdr_corrections
-            update_details.job_name = job_names
-            update_details.date = date
-            update_details.save()
-            messages.success(request, "CDR Data Updated")
-            return redirect("company_add_page")
-        else:
-            get_folder_url = CDRDetail.objects.values_list("file_url").get(id=id)
-            folder_url = get_folder_url[0]
-            if folder_url:
-                data = {
-                    "date": date,
-                    "company_email": company_email,
-                    "company_name": company_name,
-                    "job_name": job_names,
-                    "cdr_corrections": cdr_corrections,
-                }
-                response = requests.post(f"{url}{id}", data=data, files=file_dic)
+        update_details = get_object_or_404(CDRDetail, id=id)
+        update_details.company_email = company_email
+        update_details.cdr_corrections = cdr_corrections
+        update_details.job_name = job_names
+        update_details.date = date
 
-                if response.status_code == 200:
-                    messages.success(request, "Data Update Successfully")
-                    return redirect("company_add_page")
-                else:
-                    messages.warning(request, "Your Credentials will Expire")
-                    return redirect("company_add_page")
-            else:
-                update_details = get_object_or_404(CDRDetail, id=id)
-                update_details.company_email = company_email
-                update_details.cdr_corrections = cdr_corrections
-                update_details.job_name = job_names
-                update_details.date = date
-
-                for file_key, file_data in file_dic.items():
-                    file_obj = file_data[1]
-                    CDRImage.objects.create(cdr=update_details, image=file_obj)
-                update_details.save()
-                messages.success(request, "Data Updated Successfully")
-                return redirect("company_add_page")
+        for file_key, file_data in file_dic.items():
+            file_obj = file_data[1]
+            CDRImage.objects.create(cdr=update_details, image=file_obj)
+            
+        update_details.save()
+        messages.success(request, "Data Updated Successfully")
+        return redirect("company_add_page")
     return redirect("company_add_page")
 
 
@@ -1545,29 +1474,20 @@ def company_name_suggestion(request):
     if company_name:
 
         cdr_jobs = CDRDetail.objects.filter(
-            company_name__iexact=company_name
+            party_details__party_name__iexact=company_name
         ).values("job_name")
 
         job_details = Job_detail.objects.filter(
             company_name__iexact=company_name
         ).values("job_name")
-
-        proforma_job = ProformaJob.objects.filter(
-            proforma_invoice__company_name=company_name
-        ).values("job_name")
-
-       
-        jobs = list(cdr_jobs.union(job_details, proforma_job))
         
-        email = list(
-            CDRDetail.objects.filter(company_name__iexact=company_name)
-            .values("company_email").distinct().union(
-            ProformaInvoice.objects.filter(company_name=company_name)
-            .values("company_email").distinct()
-            )
-        )
-    
-        return JsonResponse({"email": email, "jobs": jobs})
+        jobs = list(cdr_jobs.union(job_details))
+        
+        email = list(Party.objects.filter(party_name=company_name).values('party_emails__email').distinct())
+        
+        contacts = Party.objects.filter(party_name=company_name).values('party_contacts__contact_number').distinct()
+      
+        return JsonResponse({"email": email, "jobs": jobs , "contacts":contacts})
     return JsonResponse({"error": "Invalid request"}, status=400)
 
 
@@ -1578,7 +1498,7 @@ def company_name_suggestion_job(request):
     if company_name:
         proforma_job =list(ProformaJob.objects.filter(proforma_invoice__company_name=company_name).values("job_name"))
     
-                
+        
         job_detail = (
             Job_detail.objects.filter(company_name__iexact=company_name)
             .values("job_name")
@@ -1630,14 +1550,14 @@ def cdr_company_check(company_name, company_email):
 
 @custom_login_required
 def ProformaInvoicePage(request):
-    company_list = CompanyName.objects.values('company_name').distinct().union(ProformaInvoice.objects.values('company_name'))
+    party_name_list = Party.objects.values("party_name").distinct()
     job_name = list(Job_detail.objects.values("job_name").distinct())
     bank_details = BankDetails.objects.all()
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
     
     context = {
-        "company_list": company_list,
+        "party_name_list": party_name_list,
         "states": states,
         "invoice_status": invoice_status,
         "bank_details": bank_details,
@@ -1649,51 +1569,45 @@ def ProformaInvoicePage(request):
 
 
 def ViewProformaInvoice(request):
+    
     proformaInvoice = (
         ProformaInvoice.objects.prefetch_related("bank_details", "job_details")
         .all()
         .order_by("invoice_status", "invoice_date")
     )
-    company_name = ProformaInvoice.objects.values_list(
-        "company_name", flat=True
-    ).distinct()
-
+    
+    
     date_sorting = request.GET.get("invoice_date_sorting", "")
-    company_name_sorting = request.GET.get("company_name_sorting", "")
-    print(date_sorting)
     start_date = request.GET.get("start_date", "")
     end_date = request.GET.get("end_date", "")
     select_company = request.GET.get("select_company", "")
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
     
-    if company_name_sorting == "asc":
-        proformaInvoice = proformaInvoice.order_by("company_name")
-    elif company_name_sorting == "desc":
-        proformaInvoice = proformaInvoice.order_by("-company_name")
-    elif date_sorting == "asc":
+    if date_sorting == "asc":
         proformaInvoice = proformaInvoice.order_by("invoice_date")
     elif date_sorting == "desc":
         proformaInvoice = proformaInvoice.order_by("-invoice_date")
         
         
-        
+    print(select_company, start_date, end_date)
     if select_company and start_date and end_date:
         proformaInvoice = proformaInvoice.filter(
             Q(invoice_date__range=[start_date, end_date])
-            & Q(company_name__icontains=select_company)
+            & Q(party_details__icontains=select_company)
         )
+    
     elif select_company and start_date:
 
         proformaInvoice = proformaInvoice.filter(
             Q(invoice_date__icontains=start_date)
-            & Q(company_name__icontains=select_company)
+            & Q(party_details__party_name__icontains=select_company)
         )
 
     elif start_date and end_date and select_company:
         proformaInvoice = proformaInvoice.filter(
             invoice_date__range=[start_date, end_date]
-        ) & Q(company_name__icontains=select_company)
+        ) & Q(party_details__party_name__icontains=select_company)
     elif start_date and end_date.strip():
 
         proformaInvoice = proformaInvoice.filter(
@@ -1703,10 +1617,13 @@ def ViewProformaInvoice(request):
         proformaInvoice = proformaInvoice.filter(Q(invoice_date__icontains=start_date))
     elif select_company.strip():
         proformaInvoice = proformaInvoice.filter(
-            Q(company_name__icontains=select_company)
+        party_details__party_name__icontains=select_company
         )
 
-    P = Paginator(proformaInvoice, 5)
+
+    party_name = Party.objects.values('party_name').distinct()
+    
+    P = Paginator(proformaInvoice, 10)
     page = request.GET.get("page")
     proformaInvoice = P.get_page(page)
     nums = "a" * proformaInvoice.paginator.num_pages
@@ -1725,7 +1642,7 @@ def ViewProformaInvoice(request):
     context = {
         "nums": nums,
         "proformaInvoices": proformaInvoice,
-        "company_name": company_name,
+        "party_name": party_name,
         "states": states,
         "invoice_status": invoice_status,
     }
@@ -1855,7 +1772,7 @@ def ProformaSendMail(request):
             template_name=template_name, context={"data": item_dic}
         )
         email = EmailMultiAlternatives(
-            subject=f"Proforma Details {item_dic.get('invoice_no','')}",
+            subject=f"Proforma Details",
             body="plain message",
             from_email="soniyuvraj9499@gmail.com",
             to=[receiver_email],
@@ -1910,7 +1827,7 @@ def ProformaInvoiceCreate(request):
         taxable_value = request.POST.get("taxable_value")
         invoice_status = request.POST.get("invoice_status")
 
-        print(banking_details)
+        
         required_fields = {
             "invoice no": invoice_no,
             "invoice date": invoice_date,
@@ -1950,16 +1867,33 @@ def ProformaInvoiceCreate(request):
             return redirect("proforma_invoice_page")
 
         try:
+            
+            party_details, _ = Party.objects.get_or_create(
+                party_name=company_name.strip() if company_name else None
+            )
+
+         
+            email_obj, _ = PartyEmail.objects.get_or_create(
+                party=party_details,
+                email=company_email
+            ) 
+
+           
+            contact_obj, _ = PartyContact.objects.get_or_create(
+                party=party_details,
+                party_number=company_contact
+            )
+
             proforma = ProformaInvoice.objects.create(
                 invoice_no=invoice_no,
                 invoice_date=invoice_date,
                 mode_payment=mode_payment,
-                company_name=company_name,
-                company_contact=company_contact,
-                company_email=company_email,
+                party_details=party_details,
+                party_email_used=email_obj,
+                party_contact_used=contact_obj,    
                 billing_address=billing_address,
                 billing_state_name=billing_state_name,
-                billing_gstin_no=billing_gstin_no,
+                billing_gstin_no=billing_gstin_no,  # Changed here
                 terms_note=terms,
                 bank_details=bank_instance,
                 gst=gst_list,
@@ -1969,6 +1903,7 @@ def ProformaInvoiceCreate(request):
                 invoice_status=invoice_status,
             )
 
+           
             for i in range(len(job_names)):
                 ProformaJob.objects.create(
                     proforma_invoice=proforma,
@@ -1979,13 +1914,6 @@ def ProformaInvoiceCreate(request):
                     cylinder_size=cylinder_sizes[i],
                     prpc_rate=prpc_price[i],
                 )
-    
-                
-           
-            party_details, created = Party.objects.get_or_create(party_name=company_name)
-
-            PartyEmail.objects.get_or_create(party=party_details, email=company_email)
-            PartyContact.objects.get_or_create(party=party_details, party_number=company_contact)
             messages.success(request, "Proforma Invoice Created Successfully!")
             return redirect("proforma_invoice_page")
         except Exception as e:
@@ -2030,18 +1958,21 @@ def ProformaInvoicePageAJAX(request):
     gst_amount = taxable_value * (gst / 100) if gst else 0
     total_amount = round(taxable_value + gst_amount, 2)
     job = []  
-    company_contact = ""
-    billing_address = ""
+   
+    billing_address = []
+    company_contact_qs = []
+    company_email_qs = []
+    
     
     if company:
 
-        job_qs = Job_detail.objects.filter(company_name=company) \
-            .values("job_name").distinct()
+        job_qs = Job_detail.objects.filter(company_name=company).values("job_name").distinct()
 
+       
         job_qs = job_qs.union(
             CDRDetail.objects.filter(company_name=company)
             .values("job_name").distinct(),
-            ProformaJob.objects.filter(proforma_invoice__company_name=company)
+            ProformaJob.objects.filter(proforma_invoice__party_details__party_name=company)
             .values("job_name").distinct(),
         )
         job = list(job_qs)
@@ -2051,22 +1982,14 @@ def ProformaInvoicePageAJAX(request):
         ).values('party_emails__email').distinct())
 
         
-        print(company_email_qs)
-
-        company_contact_qs = ProformaInvoice.objects.filter(
-            company_name__iexact=company
-        ).values("company_contact").distinct()
         
-        
-
-     
+        company_contact_qs = list(Party.objects.filter(
+            party_name__iexact=company
+        ).values("party_contacts__party_number").distinct())
+                
         billing_address_qs = ProformaInvoice.objects.filter(
-            company_name__iexact=company
+            party_details__party_name__iexact=company
         ).values("billing_address").distinct()
-
-        company_contact = (
-            company_contact_qs[0]["company_contact"] if company_contact_qs else ""
-        )
         
         billing_address = (
             billing_address_qs[0]["billing_address"] if billing_address_qs else ""
@@ -2075,13 +1998,13 @@ def ProformaInvoicePageAJAX(request):
     context = {
         "total_amount": total_amount,
         "job": job, 
-        "company_contact": company_contact,
+        "contacts": company_contact_qs,
         "emails": company_email_qs,
         "billing_address": billing_address,
         "taxable_value": taxable_value,
         "gst_amount": gst_amount,
     }
 
-    # logger.error(f"AJAX context: {context}")
+    
     return JsonResponse(context)
 

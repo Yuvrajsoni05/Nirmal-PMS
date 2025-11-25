@@ -83,10 +83,11 @@
                                             <option value="" {% if not request.GET.select_company %}selected{% endif %}>
                                                 Select Company Name
                                             </option>
-                                            {% for company in company_name %}
-                                                <option value="{{ company }}"
-                                                        {% if request.GET.select_company == company %}selected{% endif %}>
-                                                    {{ company }}
+                                            {% for party in party_name %}
+                                                <option value="{{ party.party_name }}" 
+                                                    {% if request.GET.select_company == party.party_name %}selected{% endif %}
+                                                    >
+                                                    {{ party.party_name }}
                                                 </option>
                                             {% endfor %}
                                         </select>
@@ -161,9 +162,9 @@
                                     <td>{{ proforma.invoice_date }}</td>
                                     <td>{{ proforma.mode_payment }}</td>
 
-                                    <td>{{ proforma.company_name }}</td>
-                                    <td>{{ proforma.company_contact }}</td>
-                                    <td>{{ proforma.company_email }}</td>
+                                    <td>{{ proforma.party_details.party_name }}</td>
+                                    <td>{{ proforma.party_contact_used.party_number  }}</td>
+                                    <td>{{ proforma.party_email_used.email }}</td>
                                     <td data-bs-toggle="modal" data-bs-target="#billing_addressModel{{proforma.id}}" title="{{proforma.id}}"  class="text-truncate">{{ proforma.billing_address|truncatechars:30 }}</td>
                                     <td>{{ proforma.billing_gstin_no }}</td>
                                     <td>{{ proforma.billing_state_name }}</td>
@@ -352,14 +353,14 @@
                                                                     </li>
                                                                     <li class="list-group-item px-0">
                                                                         <strong>Company:</strong>
-                                                                        <span class="text-muted ms-2">{{ proforma.company_name }}</span>
+                                                                        <span class="text-muted ms-2">{{ proforma.party_details.party_name }}</span>
                                                                     </li>
                                                                     <li class="list-group-item px-0">
                                                                         <strong>Contact:</strong>
-                                                                        <span class="text-muted ms-2">{{ proforma.company_contact }}</span>
+                                                                        <span class="text-muted ms-2">{{ proforma.party_contact_used.party_number }}</span>
                                                                         <span class="text-muted ms-3">|</span>
                                                                         <strong class="ms-2">Email:</strong>
-                                                                        <span class="text-muted ms-2">{{ proforma.company_email }}</span>
+                                                                        <span class="text-muted ms-2">{{ proforma.party_email_used.email }}</span>
                                                                     </li>
                                                                     <li class="list-group-item px-0">
                                                                         <strong>Billing Address:</strong>
@@ -550,7 +551,7 @@
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                           
                                                             <label class="fw-bold me-3 mb-0 fs-6">Company Name:</label>
-                                                            <input type="text" class="form-control form-control-sm fs-6" name="company_name" value="{{ proforma.company_name }}" readonly>
+                                                            <input type="text" class="form-control form-control-sm fs-6" name="company_name" value="{{ proforma.party_details.party_name }}" readonly>
                                                         </div>
                                                     </div>
 
@@ -559,7 +560,7 @@
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                            
                                                             <label class="fw-bold me-3 mb-0 fs-6">Company Email:</label>
-                                                            <input type="email" class="form-control form-control-sm fs-6" name="company_email" value="{{ proforma.company_email }}">
+                                                            <input type="email" class="form-control form-control-sm fs-6" name="company_email" value="{{ proforma.party_email_used.email }}">
                                                         </div>
                                                     </div>
 
@@ -568,7 +569,7 @@
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                        
                                                             <label class="fw-bold me-3 mb-0 fs-6">Company Contact:</label>
-                                                            <input type="tel" class="form-control form-control-sm fs-6" name="company_contact" value="{{ proforma.company_contact }}">
+                                                            <input type="tel" class="form-control form-control-sm fs-6" name="company_contact" value="{{ proforma.party_contact_used.party_number }}">
                                                         </div>
                                                     </div>
 
@@ -777,9 +778,9 @@
                                                     data-id="{{ proforma.id }}"
                                                     data-invoice_no="{{ proforma.invoice_no }}"
                                                     data-invoice_date="{{ proforma.invoice_date|date:'Y-m-d' }}"
-                                                    data-company_name="{{ proforma.company_name }}"
-                                                    data-company_email="{{ proforma.company_email }}"
-                                                    data-company_contact="{{ proforma.company_contact }}"
+                                                    data-company_name="{{ proforma.party_details.party_name }}"
+                                                    data-company_email="{{ proforma.party_email_used.email }}"
+                                                    data-company_contact="{{ proforma.party_contact_used.party_number }}"
                                                     data-billing_gstin_no="{{ proforma.billing_gstin_no }}"
                                                     data-billing_state_name="{{ proforma.billing_state_name }}"
                                                     data-billing_address="{{ proforma.billing_address|escapejs }}"

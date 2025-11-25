@@ -38,118 +38,140 @@
                             <i class="bi bi-plus-circle me-2"></i>Upload CDR File
                         </h5>
                     </div>
+                   
                     <div class="card-body">
-                        <form action="{% url "new_cdr_upload" %}"
-                              id="cdr_form"
-                              method="post"
-                              autocomplete="off"
-                              enctype="multipart/form-data">
+                        <form action="{% url 'new_cdr_upload' %}"
+                            id="cdr_form"
+                            method="post"
+                            autocomplete="off"
+                            enctype="multipart/form-data">
+
                             {% csrf_token %}
+
+                            <!-- Row 1 -->
                             <div class="row mb-3">
+
+                                <!-- Company Name -->
                                 <div class="col-md-4">
-                                    <label for="company_name" class="form-label fw-semibold text-dark">Company Name</label>
-                                    <span style="color:red;">*</span>
-                                    <select id="company_name"
-                                            name="company_name"
-                                            class="form-select form-control"
-                                            aria-label="Default select example">
-                                        <option value='' selected>Select Company Name</option>
-                                        {% for company in cdr_company_name %}
-                                            <option value="{{ company.company_name }}">{{ company.company_name }}</option>
+                                    <label class="form-label fw-semibold text-dark">Party Name <span class="text-danger">*</span></label>
+
+                                    <select id="company_name" name="company_name" class="form-select form-control">
+                                        <option value="" selected>Select Company Name</option>
+                                        {% for party in party_names %}
+                                                <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                                         {% endfor %}
                                         <option value="others">Other</option>
                                     </select>
-                                    <input type="text"
-                                           id="new_company_name"
-                                           name="new_company_name"
-                                           class="form-control"
-                                           placeholder="Company Name"
-                                           style="display:none">
-                                    <div class="invalid-feedback"
-                                         id="company_name_error"
-                                         style="display: none">Please provide a Company Name</div>
+
+                                    <input type="text" id="new_company_name" name="new_company_name"
+                                        class="form-control mt-2" placeholder="Enter New Company Name" style="display:none;">
+
+                                    <div class="invalid-feedback" id="company_name_error">Please provide a Company Name.</div>
                                 </div>
+
+                                <!-- Job Name -->
                                 <div class="col-md-4">
-                                    <label for="job_name" class="form-label fw-semibold text-dark">Job name</label>
-                                    <span style="color:red;">*</span>
-                                    <select id="job_name"
-                                            name="job_name"
-                                            class="form-control form-select"
-                                            placeholder="Select or type to job name...">
-                                        <option value="">Select a job...</option>
-                               
+                                    <label class="form-label fw-semibold text-dark">Job Name <span class="text-danger">*</span></label>
+
+                                    <select id="job_name" name="job_name" class="form-select form-control">
+                                        <option value="">Select Job...</option>
+                                        {% for j in cdr_job_names %}
+                                            <option value="{{ j.job_name }}">{{ j.job_name }}</option>
+                                        {% endfor %}
                                         <option value="others">Other</option>
                                     </select>
-                                    <input type="text"
-                                           id="new_job_name"
-                                           name="new_job_name"
-                                           class="form-control"
-                                           placeholder="Write Job Name"
-                                           style="display:none">
+
+                                    <input type="text" id="new_job_name" name="new_job_name"
+                                        class="form-control mt-2" placeholder="Enter New Job Name" style="display:none;">
+
                                     <div class="invalid-feedback" id="job_name_error">Please provide Job Name.</div>
                                 </div>
+
+                                <!-- Company Email -->
                                 <div class="col-md-4">
-                                    <label for="company_email" class="form-label fw-semibold text-dark">Company Email</label>
-                                    <span style="color:red;">*</span>
-                                    <select id="company_email"
-                                            name="company_email"
-                                            class="form-select form-control"
-                                            aria-label="Default select example">
-                                        <option selected>Select Company Email</option>
-                                        {% for email in cdr_email %}<option value="{{ email.company_email }}">{{ email.company_email }}</option>{% endfor %}
+                                    <label class="form-label fw-semibold text-dark">Party Email <span class="text-danger">*</span></label>
+
+                                    <select id="company_email" name="company_email" class="form-select form-control">
+                                        <option value="" selected>Select Company Email</option>
+                                        {% for email in cdr_email %}
+                                            <option value="{{ email.company_email }}">{{ email.company_email }}</option>
+                                        {% endfor %}
                                         <option value="other">Other</option>
                                     </select>
-                                    <input type="email"
-                                           id="new_company_email"
-                                           name="new_company_email"
-                                           class="form-control mt-2"
-                                           maxlength="50"
-                                           placeholder="Enter Email Address"
-                                           style="display:none" />
+
+                                    <input type="email" id="new_company_email" name="new_company_email"
+                                        class="form-control mt-2" placeholder="Enter Email Address" style="display:none;">
+
                                     <div class="invalid-feedback" id="company_email_error">Please provide a valid email address.</div>
                                 </div>
                             </div>
+
+                            <!-- Row 2 -->
                             <div class="row mb-3">
+
+                                <!-- Company Contact -->
                                 <div class="col-md-4">
-                                    <label for="cdr_upload_date" class="form-label fw-semibold text-dark">CDR Upload Date</label>
-                                    <span style="color:red;">*</span>
-                                    <input type="date"
-                                           id="cdr_upload_date"
-                                           name="cdr_upload_date"
-                                           value="{% now "Y-m-d" %}"
-                                           class="form-control" />
-                                    <span class="invalid-feedback" id="cdr_upload_date_error">Please Provide Date</span>
+                                    <label class="form-label fw-semibold text-dark">Party Contact <span class="text-danger">*</span></label>
+                                    <select id="company_contact" name="company_contact" class="form-select form-control">
+                                        <option value="" selected>Select Contact Number</option>
+                                        {% for con in cdr_contact %}
+                                            <option value="{{ con.company_contact }}">{{ con.company_contact }}</option>
+                                        {% endfor %}
+                                        <option value="other">Other</option>
+                                    </select>
+
+                                    <input type="text" id="new_company_contact" name="new_company_contact"
+                                        class="form-control mt-2" placeholder="Enter Contact Number"
+                                        maxlength="15" style="display:none;">
+                                    <div class="invalid-feedback" id="company_contact_error">Please provide a valid contact number.</div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="cdr_files" class="form-label fw-semibold text-dark">Upload CDR File</label>
-                                    <span style="color:red;">*</span>
-                                    <input type="file"
-                                           id="cdr_files"
-                                           name="cdr_files"
-                                           class="form-control"
-                                           multiple
-                                           accept=".jpeg,.png,.jpg,.ai" />
-                                    <span class="invalid-feedback" id="cdr_files_error">Please Provide CDR File</span>
+
+                                <!-- Upload Date -->
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold text-dark">CDR Upload Date <span class="text-danger">*</span></label>
+
+                                    <input type="date" id="cdr_upload_date" name="cdr_upload_date"
+                                        value="{% now 'Y-m-d' %}" class="form-control">
+
+                                    <div class="invalid-feedback" id="cdr_upload_date_error">Please provide a date.</div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="cdr_corrections" class="form-label fw-semibold text-dark">CDR Correction</label>
-                                    <input type="text"
-                                           id="cdr_corrections"
-                                           name="cdr_corrections"
-                                           placeholder="Enter CDR Corrections"
-                                           class="form-control" />
+
+                                <!-- CDR File Upload -->
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold text-dark">Upload CDR File <span class="text-danger">*</span></label>
+
+                                    <input type="file" id="cdr_files" name="cdr_files"
+                                        class="form-control"
+                                        multiple
+                                        accept=".jpeg,.png,.jpg,.ai">
+
+                                    <div class="invalid-feedback" id="cdr_files_error">Please upload CDR files.</div>
                                 </div>
+
+                                <!-- Correction -->
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold text-dark">CDR Correction</label>
+                                    <input type="text" id="cdr_corrections" name="cdr_corrections"
+                                        class="form-control" placeholder="Enter CDR Corrections">
+                                </div>
+
                             </div>
+
+                            <!-- Buttons -->
                             <div class="d-flex justify-content-end gap-2 border-top pt-3">
-                                <a href="{% url "company_add_page" %}">
+
+                                <a href="{% url 'company_add_page' %}">
                                     <button type="reset" class="btn btn-outline-secondary">
                                         <i class="bi bi-arrow-clockwise me-1"></i>Reset
                                     </button>
                                 </a>
+
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-check-circle me-1"></i>Create
                                 </button>
+
                             </div>
+
                         </form>
                     </div>
                 </div>
@@ -183,8 +205,8 @@
                                         <label for="search" class="form-label mb-0 fw-bold d-block">Company Name</label>
                                         <select id="search" name="search" class="form-select form-control">
                                             <option value="">{% if request.GET.search %}{{ request.GET.search }}{% else %}Select Company Name{% endif %}</option>
-                                            {% for company in cdr_company_name %}
-                                                <option value="{{ company.company_name }}">{{ company.company_name }}</option>
+                                            {% for party in party_names %}
+                                                <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -754,14 +776,25 @@ $("#company_name").change(function () {
               
                     $.each(data.email, function (index, email) {
                         $("#company_email").append(
-                            '<option value="' + email.company_email + '">' + email.company_email + "</option>"
+                            '<option value="' + email.party_emails__email + '">' + email.party_emails__email + "</option>"
                         );
                     });
                 } else {
      
                     $("#company_email").append('<option value="other">Other</option>');
                 }
-                
+
+                if (data.email && data.email.length > 0) {
+              
+                    $.each(data.email, function (index, email) {
+                        $("#company_email").append(
+                            '<option value="' + contacts.party_contacts__email + '">' + email.party_emails__email + "</option>"
+                        );
+                    });
+                } else {
+     
+                    $("#company_email").append('<option value="other">Other</option>');
+                }
 
                 $.each(data.jobs, function (index, job) {
                     $("#job_name").append(
