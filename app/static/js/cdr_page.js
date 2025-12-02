@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const new_job_nameInput = document.getElementById("new_job_name");
     const job_name_Error = document.getElementById("job_name_error");
 
+    const partyContactSelect = document.getElementById("party_contact_used");
+    const newPartyContactInput = document.getElementById("new_party_contact");
+    const partyContactError = document.getElementById("party_contact_error");
+
     const cdrDateInput = document.getElementById("cdr_upload_date");
     const cdrDateError = document.getElementById("cdr_upload_date_error");
 
@@ -29,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
             job_name_Error.style.display = "none";
         }
     });
+
     new_job_nameInput.addEventListener("input", function () {
         if (this.value.trim() !== "") {
             job_name_Error.style.display = "none";
@@ -49,6 +54,23 @@ document.addEventListener("DOMContentLoaded", function () {
     newCompanyInput.addEventListener("input", function () {
         if (this.value.trim() !== "") {
             companyNameError.style.display = "none";
+        }
+    });
+
+    partyContactSelect.addEventListener("change", function () {
+        if (this.value === "others") {
+            newPartyContactInput.style.display = "block";
+            newPartyContactInput.focus();
+        } else {
+            newPartyContactInput.style.display = "none";
+            newPartyContactInput.value = "";
+            partyContactError.style.display = "none";
+        }
+    });
+
+    newPartyContactInput.addEventListener("input", function () {
+        if (this.value.trim() !== "") {
+            partyContactError.style.display = "none";
         }
     });
 
@@ -75,6 +97,12 @@ document.addEventListener("DOMContentLoaded", function () {
         return pattern.test(email);
     }
 
+    function validateContact(contact) {
+        const contactPattern =
+            /^((091|\+91)?|(\(091\)|\(+91\))|(91)?|\(91\)|0)?[ ]?[6-9]\d{9}$/;
+        return contactPattern.test(contact);
+    }
+
     function validateForm() {
         let isValid = true;
 
@@ -82,8 +110,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (newCompanyInput.value.trim() === "") {
                 companyNameError.style.display = "block";
                 isValid = false;
-            } else {
-                companyNameError.style.display = "none";
             }
         } else if (companyNameSelect.value === "") {
             companyNameError.style.display = "block";
@@ -94,15 +120,12 @@ document.addEventListener("DOMContentLoaded", function () {
             if (new_job_nameInput.value.trim() === "") {
                 job_name_Error.style.display = "block";
                 isValid = false;
-            } else {
-                job_name_Error.style.display = "none";
             }
         } else if (job_nameSelect.value === "") {
             job_name_Error.style.display = "block";
             isValid = false;
         }
 
-        // Company Email
         if (companyEmailSelect.value === "other") {
             if (
                 newCompanyEmailInput.value.trim() === "" ||
@@ -110,28 +133,33 @@ document.addEventListener("DOMContentLoaded", function () {
             ) {
                 companyEmailError.style.display = "block";
                 isValid = false;
-            } else {
-                companyEmailError.style.display = "none";
             }
         } else if (companyEmailSelect.value === "") {
             companyEmailError.style.display = "block";
             isValid = false;
         }
 
-        // CDR Date
+        if (partyContactSelect.value === "others") {
+            if (
+                newPartyContactInput.value.trim() === "" ||
+                !validateContact(newPartyContactInput.value)
+            ) {
+                partyContactError.style.display = "block";
+                isValid = false;
+            }
+        } else if (partyContactSelect.value === "") {
+            partyContactError.style.display = "block";
+            isValid = false;
+        }
+
         if (cdrDateInput.value.trim() === "") {
             cdrDateError.style.display = "block";
             isValid = false;
-        } else {
-            cdrDateError.style.display = "none";
         }
 
-        // CDR Files
         if (cdrFilesInput.value.trim() === "") {
             cdrFilesError.style.display = "block";
             isValid = false;
-        } else {
-            cdrFilesError.style.display = "none";
         }
 
         return isValid;
@@ -142,6 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!validateForm()) {
             e.preventDefault();
+
+            // Scroll to first visible error
             const firstError = document.querySelector(
                 '[style*="display: block"]'
             );

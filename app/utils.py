@@ -11,12 +11,18 @@ from app.models import Registration
 
 
 def email_validator(email):
-    print(email)
+ 
     email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     if not re.match(email_regex,email):       
         return "Enter a Valid email Address"
-    
-    
+
+
+
+def phone_number_check(number):
+    number_regex = r"^((091|\+91)?|(\(091\)|\(+91\))|(91)?|\(91\)|0)?[ ]?[6-9]\d{9}$"
+    if not re.match(number_regex,number):
+        return "Enter a Valid Mobile Number"
+
 def email_check(email):
     if Registration.objects.filter(email=email).exists():
         return "Email is Already Exist"

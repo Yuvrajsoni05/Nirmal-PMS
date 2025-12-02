@@ -52,39 +52,6 @@ class PartyContact(models.Model):
         return f"{self.party.party_name} - {self.party_number}"
 
 
-# class JobHeader(models.Model):
-#     Job_Status = [
-#         ("Pending","Pending"),
-#         ("Confirmed","Confirmed")
-#     ]
-#     job_date = models.DateField()
-#     bill_no = models.CharField(max_length=200)
-#     company_name = models.CharField(max_length=300, blank=True, null=True)
-#     correction = models.TextField(blank=True, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-#     job_status  = models.CharField(max_length=200,choices=Job_Status)
-    
-#     def __str__(self):
-#         return self.company_name
-    
-
-
-# class JobMaterial(models.Model):
-#     job = models.ForeignKey(JobHeader, on_delete=models.CASCADE, related_name='job_materials')
-#     job_name = models.CharField(max_length=200)
-#     job_type = models.CharField(max_length=200)
-#     noc = models.CharField(max_length=200)
-#     prpc_purchase = models.CharField(max_length=200)
-#     prpc_sell = models.CharField(max_length=200, blank=True, null=True)
-#     cylinder_size = models.CharField(max_length=200)
-#     cylinder_made_in = models.CharField(max_length=200)
-#     pouch_size = models.CharField(max_length=200)
-#     pouch_open_size = models.CharField(max_length=200)
-#     pouch_combination = models.CharField(max_length=200)
-#     cylinder_date = models.DateField(blank=True, null=True)
-#     cylinder_bill_no = models.CharField(blank=True, null=True)
-#     created_at = models.DateTimeField(auto_now_add=True, blank=True, null=True)
-
  
 
 
@@ -118,20 +85,19 @@ class Job_detail(models.Model):
     def __str__(self):
         return self.company_name
 
-    @property
-    def cdr_file_url(self):
-        cdr = CDRDetail.objects.filter(
-            company_name__iexact=self.company_name,
-            job_name__iexact=self.job_name
-        ).first() 
-        if cdr and cdr.file_url:
-            return cdr.file_url
-        return None
+    # @property
+    # def cdr_file_url(self):
+    #     cdr = CDRDetail.objects.filter(
+    #         company_name__iexact=self.company_name,
+    #         job_name__iexact=self.job_name
+    #     ).first() 
+    #     if cdr and cdr.file_url:
+    #         return cdr.file_url
+    #     return None
     @property
     def cdr_images_urls(self):
-        
         cdr = CDRDetail.objects.filter(
-            company_name__iexact=self.company_name,
+            party_details__party_name__iexact=self.company_name,
             job_name__iexact=self.job_name
         ).first()
         if not cdr:
@@ -174,13 +140,11 @@ class CDRDetail(models.Model):
     party_email_used = models.ForeignKey(PartyEmail,on_delete=models.SET_NULL,null=True, blank=True)
     party_contact_used = models.ForeignKey(PartyContact,on_delete=models.SET_NULL,null=True, blank=True)
     job_name =  models.CharField(max_length=200,blank=True, null=True)
-    file_url = models.URLField(max_length=200,blank=True, null=True)
-    image_url = models.URLField(max_length=900,blank=True, null=True)
     cdr_corrections = models.TextField(max_length=900,blank=True, null=True)
     
     
     def __str__(self):
-        return f"{self.company_name} - {self.job_name}"
+        return f" {self.party_details} - {self.job_name}"
   
      
      

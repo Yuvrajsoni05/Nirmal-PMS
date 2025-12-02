@@ -1,3 +1,4 @@
+from calendar import c
 import json
 import logging
 from operator import inv
@@ -6,6 +7,7 @@ import re
 from datetime import datetime
 from traceback import print_tb
 
+from pyparsing import C
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -25,7 +27,7 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
 
 from app.models import CDRDetail, Job_detail, ProformaInvoice, ProformaJob
-from app.utils import file_name_convert
+from app.utils import file_name_convert, phone_number_check
 
 from . import utils 
 from .decorators import *
@@ -455,8 +457,7 @@ def base_html(request):
 @custom_login_required
 def job_entry(request):
 
-    company_name = CompanyName.objects.values("company_name").union(
-        CDRDetail.objects.values("company_name"))
+    company_name = Party.objects.values("party_name").distinct().union(Job_detail.objects.values("company_name").distinct())
     
     job_status = Job_detail._meta.get_field("job_status").choices
     
@@ -481,6 +482,7 @@ def add_job(request):
             date = request.POST.get("job_date" ,'')
             bill_no = request.POST.get("bill_no"  ,'')
             company_name = request.POST.get("company_name", "")
+            new_company_name = request.POST.get("new_company", "").strip()
             job_name = request.POST.getlist("job_name_real[]")
             
             job_type = request.POST.getlist("job_type[]")
@@ -495,7 +497,7 @@ def add_job(request):
             pouch_open_size = request.POST.getlist("pouch_open_size[]")
  
             pouch_combination = request.POST.getlist('pouch_combination[]')
-            new_company = request.POST.get("new_company")
+           
            
             
             correction = request.POST.get("correction")
@@ -530,7 +532,8 @@ def add_job(request):
                     )
                     return redirect("job_entry")
 
-   
+            if new_company_name:
+                company_name = new_company_name
 
             if cylinder_made_in_s:
                 for value in cylinder_made_in_s:
@@ -541,23 +544,18 @@ def add_job(request):
                             cylinder_made_in=value
                         )
           
-            if new_company != "":
-                if CompanyName.objects.filter(
-                    company_name__icontains=new_company
-                ).exists():
-                    messages.error(
-                        request,
-                        "company name already exists",
-                        extra_tags="custom-success-style",
+            
+
+            
+            if company_name:
+                if Party.objects.filter(party_name__iexact=company_name).exists():
+                    pass
+                else:
+                    Party.objects.create(
+                        party_name=company_name
                     )
-                    return redirect("job_entry")
-                add_company = CompanyName.objects.create(company_name=new_company)
-                add_company.save()
-                company_name = new_company
-            if company_name == "" or company_name == None:
-                messages.error(request, "Plz Provide Company Name")
-                return redirect("data-entry")
-     
+                    
+            
             for i in range(len(job_name)):
                 job = Job_detail.objects.create(
                     date=date,
@@ -593,6 +591,10 @@ def add_job(request):
         messages.error(request, f"Something went wrong {e}")
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
         return redirect("job_entry")
+    
+    
+    
+    
     # data = {
     #             "date": date,
     #             "bill_no": bill_no,
@@ -1027,9 +1029,9 @@ def user_password(request):
 
 @custom_login_required
 def cdr_page(request):
-    search = request.GET.get("search", "")
-    date = request.GET.get("date", "")
-    end_date = request.GET.get("end_date", "")
+    search = request.GET.get("search", "").strip()
+    date = request.GET.get("date", "").strip()
+    end_date = request.GET.get("end_date", "").strip()
     company_name_sorting = request.GET.get("company_name_sorting", "")
     job_name_sorting = request.GET.get("job_name_sorting", "")
     date_sorting = request.GET.get("date_sorting", "")
@@ -1038,32 +1040,35 @@ def cdr_page(request):
     cdr_data = CDRDetail.objects.all()
     if search and date:
         cdr_data = CDRDetail.objects.filter(
-            Q(date__icontains=date)
-            & (
-                Q(job_name__icontains=search)
-                | Q(company__icontains=search)
-                | Q(company_0email__icontains=search)
+            Q(date__range=(date, end_date)) &
+            (
+                Q(job_name__icontains=search) |
+                Q(party_details__party_name__icontains=search)
             )
         )
-
-    elif end_date and date:
+    elif date and end_date:
         cdr_data = CDRDetail.objects.filter(date__range=(date, end_date))
+
+    elif end_date and date and search:
+        cdr_data = CDRDetail.objects.filter(date__range=(date, end_date)) & (
+            Q(job_name__icontains=search)
+            | Q(party_details__party_name__icontains=search)
+        )
+   
     elif search:
         cdr_data = CDRDetail.objects.filter(
             Q(job_name__icontains=search)
-            | Q(company_name__icontains=search)
-            | Q(company_email__icontains=search)
+            | Q(party_details__party_name__icontains=search)
         )
     elif date:
         cdr_data = CDRDetail.objects.filter(Q(date__icontains=date))
-    elif end_date:
-        cdr_data = CDRDetail.objects.filter(Q(date__icontains=end_date))
+
 
     order_by = ""
     if company_name_sorting == "asc":
-        order_by = "company_name"
+        order_by = "party_details"
     elif company_name_sorting == "desc":
-        order_by = "-company_name"
+        order_by = "-party_details"
     elif job_name_sorting == "asc":
         order_by = "job_name"
     elif job_name_sorting == "desc":
@@ -1082,7 +1087,7 @@ def cdr_page(request):
 
     p = Paginator(cdr_data, 10)
     page = request.GET.get("page")
-    # cdr_emails = CDRDetail.objects.values("company_email").distinct()
+   
     party_name = Party.objects.values("party_name").distinct()
     cdr_job_name = CDRDetail.objects.values("job_name").distinct()
 
@@ -1091,8 +1096,7 @@ def cdr_page(request):
     datas = p.get_page(page)
     nums = "a" * datas.paginator.num_pages
     
-    
-    print(party_name)
+
 
     context = {
         "nums": nums,
@@ -1120,24 +1124,10 @@ def cdr_add(request):
         new_company_name = request.POST.get("new_company_name","").strip()
         new_company_email = request.POST.get("new_company_email","").strip()
         new_job_name = request.POST.get("new_job_name","").strip()
-
-        if not job_name or not cdr_upload_date:
-            messages.error(
-                request,
-                "Job name and upload date are required.",
-                extra_tags="custom-error-style",
-            )
-            return redirect("company_add_page")
-
-        if new_job_name != "":
-            job_name = new_job_name
-
-        if new_company_email != "":
-            company_email = new_company_email
-
-        if new_company_name != "":
-            company_name = new_company_name
-
+        party_contact_used = request.POST.get("party_contact_used","").strip()
+        new_party_contact = request.POST.get("new_party_contact","").strip()
+        
+        
         required_fields = {
             "Company Name": company_name,
             "Company Email": company_email,
@@ -1145,10 +1135,7 @@ def cdr_add(request):
             "Job Name": job_name,
         }
 
-        email_error = utils.email_validator(company_email)
-        if email_error:
-            messages.error(request, email_error, extra_tags="custom-success-style")
-            return redirect("company_add_page")
+        
 
         for field, required in required_fields.items():
             if not required:
@@ -1156,49 +1143,81 @@ def cdr_add(request):
                     request, f"{field} is Required", extra_tags="custom-success-style"
                 )
                 return redirect("company_add_page")
+            
         if not cdr_files:
             messages.error(
-                request, "CDR File is Required", extra_tags="custom-success-style"
+                request, "CDR File is Required", extra_tags="custom-success-style")
+            return redirect("company_add_page")
+
+        # if not job_name or not cdr_upload_date:
+        #     messages.error(
+        #         request,
+        #         "Job name and upload date are required.",
+        #         extra_tags="custom-error-style",
+        #     )
+        #     return redirect("company_add_page")
+
+        if new_job_name != "":
+            job_name = new_job_name
+            
+            
+        if new_party_contact != "":
+            party_contact_used = new_party_contact
+            
+
+        if new_company_email != "":
+            company_email = new_company_email
+
+        if new_company_name != "":
+            company_name = new_company_name
+
+        
+        party_number_check = utils.phone_number_check(party_contact_used)
+        if party_number_check:
+            messages.error(
+                request, party_number_check, extra_tags="custom-success-style"
             )
             return redirect("company_add_page")
+            
+            
+        email_error = utils.email_validator(company_email)
+        if email_error:
+            messages.error(request, email_error, extra_tags="custom-success-style")
+            return redirect("company_add_page")
         
-
-        if CDRDetail.objects.filter(
-            company_name=company_name, company_email=company_email
-        ).exists():
-            pass
-        else:
-            if CDRDetail.objects.filter(company_name=company_name).exists():
-                messages.error(
-                    request,
-                    "Choose Another Company Name",
-                    extra_tags="custom-success-style",
-                )
-                return redirect("company_add_page")
-            if CDRDetail.objects.filter(company_email=company_email).exists():
-                messages.error(
-                    request, "Choose Another Email", extra_tags="custom-success-style"
-                )
-                return redirect("company_add_page")
-
-        if CompanyName.objects.filter(company_name__icontains=company_name).exists():
-            pass
-        else:
-            company_add_in = CompanyName.objects.create(company_name=company_name)
-            company_add_in.save()
-            
-            
-       
-
+    
+        file_error = utils.file_validation(cdr_files)
+        if file_error:
+            messages.error(request, file_error, extra_tags="custom-success-style")
+            return redirect("company_add_page")
         file_dic = file_name_convert(cdr_files)
+
         try:
+            party_details, _ = Party.objects.get_or_create(
+                party_name=company_name.strip() if company_name.strip() else "None"
+            )
+
+            email_obj, _ = PartyEmail.objects.get_or_create(
+                party=party_details,
+                email=company_email
+            )
+            
+            contact_obj, _ = PartyContact.objects.get_or_create(
+                party=party_details,
+                party_number=party_contact_used
+            )
+            
+            
             cdr_data = CDRDetail.objects.create(
                 date=cdr_upload_date,
-                company_name=company_name,
-                company_email=company_email,
+                party_email_used = email_obj,
+                party_details=party_details,
                 cdr_corrections=cdr_corrections_data,
                 job_name=job_name,
-            )
+                party_contact_used= contact_obj )
+
+            
+
             for file_key, file_data in file_dic.items():
                 file_obj = file_data[1]
                 CDRImage.objects.create(cdr=cdr_data, image=file_obj)
@@ -1236,31 +1255,19 @@ def cdr_update(request, update_id):
         date = request.POST.get("cdr_upload_date")
 
         company_email = request.POST.get("company_email", "").strip()
+        party_number = request.POST.get("party_number", "").strip()
         cdr_files = request.FILES.getlist("files")
-        company_name = request.POST.get("company_name").strip()
         job_names = request.POST.get("job_name").strip()
-
+        
         cdr_corrections = request.POST.get("cdr_corrections")
 
         
-        
-
+        print(party_number)
         email_error = utils.email_validator(company_email)
         if email_error:
             messages.error(request, email_error, extra_tags="custom-success-style")
             return redirect("company_add_page")
-        if CDRDetail.objects.filter(
-            company_name__icontains=company_name, company_email=company_email
-        ).exists():
-            pass
-        else:
-            if CDRDetail.objects.filter(company_email=company_email).exists():
-                messages.error(
-                    request,
-                    "Choose Another Email This Email is already Exist",
-                    extra_tags="custom-success-style",
-                )
-                return redirect("company_add_page")
+        
 
         file_error = utils.file_validation(cdr_files)
         if file_error:
@@ -1270,29 +1277,53 @@ def cdr_update(request, update_id):
         file_dic = file_name_convert(cdr_files)
 
         company_email = str(company_email).strip()
-        print(company_email)
 
-        get_email = CDRDetail.objects.values_list("company_email").get(id=id)
-        email_string = get_email[0]
-        print(str(email_string))
-
-        if company_email == email_string:
-            pass
-        else:
-            CDRDetail.objects.filter(company_email=email_string).update(
-                company_email=company_email
-            )
         update_details = get_object_or_404(CDRDetail, id=id)
-        update_details.company_email = company_email
+        
+        # Party Email Uniqueness Check
+        party_id = update_details.party_details.id
+        email_exists = PartyEmail.objects.filter(
+            party=party_id, email=company_email
+        ).exclude(id=update_details.party_email_used.id).exists()
+        if email_exists:
+            messages.error(
+                request,
+                "This email is already exists.",
+                extra_tags="custom-success-style",
+            )
+            return redirect("company_add_page")
+        
+      
+        contact_exists = PartyContact.objects.filter(
+            party=party_id, party_number=party_number
+        ).exclude(id=update_details.party_contact_used.id).exists()
+        if contact_exists:
+            messages.error(
+                request,
+                "This contact number is already exists.",
+                extra_tags="custom-success-style",
+            )
+            return redirect("company_add_page")
+        
+        
+         
+        
         update_details.cdr_corrections = cdr_corrections
         update_details.job_name = job_names
         update_details.date = date
+        update_details.save()
+        
+        update_details.party_email_used.email = company_email
+        update_details.party_email_used.save()
+        
+        
+        update_details.party_contact_used.party_number = party_number
+        update_details.party_contact_used.save()
 
         for file_key, file_data in file_dic.items():
             file_obj = file_data[1]
-            CDRImage.objects.create(cdr=update_details, image=file_obj)
-            
-        update_details.save()
+            CDRImage.objects.create(cdr=update_details, image=file_obj) 
+        
         messages.success(request, "Data Updated Successfully")
         return redirect("company_add_page")
     return redirect("company_add_page")
@@ -1372,7 +1403,6 @@ def cdr_sendmail_data(request):
 
 @custom_login_required
 def send_mail_data(request):
-
     if request.method == "POST":
         date_check = request.POST.get("date_check")
         date = request.POST.get("date", "")
@@ -1390,8 +1420,6 @@ def send_mail_data(request):
         correction_check = request.POST.get("correction_check", "")
         attachments = request.FILES.getlist("attachment")
         note = request.POST.get("notes", "")
-        # selected_item = request.POST.getlist('select_item[]',"")
-
     if date_check == None or date_check == "":
         date = ""
     else:
@@ -1466,86 +1494,52 @@ def send_mail_data(request):
     
 
 
-
+@require_GET
 @custom_login_required
-def company_name_suggestion(request):
+def cdr_page_ajax(request):
     company_name = request.GET.get("company_name", "")
     
     if company_name:
-
-        cdr_jobs = CDRDetail.objects.filter(
-            party_details__party_name__iexact=company_name
-        ).values("job_name")
-
-        job_details = Job_detail.objects.filter(
+        jobs = list(Job_detail.objects.filter(
             company_name__iexact=company_name
-        ).values("job_name")
-        
-        jobs = list(cdr_jobs.union(job_details))
-        
+        ).values("job_name").distinct().union(
+            CDRDetail.objects.filter(party_details__party_name__iexact=company_name)
+            .values("job_name")
+            .distinct().union(ProformaJob.objects.filter(proforma_invoice__party_details__party_name=company_name)
+            .values("job_name").distinct())
+        ))
         email = list(Party.objects.filter(party_name=company_name).values('party_emails__email').distinct())
-        
-        contacts = Party.objects.filter(party_name=company_name).values('party_contacts__contact_number').distinct()
-      
-        return JsonResponse({"email": email, "jobs": jobs , "contacts":contacts})
+        contacts = list(
+            Party.objects
+            .filter(party_name=company_name)
+            .values('party_contacts__party_number')
+            .distinct()
+        )
+       
+        return JsonResponse({"email": email, "jobs": jobs, "contact":contacts})
     return JsonResponse({"error": "Invalid request"}, status=400)
 
-
+@require_GET
 @custom_login_required
-def company_name_suggestion_job(request):
+def job_page_ajax(request):
     company_name = request.GET.get("company_name", "")
 
     if company_name:
-        proforma_job =list(ProformaJob.objects.filter(proforma_invoice__company_name=company_name).values("job_name"))
-    
-        
         job_detail = (
             Job_detail.objects.filter(company_name__iexact=company_name)
             .values("job_name")
-            .distinct()
-        )
-        cdr_job = (
-            CDRDetail.objects.filter(company_name__iexact=company_name)
-            .values("job_name")
-            .distinct()
-        )
-        jobs = list(job_detail.union(cdr_job)) + list(proforma_job)
+            .distinct().union(CDRDetail.objects.filter(party_details__party_name__iexact=company_name)
+            .values("job_name").distinct().union(
+                ProformaJob.objects.filter(proforma_invoice__party_details__party_name=company_name)
+                .values("job_name").distinct()
+            )
+        ))
+        
+        jobs = list(job_detail) 
         
         return JsonResponse({"jobs": jobs})
     return JsonResponse({"error": "Invalid request"}, status=400)
 
-
-@custom_login_required
-def file_convert(images):
-    valid_extension = [".jpeg", ".jpg", ".png", ".ai"]
-    for i in images:
-        print(i)
-        ext = os.path.splitext(i.name)[1]
-        if ext.lower() not in valid_extension:
-            return {
-                "Error": "Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed."
-            }
-    return None
-
-
-@custom_login_required
-def cdr_job_check(job_name, date):
-    if CDRDetail.objects.filter(job_name__icontains=job_name, date=date).exists():
-        return {"Error": "Job Name already exists on this date. Kindly update job"}
-    return None
-
-
-@custom_login_required
-def cdr_company_check(company_name, company_email):
-    if CDRDetail.objects.filter(
-        company_name=company_name, company_email=company_email
-    ).exists():
-        pass
-    else:
-        if CDRDetail.objects.filter(company_name=company_name).exists():
-            return {"Error": "Choose Another Company Name"}
-        if CDRDetail.objects.filter(company_email=company_email).exists():
-            return {"Error": "Choose Another Email"}
 
 
 @custom_login_required
@@ -1844,19 +1838,36 @@ def ProformaInvoiceCreate(request):
             "gst value": gst_value,
             "taxable value": taxable_value,
         }
-        bank_instance = (
-            BankDetails.objects.get(id=banking_details) if banking_details else None
-        )
-
+        
         for field, required in required_fields.items():
             if not required:
                 messages.error(
                     request, f"{field} is Required", extra_tags="custom-success-style"
                 )
                 return redirect("proforma_invoice_page")
-
+        
+        
         if company_name == "" or new_company != "":
-            company_name = new_company
+            company_name = new_company.strip()  
+            
+        party_number_check = utils.phone_number_validator(company_contact)
+        if party_number_check:
+            messages.error(
+                request, party_number_check, extra_tags="custom-success-style"
+            )
+            return redirect("company_add_page")
+        
+        
+        email_error = utils.email_validator(company_email)
+        if email_error:
+            messages.error(request, email_error, extra_tags="custom-success-style")
+            return redirect("proforma_invoice_page")
+        
+        bank_instance = (
+            BankDetails.objects.get(id=banking_details) if banking_details else None
+        )
+        
+        
 
         if ProformaInvoice.objects.filter(invoice_no=invoice_no).exists():
             messages.error(
@@ -1893,7 +1904,7 @@ def ProformaInvoiceCreate(request):
                 party_contact_used=contact_obj,    
                 billing_address=billing_address,
                 billing_state_name=billing_state_name,
-                billing_gstin_no=billing_gstin_no,  # Changed here
+                billing_gstin_no=billing_gstin_no,  
                 terms_note=terms,
                 bank_details=bank_instance,
                 gst=gst_list,
@@ -1965,15 +1976,14 @@ def ProformaInvoicePageAJAX(request):
     
     
     if company:
-
         job_qs = Job_detail.objects.filter(company_name=company).values("job_name").distinct()
 
        
         job_qs = job_qs.union(
-            CDRDetail.objects.filter(company_name=company)
-            .values("job_name").distinct(),
             ProformaJob.objects.filter(proforma_invoice__party_details__party_name=company)
-            .values("job_name").distinct(),
+            .values("job_name").distinct().union(CDRDetail.objects.filter(
+                party_details__party_name=company
+            ).values("job_name").distinct())
         )
         job = list(job_qs)
         

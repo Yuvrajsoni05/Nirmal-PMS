@@ -41,7 +41,7 @@ admin.site.register(CompanyName,AdminCompanyDetail)
 
 
 class AdminCDRDetail(admin.ModelAdmin):
-    list_display = ["id" , 'job_name', 'party_details' , 'party_email_used' , 'party_contact_used' , 'file_url' , 'image_url']
+    list_display = ["id" , 'job_name', 'party_details' , 'party_email_used' , 'party_contact_used']
 admin.site.register(CDRDetail,AdminCDRDetail)
 
 

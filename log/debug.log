@@ -8280,3 +8280,35 @@ ERROR 2025-11-21 17:02:02,743 myapp login_page Invalid Username or Password view
 ERROR 2025-11-21 17:04:19,369 myapp login_page Invalid Username or Password views.py
 ERROR 2025-11-21 17:04:22,980 myapp login_page Invalid Username or Password views.py
 ERROR 2025-11-21 18:10:11,912 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-02 11:23:25,208 myapp cdr_add Something went wrong: too many values to unpack (expected 1) views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 1174, in cdr_add
+    party_details, = Party.objects.get_or_create(
+    ^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 1)
+ERROR 2025-12-02 11:23:42,798 myapp cdr_add Something went wrong: too many values to unpack (expected 1) views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 1174, in cdr_add
+    party_details, = Party.objects.get_or_create(
+    ^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 1)
+ERROR 2025-12-02 11:24:40,628 myapp cdr_add Something went wrong: too many values to unpack (expected 1) views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 1174, in cdr_add
+    party_details, = Party.objects.get_or_create(
+    ^^^^^^^^^^^^^^
+ValueError: too many values to unpack (expected 1)
+ERROR 2025-12-02 18:32:42,439 myapp add_job Something went wrong: Reverse for 'data-entry' not found. 'data-entry' is not a valid view function or pattern name. views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 549, in add_job
+    return redirect("data-entry")
+  File "D:\Nirmal\venv\Lib\site-packages\django\shortcuts.py", line 51, in redirect
+    resolve_url(to, *args, **kwargs),
+    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\shortcuts.py", line 184, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+  File "D:\Nirmal\venv\Lib\site-packages\django\urls\base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+  File "D:\Nirmal\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'data-entry' not found. 'data-entry' is not a valid view function or pattern name.

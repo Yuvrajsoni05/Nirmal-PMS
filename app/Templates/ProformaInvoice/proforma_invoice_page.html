@@ -705,7 +705,7 @@ $(document).ready(function() {
         var billing_state_name = $('#billing_state_name').val();
         var company_name = $('#company_name').val();
 
-        // GST Checkbox values
+     
         var igst = $('#igst').is(':checked') ? 18 : 0;
         var cgst = $('#cgst').is(':checked') ? 9 : 0;
         var sgst = $('#sgst').is(':checked') ? 9 : 0;
@@ -783,8 +783,7 @@ $(document).ready(function() {
                             }
                         }
                     }
-                }
-                           
+                }      
                 if ((response.emails && response.emails.length) || changedField === 'company_name') {
                     var $select = $('#company_email');
                     var previous = $select.val();

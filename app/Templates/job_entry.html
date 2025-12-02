@@ -1,7 +1,9 @@
-{% extends "Base/base.html" %} {% load humanize %} {% load static %}
-{% block style %}
- 
-{% endblock style %} {% block main_block %}
+{% extends "Base/base.html" %} 
+{% load humanize %} 
+{% load static %} 
+{% block style %} 
+{% endblock style %} 
+{% block main_block %}
 <div class="page-inner">
     <div
         class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
@@ -51,8 +53,7 @@
                                         </label>
                                         <input type="date" class="form-control
                                         border-1" value="{% now "Y-m-d" %}"
-                                        id="job_date" name="job_date"
-                                        >
+                                        id="job_date" name="job_date" >
                                         <div
                                             class="invalid-feedback"
                                             id="job_date_error"
@@ -103,9 +104,9 @@
                                             </option>
                                             {% for company in company_name %}
                                             <option
-                                                value="{{ company.company_name }}"
+                                                value="{{ company.party_name }}"
                                             >
-                                                {{ company.company_name }}
+                                                {{ company.party_name }}
                                             </option>
                                             {% endfor %}
                                             <option value="other">Other</option>
@@ -395,21 +396,33 @@
 
                                         <div class="row g-3 mt-2">
                                             <div class="col-12 col-md-4">
-                                                <label for="cylinder_made_in" class="form-label fw-semibold text-dark">
-                                                    Cylinder Made In <span class="text-danger">*</span>
+                                                <label
+                                                    for="cylinder_made_in"
+                                                    class="form-label fw-semibold text-dark"
+                                                >
+                                                    Cylinder Made In
+                                                    <span class="text-danger"
+                                                        >*</span
+                                                    >
                                                 </label>
 
                                                 <select
                                                     name="cylinder_made_in_select[]"
                                                     class="form-control form-select border-1 cylinder-made-in-select"
                                                 >
-                                                    <option value="">Select Company</option>
+                                                    <option value="">
+                                                        Select Company
+                                                    </option>
                                                     {% for i in cylinder_company_names %}
-                                                    <option value="{{ i.cylinder_made_in }}">
+                                                    <option
+                                                        value="{{ i.cylinder_made_in }}"
+                                                    >
                                                         {{ i.cylinder_made_in }}
                                                     </option>
                                                     {% endfor %}
-                                                    <option value="others">Other</option>
+                                                    <option value="others">
+                                                        Other
+                                                    </option>
                                                 </select>
 
                                                 <!-- Text input shown when "Other" is selected -->
@@ -427,8 +440,12 @@
                                                     name="cylinder_made_in_real[]"
                                                 />
 
-                                                <div class="invalid-feedback" id="cylinder_made_in_error">
-                                                    Please provide Cylinder Made In
+                                                <div
+                                                    class="invalid-feedback"
+                                                    id="cylinder_made_in_error"
+                                                >
+                                                    Please provide Cylinder Made
+                                                    In
                                                 </div>
                                             </div>
 
@@ -446,7 +463,9 @@
                                                 </label>
                                                 <input type="date"
                                                 class="form-control border-1"
-                                                id="cylinder_dates" value="{% now "Y-m-d" %}" name="cylinder_date[]">
+                                                id="cylinder_dates" value="{%
+                                                now "Y-m-d" %}"
+                                                name="cylinder_date[]">
                                                 <div
                                                     class="invalid-feedback"
                                                     id="cylinder_date_error"
@@ -709,7 +728,7 @@
                                                         <div
                                                             class="border border-2 border-dashed rounded-3 p-4 text-center bg-light"
                                                         >
-                                                             <input
+                                                            <input
                                                                 class="form-control border-0 bg-transparent"
                                                                 type="file"
                                                                 name="files[0][]"
@@ -852,7 +871,7 @@
 
         if (companyName) {
             $.ajax({
-                url: '{% url "company_name_suggestion_job" %}',
+                url: '{% url "job_page_ajax" %}',
                 data: { company_name: companyName },
                 success: function (data) {
                     $("#job_name")
@@ -883,50 +902,48 @@
 </script>
 
 <script>
-$(document).ready(function () {
+    $(document).ready(function () {
+        function updateJobIndexes() {
+            $("#job-details-section .job-section").each(function (idx) {
+                $(this).attr("data-job-index", idx);
 
+                // Update file input name
+                $(this)
+                    .find('input[type="file"]')
+                    .attr("name", `files[${idx}][]`);
+            });
+        }
 
-    function updateJobIndexes() {
-        $("#job-details-section .job-section").each(function (idx) {
-            $(this).attr("data-job-index", idx);
+        $(document).on("click", "#add-job", function (e) {
+            e.preventDefault();
 
-            // Update file input name
-            $(this).find('input[type="file"]').attr("name", `files[${idx}][]`);
-        });
-    }
+            let newSection = $(
+                "#job-details-section .job-section:first"
+            ).clone();
 
-    $(document).on("click", "#add-job", function (e) {
-        e.preventDefault();
+            newSection.find("input").val("");
+            newSection.find("select").prop("selectedIndex", 0);
 
-        let newSection = $("#job-details-section .job-section:first").clone();
+            newSection.find(".close-job-btn").closest(".d-grid").remove();
 
-        newSection.find("input").val("");
-        newSection.find("select").prop("selectedIndex", 0);
-
-       
-        newSection.find(".close-job-btn").closest(".d-grid").remove();
-
-        newSection.find("h5").after(`
+            newSection.find("h5").after(`
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button class="btn btn-danger me-md-2 close-job-btn" type="button">X</button>
             </div>
         `);
 
-        $("#job-details-section").append(newSection);
+            $("#job-details-section").append(newSection);
+            updateJobIndexes();
+        });
+
+        $(document).on("click", ".close-job-btn", function (e) {
+            e.preventDefault();
+            if ($("#job-details-section .job-section").length > 1) {
+                $(this).closest(".job-section").remove();
+            }
+        });
         updateJobIndexes();
     });
-
-
-    $(document).on("click", ".close-job-btn", function (e) {
-        e.preventDefault();
-        if ($("#job-details-section .job-section").length > 1) {
-            $(this).closest(".job-section").remove();
-        }
-    });
-    updateJobIndexes();
-
-});
-
 </script>
 
 <script>

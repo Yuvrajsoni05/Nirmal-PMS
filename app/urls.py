@@ -36,15 +36,15 @@ urlpatterns = [
     path('update_proforma_invoice/<uuid:proforma_id>/',UpdateProformaInvoice,name='update_proforma_invoice'),
     path('proforma_sendmail',ProformaSendMail,name='proforma_sendmail'),
     path(
-        "company_name_suggestion_job",
-        company_name_suggestion_job,
-        name="company_name_suggestion_job",
+        "job_page_ajax",
+        job_page_ajax,
+        name="job_page_ajax",
     ),
     # path('print_job/<int:job_id>/',job_detail_print,name='job_detail_print'),
     path(
-        "company_name_suggestion",
-        company_name_suggestion,
-        name="company_name_suggestion",
+        "cdr_page_ajax",
+        cdr_page_ajax,
+        name="cdr_page_ajax",
     ),
     path("password_reset", CustomPasswordResetView.as_view(), name="password_reset"),
     path(
