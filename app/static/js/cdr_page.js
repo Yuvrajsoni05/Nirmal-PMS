@@ -203,68 +203,194 @@ function printJobDetails(btn) {
     const doc = iframe.contentWindow.document;
     doc.open();
     doc.write(`
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Job Details - Print</title>
-                    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-                    <style>
-                        body { font-family: Arial, sans-serif; padding: 20px; margin: 0; }
-                        @page { margin: 20px; }
-                    </style>
-                </head>
-                <body>
-                    <div class="text-center mb-4">
-                        <h2 style="color: #0d6efd; margin-bottom: 5px;">Nirmal Group</h2>
-                        <h4 style="margin-bottom: 20px;">CDR Details    </h4>
-                        <hr>
-                    </div>
-                    
-                    <table class="table table-bordered" style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background-color: #212529; color: white;">
-                                <th style="width: 30%; padding: 12px; border: 1px solid #dee2e6;">Field</th>
-                                <th style="padding: 12px; border: 1px solid #dee2e6;">Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Job ID</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${jobId}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Job Name</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${job_name}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Date</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${date}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Company Name</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${company_name}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Company Email</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${company_email}</td>
-                            </tr>
-                            <tr style="background-color: #f8f9fa;">
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Corrections</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;">${correction}</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><strong>Folder Link</strong></td>
-                                <td style="padding: 8px; border: 1px solid #dee2e6;"><a href="${folder_url}" target="_blank">Open Folder</a></td> 
-                            </tr>  
-                        
-                        </tbody>
-                    </table>
-                    
-                    <div class="text-center mt-4">
-                        <small style="color: #6c757d;">Generated on ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</small>
-                    </div>
-                </body>
-                </html>
+          <!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 40px; 
+            margin: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: right;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 20px;
+        }
+        
+        .logo {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        
+        .logo-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .logo-text span {
+            color: #ff6600;
+        }
+        
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+            margin: 5px 0;
+        }
+        
+        .company-address {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #007bff;
+            width: 150px;
+        }
+        
+        .info-value {
+            flex: 1;
+            color: #333;
+        }
+        
+        .section-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            margin: 25px 0 0 0;
+        }
+        
+        .section-content {
+            border: 1px solid #007bff;
+            border-top: none;
+            padding: 0;
+        }
+        
+        .detail-row {
+            display: flex;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            width: 200px;
+            color: #333;
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+        
+        .correction-box {
+            border: 2px dashed #007bff;
+            padding: 15px;
+            margin: 25px 0;
+        }
+        
+        .correction-title {
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .correction-text {
+            color: #333;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #007bff;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div class="header">
+    <div class="col-auto">
+        <img  src="https://nirmalgroup.com/wp-content/uploads/2024/11/Mask-group-2.png" 
+                alt="Logo" class="company-logo" style="height: 30px;">
+    </div>
+        <div class="company-name">Shrri nirmal ventures private limited. Ltd.</div>
+        <div class="company-address">
+            1601, 16th Floor, B Block, Navratna Corporate Park<br>
+            Ambli Bopal Road, Ambli, Ahmedabad - 380058
+        </div>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">CDR ID:</span>
+        <span class="info-value">${jobId}</span>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">Job Date:</span>
+        <span class="info-value">${date}</span>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">Party Name:</span>
+        <span class="info-value">${company_name}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-label">Party Email:</span>
+        <span class="info-value">${company_email}</span>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">Job Name:</span>
+        <span class="info-value">${job_name}</span>
+    </div>
+    
+    
+    
+    <div class="correction-box">
+        <div class="correction-title">Correction:</div>
+        <div class="correction-text">${correction}</div>
+    </div>
+    
+    
+    
+    <div class="footer">
+        © shrri nirmal ventures private limited.
+    </div>
+</body>
+</html>
             `);
     doc.close();
 

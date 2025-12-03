@@ -136,7 +136,7 @@
                                         </div>
 
                                         <!-- Company Name -->
-                                        <div class="col-12 col-md-auto" >
+                                        <div class="col-12 col-md-auto" style="min-width: 220px;">
                                             <label for="q" class="form-label mb-1 fw-bold">Company Search</label>
                                             <select class="form-select form-control"
                                                     name="q"
@@ -170,7 +170,7 @@
                                                     <option value="{{ request.GET.job_name_search }}">
                                                         {{ request.GET.job_name_search }}
                                                     </option>
-                                                    <option value="">All Job Names</option>
+                                                    
                                                 {% else %}
                                                     <option value="">Select Job Name</option>
                                                 {% endif %}
@@ -196,11 +196,10 @@
 
                                         <!-- Reset Button -->
                                         <div class="col-12 col-md-auto">
-                                            <a href="{% url 'dashboard_page' %}"
-                                            class="btn btn-secondary w-100 w-md-auto"
-                                            data-mdb-ripple-init>
+                                            <a href="{% url 'dashboard_page' %}" class="btn btn-secondary w-100 w-md-auto">
                                                 Reset
                                             </a>
+
                                         </div>
                                     </form>
                                 </div>
@@ -252,848 +251,854 @@
                                     <tbody>
                                         {% for i in venues %}
                                             {% if i.id != none %}
-                                                <tr class="text-start">
-                                                    <td class="text-truncate sticky-left"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#viewModal{{ i.id }}">
-                                                        {{ forloop.counter|add:datas.start_index|add:"-1" }}
-                                                    </td>
-                                                    <td class="text-truncate">{{ i.date }}</td>
-                                                    <td class="text-truncate">{{ i.bill_no }}</td>
-                                                    <td class="text-truncate">{{ i.job_name }}</td>
-                                                    <td class="text-truncate">{{ i.job_type }}</td>
-                                                    <td class="text-truncate">{{ i.company_name }}</td>
-                                                    <td class="text-truncate">{{ i.noc }}</td>
-                                                    <td class="text-truncate">₹ {{ i.prpc_purchase|indian_currency_format }}</td>
-                                                    <td class="text-truncate">₹ {{ i.prpc_sell|indian_currency_format }}</td>
-                                                    <td class="text-truncate">{{ i.cylinder_size }}</td>
-                                                    <td class="text-truncate">{{ i.cylinder_made_in }}</td>
-                                                    <td class="text-truncate">{{ i.cylinder_bill_no }}</td>
-                                                    <td class="text-truncate">{{ i.cylinder_date }}</td>
-                                                    <td class="text-truncate">{{ i.pouch_size }}</td>
-                                                    <td class="text-truncate">{{ i.pouch_open_size }}</td>
-                                                    <td class="text-truncate">{{ i.pouch_combination }}</td>
-                                                    
-                                                    
-                                                    <!-- Correction Column -->
-                                                    {% if i.correction %}
-                                                        <td class="text-truncate"
+                                                    <tr class="text-start">
+                                                        <td class="text-truncate sticky-left"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#staticBackdrop{{ i.id }}"
-                                                            title="{{ i.correction }}">
-                                                            {{ i.correction|truncatechars:20 }}
+                                                            data-bs-target="#viewModal{{ i.id }}">
+                                                            {{ forloop.counter|add:datas.start_index|add:"-1" }}
                                                         </td>
-                                                    {% else %}
-                                                        <td class="text-truncate">
-                                                            <span class="fw-bold">-</span>
-                                                        </td>
-                                                    {% endif %}
-                                                    <!-- Folder/Images Column -->
-                                                    {% if i.folder_url %}
-                                                        <td class="text-truncate">
-                                                            <a class="icon-link" href="{{ i.folder_url }}">View Folder</a>
-                                                        </td>
-                                                    {% else %}
-                                                        <td class="text-truncate">
-                                                            <div id="carousel-{{ i.id }}"
-                                                                 class="carousel slide"
-                                                                 data-bs-ride="carousel">
-                                                                <div class="carousel-inner">
-                                                                    {% for job_image in i.image.all %}
-                                                                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                                                            <div class="d-flex justify-content-center align-items-center"
-                                                                                 style="height: 50px">
-                                                                                <a class="icon-link" href="{{ job_image.image.url }}" target="_blank">{{ job_image.image.name|filename }}</a>
-                                                                            </div>
-                                                                        </div>  
-                                                                    {% endfor %}
-                                                                </div>
-                                                                <button class="carousel-control-prev"
-                                                                        type="button"
-                                                                        data-bs-target="#carousel-{{ i.id }}"
-                                                                        data-bs-slide="prev">
-                                                                    <span class="previcon" aria-hidden="false">
-                                                                        <i class="fa fa-caret-left" aria-hidden="true"></i>
-                                                                    </span>
-                                                                </button>
-                                                                <button class="carousel-control-next"
-                                                                        type="button"
-                                                                        data-bs-target="#carousel-{{ i.id }}"
-                                                                        data-bs-slide="next">
-                                                                    <span class="nexticon" aria-hidden="true">
-                                                                        <i class="fa fa-caret-right" aria-hidden="true"></i>
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    {% endif %}
-                                                    <!-- Job Status Column -->
-                                                    <td class="text-truncate sticky-right">
-                                                        {% if i.job_status == 'In Progress' %}
-                                                            <span class="badge bg-success text-white">
-                                                                {{ i.job_status }}
-                                                            </span>
+                                                        <td class="text-truncate">{{ i.date }}</td>
+                                                        <td class="text-truncate">{{ i.bill_no }}</td>
+                                                        <td class="text-truncate">{{ i.job_name }}</td>
+                                                        <td class="text-truncate">{{ i.job_type }}</td>
+                                                        <td class="text-truncate">{{ i.company_name }}</td>
+                                                        <td class="text-truncate">{{ i.noc }}</td>
+                                                        <td class="text-truncate">₹ {{ i.prpc_purchase|indian_currency_format }}</td>
+                                                        <td class="text-truncate">₹ {{ i.prpc_sell|indian_currency_format }}</td>
+                                                        <td class="text-truncate">{{ i.cylinder_size }}</td>
+                                                        <td class="text-truncate">{{ i.cylinder_made_in }}</td>
+                                                        <td class="text-truncate">{{ i.cylinder_bill_no }}</td>
+                                                        <td class="text-truncate">{{ i.cylinder_date }}</td>
+                                                        <td class="text-truncate">{{ i.pouch_size }}</td>
+                                                        <td class="text-truncate">{{ i.pouch_open_size }}</td>
+                                                        <td class="text-truncate">{{ i.pouch_combination }}</td>
+                                                        
+                                                        
+                                                        <!-- Correction Column -->
+                                                        {% if i.correction %}
+                                                            <td class="text-truncate"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#staticBackdrop{{ i.id }}"
+                                                                title="{{ i.correction }}">
+                                                                {{ i.correction|truncatechars:20 }}
+                                                            </td>
                                                         {% else %}
-                                                            <span class="badge bg-danger text-white">
-                                                                {{ i.job_status }}
-                                                            </span>
+                                                            <td class="text-truncate">
+                                                                <span class="fw-bold">-</span>
+                                                            </td>
                                                         {% endif %}
-                                                    </td>
-                                                    <!-- CDR Links Column -->
-                                                    <td class="text-truncate">
-                                                        {% if i.cdr_file_url %}
-                                                            <a class="icon-link" href="{{ i.cdr_file_url }}" target="_blank">CDR</a>
+                                                        <!-- Folder/Images Column -->
+                                                        {% if i.folder_url %}
+                                                            <td class="text-truncate">
+                                                                <a class="icon-link" href="{{ i.folder_url }}">View Folder</a>
+                                                            </td>
                                                         {% else %}
-                                                            {% if i.cdr_images_urls %}
-                                                                <div id="cdr-carousel-{{ i.id }}" class="carousel slide" data-bs-ride="carousel">
+                                                            <td class="text-truncate">
+                                                                <div id="carousel-{{ i.id }}"
+                                                                    class="carousel slide"
+                                                                    data-bs-ride="carousel">
                                                                     <div class="carousel-inner">
-                                                                        {% for cdr_img in i.cdr_images_urls %}
+                                                                        {% for job_image in i.image.all %}
                                                                             <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                                                                <div class="d-flex justify-content-center align-items-center" style="height: 50px;">
-                                                                                    <a class="icon-link text-decoration-none "
-                                                                                    href="{{ cdr_img }}" target="_blank">
-                                                                                        {% comment %} {{ cdr_img|filename }} {% endcomment %} CDR
-                                                                                    </a>
+                                                                                <div class="d-flex justify-content-center align-items-center"
+                                                                                    style="height: 50px">
+                                                                                    <a class="icon-link" href="{{ job_image.image.url }}" target="_blank">{{ job_image.image.name|filename }}</a>
                                                                                 </div>
-                                                                            </div>
+                                                                            </div>  
                                                                         {% endfor %}
                                                                     </div>
-
-                                                                    <button class="carousel-control-prev" type="button"
-                                                                            data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="prev">
+                                                                    <button class="carousel-control-prev"
+                                                                            type="button"
+                                                                            data-bs-target="#carousel-{{ i.id }}"
+                                                                            data-bs-slide="prev">
                                                                         <span class="previcon" aria-hidden="false">
                                                                             <i class="fa fa-caret-left" aria-hidden="true"></i>
                                                                         </span>
                                                                     </button>
-
-                                                                    <button class="carousel-control-next" type="button"
-                                                                            data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="next">
+                                                                    <button class="carousel-control-next"
+                                                                            type="button"
+                                                                            data-bs-target="#carousel-{{ i.id }}"
+                                                                            data-bs-slide="next">
                                                                         <span class="nexticon" aria-hidden="true">
                                                                             <i class="fa fa-caret-right" aria-hidden="true"></i>
                                                                         </span>
                                                                     </button>
                                                                 </div>
-                                                            {% else %}
-                                                                <p>-</p>
-                                                            {% endif %}
-
-
+                                                            </td>
                                                         {% endif %}
-                                                    </td>
-
-                                                   
-                                                    <td class="text-truncate"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#OldBackdrop{{ i.id }}"
-                                                        title="{{ i.id }}">
-                                                        {{ i.job_history.count }} Records
-                                                    </td>
-                                                  
-                                                    
-                                                    <!-- Actions Column -->
-                                                    <td class="text-truncate sticky-right">
-                                                        <div class="action-buttons">
-                                                            <!-- Delete Button -->
-                                                            <form method="post" action="{% url 'delete_data' delete_id=i.id %}" class="d-inline" id="delete-form-{{ i.id }}">
-                                                        {% csrf_token %}
-                                                        <button type="button" class="btn btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#confirmationModal" onclick="setFormId({{ i.id }})">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                                            </svg>
-                                                        </button>
-                                                    </form>
-                                                        
-                                                            <!-- Edit Button -->
-                                                            <button type="button"
-                                                                    class="btn btn-sm btn-outline-primary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#exampleModal{{ i.id }}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                     width="16"
-                                                                     height="16"
-                                                                     fill="currentColor"
-                                                                     class="bi bi-pencil-square"
-                                                                     viewBox="0 0 16 16">
-                                                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                                                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                                                                </svg>
-                                                            </button>
-                                                            <!-- Email Button -->
-                                                            <button type="button"
-                                                                    class="btn btn-sm btn-outline-success"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#emailModal{{ i.id }}">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                     width="16"
-                                                                     height="16"
-                                                                     fill="currentColor"
-                                                                     class="bi bi-envelope"
-                                                                     viewBox="0 0 16 16">
-                                                                    <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                                <!-- Modals for each row -->
-
-                                                <!-- Modal Structure -->
-                                                        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                                                            <div class="modal-dialog">
-                                                                <div class="modal-content">
-                                                                    <!-- Modal Header -->
-                                                                    <div class="modal-header">
-                                                                        <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
-                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                    </div>
-                                                                    <!-- Modal Body -->
-                                                                    <div class="modal-body">
-                                                                        Are you sure you want to delete this item? 
-                                                                    </div>
-                                                                    <!-- Modal Footer -->
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-danger" onclick="submitForm()">Yes</button>
-                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                <!-- View Details Modal -->
-                                                <div class="modal fade"
-                                                     id="viewModal{{ i.id }}"
-                                                     tabindex="-1"
-                                                     role="dialog"
-                                                     aria-labelledby="exampleModalCenterTitle"
-                                                     aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header bg-primary text-white">
-                                                                <h5 class="modal-title">Job Details</h5>
-                                                                <button type="button"
-                                                                        class="btn-close btn-close-white"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div class="container-fluid">
-                                                                    <div class="row">
-                                                                        <div class="col-md-4 mb-3">
-                                                                            <p>
-                                                                                <strong>Date:</strong> {{ i.date }}
-                                                                            </p>
-                                                                            <p>
-                                                                                <strong>Bill No:</strong> {{ i.bill_no }}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-md-4 mb-3">
-                                                                            <p>
-                                                                                <strong>Job Name:</strong> {{ i.job_name }}
-                                                                            </p>
-                                                                            <p>
-                                                                                <strong>Job Type:</strong> {{ i.job_type }}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-md-4 mb-3">
-                                                                            <p>
-                                                                                <strong>Company Name:</strong> {{ i.company_name }}
-                                                                            </p>
-                                                                            <p>
-                                                                                <strong>No. of Colors (NOC):</strong> {{ i.noc }}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-md-4 mb-3">
-                                                                            <p>
-                                                                                <strong>Rate/Cylinder (Purchase):</strong> ₹ {{ i.prpc_purchase|indian_currency_format }}
-                                                                            </p>
-                                                                            <p>
-                                                                                <strong>Rate/Cylinder (Sales):</strong> ₹ {{ i.prpc_sell|indian_currency_format }}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-md-4 mb-3">
-                                                                            <p>
-                                                                                <strong>Cylinder Size:</strong> {{ i.cylinder_size }}
-                                                                            </p>
-                                                                            <p>
-                                                                                <strong>Made In:</strong> {{ i.cylinder_made_in }}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-md-4 mb-3">
-                                                                            <p>
-                                                                                <strong>Cylinder Bill No:</strong> {{ i.cylinder_bill_no }}
-                                                                            </p>
-                                                                            <p>
-                                                                                <strong>Cylinder Date:</strong> {{ i.cylinder_date }}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-md-4 mb-3">
-                                                                            <p>
-                                                                                <strong>Pouch Size:</strong> {{ i.pouch_size }}
-                                                                            </p>
-                                                                            <p>
-                                                                                <strong>Open Size:</strong> {{ i.pouch_open_size }}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-md-4 mb-3">
-                                                                            <p>
-                                                                                <strong>Pouch Combination:</strong> {{ i.pouch_combination }}
-                                                                            </p>
-                                                                            <p>
-                                                                                <strong>Correction:</strong> {{ i.correction }}
-                                                                            </p>
-                                                                        </div>
-                                                                        <div class="col-md-4 mb-3">
-                                                                            <p>
-                                                                                <strong>Job Status:</strong> {{ i.job_status }}
-                                                                            </p>
-                                                                            <p>
-                                                                                <strong>Link:</strong> 
-                                                                                <a href="{{ i.folder_url }}"
-                                                                                  target="_blank"
-                                                                                  class="btn btn-outline-primary btn-sm">Open Folder
-                                                                                </a>
-                                                                            </p>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="modal-footer">
-                                                                <button class="btn btn-secondary"
-                                                                        onclick="printJobDetails(this)"
-                                                                        data-id="{{ i.id }}"
-                                                                        data-job_name="{{ i.job_name }}"
-                                                                        data-job_bill_no="{{ i.bill_no }}"
-                                                                        data-company_name="{{ i.company_name }}"
-                                                                        data-prpc_purchase="{{ i.prpc_purchase }}"
-                                                                        data-prpc_sell="{{ i.prpc_sell }}"
-                                                                        data-cylinder_size="{{ i.cylinder_size }}"
-                                                                        data-cylinder_made_in="{{ i.cylinder_made_in }}"
-                                                                        data-cylinder_bill_no="{{ i.cylinder_bill_no }}"
-                                                                        data-cylinder_date="{{ i.cylinder_date }}"
-                                                                        data-pouch_size="{{ i.pouch_size }}"
-                                                                        data-pouch_open_size="{{ i.pouch_open_size }}"
-                                                                        data-pouch_combination="{{ i.pouch_combination }}"
-                                                                        data-correction="{{ i.correction }}"
-                                                                        data-job_status="{{ i.job_status }}"
-                                                                        data-noc = "{{i.noc }}"
-                                                                        data-folder_url="{{ i.folder_url }}">
-                                                                    Print
-                                                                </button>
-                                                                <button type="button"
-                                                                        class="btn btn-secondary"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#emailModal{{ i.id }}"
-                                                                        data-bs-dismiss="modal">Mail</button>
-                                                                <button type="button"
-                                                                        class="btn btn-warning"
-                                                                        data-bs-toggle="modal"
-                                                                        data-bs-target="#exampleModal{{ i.id }}"
-                                                                        data-bs-dismiss="modal">Edit</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Email Modal -->
-                                                <div class="modal fade"
-                                                     id="emailModal{{ i.id }}"
-                                                     tabindex="-1"
-                                                     data-bs-backdrop="static"
-                                                     role="dialog"
-                                                     aria-labelledby="exampleModalCenterTitle"
-                                                     aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg modal-dialog-centered modal-xl"
-                                                         role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLongTitle">Send Mail</h5>
-                                                                <button type="button"
-                                                                        class="close"
-                                                                        data-bs-dismiss="modal"
-                                                                        aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
-                                                            </div>
-                                                            <div class="card-body">
-                                                                <form method="post"
-                                                                      action="{% url 'send_mail' %}"
-                                                                      enctype="multipart/form-data">
-                                                                    {% csrf_token %}
-                                                                    <div class="row mb-3">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Job Date</label>
-                                                                            <input class="form-check-input"
-                                                                                   type="checkbox"
-                                                                                   name="date_check"
-                                                                                   value="true">
-                                                                            &nbsp; Enable Date
-                                                                            <div class="form-check">
-                                                                                <input class="form-control"
-                                                                                       type="date"
-                                                                                       name="date"
-                                                                                       value="{{ i.date|date:'Y-m-d' }}"
-                                                                                       id="date">
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Bill No.</label>
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input"
-                                                                                       type="checkbox"
-                                                                                       name="bill_no"
-                                                                                       value="{{ i.bill_no }}"
-                                                                                       id="bill_no">
-                                                                                <label class="form-check-label" for="bill_no">{{ i.bill_no }}</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row mb-3">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Company Name</label>
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input"
-                                                                                       type="checkbox"
-                                                                                       name="company_name"
-                                                                                       value="{{ i.company_name }}"
-                                                                                       id="company_name">
-                                                                                <label class="form-check-label" for="company_name">{{ i.company_name }}</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">
-                                                                                Company Email Address <span class="text-danger">*</span>
-                                                                            </label>
-                                                                            <input type="email"
-                                                                                   class="form-control"
-                                                                                   name="company_address"
-                                                                                   placeholder="Enter email address"
-                                                                                   maxlength="50"
-                                                                                   required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row mb-3">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Job Name</label>
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input"
-                                                                                       type="checkbox"
-                                                                                       name="job_name"
-                                                                                       value="{{ i.job_name }}"
-                                                                                       id="job_name">
-                                                                                <label class="form-check-label" for="job_name">{{ i.job_name }}</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">NOC (No. of Colors)</label>
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input"
-                                                                                       type="checkbox"
-                                                                                       name="noc"
-                                                                                       value="{{ i.noc }}"
-                                                                                       id="noc">
-                                                                                <label class="form-check-label" for="noc">{{ i.noc }}</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row mb-3">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">PRPC Sales (Per Rate Per Cylinder)</label>
-                                                                            <input type="checkbox" name="prpc_sell_check" value="true">
-                                                                            <label for="enablePRPC">Enable PRPC Sales</label>
-                                                                            <input type="text"
-                                                                                   class="form-control"
-                                                                                   name="prpc_sell"
-                                                                                   value="{{ i.prpc_sell }}"
-                                                                                   onkeyup="formatNumberWithCommas(this)"
-                                                                                   id="prpcSellInput">
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Cylinder Size</label>
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input"
-                                                                                       type="checkbox"
-                                                                                       name="cylinder_size"
-                                                                                       value="{{ i.cylinder_size }}"
-                                                                                       id="cylinder_size">
-                                                                                <label class="form-check-label" for="cylinder_size">{{ i.cylinder_size }}</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row mb-3">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Pouch Size</label>
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input"
-                                                                                       type="checkbox"
-                                                                                       name="pouch_size"
-                                                                                       value="{{ i.pouch_size }}"
-                                                                                       id="pouch_size">
-                                                                                <label class="form-check-label" for="pouch_size">{{ i.pouch_size }}</label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Pouch Open Size</label>
-                                                                            <div class="form-check">
-                                                                                <input class="form-check-input"
-                                                                                       type="checkbox"
-                                                                                       name="pouch_open_size"
-                                                                                       value="{{ i.pouch_open_size }}"
-                                                                                       id="pouch_open_size">
-                                                                                <label class="form-check-label" for="pouch_open_size">{{ i.pouch_open_size }}</label>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="row mb-3">
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Correction</label>
-                                                                            <input type="checkbox"
-                                                                                   name="correction_check"
-                                                                                   value="true"
-                                                                                   class="form-check-input">
-                                                                            <label for="enablePRPC">Enable Correction</label>
-                                                                            <input class="form-control"
-                                                                                   type="textarea"
-                                                                                   name="correction"
-                                                                                   value="{{ i.correction }}"
-                                                                                   id="correction">
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Attachment</label>
-                                                                            <input type="file"
-                                                                                   class="form-control"
-                                                                                   name="attachment"
-                                                                                   accept=".jpeg,.png,.jpg,.ai"
-                                                                                   multiple>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label class="form-label fw-bold">Note</label>
-                                                                            <input type="textarea"
-                                                                                   id="notes"
-                                                                                   class="form-control"
-                                                                                   name="notes"
-                                                                                   placeholder="Write Note">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="d-flex gap-2 pt-3">
-                                                                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                        <button type="submit" class="btn btn-primary">Send Mail</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <!-- Model Correction Job -->
-                                                <div class="modal fade"
-                                                     id="staticBackdrop{{ i.id }}"
-                                                     tabindex="-1"
-                                                     
-                                                     role="dialog"
-                                                     aria-labelledby="exampleModalCenterTitle"
-                                                     aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="exampleModalLongTitle">Event Description</h5>
-                                                            </div>
-                                                            <div class="modal-body">{{ i.correction }}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <!-- Model Correction Job -->
-                                                <div class="modal fade"  id="OldBackdrop{{ i.id }}" tabindex="-1" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">
-                                                                    <i class="bi bi-clock-history me-2"></i> Job History <b>{{ i.job_name }}</b>
-                                                                </h5>
-                                                                <button type="button" class="btn-close"  data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body" style="max-height: 50vh; overflow-y: auto;">
-                                                                {% if i.job_history.all %}
-                                                                <div class="list-group">
-                                                                    {% for history in i.job_history.all %}
-                                                                    <div class="list-group-item">
-                                                                        <div class="d-flex justify-content-between">
-                                                                            <strong class="text-primary">{{ history.field_name }}:</strong>
-                                                                            <small class="text-muted">{{ history.timestamp|date:"M d, Y H:i" }}</small>
-                                                                        </div>
-                                                                        <p class="mb-1">
-                                                                            <span class="text-danger fw-semibold">Changed From:</span> {{ history.old_value }}<br>
-                                                                            <span class="text-success fw-semibold">To:</span> {{ history.new_value }}<br>
-                                                                            <span class="text-success fw-semibold">Date & Time:</span> {{ history.changed_at|date:"M d, Y H:i" }}
-                                                                        </p>
-                                                                    </div>
-                                                                    {% endfor %}
-                                                                </div>
-                                                                {% else %}
-                                                                <p class="text-muted text-center mb-0">No job history available.</p>
-                                                                {% endif %}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                {% comment %} Model {% endcomment %}
-                                                <div class="modal fade"
-                                                     id="exampleModal{{ i.id }}"
-                                                     tabindex="-1"
-                                                      data-bs-backdrop="static"
-                                                     aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog modal-xl">
-                                                        <div class="modal-content ">
-                                                            <div class="modal-header bg-light">
-                                                                <h5 class="modal-title">Edit Job</h5>
-                                                                <button type="button"
-                                                                        class="btn-close"
-                                                                        data-bs-dismiss="modal"
-                                                                        
-                                                                        aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body form-datas">
-                                                                <form method="post"
-                                                                      action="{% url "update_job" update_id=i.id %}"
-                                                                      id="update_form_id"
-                                                                      enctype="multipart/form-data">
-                                                                    {% csrf_token %}
-                                                                    <div class="row g-4">
-                                                                        <!-- Event Date -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="date" class="form-label fw-bold">Job Date</label>
-                                                                            <span style="color:red;">*</span>
-                                                                            <input type="date"
-                                                                                   class="form-control"
-                                                                                   id="date"
-                                                                                   name="date"
-                                                                                   value="{{ i.date|date:'Y-m-d' }}"
-                                                                                   required>
-                                                                            <div class="invalid-feedback" id="event_date_error">Please provide an event date.</div>
-                                                                        </div>
-                                                                        <!-- Bill No -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="bill_no" class="form-label fw-bold">Bill No</label>
-                                                                            <span style="color:red;">*</span>
-                                                                            <input type="text"
-                                                                                   class="form-control"
-                                                                                   id="bill_no"
-                                                                                   name="bill_no"
-                                                                                   value="{{ i.bill_no }}"
-                                                                                   required>
-                                                                            <div class="invalid-feedback" id="event_name_error">Please provide an event Bill No.</div>
-                                                                        </div>
-                                                                        <!-- Company Name -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="company_name" class="form-label fw-bold">Company Name</label>
-                                                                            <input type="text"
-                                                                                   id="company_name"
-                                                                                   class="form-control"
-                                                                                   name="company_name"
-                                                                                   value="{{ i.company_name }}"
-                                                                                   readonly>
-                                                                        </div>
-                                                                        <!-- Job Type -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="job_type" class="form-label fw-bold">Job Type</label>
-                                                                            <select id="job_type"
-                                                                                    name="job_type"
-                                                                                    class="form-control form-select border-1"
-                                                                                    required>
-                                                                                <option value="{{ i.job_type }}">{{ i.job_type }}</option>
-                                                                                <option value="New Job" {% if i.job_type == "New Job" %}disabled{% endif %}>New Job</option>
-                                                                                <option value="Damage Repair"
-                                                                                        {% if i.job_type == "Damage Repair" %}disabled{% endif %}>
-                                                                                    Damage Repair
-                                                                                </option>
-                                                                                <option value="Job Work"{% if i.job_type == "Job Work" %}disabled {% endif %}>Job Work</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <!-- Job Name -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="job_name" class="form-label fw-bold">Job Name</label>
-                                                                            <input type="text"
-                                                                                   id="job_name"
-                                                                                   class="form-control"
-                                                                                   name="job_name"
-                                                                                   value="{{ i.job_name }}"
-                                                                                   readonly>
-                                                                        </div>
-                                                                        <!-- NOC -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="noc" class="form-label fw-bold">NOC (No. of Colors)</label>
-                                                                            <textarea
-                                                                                id="noc"
-                                                                                class="form-control"
-                                                                                name="noc"
-                                                                                required>{{ i.noc }}</textarea>
-                                                                        </div>
-
-                                                                        <!-- PRPC -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="prpc" class="form-label fw-bold">PRPC Purchase (Per Rate Per Cylinder )</label>
-                                                                            <input type="text"
-                                                                                   id="prpc"
-                                                                                   class="form-control"
-                                                                                   name="prpc_purchase"
-                                                                                   onkeyup="formatNumberWithCommas(this)"
-                                                                                   value="{{ i.prpc_purchase|indian_currency_format }}">
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label for="prpc" class="form-label fw-bold">PRPC Sell (Per Rate Per Cylinder )</label>
-                                                                            <input type="text"
-                                                                                   id="prpc"
-                                                                                   class="form-control"
-                                                                                   name="prpc_sell"
-                                                                                   onkeyup="formatNumberWithCommas(this)"
-                                                                                   value="{{ i.prpc_sell|indian_currency_format }}">
-                                                                        </div>
-                                                                        <!-- Cylinder Size -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="cylinder_size" class="form-label fw-bold">Cylinder Size</label>
-                                                                            <input type="text"
-                                                                                   id="cylinder_size"
-                                                                                   class="form-control"
-                                                                                   name="cylinder_size"
-                                                                                   value="{{ i.cylinder_size }}"
-                                                                                   readonly>
-                                                                        </div>
-                                                                        <!-- Cylinder Made In -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="cylinder_made_in" class="form-label fw-bold">Cylinder Made In</label>
-                                                                            <select id="cylinder_made_in"
-                                                                                    name="cylinder_made_in"
-                                                                                    class="form-control form-select border-1"
-                                                                                    required>
-                                                                                <option value="{{ i.cylinder_made_in }}" default select>{{ i.cylinder_made_in }}</option>
-                                                                                {% for r in cylinder_company_names %}
-                                                                                    <option value="{{ r.cylinder_made_in }}"
-                                                                                            {% if r.cylinder_made_in == i.cylinder_made_in %}disabled{% endif %}>
-                                                                                        {{ r.cylinder_made_in }}
-                                                                                    </option>
-                                                                                {% endfor %}
-                                                                            </select>
-       
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label for="cylinder_bill_no" class="form-label fw-bold">Cylinder  Bill No.</label>
-                                                                            <input type="text"
-                                                                                   id="cylinder_bill_no"
-                                                                                   class="form-control"
-                                                                                   name="cylinder_bill_no"
-                                                                                   value="{{ i.cylinder_bill_no }}"
-                                                                                   required>
-                                                                        </div>
-                                                                        <div class="col-md-6">
-                                                                            <label for="cylinder_date" class="form-label fw-bold">Cylinder  Date</label>
-                                                                            <input type="date"
-                                                                                   id="cylinder_date"
-                                                                                   class="form-control"
-                                                                                   name="cylinder_date"
-                                                                                   value="{{ i.cylinder_date|date:'Y-m-d' }}"
-                                                                                   required>
-                                                                        </div>
-                                                                        <!-- Pouch Size -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="pouch_size" class="form-label fw-bold">Pouch Size</label>
-                                                                            <input type="text"
-                                                                                   id="pouch_size"
-                                                                                   class="form-control"
-                                                                                   name="pouch_size"
-                                                                                   value="{{ i.pouch_size }}"
-                                                                                   readonly>
-                                                                        </div>
-                                                                        <!-- Pouch Open Size -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="pouch_open_size" class="form-label fw-bold">Pouch Open Size</label>
-                                                                            <input type="text"
-                                                                                   id="pouch_open_size"
-                                                                                   class="form-control"
-                                                                                   name="pouch_open_size"
-                                                                                   value="{{ i.pouch_open_size }}"
-                                                                                   readonly>
-                                                                        </div>
-                                                                        <!-- Pouch Combination -->
-                                                                        <div class="col-md-6">
-                                                                            <label for="pouch_combination" class="form-label fw-bold">Pouch Combination (thickness)</label>
-                                                                            <div class="col-md-12 d-flex justify-content-start">
-                                                                                {% with pc=i.pouch_combination|split_text %}
-                                                                                    <div class="d-flex align-items-center">
-                                                                                        <input type="text"
-                                                                                               id="pouch_combination"
-                                                                                               class="form-control "
-                                                                                               name="pouch_combination1"
-                                                                                               value="{{ pc.0|cut:" " }}"
-                                                                                               required readonly>
-                                                                                        <span class="input-group-text bg-light border-1 fw-bold">+</span>
-                                                                                        <input type="text"
-                                                                                               id="pouch_combination"
-                                                                                               class="form-control "
-                                                                                               name="pouch_combination2"
-                                                                                               value="{{ pc.1|cut:" " }}"
-                                                                                               required readonly>
-                                                                                        <span class="input-group-text bg-light border-1 fw-bold">+</span>
-                                                                                        <input type="text"
-                                                                                               id="pouch_combination"
-                                                                                               class="form-control "
-                                                                                               name="pouch_combination3"
-                                                                                               value="{{ pc.2|cut:" " }}" readonly>
-                                                                                        <span class="input-group-text bg-light border-1 fw-bold">+</span>
-                                                                                        <input type="text"
-                                                                                               id="pouch_combination"
-                                                                                               class="form-control "
-                                                                                               name="pouch_combination4"
-                                                                                               value="{{ pc.3|cut:" " }}" readonly>
+                                                        <!-- Job Status Column -->
+                                                        <td class="text-truncate sticky-right">
+                                                            {% if i.job_status == 'In Progress' %}
+                                                                <span class="badge bg-success text-white">
+                                                                    {{ i.job_status }}
+                                                                </span>
+                                                            {% else %}
+                                                                <span class="badge bg-danger text-white">
+                                                                    {{ i.job_status }}
+                                                                </span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <!-- CDR Links Column -->
+                                                        <td class="text-truncate">
+                                                            {% if i.cdr_file_url %}
+                                                                <a class="icon-link" href="{{ i.cdr_file_url }}" target="_blank">CDR</a>
+                                                            {% else %}
+                                                                {% if i.cdr_images_urls %}
+                                                                    <div id="cdr-carousel-{{ i.id }}" class="carousel slide" data-bs-ride="carousel">
+                                                                        <div class="carousel-inner">
+                                                                            {% for cdr_img in i.cdr_images_urls %}
+                                                                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                                                    <div class="d-flex justify-content-center align-items-center" style="height: 50px;">
+                                                                                        <a class="icon-link text-decoration-none "
+                                                                                        href="{{ cdr_img }}" target="_blank">
+                                                                                            {% comment %} {{ cdr_img|filename }} {% endcomment %} CDR
+                                                                                        </a>
                                                                                     </div>
-                                                                                {% endwith %}
-                                                                            </div>
+                                                                                </div>
+                                                                            {% endfor %}
                                                                         </div>
-                                                                        <div class="col-md-6">
-                                                                            <label for="image" class="form-label fw-bold">Upload Images</label>
-                                                                            <input type="file"
-                                                                                   class="form-control"
-                                                                                   id="files"
-                                                                                   name="files"
-                                                                                   multiple
-                                                                                   accept=".jpeg , .png, .jpg .ai">
+
+                                                                        <button class="carousel-control-prev" type="button"
+                                                                                data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="prev">
+                                                                            <span class="previcon" aria-hidden="false">
+                                                                                <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                                                            </span>
+                                                                        </button>
+
+                                                                        <button class="carousel-control-next" type="button"
+                                                                                data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="next">
+                                                                            <span class="nexticon" aria-hidden="true">
+                                                                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                                            </span>
+                                                                        </button>
+                                                                    </div>
+                                                                {% else %}
+                                                                    <p>-</p>
+                                                                {% endif %}
+
+
+                                                            {% endif %}
+                                                        </td>
+
+                                                    
+                                                        <td class="text-truncate"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#OldBackdrop{{ i.id }}"
+                                                            title="{{ i.id }}">
+                                                            {{ i.job_history.count }} Records
+                                                        </td>
+                                                    
+                                                        
+                                                        <!-- Actions Column -->
+                                                        <td class="text-truncate sticky-right">
+                                                            <div class="action-buttons">
+                                                                <!-- Delete Button -->
+                                                                <form method="post" action="{% url 'delete_data' delete_id=i.id %}" class="d-inline" id="delete-form-{{ i.id }}">
+                                                            {% csrf_token %}
+                                                            <button type="button" class="btn btn-outline-danger ms-1" data-bs-toggle="modal" data-bs-target="#confirmationModal" onclick="setFormId({{ i.id }})">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                                    <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                            
+                                                                <!-- Edit Button -->
+                                                                <button type="button"
+                                                                        class="btn btn-sm btn-outline-primary"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#exampleModal{{ i.id }}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        width="16"
+                                                                        height="16"
+                                                                        fill="currentColor"
+                                                                        class="bi bi-pencil-square"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                                                    </svg>
+                                                                </button>
+                                                                <!-- Email Button -->
+                                                                <button type="button"
+                                                                        class="btn btn-sm btn-outline-success"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#emailModal{{ i.id }}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        width="16"
+                                                                        height="16"
+                                                                        fill="currentColor"
+                                                                        class="bi bi-envelope"
+                                                                        viewBox="0 0 16 16">
+                                                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- Modals for each row -->
+
+                                                    <!-- Modal Structure -->
+                                                            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog">
+                                                                    <div class="modal-content">
+                                                                        <!-- Modal Header -->
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
+                                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                         </div>
-                                                                        <div class="col-md-6">
-                                                                            <label for="correction" class="form-label fw-bold">Correction</label>
-                                                                            <input type="textarea"
-                                                                                   class="form-control"
-                                                                                   id="correction"
-                                                                                   name="correction"
-                                                                                   value="{{ i.correction }}">
+                                                                        <!-- Modal Body -->
+                                                                        <div class="modal-body">
+                                                                            Are you sure you want to delete this item? 
                                                                         </div>
-                                                                        <div class="col-md-6">
-                                                                            <label for="job_status" class="form-label fw-bold">Job Status</label>
-                                                                            <select id="job_status" class="form-select" name="job_status">
-                                                                                <option value="In Progress"
-                                                                                        {% if i.job_status == 'In Progress' %}selected{% endif %}
-                                                                                        style="background: #fffaeb;
-                                                                                               color: #dc6803">
-                                                                                    In Progress
-                                                                                </option>
-                                                                                <option value="Close Job"
-                                                                                        {% if i.job_status == 'Close Job' %}selected{% endif %}
-                                                                                        style="background: #ecfdf3;
-                                                                                               color: #039855">
-                                                                                    Close Job
-                                                                                </option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <!-- Form Actions -->
-                                                                        <div class="col-12">
-                                                                            <a href="{% url "dashboard_page" %}">
-                                                                                <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                            </a>
-                                                                            <button type="submit" class="btn btn-primary">Save changes</button>
+                                                                        <!-- Modal Footer -->
+                                                                        <div class="modal-footer">
+                                                                            <button type="button" class="btn btn-danger" onclick="submitForm()">Yes</button>
+                                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                                                                         </div>
                                                                     </div>
-                                                                </form>
+                                                                </div>
+                                                            </div>
+                                                    <!-- View Details Modal -->
+                                                    <div class="modal fade"
+                                                        id="viewModal{{ i.id }}"
+                                                        tabindex="-1"
+                                                        role="dialog"
+                                                        aria-labelledby="exampleModalCenterTitle"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-primary text-white">
+                                                                    <h5 class="modal-title">Job Details</h5>
+                                                                    <button type="button"
+                                                                            class="btn-close btn-close-white"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="container-fluid">
+                                                                        <div class="row">
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <p>
+                                                                                    <strong>Date:</strong> {{ i.date }}
+                                                                                </p>
+                                                                                <p>
+                                                                                    <strong>Bill No:</strong> {{ i.bill_no }}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <p>
+                                                                                    <strong>Job Name:</strong> {{ i.job_name }}
+                                                                                </p>
+                                                                                <p>
+                                                                                    <strong>Job Type:</strong> {{ i.job_type }}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <p>
+                                                                                    <strong>Company Name:</strong> {{ i.company_name }}
+                                                                                </p>
+                                                                                <p>
+                                                                                    <strong>No. of Colors (NOC):</strong> {{ i.noc }}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <p>
+                                                                                    <strong>Rate/Cylinder (Purchase):</strong> ₹ {{ i.prpc_purchase|indian_currency_format }}
+                                                                                </p>
+                                                                                <p>
+                                                                                    <strong>Rate/Cylinder (Sales):</strong> ₹ {{ i.prpc_sell|indian_currency_format }}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <p>
+                                                                                    <strong>Cylinder Size:</strong> {{ i.cylinder_size }}
+                                                                                </p>
+                                                                                <p>
+                                                                                    <strong>Made In:</strong> {{ i.cylinder_made_in }}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <p>
+                                                                                    <strong>Cylinder Bill No:</strong> {{ i.cylinder_bill_no }}
+                                                                                </p>
+                                                                                <p>
+                                                                                    <strong>Cylinder Date:</strong> {{ i.cylinder_date }}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <p>
+                                                                                    <strong>Pouch Size:</strong> {{ i.pouch_size }}
+                                                                                </p>
+                                                                                <p>
+                                                                                    <strong>Open Size:</strong> {{ i.pouch_open_size }}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <p>
+                                                                                    <strong>Pouch Combination:</strong> {{ i.pouch_combination }}
+                                                                                </p>
+                                                                                <p>
+                                                                                    <strong>Correction:</strong> {{ i.correction }}
+                                                                                </p>
+                                                                            </div>
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <p>
+                                                                                    <strong>Job Status:</strong> {{ i.job_status }}
+                                                                                </p>
+                                                                                
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button class="btn btn-secondary"
+                                                                            onclick="printJobDetails(this)"
+                                                                            data-id="{{ i.id }}"
+                                                                            data-job_name="{{ i.job_name }}"
+                                                                            data-job_bill_no="{{ i.bill_no }}"
+                                                                            data-company_name="{{ i.company_name }}"
+                                                                            data-prpc_purchase="{{ i.prpc_purchase }}"
+                                                                            data-prpc_sell="{{ i.prpc_sell }}"
+                                                                            data-cylinder_size="{{ i.cylinder_size }}"
+                                                                            data-cylinder_made_in="{{ i.cylinder_made_in }}"
+                                                                            data-cylinder_bill_no="{{ i.cylinder_bill_no }}"
+                                                                            data-cylinder_date="{{ i.cylinder_date }}"
+                                                                            data-pouch_size="{{ i.pouch_size }}"
+                                                                            data-pouch_open_size="{{ i.pouch_open_size }}"
+                                                                            data-pouch_combination="{{ i.pouch_combination }}"
+                                                                            data-correction="{{ i.correction }}"
+                                                                            data-job_status="{{ i.job_status }}"
+                                                                            data-noc = "{{i.noc }}"
+                                                                            data-folder_url="{{ i.folder_url }}">
+                                                                        Print
+                                                                    </button>
+                                                                    <button type="button"
+                                                                            class="btn btn-secondary"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#emailModal{{ i.id }}"
+                                                                            data-bs-dismiss="modal">Mail</button>
+                                                                    <button type="button"
+                                                                            class="btn btn-warning"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#exampleModal{{ i.id }}"
+                                                                            data-bs-dismiss="modal">Edit</button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                {% else %}
+                                                    <!-- Email Modal -->
+                                                    <div class="modal fade"
+                                                        id="emailModal{{ i.id }}"
+                                                        tabindex="-1"
+                                                        data-bs-backdrop="static"
+                                                        role="dialog"
+                                                        aria-labelledby="exampleModalCenterTitle"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg modal-dialog-centered modal-xl"
+                                                            role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLongTitle">Send Mail</h5>
+                                                                    <button type="button"
+                                                                            class="close"
+                                                                            data-bs-dismiss="modal"
+                                                                            aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <form method="post"
+                                                                        action="{% url 'send_mail' %}"
+                                                                        enctype="multipart/form-data">
+                                                                        {% csrf_token %}
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Job Date</label>
+                                                                                <input class="form-check-input"
+                                                                                    type="checkbox"
+                                                                                    name="date_check"
+                                                                                    value="true">
+                                                                                &nbsp; Enable Date
+                                                                                <div class="form-check">
+                                                                                    <input class="form-control"
+                                                                                        type="date"
+                                                                                        name="date"
+                                                                                        value="{{ i.date|date:'Y-m-d' }}"
+                                                                                        id="date">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Bill No.</label>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox"
+                                                                                        name="bill_no"
+                                                                                        value="{{ i.bill_no }}"
+                                                                                        id="bill_no">
+                                                                                    <label class="form-check-label" for="bill_no">{{ i.bill_no }}</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Company Name</label>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox"
+                                                                                        name="company_name"
+                                                                                        value="{{ i.company_name }}"
+                                                                                        id="company_name">
+                                                                                    <label class="form-check-label" for="company_name">{{ i.company_name }}</label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">
+                                                                                    Company Email Address <span class="text-danger">*</span>
+                                                                                </label>
+                                                                                <input type="email"
+                                                                                    class="form-control"
+                                                                                    name="company_address"
+                                                                                    placeholder="Enter email address"
+                                                                                    maxlength="50"
+                                                                                    required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Job Name</label>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox"
+                                                                                        name="job_name"
+                                                                                        value="{{ i.job_name }}"
+                                                                                        id="job_name">
+                                                                                    <label class="form-check-label" for="job_name">{{ i.job_name }}</label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">NOC (No. of Colors)</label>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox"
+                                                                                        name="noc"
+                                                                                        value="{{ i.noc }}"
+                                                                                        id="noc">
+                                                                                    <label class="form-check-label" for="noc">{{ i.noc }}</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">PRPC Sales (Per Rate Per Cylinder)</label>
+                                                                                <input type="checkbox" name="prpc_sell_check" value="true">
+                                                                                <label for="enablePRPC">Enable PRPC Sales</label>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    name="prpc_sell"
+                                                                                    value="{{ i.prpc_sell }}"
+                                                                                    onkeyup="formatNumberWithCommas(this)"
+                                                                                    id="prpcSellInput">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Cylinder Size</label>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox"
+                                                                                        name="cylinder_size"
+                                                                                        value="{{ i.cylinder_size }}"
+                                                                                        id="cylinder_size">
+                                                                                    <label class="form-check-label" for="cylinder_size">{{ i.cylinder_size }}</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Pouch Size</label>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox"
+                                                                                        name="pouch_size"
+                                                                                        value="{{ i.pouch_size }}"
+                                                                                        id="pouch_size">
+                                                                                    <label class="form-check-label" for="pouch_size">{{ i.pouch_size }}</label>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Pouch Open Size</label>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input"
+                                                                                        type="checkbox"
+                                                                                        name="pouch_open_size"
+                                                                                        value="{{ i.pouch_open_size }}"
+                                                                                        id="pouch_open_size">
+                                                                                    <label class="form-check-label" for="pouch_open_size">{{ i.pouch_open_size }}</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row mb-3">
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Correction</label>
+                                                                                <input type="checkbox"
+                                                                                    name="correction_check"
+                                                                                    value="true"
+                                                                                    class="form-check-input">
+                                                                                <label for="enablePRPC">Enable Correction</label>
+                                                                                <input class="form-control"
+                                                                                    type="textarea"
+                                                                                    name="correction"
+                                                                                    value="{{ i.correction }}"
+                                                                                    id="correction">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Attachment</label>
+                                                                                <input type="file"
+                                                                                    class="form-control"
+                                                                                    name="attachment"
+                                                                                    accept=".jpeg,.png,.jpg,.ai ,.cdr,"
+                                                                                    multiple>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label class="form-label fw-bold">Note</label>
+                                                                                <input type="textarea"
+                                                                                    id="notes"
+                                                                                    class="form-control"
+                                                                                    name="notes"
+                                                                                    placeholder="Write Note">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="d-flex gap-2 pt-3">
+                                                                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                            <button type="submit" class="btn btn-primary">Send Mail</button>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Model Correction Job -->
+                                                    <div class="modal fade"
+                                                        id="staticBackdrop{{ i.id }}"
+                                                        tabindex="-1"
+                                                        
+                                                        role="dialog"
+                                                        aria-labelledby="exampleModalCenterTitle"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLongTitle">Correction</h5>
+                                                                </div>
+                                                                <div class="modal-body">{{ i.correction }}</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <!-- Model Correction Job -->
+                                                    <div class="modal fade" id="OldBackdrop{{ i.id }}" tabindex="-1" aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg">
+                                                            <div class="modal-content">
+
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Job History – {{ i.job_name }}</h5>
+                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                                </div>
+
+                                                                <div class="modal-body" style="max-height: 50vh; overflow-y: auto;">
+
+                                                                    {% if i.job_history.all %}
+
+                                                                        {% for history in i.job_history.all %}
+                                                                        <div style="padding: 12px 0; border-bottom: 1px solid #eee;">
+
+                                                                            <div style="font-weight: 600; margin-bottom: 6px;">
+                                                                                {{ history.field_name }}
+                                                                            </div>
+
+                                                                            <div style="margin-bottom: 4px;">
+                                                                                <small>Old:</small> {{ history.old_value }}
+                                                                            </div>
+
+                                                                            <div style="margin-bottom: 4px;">
+                                                                                <small>New:</small> {{ history.new_value }}
+                                                                            </div>
+
+                                                                            <div>
+                                                                                <small>Date:</small> {{ history.changed_at|date:"M d, Y H:i" }}
+                                                                            </div>
+
+                                                                        </div>
+                                                                        {% endfor %}
+
+                                                                    {% else %}
+                                                                    <p class="text-center m-0">No job history available.</p>
+                                                                    {% endif %}
+
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    
+                                                    {% comment %} Model {% endcomment %}
+                                                    <div class="modal fade"
+                                                        id="exampleModal{{ i.id }}"
+                                                        tabindex="-1"
+                                                        data-bs-backdrop="static"
+                                                        aria-hidden="true">
+                                                        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog modal-xl">
+                                                            <div class="modal-content ">
+                                                                <div class="modal-header bg-light">
+                                                                    <h5 class="modal-title">Edit Job</h5>
+                                                                    <button type="button"
+                                                                            class="btn-close"
+                                                                            data-bs-dismiss="modal"
+                                                                            
+                                                                            aria-label="Close"></button>
+                                                                </div>
+                                                                <div class="modal-body form-datas">
+                                                                    <form method="post"
+                                                                        action="{% url "update_job" update_id=i.id %}"
+                                                                        id="update_form_id"
+                                                                        enctype="multipart/form-data">
+                                                                        {% csrf_token %}
+                                                                        <div class="row g-4">
+                                                                            <!-- Event Date -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="date" class="form-label fw-bold">Job Date</label>
+                                                                                <span style="color:red;">*</span>
+                                                                                <input type="date"
+                                                                                    class="form-control"
+                                                                                    id="date"
+                                                                                    name="date"
+                                                                                    value="{{ i.date|date:'Y-m-d' }}"
+                                                                                    required>
+                                                                                <div class="invalid-feedback" id="event_date_error">Please provide an event date.</div>
+                                                                            </div>
+                                                                            <!-- Bill No -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="bill_no" class="form-label fw-bold">Bill No</label>
+                                                                                <span style="color:red;">*</span>
+                                                                                <input type="text"
+                                                                                    class="form-control"
+                                                                                    id="bill_no"
+                                                                                    name="bill_no"
+                                                                                    value="{{ i.bill_no }}"
+                                                                                    required>
+                                                                                <div class="invalid-feedback" id="event_name_error">Please provide an event Bill No.</div>
+                                                                            </div>
+                                                                            <!-- Company Name -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="company_name" class="form-label fw-bold">Company Name</label>
+                                                                                <input type="text"
+                                                                                    id="company_name"
+                                                                                    class="form-control"
+                                                                                    name="company_name"
+                                                                                    value="{{ i.company_name }}"
+                                                                                    readonly>
+                                                                            </div>
+                                                                            <!-- Job Type -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="job_type" class="form-label fw-bold">Job Type</label>
+                                                                                <select id="job_type"
+                                                                                        name="job_type"
+                                                                                        class="form-control form-select border-1"
+                                                                                        required>
+                                                                                    <option value="{{ i.job_type }}">{{ i.job_type }}</option>
+                                                                                    <option value="New Job" {% if i.job_type == "New Job" %}disabled{% endif %}>New Job</option>
+                                                                                    <option value="Damage Repair"
+                                                                                            {% if i.job_type == "Damage Repair" %}disabled{% endif %}>
+                                                                                        Damage Repair
+                                                                                    </option>
+                                                                                    <option value="Job Work"{% if i.job_type == "Job Work" %}disabled {% endif %}>Job Work</option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <!-- Job Name -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="job_name" class="form-label fw-bold">Job Name</label>
+                                                                                <input type="text"
+                                                                                    id="job_name"
+                                                                                    class="form-control"
+                                                                                    name="job_name"
+                                                                                    value="{{ i.job_name }}"
+                                                                                    readonly>
+                                                                            </div>
+                                                                            <!-- NOC -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="noc" class="form-label fw-bold">NOC (No. of Colors)</label>
+                                                                                <textarea
+                                                                                    id="noc"
+                                                                                    class="form-control"
+                                                                                    name="noc"
+                                                                                    required>{{ i.noc }}</textarea>
+                                                                            </div>
+
+                                                                            <!-- PRPC -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="prpc" class="form-label fw-bold">PRPC Purchase (Per Rate Per Cylinder )</label>
+                                                                                <input type="text"
+                                                                                    id="prpc"
+                                                                                    class="form-control"
+                                                                                    name="prpc_purchase"
+                                                                                    onkeyup="formatNumberWithCommas(this)"
+                                                                                    value="{{ i.prpc_purchase|indian_currency_format }}">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label for="prpc" class="form-label fw-bold">PRPC Sell (Per Rate Per Cylinder )</label>
+                                                                                <input type="text"
+                                                                                    id="prpc"
+                                                                                    class="form-control"
+                                                                                    name="prpc_sell"
+                                                                                    onkeyup="formatNumberWithCommas(this)"
+                                                                                    value="{{ i.prpc_sell|indian_currency_format }}">
+                                                                            </div>
+                                                                            <!-- Cylinder Size -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="cylinder_size" class="form-label fw-bold">Cylinder Size</label>
+                                                                                <input type="text"
+                                                                                    id="cylinder_size"
+                                                                                    class="form-control"
+                                                                                    name="cylinder_size"
+                                                                                    value="{{ i.cylinder_size }}"
+                                                                                    readonly>
+                                                                            </div>
+                                                                            <!-- Cylinder Made In -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="cylinder_made_in" class="form-label fw-bold">Cylinder Made In</label>
+                                                                                <select id="cylinder_made_in"
+                                                                                        name="cylinder_made_in"
+                                                                                        class="form-control form-select border-1"
+                                                                                        required>
+                                                                                    <option value="{{ i.cylinder_made_in }}" default select>{{ i.cylinder_made_in }}</option>
+                                                                                    {% for r in cylinder_company_names %}
+                                                                                        <option value="{{ r.cylinder_made_in }}"
+                                                                                                {% if r.cylinder_made_in == i.cylinder_made_in %}disabled{% endif %}>
+                                                                                            {{ r.cylinder_made_in }}
+                                                                                        </option>
+                                                                                    {% endfor %}
+                                                                                </select>
+        
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label for="cylinder_bill_no" class="form-label fw-bold">Cylinder  Bill No.</label>
+                                                                                <input type="text"
+                                                                                    id="cylinder_bill_no"
+                                                                                    class="form-control"
+                                                                                    name="cylinder_bill_no"
+                                                                                    value="{{ i.cylinder_bill_no }}"
+                                                                                    required>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label for="cylinder_date" class="form-label fw-bold">Cylinder  Date</label>
+                                                                                <input type="date"
+                                                                                    id="cylinder_date"
+                                                                                    class="form-control"
+                                                                                    name="cylinder_date"
+                                                                                    value="{{ i.cylinder_date|date:'Y-m-d' }}"
+                                                                                    required>
+                                                                            </div>
+                                                                            <!-- Pouch Size -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="pouch_size" class="form-label fw-bold">Pouch Size</label>
+                                                                                <input type="text"
+                                                                                    id="pouch_size"
+                                                                                    class="form-control"
+                                                                                    name="pouch_size"
+                                                                                    value="{{ i.pouch_size }}"
+                                                                                    readonly>
+                                                                            </div>
+                                                                            <!-- Pouch Open Size -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="pouch_open_size" class="form-label fw-bold">Pouch Open Size</label>
+                                                                                <input type="text"
+                                                                                    id="pouch_open_size"
+                                                                                    class="form-control"
+                                                                                    name="pouch_open_size"
+                                                                                    value="{{ i.pouch_open_size }}"
+                                                                                    readonly>
+                                                                            </div>
+                                                                            <!-- Pouch Combination -->
+                                                                            <div class="col-md-6">
+                                                                                <label for="pouch_combination" class="form-label fw-bold">Pouch Combination (thickness)</label>
+                                                                                <div class="col-md-12 d-flex justify-content-start">
+                                                                                    {% with pc=i.pouch_combination|split_text %}
+                                                                                        <div class="d-flex align-items-center">
+                                                                                            <input type="text"
+                                                                                                id="pouch_combination"
+                                                                                                class="form-control "
+                                                                                                name="pouch_combination1"
+                                                                                                value="{{ pc.0|cut:" " }}"
+                                                                                                required readonly>
+                                                                                            <span class="input-group-text bg-light border-1 fw-bold">+</span>
+                                                                                            <input type="text"
+                                                                                                id="pouch_combination"
+                                                                                                class="form-control "
+                                                                                                name="pouch_combination2"
+                                                                                                value="{{ pc.1|cut:" " }}"
+                                                                                                required readonly>
+                                                                                            <span class="input-group-text bg-light border-1 fw-bold">+</span>
+                                                                                            <input type="text"
+                                                                                                id="pouch_combination"
+                                                                                                class="form-control "
+                                                                                                name="pouch_combination3"
+                                                                                                value="{{ pc.2|cut:" " }}" readonly>
+                                                                                            <span class="input-group-text bg-light border-1 fw-bold">+</span>
+                                                                                            <input type="text"
+                                                                                                id="pouch_combination"
+                                                                                                class="form-control "
+                                                                                                name="pouch_combination4"
+                                                                                                value="{{ pc.3|cut:" " }}" readonly>
+                                                                                        </div>
+                                                                                    {% endwith %}
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label for="image" class="form-label fw-bold">Upload Images</label>
+                                                                                <input type="file"
+                                                                                    class="form-control"
+                                                                                    id="files"
+                                                                                    name="files"
+                                                                                    multiple
+                                                                                    accept=".jpeg , .png, .jpg .ai,.cdr">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label for="correction" class="form-label fw-bold">Correction</label>
+                                                                                <input type="textarea"
+                                                                                    class="form-control"
+                                                                                    id="correction"
+                                                                                    name="correction"
+                                                                                    value="{{ i.correction }}">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <label for="job_status" class="form-label fw-bold">Job Status</label>
+                                                                                <select id="job_status" class="form-select" name="job_status">
+                                                                                    <option value="In Progress"
+                                                                                            {% if i.job_status == 'In Progress' %}selected{% endif %}
+                                                                                            style="background: #fffaeb;
+                                                                                                color: #dc6803">
+                                                                                        In Progress
+                                                                                    </option>
+                                                                                    <option value="Close Job"
+                                                                                            {% if i.job_status == 'Close Job' %}selected{% endif %}
+                                                                                            style="background: #ecfdf3;
+                                                                                                color: #039855">
+                                                                                        Close Job
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <!-- Form Actions -->
+                                                                            <div class="col-12">
+                                                                            
+                                                                                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                                
+                                                                                <button type="submit" class="btn btn-primary">Save changes</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    {% else %}
                                                     <tr>
                                                         <td colspan="17">
                                                             <center><span>No Data</span></center>

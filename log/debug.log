@@ -8312,3 +8312,6 @@ Traceback (most recent call last):
   File "D:\Nirmal\venv\Lib\site-packages\django\urls\resolvers.py", line 831, in _reverse_with_prefix
     raise NoReverseMatch(msg)
 django.urls.exceptions.NoReverseMatch: Reverse for 'data-entry' not found. 'data-entry' is not a valid view function or pattern name.
+ERROR 2025-12-03 15:55:13,114 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-03 15:55:28,996 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-03 15:59:57,490 myapp login_page Invalid Username or Password views.py

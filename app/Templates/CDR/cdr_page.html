@@ -44,7 +44,8 @@
                             id="cdr_form"
                             method="post"
                             autocomplete="off"
-                            enctype="multipart/form-data">
+                            enctype="multipart/form-data"
+                            class="need-validation">
 
                             {% csrf_token %}
 
@@ -56,7 +57,7 @@
                                     <label class="form-label fw-semibold text-dark">Party Name<span class="text-danger">*</span></label>
 
                                     <select id="company_name" name="company_name" class="form-select form-control">
-                                        <option value="" selected>Select Company Name</option>
+                                        <option value="" selected>Select Party Name</option>
                                         {% for party in party_names %}
                                                 <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                                         {% endfor %}
@@ -64,9 +65,9 @@
                                     </select>
 
                                     <input type="text" id="new_company_name" name="new_company_name"
-                                        class="form-control mt-2" placeholder="Enter New Company Name" style="display:none;">
+                                        class="form-control mt-2" placeholder="Enter New Party Name" style="display:none;">
 
-                                    <div class="invalid-feedback" id="company_name_error">Please provide a Company Name.</div>
+                                    <div class="invalid-feedback" id="company_name_error">Please provide a Party Name.</div>
                                 </div>
 
                                 <!-- Job Name -->
@@ -198,9 +199,9 @@
                                                value="{{ request.GET.end_date }}">
                                     </div>
                                     <div class="col-auto">
-                                        <label for="search" class="form-label mb-0 fw-bold d-block">Company Name</label>
+                                        <label for="search" class="form-label mb-0 fw-bold d-block">Party Name</label>
                                         <select id="search" name="search" class="form-select form-control">
-                                            <option value="">{% if request.GET.search %}{{ request.GET.search }}{% else %}Select Company Name{% endif %}</option>
+                                            <option value="">{% if request.GET.search %}{{ request.GET.search }}{% else %}Select Party Name{% endif %}</option>
                                             {% for party in party_names %}
                                                 <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                                             {% endfor %}
@@ -411,7 +412,7 @@
                                                                             required>
                                                                         <div class="invalid-feedback" id="cdr_date_error">Please provide an CDR date.</div>
                                                                     </div>
-                                                                    <!-- Company Name -->
+                                                                    <!-- Party Name -->
                                                                     <div class="col-md-6">
                                                                         <label for="company_name" class="form-label fw-bold">Party Name</label>
                                                                         <input type="text"
@@ -458,10 +459,10 @@
                                                                         <label for="files" class="form-label fw-bold">Upload Images</label>
                                                                         <input type="file"
                                                                             class="form-control"
-                                                                            id="files"
+                                                                            id="files"  
                                                                             name="files"
                                                                             multiple
-                                                                            accept=".jpeg,.png,.jpg,.ai">
+                                                                            accept=".jpeg,.png,.jpg,.ai , .cdr">
                                                                     </div>
                                                                     <!-- CDR Corrections -->
                                                                     <div class="col-md-6">
@@ -521,22 +522,22 @@
                                                                             value="{{ i.date|date:'Y-m-d' }}">
                                                                     </div>
 
-                                                                    <!-- Company Name -->
+                                                                    <!-- Party Name -->
                                                                     <div class="col-md-6">
-                                                                        <label class="form-label fw-bold">Company Name</label>
+                                                                        <label class="form-label fw-bold">Party Name</label>
                                                                         <div class="form-check mt-2">
                                                                             <input class="form-check-input" type="checkbox" id="cdr_company_name{{ i.id }}"
-                                                                                name="cdr_company_name" value="{{ i.company_name }}">
-                                                                            <label class="form-check-label" for="cdr_company_name{{ i.id }}">{{ i.company_name }}</label>
+                                                                                name="cdr_company_name" value="{{ i.party_details.party_nam }}">
+                                                                            <label class="form-check-label" for="cdr_company_name{{ i.id }}">{{ i.party_details.party_name  }}</label>
                                                                         </div>
                                                                     </div>
 
-                                                                    <!-- Company Email Address -->
+                                                                    <!-- Party Email Address -->
                                                                     <div class="col-md-6">
-                                                                        <label for="cdr_company_address" class="form-label fw-bold">Company Email Address</label>
+                                                                        <label for="cdr_company_address" class="form-label fw-bold">Party Email Address</label>
                                                                         <input type="email" id="cdr_company_address" name="cdr_company_address"
-                                                                            class="form-control" placeholder="Enter Company Email Address" maxlength="50"
-                                                                            value="{{ i.company_email }}">
+                                                                            class="form-control" placeholder="Enter Party Email Address" maxlength="50"
+                                                                            value="{{ i.party_email_used.email }}">
                                                                     </div>
 
                                                                     <!-- Job Name -->
@@ -628,10 +629,10 @@
                                                                     <!-- Column 3 -->
                                                                     <div class="col-md-4 mb-3">
                                                                         <p>
-                                                                            <strong>Company Name:</strong> {{ i.company_name }}
+                                                                            <strong>Party Name:</strong> {{ i.party_details.party_name }}
                                                                         </p>
                                                                         <p>
-                                                                            <strong>Company Email:</strong> {{ i.company_email }}
+                                                                            <strong>Party Email:</strong> {{ i.party_email_used.email }}
                                                                         </p>
                                                                     </div>
                                                                 </div>
@@ -641,8 +642,8 @@
                                                                     data-id="{{ i.id }}"
                                                                     data-job_name="{{ i.job_name }}"
                                                                     data-date="{{ i.date }}"
-                                                                    data-company_name="{{ i.company_name }}"
-                                                                    data-company_email="{{ i.company_email }}"
+                                                                    data-company_name="{{ i.party_details.party_name }}"
+                                                                    data-company_email="{{ i.party_email_used.email }}"
                                                                     data-correction="{{ i.cdr_corrections }}"
                                                                     data-folder_url="{{ i.file_url }}">Print</button>
                                                         </div>

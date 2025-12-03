@@ -11,3 +11,4 @@ build/
 *.debug.log
 *.sqlite3
 .pyc
+.venv

@@ -11,12 +11,10 @@ admin.site.register(CylinderMadeIn)
 
 
 
-# class AdminPerformaInvoice(admin.ModelAdmin):
-#     list_display = ("id","company_name", "job_name" , "quantity" , "gst" , "total" )
-# admin.site.register(ProformaInvoice,AdminPerformaInvoice)
+
 
 admin.site.register(ProformaInvoice)
-admin.site.register(ProformaJob)
+
 admin.site.register(BankDetails)
 
 class JobDetailHistory(admin.ModelAdmin):
@@ -30,14 +28,12 @@ admin.site.register(Registration,AdminDetail)
 
 
 class AdminJobDetails(admin.ModelAdmin):
-    list_display = ("id","date", "bill_no" , "company_name" , "job_name" , "prpc_purchase" , "prpc_sell")
+    list_display = ("id","date", "bill_no" , "company_name" , "job_name" , "prpc_purchase" , "prpc_sell" ,)
 admin.site.register(Job_detail,AdminJobDetails)
 
 
 
-class AdminCompanyDetail(admin.ModelAdmin):
-    list_display  = ["id" ,"company_name"]
-admin.site.register(CompanyName,AdminCompanyDetail)
+
 
 
 class AdminCDRDetail(admin.ModelAdmin):
@@ -46,9 +42,24 @@ admin.site.register(CDRDetail,AdminCDRDetail)
 
 
 
-admin.site.register(PartyEmail)
-admin.site.register(PartyContact)
-admin.site.register(Party)
+class PartyEmailAdmin(admin.ModelAdmin):
+    list_display = ["id", "email" ,"party"]
+admin.site.register(PartyEmail, PartyEmailAdmin) 
+class PartyContactAdmin(admin.ModelAdmin):
+    list_display = ["id", "party_number" ,"party"]
+admin.site.register(PartyContact , PartyContactAdmin)
+class PartyAdmin(admin.ModelAdmin):
+    list_display = ["id", "party_name" ]
+admin.site.register(Party , PartyAdmin)
+
+
+class ProformaJobAdmin(admin.ModelAdmin):
+    list_display = ["id", "job_name"]
+admin.site.register(ProformaJob , ProformaJobAdmin)
+
+
+
+
 
 admin.site.register(CDRImage)
     

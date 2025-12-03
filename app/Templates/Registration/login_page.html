@@ -4,7 +4,7 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Login - Nirmal</title>
+        <title>Login - Shrri Nirmal Ventures</title>
         <meta
             http-equiv="Cache-Control"
             content="no-cache, no-store, must-revalidate"
@@ -17,112 +17,351 @@
             integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
             crossorigin="anonymous"
         />
-        <link rel="stylesheet" href="{% static 'css/login_page.css' %}" />
         <link
-            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
             rel="stylesheet"
         />
-
         <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
             body {
-                background: #0a1c33; /* Updated dark background */
+                background: linear-gradient(
+                    135deg,
+                    #5e3ba6 0%,
+                    #7b5cc4 50%,
+                    #c8a858 100%
+                );
                 font-family: "Poppins", sans-serif;
-                color: #fff;
+                min-height: 100vh;
+                overflow: hidden;
             }
 
             .login-wrapper {
                 display: flex;
                 height: 100vh;
-                flex-wrap: wrap; /* Make the layout responsive */
+                position: relative;
             }
 
+            /* Animated triangles background */
+            .triangle {
+                position: absolute;
+                opacity: 0.1;
+                animation: float 20s infinite ease-in-out;
+            }
+
+            .triangle-1 {
+                width: 0;
+                height: 0;
+                border-left: 100px solid transparent;
+                border-right: 100px solid transparent;
+                border-bottom: 173px solid rgba(255, 255, 255, 0.2);
+                top: 10%;
+                left: 15%;
+                animation-delay: 0s;
+            }
+
+            .triangle-2 {
+                width: 0;
+                height: 0;
+                border-left: 60px solid transparent;
+                border-right: 60px solid transparent;
+                border-bottom: 104px solid rgba(200, 168, 88, 0.3);
+                top: 60%;
+                left: 5%;
+                animation-delay: 2s;
+            }
+
+            .triangle-3 {
+                width: 0;
+                height: 0;
+                border-left: 80px solid transparent;
+                border-right: 80px solid transparent;
+                border-bottom: 139px solid rgba(255, 255, 255, 0.15);
+                bottom: 15%;
+                left: 25%;
+                animation-delay: 4s;
+            }
+
+            .triangle-4 {
+                width: 0;
+                height: 0;
+                border-left: 120px solid transparent;
+                border-right: 120px solid transparent;
+                border-bottom: 208px solid rgba(200, 168, 88, 0.2);
+                top: 20%;
+                right: 20%;
+                animation-delay: 1s;
+            }
+
+            .triangle-5 {
+                width: 0;
+                height: 0;
+                border-left: 50px solid transparent;
+                border-right: 50px solid transparent;
+                border-bottom: 87px solid rgba(255, 255, 255, 0.2);
+                bottom: 30%;
+                right: 10%;
+                animation-delay: 3s;
+            }
+
+            .triangle-6 {
+                width: 0;
+                height: 0;
+                border-left: 90px solid transparent;
+                border-right: 90px solid transparent;
+                border-bottom: 156px solid rgba(200, 168, 88, 0.25);
+                top: 50%;
+                right: 35%;
+                animation-delay: 5s;
+            }
+
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translateY(0px) rotate(0deg);
+                }
+                50% {
+                    transform: translateY(-30px) rotate(5deg);
+                }
+            }
+
+            /* Left side - Form */
             .login-left {
                 width: 50%;
-                background: #0d2544; /* Slightly brighter than body */
                 display: flex;
                 justify-content: center;
                 align-items: center;
                 padding: 50px;
-                box-sizing: border-box;
+                position: relative;
+                z-index: 10;
             }
 
             .login-box {
                 width: 100%;
-                max-width: 400px;
+                max-width: 600px;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+                border-radius: 20px;
+                padding: 50px 40px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                animation: slideInLeft 0.8s ease;
+            }
+
+            @keyframes slideInLeft {
+                from {
+                    opacity: 0;
+                    transform: translateX(-50px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
             }
 
             h2 {
-                color: #fff;
+                color: #5e3ba6;
                 font-weight: 600;
-                margin-bottom: 10px;
+                margin-bottom: 8px;
+                font-size: 28px;
             }
 
-            p {
-                color: #aab8c5; /* Light secondary text */
+            .subtitle {
+                color: #6c757d;
+                margin-bottom: 30px;
+                font-size: 14px;
+            }
+
+            .form-label {
+                color: #495057;
+                font-weight: 500;
+                font-size: 14px;
+                margin-bottom: 8px;
             }
 
             .form-control {
-                background: #0a1c33;
-                border: 1px solid #1f3555; /* Border with blue tone */
-                color: #fff;
+                background: #f8f9fa;
+                border: 2px solid #e9ecef;
+                color: #2c3e50;
+                padding: 12px 16px;
+                font-size: 15px;
+                border-radius: 10px;
+                transition: all 0.3s ease;
             }
 
             .form-control:focus {
-                border-color: #f28a30; /* Orange tone */
-                box-shadow: none;
+                background: white;
+                border-color: #5e3ba6;
+                box-shadow: 0 0 0 4px rgba(94, 59, 166, 0.1);
+            }
+
+            .form-check-input:checked {
+                background-color: #5e3ba6;
+                border-color: #5e3ba6;
+            }
+
+            .form-check-label {
+                color: #6c757d;
+                font-size: 14px;
+            }
+
+            .forgot-link {
+                color: #5e3ba6;
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
+
+            .forgot-link:hover {
+                color: #c8a858;
             }
 
             .btn-primary {
-                background: linear-gradient(
-                    to right,
-                    #f9c00c,
-                    #f2541b
-                ); /* Button in gradient */
+                background: linear-gradient(135deg, #5e3ba6 0%, #7b5cc4 100%);
                 border: none;
                 width: 100%;
-                padding: 10px;
+                padding: 14px;
                 font-weight: 600;
-                color: #fff;
+                color: white;
+                border-radius: 10px;
+                font-size: 16px;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
             }
 
+            .btn-primary::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, #c8a858 0%, #d4b76a 100%);
+                transition: left 0.4s ease;
+            }
+
+            .btn-primary span {
+                position: relative;
+                z-index: 1;
+            }
+
+            .btn-primary:hover::before {
+                left: 0;
+            }
+
+            .btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px rgba(94, 59, 166, 0.4);
+            }
+
+            /* Right side - Logo */
             .login-right {
                 width: 50%;
-                background: url("{% static 'assets/img/grid-01.svg' %}"),
-                    #0a1c33;
-                background-size: cover;
                 display: flex;
+                flex-direction: column;
                 justify-content: center;
                 align-items: center;
                 position: relative;
+                z-index: 10;
             }
 
-            .login-logo {
-                max-width: 200px;
+            .logo-container {
+                text-align: center;
+                animation: floatUpDown 4s infinite ease-in-out;
+            }
+
+            @keyframes floatUpDown {
+                0%,
+                100% {
+                    transform: translateY(0px);
+                }
+                50% {
+                    transform: translateY(-20px);
+                }
+            }
+
+            .logo-container img {
+                max-width: 280px;
                 width: 100%;
                 height: auto;
+                filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.3));
+                margin-bottom: 30px;
+            }
+
+            .company-name {
+                color: white;
+                font-size: 32px;
+                font-weight: 700;
+                margin-bottom: 10px;
+                text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+                letter-spacing: 1px;
+            }
+
+            .tagline {
+                color: rgba(255, 255, 255, 0.9);
+                font-size: 16px;
+                font-weight: 400;
+                text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
             }
 
             .toast-container {
-                top: 1.5rem !important;
+                top: 20px !important;
                 max-width: 400px;
+                z-index: 9999;
             }
 
             .toast {
-                border-radius: 0.5rem;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+                border: none;
+                animation: slideInDown 0.4s ease;
+            }
+
+            @keyframes slideInDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .toast.hide {
+                animation: slideOutUp 0.4s ease;
+            }
+
+            @keyframes slideOutUp {
+                from {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
             }
 
             .toast-body {
-                font-size: 0.95rem;
+                font-size: 14px;
+                padding: 12px 16px;
             }
 
-            .text-center img {
-                max-width: 150px;
-                height: auto;
+            .toast-icon {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+                flex-shrink: 0;
             }
 
-            /* Media Queries for Responsiveness */
-            @media (max-width: 768px) {
+            /* Responsive */
+            @media (max-width: 968px) {
                 .login-wrapper {
                     flex-direction: column;
                 }
@@ -130,86 +369,129 @@
                 .login-left,
                 .login-right {
                     width: 100%;
-                    height: auto;
-                    padding: 20px;
+                    min-height: 50vh;
+                    padding: 30px;
                 }
 
-                .login-logo {
-                    max-width: 150px;
+                .login-right {
+                    order: -1;
+                    min-height: 40vh;
+                }
+
+                .logo-container img {
+                    max-width: 200px;
+                }
+
+                .company-name {
+                    font-size: 24px;
+                }
+
+                .tagline {
+                    font-size: 14px;
                 }
             }
 
             @media (max-width: 480px) {
                 .login-box {
-                    max-width: 100%;
-                    padding: 20px;
+                    padding: 40px 30px;
                 }
 
-                .btn-primary {
-                    padding: 12px;
-                    font-weight: 500;
+                h2 {
+                    font-size: 24px;
+                }
+
+                .triangle-1,
+                .triangle-4,
+                .triangle-6 {
+                    display: none;
                 }
             }
         </style>
     </head>
     <body>
+        <!-- Animated triangles background -->
+        <div class="triangle triangle-1"></div>
+        <div class="triangle triangle-2"></div>
+        <div class="triangle triangle-3"></div>
+        <div class="triangle triangle-4"></div>
+        <div class="triangle triangle-5"></div>
+        <div class="triangle triangle-6"></div>
+        
+      
+
+
         <div class="login-wrapper">
-            <!-- Left Form -->
+            <!-- Left side - Form -->
             <div class="login-left">
-                <form
-                    class="login-box"
-                    method="POST"
-                    action="{% url 'login_page' %}"
-                >
-                    {% csrf_token %}
-                    <h2>Sign In</h2>
-                    <p>Enter your email / username and password to sign in!</p>
+                <div class="login-box">
+                    <h2>Welcome Back</h2>
+                    <p class="subtitle">Sign in to continue to your account</p>
 
-                    <div class="mb-3">
-                        <label class="form-label">Email / Username</label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="username"
-                            required
-                        />
-                    </div>
+                    <form method="POST" action="{% url 'login_page' %}">
+                        {% csrf_token %}
 
-                    <div class="mb-3">
-                        <label class="form-label">Password</label>
-                        <input
-                            type="password"
-                            class="form-control"
-                            name="password"
-                            required
-                        />
-                    </div>
-
-                    <div
-                        class="d-flex justify-content-between align-items-center mb-3"
-                    >
-                        <div>
-                            <input type="checkbox" id="remember_me" />
-                            <label for="remember_me">Keep me logged in</label>
+                        <div class="mb-3">
+                            <label class="form-label">Email / Username</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="username"
+                                placeholder="Enter your email or username"
+                                required
+                            />
                         </div>
-                        <a href="{% url 'password_reset' %}" class="text-muted"
-                            >Forgot password?</a
-                        >
-                    </div>
 
-                    <button class="btn btn-primary">Sign In</button>
-                </form>
+                        <div class="mb-3">
+                            <label class="form-label">Password</label>
+                            <input
+                                type="password"
+                                class="form-control"
+                                name="password"
+                                placeholder="Enter your password"
+                                required
+                            />
+                        </div>
+
+                        <div
+                            class="d-flex justify-content-between align-items-center mb-4"
+                        >
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="remember_me"
+                                />
+                                <label
+                                    class="form-check-label"
+                                    for="remember_me"
+                                >
+                                    Keep me logged in
+                                </label>
+                            </div>
+                            <a
+                                href="{% url 'password_reset' %}"
+                                class="forgot-link"
+                                >Forgot password?</a
+                            >
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">
+                            <span>Sign In</span>
+                        </button>
+                    </form>
+                </div>
             </div>
 
-            <!-- Right Panel with Logo -->
+            <!-- Right side - Logo -->
             <div class="login-right">
-                <img
-                    src="{% static 'assets/img/logo_icon.png' %}"
-                    alt="Logo"
-                    class="login-logo"
-                    width="500"
-                    height="300"
-                />
+                <div class="logo-container">
+                    <img
+                        src="{% static 'assets/img/logo_icon.png' %}"
+                        alt="Shrri Nirmal Ventures Logo"
+                    />
+                    <div class="company-name">Shrri Nirmal Ventures</div>
+                    <div class="tagline">Private Limited</div>
+                </div>
             </div>
         </div>
 
@@ -272,7 +554,7 @@
                         if (toast.parentNode) {
                             toast.parentNode.removeChild(toast);
                         }
-                    }, 300);
+                    }, 400);
                 }
             }
 

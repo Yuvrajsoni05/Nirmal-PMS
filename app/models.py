@@ -85,15 +85,7 @@ class Job_detail(models.Model):
     def __str__(self):
         return self.company_name
 
-    # @property
-    # def cdr_file_url(self):
-    #     cdr = CDRDetail.objects.filter(
-    #         company_name__iexact=self.company_name,
-    #         job_name__iexact=self.job_name
-    #     ).first() 
-    #     if cdr and cdr.file_url:
-    #         return cdr.file_url
-    #     return None
+    
     @property
     def cdr_images_urls(self):
         cdr = CDRDetail.objects.filter(
@@ -131,8 +123,7 @@ class Jobimage(models.Model):
         return f"Image for Job ID: {self.job.id}"
     
 
-    
-    
+
     
 class CDRDetail(models.Model):
     date = models.DateField()
@@ -262,7 +253,7 @@ class ProformaInvoice(models.Model):
             return f"{num:,}"
     
     def __str__(self):
-        return f"Proforma Invoice: {self.invoice_no}"
+        return f"Proforma Invoice: {self.bank_details}"
 
 
 
