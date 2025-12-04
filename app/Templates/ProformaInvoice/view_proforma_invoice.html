@@ -81,7 +81,7 @@
                                                 id="select_company"
                                                 name="select_company">
                                             <option value="" {% if not request.GET.select_company %}selected{% endif %}>
-                                                Select Company Name
+                                                Select Party Name
                                             </option>
                                             {% for party in party_name %}
                                                 <option value="{{ party.party_name }}" 
@@ -117,20 +117,20 @@
                             <thead class="thead-light">
                                 <tr class="text-nowrap text-center">
                                     <th scope="col" class="sticky-left">
-                                        <a href="">Sr No</a>
+                                       Sr No
                                     </th>
                                     <th scope="col">
-                                        <a href="">Invoices no.</a>
+                                        Invoices no.
                                     </th>
                                     <th scope="col">
                                         <a href="?invoice_date_sorting={% if request.GET.invoice_date_sorting == 'asc' %}desc{% else %}asc{% endif %}">Invoice Date</a>
                                     </th>
                                     <th scope="col">Mode / Payment</th>
                                     <th scope="col">
-                                        <a href="?company_name_sorting={% if request.GET.company_name_sorting == 'asc' %}desc{% else %}asc{% endif %}">Company Name </a>
+                                        <a href="?company_name_sorting={% if request.GET.company_name_sorting == 'asc' %}desc{% else %}asc{% endif %}">Party Name </a>
                                     </th>
-                                    <th scope="col">Company Contact</th>
-                                    <th scope="col">Company Email</th>
+                                    <th scope="col">Party Contact</th>
+                                    <th scope="col">Party Email</th>
                                     <th scope="col">Billing Address</th>
                                     <th scope="col">Billing GSTINT No</th>
                                     <th scope="col">Billing State Name</th>
@@ -503,7 +503,7 @@
                                                 </div>
 
                                                 <div class="modal-footer bg-light">
-                                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                                    <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -551,7 +551,7 @@
                                                     <div class="col-md-12">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                           
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Company Name:</label>
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Party Name:</label>
                                                             <input type="text" class="form-control form-control-sm fs-6" name="company_name" value="{{ proforma.party_details.party_name }}" readonly>
                                                         </div>
                                                     </div>
@@ -560,7 +560,7 @@
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                            
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Company Email:</label>
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Party Email:</label>
                                                             <input type="email" class="form-control form-control-sm fs-6" name="company_email" value="{{ proforma.party_email_used.email }}">
                                                         </div>
                                                     </div>
@@ -569,7 +569,7 @@
                                                     <div class="col-md-6">
                                                         <div class="d-flex align-items-center bg-white p-3 rounded">
                                                        
-                                                            <label class="fw-bold me-3 mb-0 fs-6">Company Contact:</label>
+                                                            <label class="fw-bold me-3 mb-0 fs-6">Party Contact:</label>
                                                             <input type="tel" class="form-control form-control-sm fs-6" name="company_contact" value="{{ proforma.party_contact_used.party_number }}">
                                                         </div>
                                                     </div>
@@ -771,7 +771,7 @@
 
                                                 <!-- Buttons -->
                                                 <div class="mt-4 d-flex justify-content-end gap-2">
-                                                    <button type="button" class="btn btn-outline-secondary  px-4" data-bs-dismiss="modal">Close</button>
+                                                    <button type="reset" class="btn btn-outline-secondary  px-4" data-bs-dismiss="modal">Close</button>
                                                     <button type="submit" class="btn btn-primary  px-4">Send Mail</button>
                                                   <button type="button"
                                                     class="btn btn-info px-4"

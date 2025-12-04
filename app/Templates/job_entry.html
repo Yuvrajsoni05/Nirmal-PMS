@@ -214,17 +214,10 @@
                                                     <option value="">
                                                         Select Job Type
                                                     </option>
-                                                    <option value="New Job">
-                                                        New Job
-                                                    </option>
-                                                    <option
-                                                        value="Damage Repair"
-                                                    >
-                                                        Damage Repair
-                                                    </option>
-                                                    <option value="Job Work">
-                                                        Job Work
-                                                    </option>
+                                                    {% for value, label in job_type  %}
+                                                        <option value="{{ value }}"  > {{label}} </option>
+                                                    
+                                                    {% endfor %}
                                                 </select>
                                                 <div
                                                     class="invalid-feedback"

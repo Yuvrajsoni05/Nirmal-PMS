@@ -59,12 +59,17 @@ class Job_detail(models.Model):
     job_status = [
         ("In Progress","In Progress"),
         ("Close Job","Close Job")
+    ] 
+    JOB_STATUS_CHOICES = [
+        ("New Job" , "New Job"),
+        ("Damage Repair","Damage Repair"),
+        ("Job Work" , "Job Work")
     ]
     date = models.DateField()
     bill_no = models.CharField(max_length=200)
-    company_name = models.CharField(max_length=300,blank=True, null=True)
+    
     job_name = models.CharField(max_length=200)
-    job_type  = models.CharField(max_length=200)
+    job_type  = models.CharField(max_length=200,choices=JOB_STATUS_CHOICES)
     noc =  models.TextField(blank=True, null=True)
     prpc_purchase = models.CharField(max_length=200)
     prpc_sell = models.CharField(max_length=200,blank=True, null=True)
@@ -74,22 +79,21 @@ class Job_detail(models.Model):
     pouch_open_size = models.CharField(max_length=200)
     pouch_combination = models.CharField(max_length=200,blank=True,null=True)
     correction = models.TextField(blank=True, null=True)
-    folder_url = models.URLField()
-    image_links = models.CharField(max_length=1000,blank=True, null=True)
+
     cylinder_date = models.DateField(blank=True, null=True)
     cylinder_bill_no = models.CharField(blank=True, null=True)
     job_status = models.CharField(max_length=200,blank=True, null=True,choices=job_status)
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
-    
+    party_details =  models.ForeignKey(Party,on_delete=models.SET_NULL,blank=True,null=True)
 
-    def __str__(self):
-        return self.company_name
+    # def __str__(self):
+    #     return self.party_details
 
     
     @property
     def cdr_images_urls(self):
         cdr = CDRDetail.objects.filter(
-            party_details__party_name__iexact=self.company_name,
+            party_details=self.party_details,
             job_name__iexact=self.job_name
         ).first()
         if not cdr:
@@ -150,10 +154,10 @@ class CDRImage(models.Model):
     
     
     
-class CompanyName(models.Model):
-    company_name = models.CharField(max_length=300)
-    def __str__(self):
-        return f"{self.company_name}"
+# class CompanyName(models.Model):
+#     company_name = models.CharField(max_length=300)
+#     def __str__(self):
+#         return f"{self.company_name}"
    
 
 class CylinderMadeIn(models.Model):

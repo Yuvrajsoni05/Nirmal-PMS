@@ -15,7 +15,7 @@ admin.site.register(CylinderMadeIn)
 
 admin.site.register(ProformaInvoice)
 
-admin.site.register(BankDetails)
+
 
 class JobDetailHistory(admin.ModelAdmin):
     list_display = ("id", "job" , "field_name" , "old_value" , "new_value" , "changed_at","chnage_user" )
@@ -28,7 +28,7 @@ admin.site.register(Registration,AdminDetail)
 
 
 class AdminJobDetails(admin.ModelAdmin):
-    list_display = ("id","date", "bill_no" , "company_name" , "job_name" , "prpc_purchase" , "prpc_sell" ,)
+    list_display = ("id","date", "bill_no", "job_name" , "prpc_purchase" , "prpc_sell",)
 admin.site.register(Job_detail,AdminJobDetails)
 
 
@@ -49,9 +49,13 @@ class PartyContactAdmin(admin.ModelAdmin):
     list_display = ["id", "party_number" ,"party"]
 admin.site.register(PartyContact , PartyContactAdmin)
 class PartyAdmin(admin.ModelAdmin):
-    list_display = ["id", "party_name" ]
+    list_display = ["party_name" ]
 admin.site.register(Party , PartyAdmin)
 
+
+class BankDetailsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'account_name' , 'bank_name' , 'bank_account_number']
+admin.site.register(BankDetails,BankDetailsAdmin)
 
 class ProformaJobAdmin(admin.ModelAdmin):
     list_display = ["id", "job_name"]

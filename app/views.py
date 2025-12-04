@@ -5,7 +5,7 @@ from operator import inv
 import os
 import re
 from datetime import datetime
-from traceback import print_tb
+
 
 
 from pyparsing import C
@@ -285,14 +285,14 @@ def update_user(request, user_id):
             logout_user = Registration.objects.get(id=user_id)
             for session in Session.objects.all():
                 session_data = session.get_decoded()
-                # print(session_data)
+              
                 if str(session_data.get("_auth_user_id")) == str(logout_user.id):
                     session.delete()
             update_user.save()
             messages.success(request, "User updated successfully.")
             return redirect("edit_user_page")
     except Exception as e:
-        print(e)
+    
         messages.error(
             request, f"Something went wrong", extra_tags="custom-success-style"
         )
@@ -306,7 +306,7 @@ def dashboard_page(request):
         job_name_search = request.GET.get("job_name_search", "").strip()
         date_s = request.GET.get("date", "").strip()
         date_e = request.GET.get("end_date", "").strip()
-        sorting = request.GET.get("sorting", "").strip()
+        sorting = request.GET.get("sort ing", "").strip()
         date_sorting = request.GET.get("date_sorting", "").strip()
         company_name_sorting = request.GET.get("company_name_sorting", "").strip()
         job_name_sorting = request.GET.get("job_name_sorting", "").strip()
@@ -315,9 +315,9 @@ def dashboard_page(request):
 
         filters = Q()
 
-        
+ 
         if get_q:
-            filters &= Q(company_name__icontains=get_q)
+            filters &= Q(party_details__party_name__icontains=get_q)
         if job_name_search:
             filters &= Q(job_name__icontains=job_name_search)
 
@@ -344,8 +344,8 @@ def dashboard_page(request):
             "date_desc": "-date",
             "cyl_date_asc": "cylinder_date",
             "cyl_date_desc": "-cylinder_date",
-            "company_asc": "company_name",
-            "company_desc": "-company_name",
+            "company_asc": "party_details__party_name",
+            "company_desc": "-party_details__party_name",
             "madein_asc": "cylinder_made_in",
             "madein_desc": "-cylinder_made_in",
         }
@@ -369,7 +369,7 @@ def dashboard_page(request):
         datas = p.get_page(page)
         total_job = db_sqlite3.count()
 
-        company_names = Job_detail.objects.values('company_name').distinct()
+        company_names = Party.objects.values("party_name").distinct()
         job_names = Job_detail.objects.values("job_name").distinct()
         count_of_company = Party.objects.all().order_by("party_name").count()
 
@@ -377,7 +377,7 @@ def dashboard_page(request):
         total_active_job = Job_detail.objects.filter(job_status="In Progress").count()
         count_of_cylinder_company = cylinder_company_names.count()
         nums = " " * datas.paginator.num_pages
-       
+        
         context = {
             "nums": nums,
             "venues": datas,
@@ -414,25 +414,6 @@ def bank(request):
 def delete_data(request, delete_id):
    
     try:
-        folder_url = Job_detail.objects.values_list("folder_url", flat=True).get(
-            id=delete_id
-        )
-
-        
-        if folder_url and folder_url != "nan":
-            try:
-                
-                url = os.environ.get("DELETE_WEBHOOK_JOB")
-            
-                response = requests.delete(f"{url}{delete_id}")
-
-                messages.success(request, "Job Deleted successfully ")
-                return redirect("dashboard_page")
-            except Exception as e:
-                messages.warning(request, "Something went wrong try again")
-                logger.error(f"Something went wrong: {str(e)}", exc_info=True)
-                return redirect("dashboard_page")
-        else:
             delete_data = get_object_or_404(Job_detail, id=delete_id)
             delete_images = delete_data.image.all()
             
@@ -457,8 +438,12 @@ def delete_data(request, delete_id):
 
 @custom_login_required
 def job_entry(request):
-    company_name = Party.objects.values("party_name").distinct().union(Job_detail.objects.values("company_name").distinct())
+    company_name = Party.objects.values("party_name").distinct()
     job_status = Job_detail._meta.get_field("job_status").choices
+    job_type = Job_detail.JOB_STATUS_CHOICES
+     
+    
+  
     
     cylinder_company_names = CylinderMadeIn.objects.all()
     cdr_job_name = CDRDetail.objects.values("job_name").distinct()
@@ -466,14 +451,14 @@ def job_entry(request):
         "company_name": company_name,
         "cylinder_company_names": cylinder_company_names,
         "job_name": cdr_job_name,
-        "job_status":job_status
+        "job_status":job_status,
+        "job_type":job_type
     }
     return render(request, "job_entry.html", context)
 
 
 @custom_login_required
 def add_job(request):
-
     try:
         if request.method == "POST":
             date = request.POST.get("job_date" ,'')
@@ -540,20 +525,22 @@ def add_job(request):
                             cylinder_made_in=value
                         )
           
-            if company_name:
-                if Party.objects.filter(party_name__iexact=company_name).exists():
-                    pass
-                else:
-                    Party.objects.create(
-                        party_name=company_name
-                    )
+            # if company_name:
+            #     if Party.objects.filter(party_name__iexact=company_name).exists():
+            #         pass
+            #     else:
+            #         Party.objects.create(
+            #             party_name=company_name
+            #         )
                     
-            
+            party_details, _ = Party.objects.get_or_create(
+                party_name=company_name.strip() if company_name.strip() else "None"
+            )
             for i in range(len(job_name)):
                 job = Job_detail.objects.create(
                     date=date,
                     bill_no=bill_no,
-                    company_name=company_name,
+                    party_details=party_details,
                     job_name=job_name[i],
                     job_type=job_type[i],
                     noc=noc[i],
@@ -571,10 +558,10 @@ def add_job(request):
                 )
                 files_for_this_job = request.FILES.getlist(f"files[{i}][]")
                 file_dic = file_name_convert(files_for_this_job)
-                print(file_dic)
+                
                 for file_key, file_data in file_dic.items():
                     file_obj = file_data[1]
-                    print(file_obj)
+                    
                     Jobimage.objects.create(job=job, image=file_obj)
 
                 job.save()
@@ -588,6 +575,8 @@ def add_job(request):
 
 
 
+from django.db import transaction
+
 @custom_login_required
 def update_job(request, update_id):
 
@@ -595,8 +584,8 @@ def update_job(request, update_id):
         if request.method == "POST":
             date = request.POST.get("date")
             bill_no = request.POST.get("bill_no")
-            company_name = request.POST.get("company_name")
-            job_name = request.POST.get("job_name", "")
+            
+
             job_type = request.POST.get("job_type", "")
             noc = request.POST.get("noc")
             prpc_purchase = request.POST.get("prpc_purchase")
@@ -618,14 +607,12 @@ def update_job(request, update_id):
             pouch_combination = f"{pouch_combination1} + {pouch_combination2} + {pouch_combination3} + {pouch_combination4}"
             
 
-        demo = Job_detail.objects.values("date").get(id=update_id)
-        date_formatte = demo["date"].strftime("%Y-%m-%d")
+  
 
         required_filed = {
             "Date": date,
             "Bill no": bill_no,
-            "Company_Name": company_name,
-            "job name": job_name,
+         
             "job type": job_type,
             "Noc": noc,
             "Prpc Purchase": prpc_purchase,
@@ -646,19 +633,9 @@ def update_job(request, update_id):
                 )
                 return redirect("dashboard_page")
 
-        jobs = Job_detail.objects.all().get(id=update_id)
-        if job_name != jobs.job_name:
-            messages.error(request, "You can't chnage job_name")
-            return redirect("dashboard_page")
+       
 
-        if date != date_formatte:
-            if Job_detail.objects.filter(date=date, job_name=job_name).exists():
-                messages.error(
-                    request,
-                    "Job is Already exists from this date ",
-                    extra_tags="custom-success-style",
-                )
-                return redirect("dashboard_page")
+        
 
         file_error = utils.file_validation(files)
         if file_error:
@@ -669,112 +646,71 @@ def update_job(request, update_id):
         get_combinations = get_data.pouch_combination.replace(" ", "").split("+")
         while len(get_combinations) < 4:
             get_combinations.append("")
-        folder_id = get_data.folder_url
+      
         file_dic = file_name_convert(files)
-        url = os.environ.get("UPDATE_WEBHOOK_JOB")
-        if folder_id:
-            data = {
-                "date": date,
-                "bill_no": bill_no,
-                "company_name": company_name,
-                "job_type": job_type,
-                "job_name": job_name,
-                "noc": noc,
-                "prpc_purchase": prpc_purchase,
-                "prpc_sell": prpc_sell,
-                "cylinder_size": cylinder_size,
-                "cylinder_made_in": cylinder_made_in,
-                "pouch_size": pouch_size,
-                "pouch_open_size": pouch_open_size,
-                "pouch_combination": pouch_combination,
-                "correction": correction,
-            }
-            try:
-                response = requests.post(f"{url}{update_id}", data=data, files=file_dic)
-                if response.status_code == 200:
-                    cylinder_data = Job_detail.objects.all().get(id=update_id)
-                    cylinder_data.cylinder_date = cylinder_date
-                    cylinder_data.cylinder_bill_no = cylinder_bill_no
-                    cylinder_data.job_status = job_status
-                    cylinder_data.save()
-                    messages.success(
-                        request,
-                        "Data Updated successfully",
-                    )
-                    return redirect("dashboard_page")
-                else:
-                    messages.warning(request, "Your Credentials will Expire")
-                    return redirect("dashboard_page")
-            except Exception as e:
-                logger.error(f"Something went wrong: {str(e)}", exc_info=True)
-                messages.warning(request, "Your Credentials will Expire")
-                return redirect("dashboard_page")
-        else:
-            try:
-                old_job = Job_detail.objects.get(id=update_id)
-                update_job_data = get_object_or_404(Job_detail, id=update_id)
-                print(Job_detail.objects.values("pouch_combination").get(id=update_id))
-                job = old_job
-                for field in [
-                    "job_status",
-                    "cylinder_bill_no",
-                    "correction",
-                    "cylinder_size",
-                    "prpc_sell",
-                    "prpc_purchase",
-                    "noc",
-                    "job_type",
-                    "job_name",
-                    "company_name",
-                    "bill_no",
-                    "pouch_open_size",
-                    "pouch_size",
-                    "cylinder_made_in",
-                    "cylinder_date",
-                    "date",
-                    
-                ]:
-                    old_value = getattr(old_job, field)
-                    new_value = request.POST.get(field)
-                    if str(old_value) != new_value:
-                        JobHistory.objects.create(
-                            job=job,
-                            field_name=field,
-                            old_value=old_value,
-                            new_value=new_value,
-                            chnage_user=request.user,
-                        )
-                        setattr(job, field, new_value)
-                job.save()
-
-                update_job_data.company_name = company_name
-                update_job_data.date = date
-                update_job_data.bill_no = bill_no
-                update_job_data.job_name = job_name
-                update_job_data.job_type = job_type
-                update_job_data.noc = noc
-                update_job_data.prpc_purchase = prpc_purchase
-                update_job_data.prpc_sell = prpc_sell
-                update_job_data.cylinder_size = cylinder_size
-                update_job_data.cylinder_bill_no = cylinder_bill_no
-                update_job_data.cylinder_size = cylinder_size
-                update_job_data.correction = correction
-                update_job_data.cylinder_made_in = cylinder_made_in
-                update_job_data.pouch_size = pouch_size
-                update_job_data.pouch_open_size = pouch_open_size
-                update_job_data.cylinder_date = cylinder_date
-                update_job_data.job_status = job_status
-                update_job_data.pouch_combination = pouch_combination
+        try:
+            old_job = Job_detail.objects.get(id=update_id)
+            update_job_data = get_object_or_404(Job_detail, id=update_id)
+            print(Job_detail.objects.values("pouch_combination").get(id=update_id))
+            job = old_job
+            for field in [
+                "job_status",
+                "cylinder_bill_no",
+                "correction",
+                "cylinder_size",
+                "prpc_sell",
+                "prpc_purchase",
+                "noc",
+                "job_type",
+                "job_name",
+             
+                "bill_no",
+                "pouch_open_size",
+                "pouch_size",
+                "cylinder_made_in",
+                "cylinder_date",
+                "date",
                 
-                for file_key, file_data in file_dic.items():
-                    file_obj = file_data[1]
-                    Jobimage.objects.create(job=update_job_data, image=file_obj)
-                update_job_data.save()
-                messages.success(request, "Data Update successfully ")
-                return redirect("dashboard_page")
-            except Exception as e:
-                messages.warning(request, f"Something went wrong try again {e}")
-                return redirect("dashboard_page")
+            ]:
+                old_value = getattr(old_job, field)
+                new_value = request.POST.get(field)
+                if str(old_value) != new_value:
+                    JobHistory.objects.create(
+                        job=job,
+                        field_name=field,
+                        old_value=old_value,
+                        new_value=new_value,
+                        chnage_user=request.user,
+                    )
+                    setattr(job, field, new_value)
+            job.save()
+            update_job_data.date = date
+            update_job_data.bill_no = bill_no
+            
+            update_job_data.job_type = job_type
+            update_job_data.noc = noc
+            update_job_data.prpc_purchase = prpc_purchase
+            update_job_data.prpc_sell = prpc_sell
+            update_job_data.cylinder_size = cylinder_size
+            update_job_data.cylinder_bill_no = cylinder_bill_no
+            update_job_data.cylinder_size = cylinder_size
+            update_job_data.correction = correction
+            update_job_data.cylinder_made_in = cylinder_made_in
+            update_job_data.pouch_size = pouch_size
+            update_job_data.pouch_open_size = pouch_open_size
+            update_job_data.cylinder_date = cylinder_date
+            update_job_data.job_status = job_status
+            update_job_data.pouch_combination = pouch_combination
+            
+            for file_key, file_data in file_dic.items():
+                file_obj = file_data[1]
+                Jobimage.objects.create(job=update_job_data, image=file_obj)
+            update_job_data.save()
+            messages.success(request, "Data Update successfully ")
+            return redirect("dashboard_page")
+        except Exception as e:
+            messages.warning(request, f"Something went wrong try again {e}")
+            return redirect("dashboard_page")
 
     except Exception as e:
         messages.error(request, f"Something went wrong try again {e}")
@@ -1048,33 +984,12 @@ def cdr_add(request):
         if new_party_contact != "":
             party_contact_used = new_party_contact
             
-            party_contact_exists = PartyContact.objects.filter(
-                party__party_name__iexact=company_name,
-                party_number=party_contact_used
-            ).exists()
-            if party_contact_exists:
-                messages.error(
-                    request,
-                    "This contact number is already exists for the new company.",
-                    extra_tags="custom-success-style",
-                )
-                return redirect("company_add_page")
             
 
         if new_company_email != "":
             company_email = new_company_email
             
-            email_exists = PartyEmail.objects.filter(
-                party__party_name__iexact=company_name,
-                email=company_email
-            ).exists()
-            if email_exists:
-                messages.error(
-                    request,
-                    "This email is already exists for the new company.",
-                    extra_tags="custom-success-style",
-                )
-                return redirect("company_add_page")
+            
 
         if new_company_name != "":
             company_name = new_company_name
@@ -1155,11 +1070,11 @@ def cdr_add(request):
 @custom_login_required
 def cdr_delete(request, delete_id):
     delete = get_object_or_404(CDRDetail, id=delete_id)
-    print(delete)
+    
     delete_image = delete.cdr_images.all()
     for img in delete_image:
         path = img.image.path
-        print(path)
+        
         if os.path.isfile(path):
             os.remove(path)
         else:
@@ -1183,7 +1098,7 @@ def cdr_update(request, update_id):
         cdr_corrections = request.POST.get("cdr_corrections")
 
         
-        print(party_number)
+      
         email_error = utils.email_validator(company_email)
         if email_error:
             messages.error(request, email_error, extra_tags="custom-success-style")
@@ -1422,7 +1337,7 @@ def cdr_page_ajax(request):
     
     if company_name:
         jobs = list(Job_detail.objects.filter(
-            company_name__iexact=company_name
+            party_details__party_name__iexact=company_name
         ).values("job_name").distinct().union(
             CDRDetail.objects.filter(party_details__party_name__iexact=company_name)
             .values("job_name")
@@ -1436,6 +1351,8 @@ def cdr_page_ajax(request):
             .values('party_contacts__party_number')
             .distinct()
         )
+        
+        
        
         return JsonResponse({"email": email, "jobs": jobs, "contact":contacts})
     return JsonResponse({"error": "Invalid request"}, status=400)
@@ -1447,7 +1364,7 @@ def job_page_ajax(request):
 
     if company_name:
         job_detail = (
-            Job_detail.objects.filter(company_name__iexact=company_name)
+            Job_detail.objects.filter(party_details__party_name__iexact=company_name)
             .values("job_name")
             .distinct().union(CDRDetail.objects.filter(party_details__party_name__iexact=company_name)
             .values("job_name").distinct().union(
@@ -1470,6 +1387,7 @@ def ProformaInvoicePage(request):
     bank_details = BankDetails.objects.all()
     states = ProformaInvoice.INDIAN_STATES
     invoice_status = ProformaInvoice.Invoice_Status
+   
     
     context = {
         "party_name_list": party_name_list,
@@ -1504,8 +1422,7 @@ def ViewProformaInvoice(request):
     elif date_sorting == "desc":
         proformaInvoice = proformaInvoice.order_by("-invoice_date")
         
-        
-    print(select_company, start_date, end_date)
+
     if select_company and start_date and end_date:
         proformaInvoice = proformaInvoice.filter(
             Q(invoice_date__range=[start_date, end_date])
@@ -1703,9 +1620,9 @@ def ProformaSendMail(request):
 @custom_login_required
 def DeleteProformaInvoice(request, proforma_id):
     if request.method == "POST":
-        print(proforma_id)
+   
         item = get_object_or_404(ProformaInvoice, id=proforma_id)
-        print("Delete Request Received")
+        
         item.delete()
         messages.success(request, "Proforma Invoice Deleted Successfully")
         return redirect("view_proforma_invoice")
@@ -1770,13 +1687,23 @@ def ProformaInvoiceCreate(request):
         
         if company_name == "" or new_company != "":
             company_name = new_company.strip()  
+            company_name_exists = Party.objects.filter(
+                party_name__iexact=company_name
+            ).exists()
+            if company_name_exists:
+                messages.error(
+                    request,
+                    "This company name is already exists.",
+                    extra_tags="custom-success-style",
+                )
+                return redirect("proforma_invoice_page")
             
         party_number_check = utils.phone_number_check(company_contact)
         if party_number_check:
             messages.error(
                 request, party_number_check, extra_tags="custom-success-style"
             )
-            return redirect("company_add_page")
+            return redirect("proforma_invoice_page")
         
         
         email_error = utils.email_validator(company_email)
@@ -1790,6 +1717,11 @@ def ProformaInvoiceCreate(request):
         
         
 
+        
+            
+            
+        
+        
         if ProformaInvoice.objects.filter(invoice_no=invoice_no).exists():
             messages.error(
                 request,
@@ -1850,7 +1782,6 @@ def ProformaInvoiceCreate(request):
             return redirect("proforma_invoice_page")
         except Exception as e:
             messages.warning(request, "Something went Wrong")
-            print(e)
             return redirect("proforma_invoice_page")
 
     return redirect("proforma_invoice_page")
@@ -1897,7 +1828,7 @@ def ProformaInvoicePageAJAX(request):
     
     
     if company:
-        job_qs = Job_detail.objects.filter(company_name=company).values("job_name").distinct()
+        job_qs = Job_detail.objects.filter(party_details__party_name=company).values("job_name").distinct()
 
        
         job_qs = job_qs.union(

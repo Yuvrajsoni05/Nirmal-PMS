@@ -8315,3 +8315,455 @@ django.urls.exceptions.NoReverseMatch: Reverse for 'data-entry' not found. 'data
 ERROR 2025-12-03 15:55:13,114 myapp login_page Invalid Username or Password views.py
 ERROR 2025-12-03 15:55:28,996 myapp login_page Invalid Username or Password views.py
 ERROR 2025-12-03 15:59:57,490 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-04 15:51:25,353 myapp add_job Something went wrong: Cannot assign "'Lippi System'": "Job_detail.party_details" must be a "Party" instance. views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 538, in add_job
+    job = Job_detail.objects.create(
+        date=date,
+    ...<15 lines>...
+        cylinder_bill_no=cylinder_bill_no[i],
+    )
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 661, in create
+    obj = self.model(**kwargs)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\base.py", line 545, in __init__
+    _setattr(self, field.name, rel_obj)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 291, in __set__
+    raise ValueError(
+    ...<7 lines>...
+    )
+ValueError: Cannot assign "'Lippi System'": "Job_detail.party_details" must be a "Party" instance.
+ERROR 2025-12-04 16:43:16,139 myapp dashboard_page Something went wrong: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted. views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 334, in dashboard_page
+    db_sqlite3 = Job_detail.objects.filter(filters)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1503, in build_filter
+    return self._add_q(
+           ~~~~~~~~~~~^
+        filter_expr,
+        ^^^^^^^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1409, in build_lookup
+    lhs = self.try_transform(lhs, lookup_name)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1458, in try_transform
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted.
+ERROR 2025-12-04 16:43:19,620 myapp dashboard_page Something went wrong: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted. views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 334, in dashboard_page
+    db_sqlite3 = Job_detail.objects.filter(filters)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1503, in build_filter
+    return self._add_q(
+           ~~~~~~~~~~~^
+        filter_expr,
+        ^^^^^^^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1409, in build_lookup
+    lhs = self.try_transform(lhs, lookup_name)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1458, in try_transform
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted.
+ERROR 2025-12-04 16:43:21,519 myapp dashboard_page Something went wrong: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted. views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 334, in dashboard_page
+    db_sqlite3 = Job_detail.objects.filter(filters)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1503, in build_filter
+    return self._add_q(
+           ~~~~~~~~~~~^
+        filter_expr,
+        ^^^^^^^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1409, in build_lookup
+    lhs = self.try_transform(lhs, lookup_name)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1458, in try_transform
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted.
+ERROR 2025-12-04 16:43:43,569 myapp dashboard_page Something went wrong: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted. views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 334, in dashboard_page
+    db_sqlite3 = Job_detail.objects.filter(filters)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1503, in build_filter
+    return self._add_q(
+           ~~~~~~~~~~~^
+        filter_expr,
+        ^^^^^^^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1409, in build_lookup
+    lhs = self.try_transform(lhs, lookup_name)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1458, in try_transform
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted.
+ERROR 2025-12-04 16:46:31,120 myapp dashboard_page Something went wrong: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted. views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 334, in dashboard_page
+    db_sqlite3 = Job_detail.objects.filter(filters)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1493, in filter
+    return self._filter_or_exclude(False, args, kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1511, in _filter_or_exclude
+    clone._filter_or_exclude_inplace(negate, args, kwargs)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1518, in _filter_or_exclude_inplace
+    self._query.add_q(Q(*args, **kwargs))
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1646, in add_q
+    clause, _ = self._add_q(q_object, can_reuse)
+                ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1503, in build_filter
+    return self._add_q(
+           ~~~~~~~~~~~^
+        filter_expr,
+        ^^^^^^^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1678, in _add_q
+    child_clause, needed_inner = self.build_filter(
+                                 ~~~~~~~~~~~~~~~~~^
+        child,
+        ^^^^^^
+    ...<7 lines>...
+        update_join_types=update_join_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1588, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1409, in build_lookup
+    lhs = self.try_transform(lhs, lookup_name)
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1458, in try_transform
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Unsupported lookup 'icontains' for ForeignKey or join on the field not permitted.
+ERROR 2025-12-04 17:28:45,120 myapp dashboard_page Something went wrong: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 364, in dashboard_page
+    db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell
+ERROR 2025-12-04 17:28:46,086 myapp dashboard_page Something went wrong: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 364, in dashboard_page
+    db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell
+ERROR 2025-12-04 17:33:16,945 myapp dashboard_page Something went wrong: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 364, in dashboard_page
+    db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell
+ERROR 2025-12-04 17:33:17,703 myapp dashboard_page Something went wrong: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 364, in dashboard_page
+    db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell
+ERROR 2025-12-04 17:33:18,167 myapp dashboard_page Something went wrong: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 364, in dashboard_page
+    db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell
+ERROR 2025-12-04 17:33:18,381 myapp dashboard_page Something went wrong: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 364, in dashboard_page
+    db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell
+ERROR 2025-12-04 17:33:18,696 myapp dashboard_page Something went wrong: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 364, in dashboard_page
+    db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell
+ERROR 2025-12-04 17:33:19,007 myapp dashboard_page Something went wrong: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 364, in dashboard_page
+    db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\query.py", line 1722, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 2291, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Nirmal\venv\Lib\site-packages\django\db\models\sql\query.py", line 1805, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'company_name' into field. Choices are: bill_no, correction, created_at, cylinder_bill_no, cylinder_date, cylinder_made_in, cylinder_size, date, id, image, job_history, job_name, job_status, job_type, noc, party_details, party_details_id, pouch_combination, pouch_open_size, pouch_size, prpc_purchase, prpc_sell
+ERROR 2025-12-04 18:51:16,468 myapp update_job History/Job update failed: 'Job_detail' object has no attribute 'company_name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 692, in update_job
+    old_value = getattr(old_job, field)
+AttributeError: 'Job_detail' object has no attribute 'company_name'
+ERROR 2025-12-04 18:51:25,972 myapp update_job History/Job update failed: 'Job_detail' object has no attribute 'company_name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 692, in update_job
+    old_value = getattr(old_job, field)
+AttributeError: 'Job_detail' object has no attribute 'company_name'
+ERROR 2025-12-04 18:52:01,187 myapp update_job History/Job update failed: 'Job_detail' object has no attribute 'company_name' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 692, in update_job
+    old_value = getattr(old_job, field)
+AttributeError: 'Job_detail' object has no attribute 'company_name'
+ERROR 2025-12-04 18:53:39,717 myapp update_job Something went wrong: 'Job_detail' object has no attribute 'folder_url' views.py
+Traceback (most recent call last):
+  File "D:\Nirmal\app\views.py", line 661, in update_job
+    folder_id = get_data.folder_url
+                ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Job_detail' object has no attribute 'folder_url'

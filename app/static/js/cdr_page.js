@@ -191,7 +191,6 @@ function printJobDetails(btn) {
     const company_email = btn.dataset.company_email || "N/A";
     const date = btn.dataset.date || "N/A";
     const correction = btn.dataset.correction || "N/A";
-    const folder_url = btn.dataset.folder_url || "#";
 
     // Create iframe for silent printing
     const iframe = document.createElement("iframe");

@@ -645,7 +645,7 @@
                                                                     data-company_name="{{ i.party_details.party_name }}"
                                                                     data-company_email="{{ i.party_email_used.email }}"
                                                                     data-correction="{{ i.cdr_corrections }}"
-                                                                    data-folder_url="{{ i.file_url }}">Print</button>
+                                                                    >Print</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -744,27 +744,26 @@ $("#company_name").change(function () {
             data: { company_name: companyName },
             success: function (data) {
           
+                // Clear and reset Job Name dropdown
                 $("#job_name")
                     .empty()
                     .append('<option value="">Select Job</option>');
                 $("#job_name").append('<option value="others">Other</option>');
                 
-                    
-             
+                // Clear and reset Company Email dropdown    
                 $("#company_email")
                     .empty()
                     .append('<option value="">Select Company Email</option>');
                 $("#company_email").append('<option value="other">Other</option>');
                 
-
-                $("#party_contact")
+                // Clear and reset Party Contact dropdown
+                $("#party_contact_used")
                     .empty()
-                    .append('<option value="">Select Company Contact</option>');
-                $("#party_contact").append('<option value="others">Other</option>');
+                    .append('<option value="">Select Contact Number</option>');
+                $("#party_contact_used").append('<option value="others">Other</option>');
 
-
+                // Populate Party Contact dropdown
                 if (data.contact && data.contact.length > 0) {
-                    
                     $.each(data.contact, function (index, contact) {
                         $("#party_contact_used").append(
                             '<option value="' + contact.party_contacts__party_number + '">' +
@@ -772,39 +771,45 @@ $("#company_name").change(function () {
                             "</option>"
                         );
                     });
-                } else {
-                    $("#party_contact").empty().append('<option value="others">Other</option>');
                 }
 
-           
+                // Populate Company Email dropdown
                 if (data.email && data.email.length > 0) {
-              
                     $.each(data.email, function (index, email) {
                         $("#company_email").append(
-                            '<option value="' + email.party_emails__email + '">' + email.party_emails__email + "</option>"
+                            '<option value="' + email.party_emails__email + '">' + 
+                            email.party_emails__email + 
+                            "</option>"
                         );
                     });
-                } else {
-                    $("#company_email").append('<option value="other">Other</option>');
                 }
                 
+                // Populate Job Name dropdown
                 $.each(data.jobs, function (index, job) {
                     $("#job_name").append(
-                        '<option value="' + job.job_name + '">' + job.job_name + "</option>"
+                        '<option value="' + job.job_name + '">' + 
+                        job.job_name + 
+                        "</option>"
                     );
                 });
             },
         });
     } else {
-     
-        $("#job_name").empty().append('<option value="">Select Job</option>');
-        $("#job_name").append('<option value="others">Other</option>');
+        // Reset all dropdowns when no company is selected
+        $("#job_name")
+            .empty()
+            .append('<option value="">Select Job</option>')
+            .append('<option value="others">Other</option>');
 
-    
         $("#company_email")
             .empty()
-            .append('<option value="">Select Company Email</option>');
-        $("#company_email").append('<option value="other">Other</option>');
+            .append('<option value="">Select Company Email</option>')
+            .append('<option value="other">Other</option>');
+            
+        $("#party_contact_used")
+            .empty()
+            .append('<option value="">Select Contact Number</option>')
+            .append('<option value="others">Other</option>');
     }
 });
     </script>

@@ -61,7 +61,7 @@
                             <div class="row align-items-center">
                                 <div class="col col-stats ms-3 ms-sm-0">
                                     <div class="numbers">
-                                        <p class="card-category">Total Company</p>
+                                        <p class="card-category">Total Party</p>
                                         <h4 class="card-title">{{ count_of_company }}</h4>
                                     </div>
                                 </div>
@@ -137,22 +137,22 @@
 
                                         <!-- Company Name -->
                                         <div class="col-12 col-md-auto" style="min-width: 220px;">
-                                            <label for="q" class="form-label mb-1 fw-bold">Company Search</label>
+                                            <label for="q" class="form-label mb-1 fw-bold">Party name Search</label>
                                             <select class="form-select form-control"
                                                     name="q"
                                                     id="q">
                                                 {% if request.GET.q %}
                                                     <!-- Show the selected value as first option -->
                                                     <option value="{{ request.GET.q }}">{{ request.GET.q }}</option>
-                                                    <option value="">All Companies</option>
+                                                
                                                 {% else %}
-                                                    <option value="">Select Company Name</option>
+                                                    <option value="">Select Party Name</option>
                                                 {% endif %}
 
                                                 {% for company in company_name %}
-                                                    {% if company.company_name != request.GET.q %}
-                                                        <option value="{{ company.company_name }}">
-                                                            {{ company.company_name }}
+                                                    {% if company.party_name != request.GET.q %}
+                                                        <option value="{{ company.party_name }}">
+                                                            {{ company.party_name }}
                                                         </option>
                                                     {% endif %}
                                                 {% endfor %}
@@ -224,7 +224,7 @@
                                             </th>
                                             <th scope="col">Job Type</th>
                                             <th scope="col">
-                                                <a href="?company_name_sorting={% if request.GET.company_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.q }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Company Name</a>
+                                                <a href="?company_name_sorting={% if request.GET.company_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.q }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Party Name</a>
                                             </th>
                                             <th scope="col">Noc(No of Colors)</th>
                                             <th scope="col">Rate/Cylinder Purchase</th>
@@ -261,7 +261,7 @@
                                                         <td class="text-truncate">{{ i.bill_no }}</td>
                                                         <td class="text-truncate">{{ i.job_name }}</td>
                                                         <td class="text-truncate">{{ i.job_type }}</td>
-                                                        <td class="text-truncate">{{ i.company_name }}</td>
+                                                        <td class="text-truncate">{{ i.party_details.party_name }}</td>
                                                         <td class="text-truncate">{{ i.noc }}</td>
                                                         <td class="text-truncate">₹ {{ i.prpc_purchase|indian_currency_format }}</td>
                                                         <td class="text-truncate">₹ {{ i.prpc_sell|indian_currency_format }}</td>
@@ -288,11 +288,7 @@
                                                             </td>
                                                         {% endif %}
                                                         <!-- Folder/Images Column -->
-                                                        {% if i.folder_url %}
-                                                            <td class="text-truncate">
-                                                                <a class="icon-link" href="{{ i.folder_url }}">View Folder</a>
-                                                            </td>
-                                                        {% else %}
+                                                
                                                             <td class="text-truncate">
                                                                 <div id="carousel-{{ i.id }}"
                                                                     class="carousel slide"
@@ -325,7 +321,7 @@
                                                                     </button>
                                                                 </div>
                                                             </td>
-                                                        {% endif %}
+                                                   
                                                         <!-- Job Status Column -->
                                                         <td class="text-truncate sticky-right">
                                                             {% if i.job_status == 'In Progress' %}
@@ -494,7 +490,7 @@
                                                                             </div>
                                                                             <div class="col-md-4 mb-3">
                                                                                 <p>
-                                                                                    <strong>Company Name:</strong> {{ i.company_name }}
+                                                                                    <strong>Party Name:</strong> {{ i.party_details.party_name }}
                                                                                 </p>
                                                                                 <p>
                                                                                     <strong>No. of Colors (NOC):</strong> {{ i.noc }}
@@ -555,7 +551,7 @@
                                                                             data-id="{{ i.id }}"
                                                                             data-job_name="{{ i.job_name }}"
                                                                             data-job_bill_no="{{ i.bill_no }}"
-                                                                            data-company_name="{{ i.company_name }}"
+                                                                            data-company_name="{{ i.party_details.party_name }}"
                                                                             data-prpc_purchase="{{ i.prpc_purchase }}"
                                                                             data-prpc_sell="{{ i.prpc_sell }}"
                                                                             data-cylinder_size="{{ i.cylinder_size }}"
@@ -568,7 +564,7 @@
                                                                             data-correction="{{ i.correction }}"
                                                                             data-job_status="{{ i.job_status }}"
                                                                             data-noc = "{{i.noc }}"
-                                                                            data-folder_url="{{ i.folder_url }}">
+                                                                       >
                                                                         Print
                                                                     </button>
                                                                     <button type="button"
@@ -640,7 +636,7 @@
                                                                         </div>
                                                                         <div class="row mb-3">
                                                                             <div class="col-md-6">
-                                                                                <label class="form-label fw-bold">Company Name</label>
+                                                                                <label class="form-label fw-bold">Party Name</label>
                                                                                 <div class="form-check">
                                                                                     <input class="form-check-input"
                                                                                         type="checkbox"
@@ -652,7 +648,7 @@
                                                                             </div>
                                                                             <div class="col-md-6">
                                                                                 <label class="form-label fw-bold">
-                                                                                    Company Email Address <span class="text-danger">*</span>
+                                                                                    Party Email Address <span class="text-danger">*</span>
                                                                                 </label>
                                                                                 <input type="email"
                                                                                     class="form-control"
@@ -887,14 +883,14 @@
                                                                                     required>
                                                                                 <div class="invalid-feedback" id="event_name_error">Please provide an event Bill No.</div>
                                                                             </div>
-                                                                            <!-- Company Name -->
+                                                                            <!-- Party Name -->
                                                                             <div class="col-md-6">
-                                                                                <label for="company_name" class="form-label fw-bold">Company Name</label>
+                                                                                <label for="company_name" class="form-label fw-bold">Party Name</label>
                                                                                 <input type="text"
                                                                                     id="company_name"
                                                                                     class="form-control"
                                                                                     name="company_name"
-                                                                                    value="{{ i.company_name }}"
+                                                                                    value="{{ i.party_details.party_name }}"
                                                                                     readonly>
                                                                             </div>
                                                                             <!-- Job Type -->
@@ -1112,7 +1108,7 @@
                             </div>
                         </div>
                     </div>
-                    {% if venues.paginator.count > 10 %}
+                    {% if venues.paginator.num_pages > 1 %}
                         <nav aria-label="Page navigation example">
                             <div class="pagination-info">Page {{ venues.number }} of {{ venues.paginator.num_pages }}</div>
                             <ul class="pagination justify-content-end">

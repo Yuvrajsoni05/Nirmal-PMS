@@ -1,0 +1,93 @@
+body {
+    background: #0a1c33; /* Updated dark background */
+    font-family: "Poppins", sans-serif;
+    color: #fff;
+}
+
+.login-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.login-left {
+    width: 50%;
+    background: #0d2544; /* Slightly brighter than body */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+}
+
+.login-box {
+    width: 100%;
+    max-width: 400px;
+}
+
+h2 {
+    color: #fff;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #aab8c5; /* Light secondary text */
+}
+
+.form-control {
+    background: #0a1c33;
+    border: 1px solid #1f3555; /* Border with blue tone */
+    color: #fff;
+}
+
+.form-control:focus {
+    border-color: #f28a30; /* Orange tone */
+    box-shadow: none;
+}
+
+.btn-primary {
+    background: linear-gradient(
+        to right,
+        #f9c00c,
+        #f2541b
+    ); /* Button in gradient */
+    border: none;
+    width: 100%;
+    padding: 10px;
+    font-weight: 600;
+    color: #fff;
+}
+
+.login-right {
+    width: 50%;
+    background: url("{% static 'assets/img/grid-01.svg' %}"), #0a1c33;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.login-logo {
+    max-width: 200px;
+    width: 100%;
+    height: auto;
+}
+
+.toast-container {
+    top: 1.5rem !important;
+    max-width: 400px;
+}
+
+.toast {
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.toast-body {
+    font-size: 0.95rem;
+}
+
+.text-center img {
+    max-width: 150px;
+    height: auto;
+}
