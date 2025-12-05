@@ -1,79 +1,75 @@
 {% extends "Base/base.html" %}
 {% load custom_tags %}
-{% comment %} {% block title %}
-    Company New Page
-{% endblock title %} {% endcomment %}
 {% load static %}
+
 {% block styles %}
     <style>
+        .nexticon {
+            position: absolute;
+            right: -20px;
+            width: 20px;
+            border-radius: 20px;
+            color: #000000ff;
+        }
 
-.nexticon {
-    position: absolute;
-    right: -20px;
-   
-    width: 20px;
-    border-radius: 20px;
-    color: #000000ff;
-}
-.previcon {
-    position: absolute;
-    left: -20px;
-    
-    width: 20px;
-    border-radius: 20px;
-    color: #000000ff;
-}
+        .previcon {
+            position: absolute;
+            left: -20px;
+            width: 20px;
+            border-radius: 20px;
+            color: #000000ff;
+        }
     </style>
 {% endblock styles %}
+
 {% block main_block %}
     <div class="container-fluid py-4">
+    <!-- Upload CDR Form Section -->
         <div class="row justify-content-center">
             <div class="col-11">
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <h3 class="fw-bold mb-0">Upload CDR</h3>
                 </div>
-                <div class="card shadow col-12 col-xl-12 col-xxl-12">
+
+                <div class="card shadow col-12">
                     <div class="card-header bg-primary text-white">
                         <h5 class="mb-0">
                             <i class="bi bi-plus-circle me-2"></i>Upload CDR File
                         </h5>
                     </div>
-                   
-                    <div class="card-body">
-                        <form action="{% url 'new_cdr_upload' %}"
-                            id="cdr_form"
-                            method="post"
-                            autocomplete="off"
-                            enctype="multipart/form-data"
-                            class="need-validation">
 
+                    <div class="card-body">
+                        <form action="{% url 'new_cdr_upload' %}" id="cdr_form" method="post"
+                              autocomplete="off" enctype="multipart/form-data" class="need-validation">
                             {% csrf_token %}
 
-                            <!-- Row 1 -->
+                        <!-- Row 1: Party Name, Job Name, Party Email -->
                             <div class="row mb-3">
-
-                                <!-- Company Name -->
+                            <!-- Party Name -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-dark">Party Name<span class="text-danger">*</span></label>
-
+                                    <label class="form-label fw-semibold text-dark">
+                                        Party Name<span class="text-danger">*</span>
+                                    </label>
                                     <select id="company_name" name="company_name" class="form-select form-control">
                                         <option value="" selected>Select Party Name</option>
                                         {% for party in party_names %}
-                                                <option value="{{ party.party_name }}">{{ party.party_name }}</option>
+                                            <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                                         {% endfor %}
                                         <option value="others">Other</option>
                                     </select>
-
                                     <input type="text" id="new_company_name" name="new_company_name"
-                                        class="form-control mt-2" placeholder="Enter New Party Name" style="display:none;">
-
-                                    <div class="invalid-feedback" id="company_name_error">Please provide a Party Name.</div>
+                                           class="form-control mt-2" placeholder="Enter New Party Name"
+                                           style="display:none;">
+                                    <div class="invalid-feedback" id="company_name_error">
+                                        Please provide a Party Name.
+                                    </div>
                                 </div>
 
-                                <!-- Job Name -->
+                            <!-- Job Name -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-dark">Job Name <span class="text-danger">*</span></label>
-
+                                    <label class="form-label fw-semibold text-dark">
+                                        Job Name<span class="text-danger">*</span>
+                                    </label>
                                     <select id="job_name" name="job_name" class="form-select form-control">
                                         <option value="">Select Job...</option>
                                         {% for j in cdr_job_names %}
@@ -81,17 +77,19 @@
                                         {% endfor %}
                                         <option value="others">Other</option>
                                     </select>
-
                                     <input type="text" id="new_job_name" name="new_job_name"
-                                        class="form-control mt-2" placeholder="Enter New Job Name" style="display:none;">
-
-                                    <div class="invalid-feedback" id="job_name_error">Please provide Job Name.</div>
+                                           class="form-control mt-2" placeholder="Enter New Job Name"
+                                           style="display:none;">
+                                    <div class="invalid-feedback" id="job_name_error">
+                                        Please provide Job Name.
+                                    </div>
                                 </div>
 
-                                <!-- Company Email -->
+                            <!-- Party Email -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-dark">Party Email <span class="text-danger">*</span></label>
-
+                                    <label class="form-label fw-semibold text-dark">
+                                        Party Email<span class="text-danger">*</span>
+                                    </label>
                                     <select id="company_email" name="company_email" class="form-select form-control">
                                         <option value="" selected>Select Company Email</option>
                                         {% for email in cdr_email %}
@@ -99,72 +97,74 @@
                                         {% endfor %}
                                         <option value="other">Other</option>
                                     </select>
-
                                     <input type="email" id="new_company_email" name="new_company_email"
-                                        class="form-control mt-2" placeholder="Enter Email Address" style="display:none;">
-
-                                    <div class="invalid-feedback" id="company_email_error">Please provide a valid email address.</div>
+                                           class="form-control mt-2" placeholder="Enter Email Address"
+                                           style="display:none;">
+                                    <div class="invalid-feedback" id="company_email_error">
+                                        Please provide a valid email address.
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Row 2 -->
+                        <!-- Row 2: Party Contact, Upload Date, CDR File, Correction -->
                             <div class="row mb-3">
-
-                                <!-- Company Contact -->
+                            <!-- Party Contact -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold text-dark">Party Contact <span class="text-danger">*</span></label>
-                                    <select id="party_contact_used" name="party_contact_used" class="form-select form-control">
+                                    <label class="form-label fw-semibold text-dark">
+                                        Party Contact<span class="text-danger">*</span>
+                                    </label>
+                                    <select id="party_contact_used" name="party_contact_used"
+                                            class="form-select form-control">
                                         <option value="" selected>Select Contact Number</option>
-                                        
                                         <option value="others">Other</option>
                                     </select>
-                                        
                                     <input type="number" id="new_party_contact" name="new_party_contact"
-                                        class="form-control mt-2" placeholder="Enter Contact Number"
-                                        maxlength="15" style="display:none;">
-                                    <div class="invalid-feedback" id="party_contact_error">Please provide a valid contact number.</div>
+                                           class="form-control mt-2" placeholder="Enter Contact Number"
+                                           maxlength="15" style="display:none;">
+                                    <div class="invalid-feedback" id="party_contact_error">
+                                        Please provide a valid contact number.
+                                    </div>
                                 </div>
 
-                                <!-- Upload Date -->
+                            <!-- CDR Upload Date -->
                                 <div class="col-md-2">
-                                    <label class="form-label fw-semibold text-dark">CDR Upload Date <span class="text-danger">*</span></label>
-
+                                    <label class="form-label fw-semibold text-dark">
+                                        CDR Upload Date<span class="text-danger">*</span>
+                                    </label>
                                     <input type="date" id="cdr_upload_date" name="cdr_upload_date"
-                                        value="{% now 'Y-m-d' %}" class="form-control">
-
-                                    <div class="invalid-feedback" id="cdr_upload_date_error">Please provide a date.</div>
+                                           value="{% now 'Y-m-d' %}" class="form-control">
+                                    <div class="invalid-feedback" id="cdr_upload_date_error">
+                                        Please provide a date.
+                                    </div>
                                 </div>
 
-                                <!-- CDR File Upload -->
+                            <!-- CDR File Upload -->
                                 <div class="col-md-3">
-                                    <label class="form-label fw-semibold text-dark">Upload CDR File <span class="text-danger">*</span></label>
-
-                                    <input type="file" id="cdr_files" name="cdr_files"
-                                        class="form-control"
-                                        multiple
-                                        accept=".jpeg,.png,.jpg,.ai , .cdr">
-
-                                    <div class="invalid-feedback" id="cdr_files_error">Please upload CDR files.</div>
+                                    <label class="form-label fw-semibold text-dark">
+                                        Upload CDR File<span class="text-danger">*</span>
+                                    </label>
+                                    <input type="file" id="cdr_files" name="cdr_files" class="form-control"
+                                           multiple accept=".jpeg,.png,.jpg,.ai,.cdr">
+                                    <div class="invalid-feedback" id="cdr_files_error">
+                                        Please upload CDR files.
+                                    </div>
                                 </div>
 
-                                <!-- Correction -->
+                            <!-- CDR Correction -->
                                 <div class="col-md-3">
                                     <label class="form-label fw-semibold text-dark">CDR Correction</label>
                                     <input type="text" id="cdr_corrections" name="cdr_corrections"
-                                        class="form-control" placeholder="Enter CDR Corrections">
+                                           class="form-control" placeholder="Enter CDR Corrections">
                                 </div>
-
                             </div>
 
-                            <!-- Buttons -->
+                        <!-- Form Action Buttons -->
                             <div class="d-flex justify-content-end gap-2 border-top pt-3">
-
                                 <a href="{% url 'company_add_page' %}">
                                     <button type="reset" class="btn btn-outline-secondary">
                                         <i class="bi bi-arrow-clockwise me-1"></i>Reset
                                     </button>
                                 </a>
-
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-check-circle me-1"></i>Create
                                 </button>
@@ -174,188 +174,203 @@
                 </div>
             </div>
         </div>
+
+    <!-- CDR Details Table Section -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-round">
+                <!-- Card Header with Search Filters -->
                     <div class="card-header">
                         <div class="card-head-row card-tools-still-right">
                             <div class="card-title">CDR Details</div>
+
                             <div class="card-tools">
-                                <form method="get" class="row gx-2 gy-2 align-items-end" action="{% url 'company_add_page' %}">
+                                <form method="get" class="row gx-2 gy-2 align-items-end"
+                                      action="{% url 'company_add_page' %}">
+                                <!-- Start Date -->
                                     <div class="col-auto">
                                         <label for="date" class="form-label fw-bold mb-0 small">Start Date</label>
-                                        <input type="date"
-                                               class="form-control form-control "
-                                               id="date"
-                                               name="date"
+                                        <input type="date" class="form-control" id="date" name="date"
                                                value="{{ request.GET.date }}">
                                     </div>
+
+                                <!-- End Date -->
                                     <div class="col-auto">
                                         <label for="end_date" class="form-label fw-bold mb-0 small">End Date</label>
-                                        <input type="date"
-                                               class="form-control form-control "
-                                               id="end_date"
-                                               name="end_date"
+                                        <input type="date" class="form-control" id="end_date" name="end_date"
                                                value="{{ request.GET.end_date }}">
                                     </div>
+
+                                <!-- Party Name Filter -->
                                     <div class="col-auto">
                                         <label for="search" class="form-label mb-0 fw-bold d-block">Party Name</label>
                                         <select id="search" name="search" class="form-select form-control">
-                                            <option value="">{% if request.GET.search %}{{ request.GET.search }}{% else %}Select Party Name{% endif %}</option>
+                                            <option value="">
+                                                {% if request.GET.search %}
+                                                    {{ request.GET.search }}
+                                                {% else %}
+                                                    Select Party Name
+                                                {% endif %}
+                                            </option>
                                             {% for party in party_names %}
                                                 <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
+
+                                <!-- Action Buttons -->
                                     <div class="col-auto d-flex align-items-end">
                                         <button type="submit" class="btn btn-primary me-2">
                                             <i class="fa fa-search"></i>&nbsp;Search
                                         </button>
-                                  
                                         <a href="{% url 'company_add_page' %}" class="btn btn-secondary">Reset</a>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
+
+                <!-- Table Body -->
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead class="thead-light">
                                     <tr class="text-nowrap text-center">
                                         <th scope="col">
-                                            <a href="?sorting={% if request.GET.sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Sr No</a>
+                                            <a href="?sorting={% if request.GET.sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                Sr No
+                                            </a>
                                         </th>
                                         <th scope="col">
-                                            <a href="?company_name_sorting={% if request.GET.company_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Party Name</a>
+                                            <a href="?company_name_sorting={% if request.GET.company_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                Party Name
+                                            </a>
                                         </th>
                                         <th scope="col">
-                                            <a href="?job_name_sorting={% if request.GET.job_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Job Name</a>
+                                            <a href="?job_name_sorting={% if request.GET.job_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                Job Name
+                                            </a>
                                         </th>
                                         <th scope="col">Party Email Address</th>
                                         <th scope="col">Party Contact Details</th>
                                         <th scope="col">
-                                            <a href="?date_sorting={% if request.GET.date_sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">CDR Upload Date</a>
+                                            <a href="?date_sorting={% if request.GET.date_sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                CDR Upload Date
+                                            </a>
                                         </th>
-                                        <th scope="col">CDR Image </th>
+                                        <th scope="col">CDR Image</th>
                                         <th scope="col">CDR Corrections</th>
                                         <th scope="col" colspan="3">Actions</th>
                                     </tr>
                                 </thead>
+                                {% if cdr_details %}
+                                
                                 <tbody>
                                     {% for i in cdr_details %}
                                         <tr class="text-nowrap text-center">
+                                    <!-- Serial Number -->
                                             <td data-bs-toggle="modal" data-bs-target="#viewModal{{ i.id }}">
                                                 {{ forloop.counter|add:page_obj.start_index|add:"-1" }}
                                             </td>
+
+                                    <!-- Party Name -->
                                             <td>{{ i.party_details.party_name }}</td>
+
+                                    <!-- Job Name -->
                                             <td title="{{ i.job_name }}">{{ i.job_name }}</td>
+
+                                    <!-- Party Email -->
                                             <td>{{ i.party_email_used.email }}</td>
+
+                                    <!-- Party Contact -->
                                             <td>{{ i.party_contact_used.party_number }}</td>
+
+                                    <!-- CDR Upload Date -->
                                             <td>{{ i.date }}</td>
-                                            {% if i.file_url == none or i.file_url == '' %}
-                                                            <td class="text-truncate">
-                                                                <div id="carousel-{{ i.id }}" class="carousel slide" data-bs-ride="false">
-                                                                    <div class="carousel-inner ">
-                                                                        {% for cdr_image in i.cdr_images.all %}
-                                                                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                                                                <div class="d-flex justify-content-center align-items-center" style="height: 50px">
-                                                                                    <a class="icon-link" href="{{ cdr_image.image.url }}" target="_blank">{{ cdr_image.image.name|filename }}</a>
-                                                                                </div>
-                                                                            </div>
-                                                                        {% endfor %}
+
+                                    <!-- CDR Image/Folder -->
+                                            
+                                                <td class="text-truncate">
+                                                    <div id="carousel-{{ i.id }}" class="carousel slide" data-bs-ride="false">
+                                                        <div class="carousel-inner">
+                                                            {% for cdr_image in i.cdr_images.all %}
+                                                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                                    <div class="d-flex justify-content-center align-items-center"
+                                                                         style="height: 50px">
+                                                                        <a class="icon-link" href="{{ cdr_image.image.url }}"
+                                                                           target="_blank">
+                                                                            {{ cdr_image.image.name|filename }}
+                                                                        </a>
                                                                     </div>
-                                                                    <!-- Controls -->
-                                                                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ i.id }}" data-bs-slide="prev">
-                                                                        <span class="previcon" aria-hidden="false"><i class="fa fa-caret-left" aria-hidden="true"></i></span>
-                                                                    </button>
-                                                                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ i.id }}" data-bs-slide="next">
-                                                                        <span class="nexticon" aria-hidden="true"><i class="fa fa-caret-right" aria-hidden="true"></i></span>
-                                                                    </button>
                                                                 </div>
-                                                            </td>
-                                                        {% else %}
-                                                            <td class="text-truncate">
-                                                    <a class="icon-link" href="{{ i.file_url }}">View Folder</a>
+                                                            {% endfor %}
+                                                        </div>
+
+                                            <!-- Carousel Controls -->
+                                                        <button class="carousel-control-prev" type="button"
+                                                                data-bs-target="#carousel-{{ i.id }}" data-bs-slide="prev">
+                                                            <span class="previcon" aria-hidden="false">
+                                                                <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                                            </span>
+                                                        </button>
+                                                        <button class="carousel-control-next" type="button"
+                                                                data-bs-target="#carousel-{{ i.id }}" data-bs-slide="next">
+                                                            <span class="nexticon" aria-hidden="true">
+                                                                <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                            </span>
+                                                        </button>
+                                                    </div>
                                                 </td>
-                                            {% endif %}
+                                            
 
-
-                                               
+                                    <!-- CDR Corrections -->
                                             {% if i.cdr_corrections %}
-                                                <td class="text-truncate"
-                                                    data-bs-toggle="modal"
+                                                <td class="text-truncate" data-bs-toggle="modal"
                                                     data-bs-target="#event_corrections{{ i.id }}">
                                                     {{ i.cdr_corrections|truncatechars:20 }}
                                                 </td>
                                             {% else %}
                                                 <td>-</td>
                                             {% endif %}
+
+                                    <!-- Action Buttons -->
                                             <td class="text-truncate">
-                                                <form method="post" action="{% url 'delete_cdr' delete_id=i.id %}" class="d-inline" id="delete-form-{{ i.id }}">
-                                                        {% csrf_token %}
-                                                        <button type="button" class="btn btn-outline-danger ms-1" 
-                                                                data-bs-toggle="modal" data-bs-target="#confirmationModal" 
-                                                                data-id="{{ i.id }}">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                                                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                                            </svg>
-                                                        </button>
-                                                    </form>
+                                        <!-- Delete Button -->
+                                                <form method="post" action="{% url 'delete_cdr' delete_id=i.id %}"
+                                                      class="d-inline" id="delete-form-{{ i.id }}">
+                                                    {% csrf_token %}
+                                                    <button type="button" class="btn btn-outline-danger ms-1"
+                                                            data-bs-toggle="modal" data-bs-target="#confirmationModal"
+                                                            data-id="{{ i.id }}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                                             fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
+                                                        </svg>
+                                                    </button>
+                                                </form>
 
-                                                   
-
-                                                    <!-- Modal -->
-                                                    <div class="modal fade" id="confirmationModal" tabindex="-1" 
-                                                    aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
-                                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    Are you sure you want to delete this item? 
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-danger" onclick="submitForm()">Yes</button>
-                                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                                                            
-                                                <button type="button"
-                                                        class="btn btn-sm btn-outline-primary"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#cdrupdate{{ i.id }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                         width="16"
-                                                         height="16"
-                                                         fill="currentColor"
-                                                         class="bi bi-pencil-square"
-                                                         viewBox="0 0 16 16">
-                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                        <!-- Edit Button -->
+                                                <button type="button" class="btn btn-sm btn-outline-primary"
+                                                        data-bs-toggle="modal" data-bs-target="#cdrupdate{{ i.id }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                         fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                                                     </svg>
                                                 </button>
-                                                <button type="button"
-                                                        class="btn btn-sm btn-outline-success"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#emailModal{{ i.id }}">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                         width="16"
-                                                         height="16"
-                                                         fill="currentColor"
-                                                         class="bi bi-envelope"
-                                                         viewBox="0 0 16 16">
-                                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z" />
+
+                                        <!-- Email Button -->
+                                                <button type="button" class="btn btn-sm btn-outline-success"
+                                                        data-bs-toggle="modal" data-bs-target="#emailModal{{ i.id }}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                         fill="currentColor" class="bi bi-envelope" viewBox="0 0 16 16">
+                                                        <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1zm13 2.383-4.708 2.825L15 11.105zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741M1 11.105l4.708-2.897L1 5.383z"/>
                                                     </svg>
                                                 </button>
                                             </td>
-                                            
-                                            <!-- Corrections Modal -->
+
+                                    <!-- Corrections Modal -->
+
                                             <div class="modal fade"
 
                                                  id="event_corrections{{ i.id }}"
@@ -377,307 +392,52 @@
                                                 </div>
                                             </div>
                                             <!-- Update Modal -->
-                                            <div class="modal fade"
-                                                data-bs-backdrop="static"
-                                                id="cdrupdate{{ i.id }}"
-                                                tabindex="-1"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog modal-lg modal-dialog-centered modal-xl">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header bg-light">
-                                                            <h5 class="modal-title">Update CDR</h5>
-                                                            <button type="button"
-                                                                    class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body form-datas">
-                                                            <form method="post"
-                                                                action="{% url 'update_cdr' update_id=i.id %}"
-                                                                class="cdr-form"
-                                                                enctype="multipart/form-data"
-                                                                autocomplete="off">
-                                                                {% csrf_token %}
-                                                                <input type="hidden" value="{{ i.id }}">
-                                                                <div class="row g-4">
-                                                                    <!-- Event Date -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="cdr_upload_date" class="form-label fw-bold">CDR Upload Date</label>
-                                                                        <span style="color:red;">*</span>
-                                                                        <input type="date"
-                                                                            class="form-control"
-                                                                            id="cdr_upload_date"
-                                                                            name="cdr_upload_date"
-                                                                            value="{{ i.date|date:'Y-m-d' }}"
-                                                                            required>
-                                                                        <div class="invalid-feedback" id="cdr_date_error">Please provide an CDR date.</div>
-                                                                    </div>
-                                                                    <!-- Party Name -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="company_name" class="form-label fw-bold">Party Name</label>
-                                                                        <input type="text"
-                                                                            id="company_name"
-                                                                            class="form-control"
-                                                                            name="company_name"
-                                                                            value="{{ i.party_details.party_name }}"
-                                                                            readonly>
-                                                                    </div>
-                                                                    <!-- Party Email -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="company_email" class="form-label fw-bold">Party Email</label>
-                                                                        <input type="text"
-                                                                            id="company_email"
-                                                                            class="form-control"
-                                                                            name="company_email"
-                                                                            value="{{ i.party_email_used.email }}"
-                                                                            required>
-                                                                        <div class="invalid-feedback" id="cdr_email_error">Please provide an email</div>
-                                                                    </div>
-                                                                    <!-- Party Contact -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="party_contact" class="form-label fw-bold">Party Contact</label>
-                                                                        <input type="text"
-                                                                            id="party_contact"
-                                                                            class="form-control"
-                                                                            name="party_number"
-                                                                            value="{{ i.party_contact_used.party_number }}"
-                                                                            required>
-                                                                        <div class="invalid-feedback" id="cdr_contact_error">Please provide a contact number</div>
-                                                                    </div>
-                                                                    <!-- Job Name -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="job_name" class="form-label fw-bold">Job Name</label>
-                                                                        <input type="text"
-                                                                            id="job_name"
-                                                                            class="form-control"
-                                                                            name="job_name"
-                                                                            value="{{ i.job_name }}"
-                                                                            readonly>
-                                                                    </div>
-                                                                    <!-- Upload Images -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="files" class="form-label fw-bold">Upload Images</label>
-                                                                        <input type="file"
-                                                                            class="form-control"
-                                                                            id="files"  
-                                                                            name="files"
-                                                                            multiple
-                                                                            accept=".jpeg,.png,.jpg,.ai , .cdr">
-                                                                    </div>
-                                                                    <!-- CDR Corrections -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="cdr_corrections" class="form-label fw-bold">CDR Corrections</label>
-                                                                        <input type="text"
-                                                                            class="form-control"
-                                                                            id="cdr_corrections"
-                                                                            name="cdr_corrections"
-                                                                            placeholder="Any Corrections...?"
-                                                                            value="{{ i.cdr_corrections }}">
-                                                                    </div>
-                                                                </div>
-                                                                <!-- Form Actions -->
-                                                                <div class="col-12 mt-3">
-                                                                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                                                    <button type="submit"
-                                                                            onclick="return validateUpdateForm(this.form)"
-                                                                            class="btn btn-primary">
-                                                                        Save changes
-                                                                    </button>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                                            {% include 'Includes/cdr_page/update_cdr.html' %}
                                             <!-- Email Modal -->
-                                            <div class="modal fade" data-bs-backdrop="static"
-                                                id="emailModal{{ i.id }}"
-                                                tabindex="-1"
-                                                role="dialog"
-                                                aria-labelledby="emailModalLabel{{ i.id }}"
-                                                aria-hidden="true">
-                                                <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header bg-light">
-                                                            <h5 class="modal-title" id="emailModalLabel{{ i.id }}">Send Mail</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form method="post"
-                                                                action="{% url 'cdr_sendmail_data' %}"
-                                                                enctype="multipart/form-data"
-                                                                autocomplete="off">
-                                                                {% csrf_token %}
-                                                                <div class="row g-3">
-                                                                    <!-- CDR Date -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="date" class="form-label fw-bold">CDR Date</label>
-                                                                        <div class="form-check mb-2">
-                                                                            <input class="form-check-input" type="checkbox" name="cdr_date_check"
-                                                                                value="true" id="cdrDateCheck{{ i.id }}">
-                                                                            <label class="form-check-label" for="cdrDateCheck{{ i.id }}">Enable Date</label>
-                                                                        </div>
-                                                                        <input type="date" class="form-control" id="date" name="date"
-                                                                            value="{{ i.date|date:'Y-m-d' }}">
-                                                                    </div>
-
-                                                                    <!-- Party Name -->
-                                                                    <div class="col-md-6">
-                                                                        <label class="form-label fw-bold">Party Name</label>
-                                                                        <div class="form-check mt-2">
-                                                                            <input class="form-check-input" type="checkbox" id="cdr_company_name{{ i.id }}"
-                                                                                name="cdr_company_name" value="{{ i.party_details.party_nam }}">
-                                                                            <label class="form-check-label" for="cdr_company_name{{ i.id }}">{{ i.party_details.party_name  }}</label>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <!-- Party Email Address -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="cdr_company_address" class="form-label fw-bold">Party Email Address</label>
-                                                                        <input type="email" id="cdr_company_address" name="cdr_company_address"
-                                                                            class="form-control" placeholder="Enter Party Email Address" maxlength="50"
-                                                                            value="{{ i.party_email_used.email }}">
-                                                                    </div>
-
-                                                                    <!-- Job Name -->
-                                                                    <div class="col-md-6">
-                                                                        <label class="form-label fw-bold">Job Name</label>
-                                                                        <div class="form-check mt-2">
-                                                                            <input class="form-check-input" type="checkbox" id="cdr_job_name{{ i.id }}"
-                                                                                name="cdr_job_name" value="{{ i.job_name }}">
-                                                                            <label class="form-check-label" for="cdr_job_name{{ i.id }}">{{ i.job_name }}</label>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <!-- Correction -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="cdr_corrections" class="form-label fw-bold">Correction</label>
-                                                                        <div class="form-check mb-2">
-                                                                            <input class="form-check-input" type="checkbox" name="correction_check"
-                                                                                value="true" id="enableCorrection{{ i.id }}">
-                                                                            <label class="form-check-label" for="enableCorrection{{ i.id }}">Enable Correction</label>
-                                                                        </div>
-                                                                        <input type="text" id="cdr_corrections" name="cdr_corrections"
-                                                                            class="form-control" placeholder="Enter Corrections"
-                                                                            value="{{ i.cdr_corrections }}">
-                                                                    </div>
-
-                                                                    <!-- Attachment -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="attachment" class="form-label fw-bold">Attachment</label>
-                                                                        <input type="file" class="form-control" id="attachment" name="attachment"
-                                                                            accept=".jpeg,.png,.jpg,.ai" multiple>
-                                                                    </div>
-
-                                                                    <!-- Notes -->
-                                                                    <div class="col-md-6">
-                                                                        <label for="notes" class="form-label fw-bold">Note</label>
-                                                                        <input type="text" id="notes" name="notes" class="form-control"
-                                                                            placeholder="Write Notes">
-                                                                    </div>
-
-                                                                    <!-- Action Buttons -->
-                                                                    <div class="col-12 text-end mt-3">
-                                                                        <button type="reset" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
-                                                                        <button type="submit" class="btn btn-primary">Send Mail</button>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                                            {% include 'Includes/cdr_page/send_mail.html' %}
                                             <!-- View Modal -->
-                                            <div class="modal fade"
-                                                 id="viewModal{{ i.id }}"
-                                                 tabindex="-1"
-                                                 role="dialog"
-                                                 aria-labelledby="exampleModalCenterTitle"
-                                                 aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                                                    <div class="modal-content">
-                                                        <!-- Modal Header -->
-                                                        <div class="modal-header bg-primary text-white">
-                                                            <h5 class="modal-title">CDR Details</h5>
-                                                            <button type="button"
-                                                                    class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                        </div>
-                                                        <!-- Modal Body -->
-                                                        <div class="modal-body">
-                                                            <div class="container-fluid">
-                                                                <div class="row">
-                                                                    <!-- Column 1 -->
-                                                                    <div class="col-md-4 mb-3">
-                                                                        <p>
-                                                                            <strong>Date:</strong> {{ i.date }}
-                                                                        </p>
-                                                                   
-                                                                    </div>
-                                                                    <!-- Column 2 -->
-                                                                    <div class="col-md-4 mb-3">
-                                                                        <p>
-                                                                            <strong>Job Name:</strong> {{ i.job_name }}
-                                                                        </p>
-                                                                        <p>
-                                                                            <strong>Job Corrections:</strong> {{ i.cdr_corrections }}
-                                                                        </p>
-                                                                    </div>
-                                                                    <!-- Column 3 -->
-                                                                    <div class="col-md-4 mb-3">
-                                                                        <p>
-                                                                            <strong>Party Name:</strong> {{ i.party_details.party_name }}
-                                                                        </p>
-                                                                        <p>
-                                                                            <strong>Party Email:</strong> {{ i.party_email_used.email }}
-                                                                        </p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <button class="btn btn-secondary"
-                                                                    onclick="printJobDetails(this)"
-                                                                    data-id="{{ i.id }}"
-                                                                    data-job_name="{{ i.job_name }}"
-                                                                    data-date="{{ i.date }}"
-                                                                    data-company_name="{{ i.party_details.party_name }}"
-                                                                    data-company_email="{{ i.party_email_used.email }}"
-                                                                    data-correction="{{ i.cdr_corrections }}"
-                                                                    >Print</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            {% include 'Includes/cdr_page/view.html' %}
                                         </tr>
                                     {% endfor %}
                                 </tbody>
+                                {% else %}
+                                <tr>
+                                    <td colspan="20" class="text-center">No data available</td>
+                                </tr>
+                                {% endif %}
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
+        <!-- Pagination -->
             {% if cdr_details %}
-                <nav aria-label="Page navigation example">
-                    <div class="pagination-info">Page {{ cdr_details.number }} of {{ cdr_details.paginator.num_pages }}</div>
+                <nav aria-label="Page navigation">
+                    <div class="pagination-info">
+                        Page {{ cdr_details.number }} of {{ cdr_details.paginator.num_pages }}
+                    </div>
                     <ul class="pagination justify-content-end">
                         {% if cdr_details.has_previous %}
                             <li class="page-item">
-                                <a class="page-link"
-                                   href="?page={{ cdr_details.previous_page_number }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}">Previous</a>
+                                <a class="page-link" href="?page={{ cdr_details.previous_page_number }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}">
+                                    Previous
+                                </a>
                             </li>
                         {% endif %}
+
                         {% for i in cdr_details.paginator.page_range %}
                             <li class="page-item {% if cdr_details.number == i %}active{% endif %}">
-                                <a class="page-link"
-                                   href="?page={{ i }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}">{{ i }}</a>
+                                <a class="page-link" href="?page={{ i }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}">
+                                    {{ i }}
+                                </a>
                             </li>
                         {% endfor %}
+
                         {% if cdr_details.has_next %}
                             <li class="page-item">
-                                <a class="page-link"
-                                   href="?page={{ cdr_details.next_page_number }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}">Next</a>
+                                <a class="page-link" href="?page={{ cdr_details.next_page_number }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}">
+                                    Next
+                                </a>
                             </li>
                         {% endif %}
                     </ul>
@@ -685,132 +445,28 @@
             {% endif %}
         </div>
     </div>
+
+<!-- Delete Confirmation Modal (Global) -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1"
+         aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this item?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="submitForm()">Yes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock main_block %}
+
 {% block script %}
-    <script src="{% static 'js/cdr_page.js' %}"></script>
-   
-<script>
-let formIdToSubmit;
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    const deleteButtons = document.querySelectorAll('.btn-outline-danger');
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', function () {
-            formIdToSubmit = this.dataset.id;
-        });
-    });
-});
-
-
-function submitForm() {
-    document.getElementById('delete-form-' + formIdToSubmit).submit();
-}
-</script>
-  
-    
-<script>
-function validateUpdateForm(form) {
-    let valid = true;
-    let requiredFields = [
-        form.cdr_upload_date,
-        form.company_email,
-      
-    ];
-    requiredFields.forEach(function(field) {
-        if (field && !field.value.trim()) {
-            field.classList.add('is-invalid');
-            valid = false;
-        } else if(field) {
-            field.classList.remove('is-invalid');
-        }
-    });
-    let errorMsg = form.querySelector('#updateFormError');
-    if (!valid) {
-        if (errorMsg) errorMsg.style.display = 'block';
-        return false;
-    } else {
-        if (errorMsg) errorMsg.style.display = 'none';
-        return true;
-    }
-}
-    </script>
-    <script>
-$("#company_name").change(function () {
-    let companyName = $(this).val();
-    if (companyName) {
-        $.ajax({
-            url: '{% url "cdr_page_ajax" %}',
-            data: { company_name: companyName },
-            success: function (data) {
-          
-                // Clear and reset Job Name dropdown
-                $("#job_name")
-                    .empty()
-                    .append('<option value="">Select Job</option>');
-                $("#job_name").append('<option value="others">Other</option>');
-                
-                // Clear and reset Company Email dropdown    
-                $("#company_email")
-                    .empty()
-                    .append('<option value="">Select Company Email</option>');
-                $("#company_email").append('<option value="other">Other</option>');
-                
-                // Clear and reset Party Contact dropdown
-                $("#party_contact_used")
-                    .empty()
-                    .append('<option value="">Select Contact Number</option>');
-                $("#party_contact_used").append('<option value="others">Other</option>');
-
-                // Populate Party Contact dropdown
-                if (data.contact && data.contact.length > 0) {
-                    $.each(data.contact, function (index, contact) {
-                        $("#party_contact_used").append(
-                            '<option value="' + contact.party_contacts__party_number + '">' +
-                            contact.party_contacts__party_number +
-                            "</option>"
-                        );
-                    });
-                }
-
-                // Populate Company Email dropdown
-                if (data.email && data.email.length > 0) {
-                    $.each(data.email, function (index, email) {
-                        $("#company_email").append(
-                            '<option value="' + email.party_emails__email + '">' + 
-                            email.party_emails__email + 
-                            "</option>"
-                        );
-                    });
-                }
-                
-                // Populate Job Name dropdown
-                $.each(data.jobs, function (index, job) {
-                    $("#job_name").append(
-                        '<option value="' + job.job_name + '">' + 
-                        job.job_name + 
-                        "</option>"
-                    );
-                });
-            },
-        });
-    } else {
-        // Reset all dropdowns when no company is selected
-        $("#job_name")
-            .empty()
-            .append('<option value="">Select Job</option>')
-            .append('<option value="others">Other</option>');
-
-        $("#company_email")
-            .empty()
-            .append('<option value="">Select Company Email</option>')
-            .append('<option value="other">Other</option>');
-            
-        $("#party_contact_used")
-            .empty()
-            .append('<option value="">Select Contact Number</option>')
-            .append('<option value="others">Other</option>');
-    }
-});
-    </script>
+<script src="{% static 'js/cdr_page.js' %}"></script>
 {% endblock script %}

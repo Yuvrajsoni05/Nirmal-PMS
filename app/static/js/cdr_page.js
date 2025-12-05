@@ -430,3 +430,127 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
+let formIdToSubmit;
+
+// Delete Form Handler
+document.addEventListener("DOMContentLoaded", function () {
+    const deleteButtons = document.querySelectorAll(".btn-outline-danger");
+    deleteButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            formIdToSubmit = this.dataset.id;
+        });
+    });
+});
+
+function submitForm() {
+    document.getElementById("delete-form-" + formIdToSubmit).submit();
+}
+
+// Update Form Validation
+function validateUpdateForm(form) {
+    let valid = true;
+    let requiredFields = [form.cdr_upload_date, form.company_email];
+
+    requiredFields.forEach(function (field) {
+        if (field && !field.value.trim()) {
+            field.classList.add("is-invalid");
+            valid = false;
+        } else if (field) {
+            field.classList.remove("is-invalid");
+        }
+    });
+
+    let errorMsg = form.querySelector("#updateFormError");
+    if (!valid) {
+        if (errorMsg) errorMsg.style.display = "block";
+        return false;
+    } else {
+        if (errorMsg) errorMsg.style.display = "none";
+        return true;
+    }
+}
+
+// AJAX: Load Related Data on Company Selection
+$("#company_name").change(function () {
+    let companyName = $(this).val();
+
+    if (companyName) {
+        $.ajax({
+            url: '{% url "cdr_page_ajax" %}',
+            data: { company_name: companyName },
+            success: function (data) {
+                // Reset Job Name dropdown
+                $("#job_name")
+                    .empty()
+                    .append('<option value="">Select Job</option>')
+                    .append('<option value="others">Other</option>');
+
+                // Reset Company Email dropdown
+                $("#company_email")
+                    .empty()
+                    .append('<option value="">Select Company Email</option>')
+                    .append('<option value="other">Other</option>');
+
+                // Reset Party Contact dropdown
+                $("#party_contact_used")
+                    .empty()
+                    .append('<option value="">Select Contact Number</option>')
+                    .append('<option value="others">Other</option>');
+
+                // Populate Party Contact
+                if (data.contact && data.contact.length > 0) {
+                    $.each(data.contact, function (index, contact) {
+                        $("#party_contact_used").append(
+                            '<option value="' +
+                                contact.party_contacts__party_number +
+                                '">' +
+                                contact.party_contacts__party_number +
+                                "</option>"
+                        );
+                    });
+                }
+
+                // Populate Company Email
+                if (data.email && data.email.length > 0) {
+                    $.each(data.email, function (index, email) {
+                        $("#company_email").append(
+                            '<option value="' +
+                                email.party_emails__email +
+                                '">' +
+                                email.party_emails__email +
+                                "</option>"
+                        );
+                    });
+                }
+
+                // Populate Job Names
+                $.each(data.jobs, function (index, job) {
+                    $("#job_name").append(
+                        '<option value="' +
+                            job.job_name +
+                            '">' +
+                            job.job_name +
+                            "</option>"
+                    );
+                });
+            },
+        });
+    } else {
+        // Reset all dropdowns when no company is selected
+        $("#job_name")
+            .empty()
+            .append('<option value="">Select Job</option>')
+            .append('<option value="others">Other</option>');
+
+        $("#company_email")
+            .empty()
+            .append('<option value="">Select Company Email</option>')
+            .append('<option value="other">Other</option>');
+
+        $("#party_contact_used")
+            .empty()
+            .append('<option value="">Select Contact Number</option>')
+            .append('<option value="others">Other</option>');
+    }
+});

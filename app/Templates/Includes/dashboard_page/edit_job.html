@@ -1,0 +1,204 @@
+{% load custom_tags %}
+{% load humanize %}
+
+<div class="modal fade"
+     id="exampleModal{{ i.id }}"
+     tabindex="-1"
+     data-bs-backdrop="static"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-light">
+                <h5 class="modal-title">Edit Job</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="modal-body form-datas">
+                <form method="post"
+                      action="{% url 'update_job' update_id=i.id %}"
+                      id="update_form_id"
+                      enctype="multipart/form-data">
+
+                    {% csrf_token %}
+
+                    <div class="row g-4">
+
+                        <!-- Job Date -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Job Date <span style="color:red;">*</span></label>
+                            <input type="date" class="form-control" name="date"
+                                   value="{{ i.date|date:'Y-m-d' }}" required>
+                            <div class="invalid-feedback">Please provide an event date.</div>
+                        </div>
+
+                        <!-- Bill No -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Bill No <span style="color:red;">*</span></label>
+                            <input type="text" class="form-control" name="bill_no"
+                                   value="{{ i.bill_no }}" required>
+                            <div class="invalid-feedback">Please provide an event Bill No.</div>
+                        </div>
+
+                        <!-- Party Name -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Party Name</label>
+                            <input type="text" class="form-control" name="company_name"
+                                   value="{{ i.party_details.party_name }}" readonly>
+                        </div>
+
+                        <!-- Job Type -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Job Type</label>
+                            <select class="form-select" name="job_type" required>
+                                <option value="{{ i.job_type }}">{{ i.job_type }}</option>
+                                <option value="New Job" {% if i.job_type == "New Job" %}disabled{% endif %}>New Job</option>
+                                <option value="Damage Repair" {% if i.job_type == "Damage Repair" %}disabled{% endif %}>Damage Repair</option>
+                                <option value="Job Work" {% if i.job_type == "Job Work" %}disabled{% endif %}>Job Work</option>
+                            </select>
+                        </div>
+
+                        <!-- Job Name -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Job Name</label>
+                            <input type="text" class="form-control" name="job_name"
+                                   value="{{ i.job_name }}" readonly>
+                        </div>
+
+                        <!-- NOC -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">NOC (No. of Colors)</label>
+                            <textarea class="form-control" name="noc" required>{{ i.noc }}</textarea>
+                        </div>
+
+                        <!-- PRPC Purchase -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">PRPC Purchase (Per Rate Per Cylinder)</label>
+                            <input type="text" class="form-control" name="prpc_purchase"
+                                   onkeyup="formatNumberWithCommas(this)"
+                                   value="{{ i.prpc_purchase|indian_currency_format }}">
+                        </div>
+
+                        <!-- PRPC Sell -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">PRPC Sell (Per Rate Per Cylinder)</label>
+                            <input type="text" class="form-control" name="prpc_sell"
+                                   onkeyup="formatNumberWithCommas(this)"
+                                   value="{{ i.prpc_sell|indian_currency_format }}">
+                        </div>
+
+                        <!-- Cylinder Size -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Cylinder Size</label>
+                            <input type="text" class="form-control" name="cylinder_size"
+                                   value="{{ i.cylinder_size }}" readonly>
+                        </div>
+
+                        <!-- Cylinder Made In -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Cylinder Made In</label>
+                            <select class="form-select" name="cylinder_made_in" required>
+                                <option value="{{ i.cylinder_made_in }}" selected>{{ i.cylinder_made_in }}</option>
+                                {% for r in cylinder_company_names %}
+                                    <option value="{{ r.cylinder_made_in }}"
+                                            {% if r.cylinder_made_in == i.cylinder_made_in %}disabled{% endif %}>
+                                        {{ r.cylinder_made_in }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Cylinder Bill No -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Cylinder Bill No.</label>
+                            <input type="text" class="form-control" name="cylinder_bill_no"
+                                   value="{{ i.cylinder_bill_no }}" required>
+                        </div>
+
+                        <!-- Cylinder Date -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Cylinder Date</label>
+                            <input type="date" class="form-control" name="cylinder_date"
+                                   value="{{ i.cylinder_date|date:'Y-m-d' }}" required>
+                        </div>
+
+                        <!-- Pouch Size -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Pouch Size</label>
+                            <input type="text" class="form-control" name="pouch_size"
+                                   value="{{ i.pouch_size }}" readonly>
+                        </div>
+
+                        <!-- Pouch Open Size -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Pouch Open Size</label>
+                            <input type="text" class="form-control" name="pouch_open_size"
+                                   value="{{ i.pouch_open_size }}" readonly>
+                        </div>
+
+                        <!-- Pouch Combination -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Pouch Combination (thickness)</label>
+                            <div class="d-flex">
+                                {% with pc=i.pouch_combination|split_text %}
+                                    <input type="text" class="form-control" name="pouch_combination1" value="{{ pc.0|cut:' ' }}" readonly>
+                                    <span class="input-group-text fw-bold">+</span>
+
+                                    <input type="text" class="form-control" name="pouch_combination2" value="{{ pc.1|cut:' ' }}" readonly>
+                                    <span class="input-group-text fw-bold">+</span>
+
+                                    <input type="text" class="form-control" name="pouch_combination3" value="{{ pc.2|cut:' ' }}" readonly>
+                                    <span class="input-group-text fw-bold">+</span>
+
+                                    <input type="text" class="form-control" name="pouch_combination4" value="{{ pc.3|cut:' ' }}" readonly>
+                                {% endwith %}
+                            </div>
+                        </div>
+
+                        <!-- Upload Images -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Upload Images</label>
+                            <input type="file" class="form-control" name="files" id="files"
+                                   multiple accept=".jpeg, .png, .jpg, .ai, .cdr">
+                        </div>
+
+                        <!-- Correction -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Correction</label>
+                            <input type="text" class="form-control" name="correction"
+                                   value="{{ i.correction }}">
+                        </div>
+
+                        <!-- Job Status -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Job Status</label>
+                            <select class="form-select" name="job_status">
+                                <option value="In Progress"
+                                    {% if i.job_status == 'In Progress' %}selected{% endif %}
+                                    style="background:#fffaeb; color:#dc6803;">
+                                    In Progress
+                                </option>
+                                <option value="Close Job"
+                                    {% if i.job_status == 'Close Job' %}selected{% endif %}
+                                    style="background:#ecfdf3; color:#039855;">
+                                    Close Job
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="col-12 mt-3">
+                            <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

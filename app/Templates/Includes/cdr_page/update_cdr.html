@@ -1,0 +1,171 @@
+<div
+    class="modal fade"
+    data-bs-backdrop="static"
+    id="cdrupdate{{ i.id }}"
+    tabindex="-1"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title">Update CDR</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body form-datas">
+                <form
+                    method="post"
+                    action="{% url 'update_cdr' update_id=i.id %}"
+                    class="cdr-form"
+                    enctype="multipart/form-data"
+                    autocomplete="off"
+                >
+                    {% csrf_token %}
+                    <input type="hidden" value="{{ i.id }}" />
+                    <div class="row g-4">
+                        <!-- Event Date -->
+                        <div class="col-md-6">
+                            <label
+                                for="cdr_upload_date"
+                                class="form-label fw-bold"
+                                >CDR Upload Date</label
+                            >
+                            <span style="color: red">*</span>
+                            <input
+                                type="date"
+                                class="form-control"
+                                id="cdr_upload_date"
+                                name="cdr_upload_date"
+                                value="{{ i.date|date:'Y-m-d' }}"
+                                required
+                            />
+                            <div class="invalid-feedback" id="cdr_date_error">
+                                Please provide an CDR date.
+                            </div>
+                        </div>
+                        <!-- Party Name -->
+                        <div class="col-md-6">
+                            <label for="company_name" class="form-label fw-bold"
+                                >Party Name</label
+                            >
+                            <input
+                                type="text"
+                                id="company_name"
+                                class="form-control"
+                                name="company_name"
+                                value="{{ i.party_details.party_name }}"
+                                readonly
+                            />
+                        </div>
+                        <!-- Party Email -->
+                        <div class="col-md-6">
+                            <label
+                                for="company_email"
+                                class="form-label fw-bold"
+                                >Party Email</label
+                            >
+                            <input
+                                type="text"
+                                id="company_email"
+                                class="form-control"
+                                name="company_email"
+                                value="{{ i.party_email_used.email }}"
+                                required
+                            />
+                            <div class="invalid-feedback" id="cdr_email_error">
+                                Please provide an email
+                            </div>
+                        </div>
+                        <!-- Party Contact -->
+                        <div class="col-md-6">
+                            <label
+                                for="party_contact"
+                                class="form-label fw-bold"
+                                >Party Contact</label
+                            >
+                            <input
+                                type="text"
+                                id="party_contact"
+                                class="form-control"
+                                name="party_number"
+                                value="{{ i.party_contact_used.party_number }}"
+                                required
+                            />
+                            <div
+                                class="invalid-feedback"
+                                id="cdr_contact_error"
+                            >
+                                Please provide a contact number
+                            </div>
+                        </div>
+                        <!-- Job Name -->
+                        <div class="col-md-6">
+                            <label for="job_name" class="form-label fw-bold"
+                                >Job Name</label
+                            >
+                            <input
+                                type="text"
+                                id="job_name"
+                                class="form-control"
+                                name="job_name"
+                                value="{{ i.job_name }}"
+                                readonly
+                            />
+                        </div>
+                        <!-- Upload Images -->
+                        <div class="col-md-6">
+                            <label for="files" class="form-label fw-bold"
+                                >Upload Images</label
+                            >
+                            <input
+                                type="file"
+                                class="form-control"
+                                id="files"
+                                name="files"
+                                multiple
+                                accept=".jpeg,.png,.jpg,.ai , .cdr"
+                            />
+                        </div>
+                        <!-- CDR Corrections -->
+                        <div class="col-md-6">
+                            <label
+                                for="cdr_corrections"
+                                class="form-label fw-bold"
+                                >CDR Corrections</label
+                            >
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="cdr_corrections"
+                                name="cdr_corrections"
+                                placeholder="Any Corrections...?"
+                                value="{{ i.cdr_corrections }}"
+                            />
+                        </div>
+                    </div>
+                    <!-- Form Actions -->
+                    <div class="col-12 mt-3">
+                        <button
+                            type="reset"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                        <button
+                            type="submit"
+                            onclick="return validateUpdateForm(this.form)"
+                            class="btn btn-primary"
+                        >
+                            Save changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

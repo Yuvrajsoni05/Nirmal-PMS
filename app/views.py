@@ -476,11 +476,7 @@ def add_job(request):
             cylinder_bill_no = request.POST.getlist("cylinder_bill_no[]")
             pouch_size = request.POST.getlist("pouch_size[]")
             pouch_open_size = request.POST.getlist("pouch_open_size[]")
- 
             pouch_combination = request.POST.getlist('pouch_combination[]')
-           
-           
-            
             correction = request.POST.get("correction")
             job_status = request.POST.get("job_status")
         
@@ -489,7 +485,7 @@ def add_job(request):
             required_filed = {
                 "Date": date,
                 "Bill no": bill_no,
-                "Company_Name": company_name,
+                "Party Name": company_name,
                 "job name": job_name,
                 "job type": job_type,
                 "Noc": noc,
@@ -525,13 +521,6 @@ def add_job(request):
                             cylinder_made_in=value
                         )
           
-            # if company_name:
-            #     if Party.objects.filter(party_name__iexact=company_name).exists():
-            #         pass
-            #     else:
-            #         Party.objects.create(
-            #             party_name=company_name
-            #         )
                     
             party_details, _ = Party.objects.get_or_create(
                 party_name=company_name.strip() if company_name.strip() else "None"
@@ -1829,8 +1818,6 @@ def ProformaInvoicePageAJAX(request):
     
     if company:
         job_qs = Job_detail.objects.filter(party_details__party_name=company).values("job_name").distinct()
-
-       
         job_qs = job_qs.union(
             ProformaJob.objects.filter(proforma_invoice__party_details__party_name=company)
             .values("job_name").distinct().union(CDRDetail.objects.filter(

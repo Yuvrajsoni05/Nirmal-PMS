@@ -1,0 +1,269 @@
+<div
+    class="modal fade"
+    id="emailModal{{ i.id }}"
+    tabindex="-1"
+    data-bs-backdrop="static"
+    role="dialog"
+    aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true"
+>
+    <div
+        class="modal-dialog modal-lg modal-dialog-centered modal-xl"
+        role="document"
+    >
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    Send Mail
+                </h5>
+                <button
+                    type="button"
+                    class="close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                >
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="card-body">
+                <form
+                    method="post"
+                    action="{% url 'send_mail' %}"
+                    enctype="multipart/form-data"
+                >
+                    {% csrf_token %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Job Date</label>
+                            <input
+                                class="form-check-input"
+                                type="checkbox"
+                                name="date_check"
+                                value="true"
+                            />
+                            &nbsp; Enable Date
+                            <div class="form-check">
+                                <input
+                                    class="form-control"
+                                    type="date"
+                                    name="date"
+                                    value="{{ i.date|date:'Y-m-d' }}"
+                                    id="date"
+                                />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Bill No.</label>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="bill_no"
+                                    value="{{ i.bill_no }}"
+                                    id="bill_no"
+                                />
+                                <label class="form-check-label" for="bill_no"
+                                    >{{ i.bill_no }}</label
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Party Name</label>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="company_name"
+                                    value="{{ i.company_name }}"
+                                    id="company_name"
+                                />
+                                <label
+                                    class="form-check-label"
+                                    for="company_name"
+                                    >{{ i.company_name }}</label
+                                >
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">
+                                Party Email Address
+                                <span class="text-danger">*</span>
+                            </label>
+                            <input
+                                type="email"
+                                class="form-control"
+                                name="company_address"
+                                placeholder="Enter email address"
+                                maxlength="50"
+                                required
+                            />
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Job Name</label>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="job_name"
+                                    value="{{ i.job_name }}"
+                                    id="job_name"
+                                />
+                                <label class="form-check-label" for="job_name"
+                                    >{{ i.job_name }}</label
+                                >
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold"
+                                >NOC (No. of Colors)</label
+                            >
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="noc"
+                                    value="{{ i.noc }}"
+                                    id="noc"
+                                />
+                                <label class="form-check-label" for="noc"
+                                    >{{ i.noc }}</label
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold"
+                                >PRPC Sales (Per Rate Per Cylinder)</label
+                            >
+                            <input
+                                type="checkbox"
+                                name="prpc_sell_check"
+                                value="true"
+                            />
+                            <label for="enablePRPC">Enable PRPC Sales</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="prpc_sell"
+                                value="{{ i.prpc_sell }}"
+                                onkeyup="formatNumberWithCommas(this)"
+                                id="prpcSellInput"
+                            />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold"
+                                >Cylinder Size</label
+                            >
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="cylinder_size"
+                                    value="{{ i.cylinder_size }}"
+                                    id="cylinder_size"
+                                />
+                                <label
+                                    class="form-check-label"
+                                    for="cylinder_size"
+                                    >{{ i.cylinder_size }}</label
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Pouch Size</label>
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="pouch_size"
+                                    value="{{ i.pouch_size }}"
+                                    id="pouch_size"
+                                />
+                                <label class="form-check-label" for="pouch_size"
+                                    >{{ i.pouch_size }}</label
+                                >
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold"
+                                >Pouch Open Size</label
+                            >
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="pouch_open_size"
+                                    value="{{ i.pouch_open_size }}"
+                                    id="pouch_open_size"
+                                />
+                                <label
+                                    class="form-check-label"
+                                    for="pouch_open_size"
+                                    >{{ i.pouch_open_size }}</label
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Correction</label>
+                            <input
+                                type="checkbox"
+                                name="correction_check"
+                                value="true"
+                                class="form-check-input"
+                            />
+                            <label for="enablePRPC">Enable Correction</label>
+                            <input
+                                class="form-control"
+                                type="textarea"
+                                name="correction"
+                                value="{{ i.correction }}"
+                                id="correction"
+                            />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Attachment</label>
+                            <input
+                                type="file"
+                                class="form-control"
+                                name="attachment"
+                                accept=".jpeg,.png,.jpg,.ai ,.cdr,"
+                                multiple
+                            />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Note</label>
+                            <input
+                                type="textarea"
+                                id="notes"
+                                class="form-control"
+                                name="notes"
+                                placeholder="Write Note"
+                            />
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2 pt-3">
+                        <button
+                            type="reset"
+                            class="btn btn-secondary"
+                            data-bs-dismiss="modal"
+                        >
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Send Mail
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

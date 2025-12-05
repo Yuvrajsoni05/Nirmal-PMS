@@ -1,972 +1,972 @@
-{% extends "base/base.html" %} {% load static %} 
+{% extends "base/base.html" %} {% load static %}
 {% block main_block %}
-<div class="page-inner">
-  <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
-    <div>
-        <h3 class="fw-bold mb-3">Proforma Invoice</h3>
-    </div>
-  </div>
-  
-<div class="row">
-    <div class="col-12">
-        <div class="card card-round mb-3">
-            <div class="card-header">
-                <div class="card-title">Proforma Details</div>
-            </div>
-            <div class="card-body">
-                <form method="post" id="proformaInvoiceForm" autocomplete="off" class="row g-4" action="{% url "proforma_invoice_create" %} ">
-                    {% csrf_token %}
-
-                    <div class="col-md-4">
-                        <label for="invoice_no" class="form-label fw-semibold">Invoice No.</label>
-                        <input type="text" class="form-control" id="invoice_no" name="invoice_no" placeholder="Enter invoice number" >
-                        <span class="invalid-feedback" id="invoice_no_error">This field is required</span>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="invoice_date" class="form-label fw-semibold">Date</label>
-                        <input type="date" class="form-control" id="invoice_date" name="invoice_date" >
-                        <span class="invalid-feedback" id="invoice_date_error">This field is required</span>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="due_date" class="form-label fw-semibold">Mode / Term of Payment</label>
-                        <input type="text" class="form-control" id="mode_payment" name="mode_payment" value="100%" placeholder="Mode / Term of Payment">
-                         <span class="invalid-feedback" id="mode_payment_error">This field is required</span>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label for="company_name" class="form-label fw-semibold">Customer / Party Name</label>
-                        <select class="form-control form-select" id="company_name" name="company_name" >
-                            <option value="" selected disabled>Select Customer / Party Name</option>
-                            {% for party in party_name_list %}
-                                <option value="{{ party.party_name }}">{{ party.party_name }}</option>
-                            {% endfor %}
-                            <option value="others">Other</option>
-                        </select>
-
-                        <input type="text" id="new_company"  name="new_company" style="display: none" placeholder="New Company Name"  name="new_company" class="form-control">
-                        <span class="invalid-feedback"  id="company_name_error">This field is required</span>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label for="company_contact" class="form-label fw-semibold">Party Contact</label>
-                        <select class="form-control form-select" id="company_contact" name="company_contact">
-                            <option value="" selected disabled>Select Company Contact</option>
-                            <option value="others">Other</option>
-                        </select>
-                        <input type="number" id="new_company_contact" name="new_company_contact" class="form-control mt-2" placeholder="Enter company contact" style="display: none;" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel">
-                        <span class="invalid-feedback" id="company_contact_error">This field is required</span>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label for="company_email" class="form-label fw-semibold">Party Email</label>
-                        <select class="form-control form-select" id="company_email" name="company_email">
-                            <option value="" selected disabled>Select Company Email</option>
-                            {% for company in company_list %}
-                                {% if company.company_email %}
-                                    <option value="{{ company.company_email }}">{{ company.company_email }}</option>
-                                {% endif %}
-                            {% endfor %}
-                            <option value="others">Other</option>
-                        </select>
-                        <input type="email" id="new_company_email" name="new_company_email" class="form-control mt-2" placeholder="Enter company email" style="display: none;">
-                        <span class="invalid-feedback" id="company_email_error">This field is required</span>
-                    </div>
-
-                    <div class="col-12">
-                        <label for="billing_address" class="form-label fw-semibold">Billing Address</label>
-                        <textarea class="form-control" id="billing_address" name="billing_address" rows="2" placeholder="Street, City, State, ZIP"></textarea>
-                        <span class="invalid-feedback" id="billing_address_error">This field is required</span>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label for="billing_state_name" class="form-label fw-semibold">Billing State Name</label>
-                        <select class="form-control form-select" id="billing_state_name" name="billing_state_name" >
-                            <option value="" selected disabled>Select State</option>
-                            {% for value, label in states %}
-                                <option value="{{ value }}">
-                                    {{ label }}
-                                </option>
-                            {% endfor %}
-                        </select>
-
-                        <span class="invalid-feedback" id="billing_state_name_error">This field is required</span>
-                    </div>
-
-
-                    <div class="col-md-4">
-                        <label for="billing_gstin_no" class="form-label fw-semibold">Billing GSTIN/UN.</label>
-                        <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No.">
-                        <span class="invalid-feedback" id="billing_gstin_no_error">This field is required</span>
-                    </div>
-                    
-                    
-                    <div id="job-container">
-                            <div class="row job-section border rounded p-3 mb-3">
-                                <h5>Job Detail Section</h5>
-                    
-                                <div class="col-md-4">
-                                <label class="form-label fw-semibold">Title</label>
-                                <select id="title" name="title[]" class="form-control form-select">
-                                    <option value="" selected disabled>Select Title</option>
-                                    <option value="JobWork on Cylinder">JobWork on Cylinder</option>
-                                    <option value="Copper Engraved Cylinder">Copper Engraved Cylinder</option>
-                                </select>
-                                <span class="invalid-feedback" id="title_input_error"  >This field is required</span>
-                                </div>
-                        
-                                <div class="col-md-4">
-                                    <label for="job_name" class="form-label fw-semibold">Job Name</label>
-                                    <select name="job_name" id="job_name" class="form-control job-name" >
-                                        <option value="" selected disabled>Select Job Name</option>
-                                        {% for i in job_names %}
-                                        <option >
-                                            {{i.job_name}}
-                                        
-                                        </option>{% endfor %}
-                                        <option value="others">Other</option>
-                                    </select>
-                                    <input type="text" name="new_job" class="form-control mt-2 new-job" style="display:none;" placeholder="Enter new Job">
-                                    <span class="invalid-feedback job-name-error" id="job-name-error"  style="display:none;">This field is required</span>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Pouch Open Size</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control pouch-height" id="pouch_open_size_height" name="pouch_height[]" placeholder="Height (e.g. 100)" step="any">
-                                        <span class="invalid-feedback" id="pouch_open_height_error">Please provide Pouch Open Size  Height</span>  <span class="input-group-text bg-light border-1 fw-bold">×</span>
-                                        <input type="number" id="pouch_open_size_diameter" class="form-control pouch-diameter" name="pouch_diameter[]" placeholder="Diameter (e.g. 50)" step="any">
-                                        <span class="invalid-feedback" id="pouch_open_diameter_error">Please provide Pouch Open Size  Diameter</span>
-                                        
-                                        <input type="hidden" class="pouch-open-size" name="pouch_open_size[]">
-                                    </div>
-                                    <span class="invalid-feedback pouch-open-size-error" style="display:none;">This field is required</span>
-                                </div>
-
-                                <div class="col-md-4 mt-3">
-                                    <label class="form-label fw-semibold">Cylinder Size</label>
-                                    <div class="input-group">
-                                        <input type="number" class="form-control cylinder-height" name="cylinder_height[]" id="cylinder_height" placeholder="Height (e.g. 100)" step="any">
-                                        <span class="invalid-feedback" id="cylinder_height_error">Please provide Cylinder  Height</span> <span class="input-group-text bg-light border-1 fw-bold">×</span>
-                                        <input type="number" class="form-control cylinder-diameter" name="cylinder_diameter[]" id="cylinder_diameter" placeholder="Diameter (e.g. 50)" step="any">
-                                        <span class="invalid-feedback" id="cylinder_diameter_error">Please provide Cylinder Diameter</span>
-                                        
-                                        <input type="hidden" class="cylinder-size" name="cylinder_size[]">
-                                    </div>
-                                </div>
-
-                            <div class="col-md-4 mt-3">
-                                <label for="quantity" class="form-label fw-semibold">Quantity</label>
-                                <input type="number" class="form-control item_check" step="any" id="quantity" name="quantity[]" placeholder="Quantity" >
-                                <span class="invalid-feedback" id="quantity_error">This field is required</span>
-                            </div>
-
-                            <div class="col-md-4 mt-3">
-                                <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
-                                <input type="number" class="form-control item_check" step="any" id="prpc_price" name="prpc_price[]" placeholder="Per Rate Per Cylinder" >
-                                <span class="invalid-feedback" id="prpc_price_error">This field is required</span>
-                            </div>
-
-                            
-                            </div>
-
-                            <!-- Add Button -->
-                            <div class="form-check form-check-inline">
-                            <button type="button" id="add-job" class="btn btn-primary d-flex align-items-center">
-                                <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add New Job
-                            </button>
-                            </div>
-                    
-                            <div class="col-md-4 mt-3 d-flex align-items-center">
-                                <label class="form-label fw-semibold me-3">GST</label>
-                                <div class="form-check form-check-inline"id="sgst_div">
-                                    <input class="form-check-input gst-checkbox" id="sgst" type="checkbox" name="gst[]" value="SGST - 9" >
-                                    <label class="form-check-label">SGST 9%</label>
-                                </div>
-                                <div class="form-check form-check-inline"id="cgst_div">
-                                    <input class="form-check-input gst-checkbox" type="checkbox" id="cgst" name="gst[]" value="CGST - 9" >
-                                    <label class="form-check-label">CGST 9%</label>
-                                </div>
-                                <div class="form-check form-check-inline"id="igst_div">
-                                    <input class="form-check-input gst-checkbox" type="checkbox" id="igst" name="gst[]" value="IGST - 18" >
-                                    <label class="form-check-label">IGST 18%</label>
-                                </div>
-                            </div>
-                            <input type="hidden" name="gst_value" id="gst_value" >
-                    </div>
-                    <div class="col-md-6">
-                        <label for="terms" class="form-label fw-semibold">Terms & Notes</label>
-                        <input type="text" id="terms" name="terms" class="form-control" placeholder="e.g. Net 30, Delivery within 7 days">
-                        <span class="invalid-feedback" id="terms_error">This field is required</span>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="taxable_value" class="form-label fw-semibold">Total Taxable Value</label>
-                        <input type="text" id="taxable_value" name="taxable_value" class="form-control" placeholder="Total Taxable Value" readonly>
-                        <span class="invalid-feedback" id="taxable_value_error">This field is required</span>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="total" class="form-label fw-semibold">Total</label>
-                        <input type="text" id="total_amount" name="total_amount" class="form-control" placeholder="Total" readonly>
-                        <span class="invalid-feedback" id="total_amount_error">This field is required</span>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label for="invoice_status" class="form-label fw-semibold">Invoice Status</label>
-                        <select id="invoice_status" name="invoice_status" class="form-control">
-                            <option value="" selected disabled selected>Order Status</option>
-                             {% for value, label in invoice_status %}
-                                <option value="{{ value }}">
-                                    {{ label }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                        <span class="invalid-feedback" id="order_status_error">This field is required</span>
-                    </div>
-
-
-                    <div class="col-md-9">
-                        <label for="bank_details" class="form-label fw-semibold">Bank Details</label>
-                        <select id="bank_details" name="bank_details" class="form-control form-select">
-                            <option value=""> Select Bank  </option>
-                            {% for bank in bank_details  %}
-                                <option value="{{ bank.id }}" >{{ bank.bank_name }} - {{ bank.bank_brnach_address }}</option>
-                            {% endfor %}
-                            
-                        </select>
-                        <span class="invalid-feedback" id="bank_details_error">This field is required</span>
-                    </div>
-
-
-                    <div class="col-12 d-flex justify-content-end">
-                        <button type="reset" class="btn btn-secondary me-2">Reset</button>
-                        <button type="submit" class="btn btn-primary">Save Proforma</button>
-                    </div>
-
-                </form>
+    <div class="page-inner">
+        <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+            <div>
+                <h3 class="fw-bold mb-3">Proforma Invoice</h3>
             </div>
         </div>
-    </div>
-</div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-round mb-3">
+                    <div class="card-header">
+                        <div class="card-title">Proforma Details</div>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" id="proformaInvoiceForm" autocomplete="off" class="row g-4" action="{% url "proforma_invoice_create" %} ">
+                            {% csrf_token %}
+
+                            <div class="col-md-4">
+                                <label for="invoice_no" class="form-label fw-semibold">Invoice No.</label>
+                                <input type="text" class="form-control" id="invoice_no" name="invoice_no" placeholder="Enter invoice number" >
+                                <span class="invalid-feedback" id="invoice_no_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="invoice_date" class="form-label fw-semibold">Date</label>
+                                <input type="date" class="form-control" id="invoice_date" name="invoice_date" >
+                                <span class="invalid-feedback" id="invoice_date_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="due_date" class="form-label fw-semibold">Mode / Term of Payment</label>
+                                <input type="text" class="form-control" id="mode_payment" name="mode_payment" value="100%" placeholder="Mode / Term of Payment">
+                                <span class="invalid-feedback" id="mode_payment_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="company_name" class="form-label fw-semibold">Customer / Party Name</label>
+                                <select class="form-control form-select" id="company_name" name="company_name" >
+                                    <option value="" selected disabled>Select Customer / Party Name</option>
+                                    {% for party in party_name_list %}
+                                        <option value="{{ party.party_name }}">{{ party.party_name }}</option>
+                                    {% endfor %}
+                                    <option value="others">Other</option>
+                                </select>
+
+                                <input type="text" id="new_company"  name="new_company" style="display: none" placeholder="New Company Name"  name="new_company" class="form-control">
+                                <span class="invalid-feedback"  id="company_name_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="company_contact" class="form-label fw-semibold">Party Contact</label>
+                                <select class="form-control form-select" id="company_contact" name="company_contact">
+                                    <option value="" selected disabled>Select Company Contact</option>
+                                    <option value="others">Other</option>
+                                </select>
+                                <input type="number" id="new_company_contact" name="new_company_contact" class="form-control mt-2" placeholder="Enter company contact" style="display: none;" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel">
+                                <span class="invalid-feedback" id="company_contact_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="company_email" class="form-label fw-semibold">Party Email</label>
+                                <select class="form-control form-select" id="company_email" name="company_email">
+                                    <option value="" selected disabled>Select Company Email</option>
+                                    {% for company in company_list %}
+                                        {% if company.company_email %}
+                                            <option value="{{ company.company_email }}">{{ company.company_email }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <option value="others">Other</option>
+                                </select>
+                                <input type="email" id="new_company_email" name="new_company_email" class="form-control mt-2" placeholder="Enter company email" style="display: none;">
+                                <span class="invalid-feedback" id="company_email_error">This field is required</span>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="billing_address" class="form-label fw-semibold">Billing Address</label>
+                                <textarea class="form-control" id="billing_address" name="billing_address" rows="2" placeholder="Street, City, State, ZIP"></textarea>
+                                <span class="invalid-feedback" id="billing_address_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="billing_state_name" class="form-label fw-semibold">Billing State Name</label>
+                                <select class="form-control form-select" id="billing_state_name" name="billing_state_name" >
+                                    <option value="" selected disabled>Select State</option>
+                                    {% for value, label in states %}
+                                        <option value="{{ value }}">
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <span class="invalid-feedback" id="billing_state_name_error">This field is required</span>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="billing_gstin_no" class="form-label fw-semibold">Billing GSTIN/UN.</label>
+                                <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No.">
+                                <span class="invalid-feedback" id="billing_gstin_no_error">This field is required</span>
+                            </div>
+
+
+                            <div id="job-container">
+                                <div class="row job-section border rounded p-3 mb-3">
+                                    <h5>Job Detail Section</h5>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">Title</label>
+                                        <select id="title" name="title[]" class="form-control form-select">
+                                            <option value="" selected disabled>Select Title</option>
+                                            <option value="JobWork on Cylinder">JobWork on Cylinder</option>
+                                            <option value="Copper Engraved Cylinder">Copper Engraved Cylinder</option>
+                                        </select>
+                                        <span class="invalid-feedback" id="title_input_error"  >This field is required</span>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="job_name" class="form-label fw-semibold">Job Name</label>
+                                        <select name="job_name" id="job_name" class="form-control job-name" >
+                                            <option value="" selected disabled>Select Job Name</option>
+                                            {% for i in job_names %}
+                                                <option >
+                                                    {{i.job_name}}
+
+                                                </option>{% endfor %}
+                                            <option value="others">Other</option>
+                                        </select>
+                                        <input type="text" name="new_job" class="form-control mt-2 new-job" style="display:none;" placeholder="Enter new Job">
+                                        <span class="invalid-feedback job-name-error" id="job-name-error"  style="display:none;">This field is required</span>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">Pouch Open Size</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control pouch-height" id="pouch_open_size_height" name="pouch_height[]" placeholder="Height (e.g. 100)" step="any">
+                                            <span class="invalid-feedback" id="pouch_open_height_error">Please provide Pouch Open Size  Height</span>  <span class="input-group-text bg-light border-1 fw-bold">×</span>
+                                            <input type="number" id="pouch_open_size_diameter" class="form-control pouch-diameter" name="pouch_diameter[]" placeholder="Diameter (e.g. 50)" step="any">
+                                            <span class="invalid-feedback" id="pouch_open_diameter_error">Please provide Pouch Open Size  Diameter</span>
+
+                                            <input type="hidden" class="pouch-open-size" name="pouch_open_size[]">
+                                        </div>
+                                        <span class="invalid-feedback pouch-open-size-error" style="display:none;">This field is required</span>
+                                    </div>
+
+                                    <div class="col-md-4 mt-3">
+                                        <label class="form-label fw-semibold">Cylinder Size</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control cylinder-height" name="cylinder_height[]" id="cylinder_height" placeholder="Height (e.g. 100)" step="any">
+                                            <span class="invalid-feedback" id="cylinder_height_error">Please provide Cylinder  Height</span> <span class="input-group-text bg-light border-1 fw-bold">×</span>
+                                            <input type="number" class="form-control cylinder-diameter" name="cylinder_diameter[]" id="cylinder_diameter" placeholder="Diameter (e.g. 50)" step="any">
+                                            <span class="invalid-feedback" id="cylinder_diameter_error">Please provide Cylinder Diameter</span>
+
+                                            <input type="hidden" class="cylinder-size" name="cylinder_size[]">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mt-3">
+                                        <label for="quantity" class="form-label fw-semibold">Quantity</label>
+                                        <input type="number" class="form-control item_check" step="any" id="quantity" name="quantity[]" placeholder="Quantity" >
+                                        <span class="invalid-feedback" id="quantity_error">This field is required</span>
+                                    </div>
+
+                                    <div class="col-md-4 mt-3">
+                                        <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
+                                        <input type="number" class="form-control item_check" step="any" id="prpc_price" name="prpc_price[]" placeholder="Per Rate Per Cylinder" >
+                                        <span class="invalid-feedback" id="prpc_price_error">This field is required</span>
+                                    </div>
+
+
+                                </div>
+
+                            <!-- Add Button -->
+                                <div class="form-check form-check-inline">
+                                    <button type="button" id="add-job" class="btn btn-primary d-flex align-items-center">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add New Job
+                                    </button>
+                                </div>
+
+                                <div class="col-md-4 mt-3 d-flex align-items-center">
+                                    <label class="form-label fw-semibold me-3">GST</label>
+                                    <div class="form-check form-check-inline"id="sgst_div">
+                                        <input class="form-check-input gst-checkbox" id="sgst" type="checkbox" name="gst[]" value="SGST - 9" >
+                                        <label class="form-check-label">SGST 9%</label>
+                                    </div>
+                                    <div class="form-check form-check-inline"id="cgst_div">
+                                        <input class="form-check-input gst-checkbox" type="checkbox" id="cgst" name="gst[]" value="CGST - 9" >
+                                        <label class="form-check-label">CGST 9%</label>
+                                    </div>
+                                    <div class="form-check form-check-inline"id="igst_div">
+                                        <input class="form-check-input gst-checkbox" type="checkbox" id="igst" name="gst[]" value="IGST - 18" >
+                                        <label class="form-check-label">IGST 18%</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="gst_value" id="gst_value" >
+                            </div>
+                            <div class="col-md-6">
+                                <label for="terms" class="form-label fw-semibold">Terms & Notes</label>
+                                <input type="text" id="terms" name="terms" class="form-control" placeholder="e.g. Net 30, Delivery within 7 days">
+                                <span class="invalid-feedback" id="terms_error">This field is required</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="taxable_value" class="form-label fw-semibold">Total Taxable Value</label>
+                                <input type="text" id="taxable_value" name="taxable_value" class="form-control" placeholder="Total Taxable Value" readonly>
+                                <span class="invalid-feedback" id="taxable_value_error">This field is required</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="total" class="form-label fw-semibold">Total</label>
+                                <input type="text" id="total_amount" name="total_amount" class="form-control" placeholder="Total" readonly>
+                                <span class="invalid-feedback" id="total_amount_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="invoice_status" class="form-label fw-semibold">Invoice Status</label>
+                                <select id="invoice_status" name="invoice_status" class="form-control">
+                                    <option value="" selected disabled selected>Order Status</option>
+                                    {% for value, label in invoice_status %}
+                                        <option value="{{ value }}">
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <span class="invalid-feedback" id="order_status_error">This field is required</span>
+                            </div>
+
+
+                            <div class="col-md-9">
+                                <label for="bank_details" class="form-label fw-semibold">Bank Details</label>
+                                <select id="bank_details" name="bank_details" class="form-control form-select">
+                                    <option value=""> Select Bank  </option>
+                                    {% for bank in bank_details  %}
+                                        <option value="{{ bank.id }}" >{{ bank.bank_name }} - {{ bank.bank_brnach_address }}</option>
+                                    {% endfor %}
+
+                                </select>
+                                <span class="invalid-feedback" id="bank_details_error">This field is required</span>
+                            </div>
+
+
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="reset" class="btn btn-secondary me-2">Reset</button>
+                                <button type="submit" class="btn btn-primary">Save Proforma</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 
 {% endblock main_block %}
 {% block script %}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
 
-    const invoiceNoInput = document.getElementById('invoice_no');
-    const invoiceNoError = document.getElementById('invoice_no_error');
-
-
-    const QuantityInput = document.getElementById('quantity');
-    const QuantityError = document.getElementById('quantity_error');
-
-    const PRPCInput = document.getElementById('prpc_price');
-    const PRPCError = document.getElementById('prpc_price_error');
-
-    const invoiceDateInput = document.getElementById('invoice_date');
-    const invoiceDateError = document.getElementById('invoice_date_error');
-
-    const modePaymentInput = document.getElementById('mode_payment');
-    const modePaymentError = document.getElementById('mode_payment_error');
-
-    const companyNameInput = document.getElementById('company_name');
-    const companyNameError = document.getElementById('company_name_error');
-
-    const companyContactInput = document.getElementById('company_contact');
-    const companyContactError = document.getElementById('company_contact_error');
-
-    const companyEmailInput = document.getElementById('company_email');
-    const companyEmailError = document.getElementById('company_email_error');
-
-    const billingAddressInput = document.getElementById('billing_address');
-    const billingAddressError = document.getElementById('billing_address_error');
-
-    const billingStateNameInput = document.getElementById('billing_state_name');
-    const billingStateNameError = document.getElementById('billing_state_name_error');
-
-    const billingGstinNoInput = document.getElementById('billing_gstin_no');
-    const billingGstinNoError = document.getElementById('billing_gstin_no_error');
-
-    const termsInput = document.getElementById('terms');
-    const termsError = document.getElementById('terms_error');
-
-    const taxableValueInput = document.getElementById('taxable_value');
-    const taxableValueError = document.getElementById('taxable_value_error');
-
-    const totalAmountInput = document.getElementById('total_amount');
-    const totalAmountError = document.getElementById('total_amount_error');
-
-    const bankDetailsInput = document.getElementById('bank_details');
-    const bankDetailsError = document.getElementById('bank_details_error');
+            const invoiceNoInput = document.getElementById('invoice_no');
+            const invoiceNoError = document.getElementById('invoice_no_error');
 
 
+            const QuantityInput = document.getElementById('quantity');
+            const QuantityError = document.getElementById('quantity_error');
 
-    const InvoiceStatusInput = document.getElementById('invoice_status');
-    const InvoiceStatusError = document.getElementById('order_status_error');
+            const PRPCInput = document.getElementById('prpc_price');
+            const PRPCError = document.getElementById('prpc_price_error');
+
+            const invoiceDateInput = document.getElementById('invoice_date');
+            const invoiceDateError = document.getElementById('invoice_date_error');
+
+            const modePaymentInput = document.getElementById('mode_payment');
+            const modePaymentError = document.getElementById('mode_payment_error');
+
+            const companyNameInput = document.getElementById('company_name');
+            const companyNameError = document.getElementById('company_name_error');
+
+            const companyContactInput = document.getElementById('company_contact');
+            const companyContactError = document.getElementById('company_contact_error');
+
+            const companyEmailInput = document.getElementById('company_email');
+            const companyEmailError = document.getElementById('company_email_error');
+
+            const billingAddressInput = document.getElementById('billing_address');
+            const billingAddressError = document.getElementById('billing_address_error');
+
+            const billingStateNameInput = document.getElementById('billing_state_name');
+            const billingStateNameError = document.getElementById('billing_state_name_error');
+
+            const billingGstinNoInput = document.getElementById('billing_gstin_no');
+            const billingGstinNoError = document.getElementById('billing_gstin_no_error');
+
+            const termsInput = document.getElementById('terms');
+            const termsError = document.getElementById('terms_error');
+
+            const taxableValueInput = document.getElementById('taxable_value');
+            const taxableValueError = document.getElementById('taxable_value_error');
+
+            const totalAmountInput = document.getElementById('total_amount');
+            const totalAmountError = document.getElementById('total_amount_error');
+
+            const bankDetailsInput = document.getElementById('bank_details');
+            const bankDetailsError = document.getElementById('bank_details_error');
 
 
 
-    const TitleInput = document.getElementById('title');
-    const TitleError = document.getElementById('title_input_error');
-
-    const jobNameInput = document.getElementById('job_name');
-    const newJobInput = document.querySelector('.new-job');
-    const jobNameError = document.querySelector('.job-name-error');
-
-    const cylinder_diameter_Input =
-        document.getElementById("cylinder_diameter");
-    const cylinder_diameter_Error = document.getElementById(
-        "cylinder_diameter_error"
-    );
-
-    const cylinder_height_Input = document.getElementById("cylinder_height");
-    const cylinder_height_Error = document.getElementById(
-        "cylinder_height_error"
-    );
-
-    const pouch_open_diameter_Input = document.getElementById(
-        "pouch_open_size_diameter"
-    );
-    const pouch_open_diameter_Error = document.getElementById(
-        "pouch_open_diameter_error"
-    );
-
-    const pouch_open_height_Input =
-        document.getElementById("pouch_open_size_height");
-    const pouch_open_height_Error = document.getElementById(
-        "pouch_open_height_error"
-    );
+            const InvoiceStatusInput = document.getElementById('invoice_status');
+            const InvoiceStatusError = document.getElementById('order_status_error');
 
 
 
+            const TitleInput = document.getElementById('title');
+            const TitleError = document.getElementById('title_input_error');
 
-    const proformaForm = document.getElementById('proformaInvoiceForm');
+            const jobNameInput = document.getElementById('job_name');
+            const newJobInput = document.querySelector('.new-job');
+            const jobNameError = document.querySelector('.job-name-error');
+
+            const cylinder_diameter_Input =
+                document.getElementById("cylinder_diameter");
+            const cylinder_diameter_Error = document.getElementById(
+                "cylinder_diameter_error"
+            );
+
+            const cylinder_height_Input = document.getElementById("cylinder_height");
+            const cylinder_height_Error = document.getElementById(
+                "cylinder_height_error"
+            );
+
+            const pouch_open_diameter_Input = document.getElementById(
+                "pouch_open_size_diameter"
+            );
+            const pouch_open_diameter_Error = document.getElementById(
+                "pouch_open_diameter_error"
+            );
+
+            const pouch_open_height_Input =
+                document.getElementById("pouch_open_size_height");
+            const pouch_open_height_Error = document.getElementById(
+                "pouch_open_height_error"
+            );
+
+
+
+
+            const proformaForm = document.getElementById('proformaInvoiceForm');
 
     // Validation Functions
-    function validateInvoiceNo() {
-        if (invoiceNoInput.value.trim() === '') {
-            invoiceNoError.style.display = 'block';
-            return false;
-        } else {
-            invoiceNoError.style.display = 'none';
-            return true;
-        }
-    }
+            function validateInvoiceNo() {
+                if (invoiceNoInput.value.trim() === '') {
+                    invoiceNoError.style.display = 'block';
+                    return false;
+                } else {
+                    invoiceNoError.style.display = 'none';
+                    return true;
+                }
+            }
 
 
-    function validateJobName() {
-        if (jobNameInput.value === '' || (jobNameInput.value === 'others' && newJobInput.value.trim() === '')) {
-            jobNameError.style.display = 'block';
-            return false;
-        } else {
-            jobNameError.style.display = 'none';
-            return true;
-        }
-    }
+            function validateJobName() {
+                if (jobNameInput.value === '' || (jobNameInput.value === 'others' && newJobInput.value.trim() === '')) {
+                    jobNameError.style.display = 'block';
+                    return false;
+                } else {
+                    jobNameError.style.display = 'none';
+                    return true;
+                }
+            }
 
 
-    function validatePRPCPrice() {
-        if (PRPCInput.value.trim() === '') {
-            PRPCError.style.display = 'block';
-            return false;
-        } else {
-            PRPCError.style.display = 'none';
-            return true;
-        }
-    }
-
-
-
-    function validateQuantity() {
-        if (QuantityInput.value.trim() === '') {
-            QuantityError.style.display = 'block';
-            return false;
-        } else {
-            QuantityError.style.display = 'none';
-            return true;
-        }
-    }
-
-    function validateInvoiceDate() {
-        if (invoiceDateInput.value.trim() === '') {
-            invoiceDateError.style.display = 'block';
-            return false;
-        } else {
-            invoiceDateError.style.display = 'none';
-            return true;
-        }
-    }
-
-    function validateModePayment() {
-        if (modePaymentInput.value.trim() === '') {
-            modePaymentError.style.display = 'block';
-            return false;
-        } else {
-            modePaymentError.style.display = 'none';
-            return true;
-        }
-    }
-
-    function validateCompanyName() {
-        if (companyNameInput.value.trim() === '') {
-            companyNameError.style.display = 'block';
-            return false;
-        } else {
-            companyNameError.style.display = 'none';
-            return true;
-        }
-    }
+            function validatePRPCPrice() {
+                if (PRPCInput.value.trim() === '') {
+                    PRPCError.style.display = 'block';
+                    return false;
+                } else {
+                    PRPCError.style.display = 'none';
+                    return true;
+                }
+            }
 
 
 
-       function validateTitle() {
-        if (TitleInput.value.trim() === '') {
-            TitleError.style.display = 'block';
-            return false;
-        } else {
-            TitleError.style.display = 'none';
-            return true;
-        }
-    }
+            function validateQuantity() {
+                if (QuantityInput.value.trim() === '') {
+                    QuantityError.style.display = 'block';
+                    return false;
+                } else {
+                    QuantityError.style.display = 'none';
+                    return true;
+                }
+            }
 
-    function validateCompanyContact() {
-        const contact = companyContactInput.value.trim();
-        const contactPattern = /^\d{10}$/;
-        if (contact === '' || !contactPattern.test(contact)) {
-            companyContactError.style.display = 'block';
-            return false;
-        } else {
-            companyContactError.style.display = 'none';
-            return true;
-        }
-    }
+            function validateInvoiceDate() {
+                if (invoiceDateInput.value.trim() === '') {
+                    invoiceDateError.style.display = 'block';
+                    return false;
+                } else {
+                    invoiceDateError.style.display = 'none';
+                    return true;
+                }
+            }
 
-    function validateCompanyEmail() {
-        const email = companyEmailInput.value.trim();
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (email === '' || !emailPattern.test(email)) {
-            companyEmailError.style.display = 'block';
-            return false;
-        } else {
-            companyEmailError.style.display = 'none';
-            return true;
-        }
-    }
+            function validateModePayment() {
+                if (modePaymentInput.value.trim() === '') {
+                    modePaymentError.style.display = 'block';
+                    return false;
+                } else {
+                    modePaymentError.style.display = 'none';
+                    return true;
+                }
+            }
 
-    function validateBillingAddress() {
-        if (billingAddressInput.value.trim() === '') {
-            billingAddressError.style.display = 'block';
-            return false;
-        } else {
-            billingAddressError.style.display = 'none';
-            return true;
-        }
-    }
-
-    function validateBillingStateName() {
-        if (billingStateNameInput.value.trim() === '') {
-            billingStateNameError.style.display = 'block';
-            return false;
-        } else {
-            billingStateNameError.style.display = 'none';
-            return true;
-        }
-    }
-
-    function validateBillingGstinNo() {
-        if (billingGstinNoInput.value.trim() === '') {
-            billingGstinNoError.style.display = 'block';
-            return false;
-        } else {
-            billingGstinNoError.style.display = 'none';
-            return true;
-        }
-    }
+            function validateCompanyName() {
+                if (companyNameInput.value.trim() === '') {
+                    companyNameError.style.display = 'block';
+                    return false;
+                } else {
+                    companyNameError.style.display = 'none';
+                    return true;
+                }
+            }
 
 
 
-    function validateInvoiceStatus() {
-        if (InvoiceStatusInput.value.trim() === '') {
-            InvoiceStatusError.style.display = 'block';
-            return false;
-        } else {
-            InvoiceStatusError.style.display = 'none';
-            return true;
-        }
-    }
+            function validateTitle() {
+                if (TitleInput.value.trim() === '') {
+                    TitleError.style.display = 'block';
+                    return false;
+                } else {
+                    TitleError.style.display = 'none';
+                    return true;
+                }
+            }
+
+            function validateCompanyContact() {
+                const contact = companyContactInput.value.trim();
+                const contactPattern = /^\d{10}$/;
+                if (contact === '' || !contactPattern.test(contact)) {
+                    companyContactError.style.display = 'block';
+                    return false;
+                } else {
+                    companyContactError.style.display = 'none';
+                    return true;
+                }
+            }
+
+            function validateCompanyEmail() {
+                const email = companyEmailInput.value.trim();
+                const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                if (email === '' || !emailPattern.test(email)) {
+                    companyEmailError.style.display = 'block';
+                    return false;
+                } else {
+                    companyEmailError.style.display = 'none';
+                    return true;
+                }
+            }
+
+            function validateBillingAddress() {
+                if (billingAddressInput.value.trim() === '') {
+                    billingAddressError.style.display = 'block';
+                    return false;
+                } else {
+                    billingAddressError.style.display = 'none';
+                    return true;
+                }
+            }
+
+            function validateBillingStateName() {
+                if (billingStateNameInput.value.trim() === '') {
+                    billingStateNameError.style.display = 'block';
+                    return false;
+                } else {
+                    billingStateNameError.style.display = 'none';
+                    return true;
+                }
+            }
+
+            function validateBillingGstinNo() {
+                if (billingGstinNoInput.value.trim() === '') {
+                    billingGstinNoError.style.display = 'block';
+                    return false;
+                } else {
+                    billingGstinNoError.style.display = 'none';
+                    return true;
+                }
+            }
 
 
 
-    function validateTerms() {
-        if (termsInput.value.trim() === '') {
-            termsError.style.display = 'block';
-            return false;
-        } else {
-            termsError.style.display = 'none';
-            return true;
-        }
-    }
-
-    function validateTaxableValue() {
-        if (taxableValueInput.value.trim() === '') {
-            taxableValueError.style.display = 'block';
-            return false;
-        } else {
-            taxableValueError.style.display = 'none';
-            return true;
-        }
-    }
-
-    function validateTotalAmount() {
-        if (totalAmountInput.value.trim() === '') {
-            totalAmountError.style.display = 'block';
-            return false;
-        } else {
-            totalAmountError.style.display = 'none';
-            return true;
-        }
-    }
-
- 
-
-    function validateBankDetails() {
-        if (bankDetailsInput.value.trim() === '') {
-            bankDetailsError.style.display = 'block';
-            return false;
-        } else {
-            bankDetailsError.style.display = 'none';
-            return true;
-        }
-    }
+            function validateInvoiceStatus() {
+                if (InvoiceStatusInput.value.trim() === '') {
+                    InvoiceStatusError.style.display = 'block';
+                    return false;
+                } else {
+                    InvoiceStatusError.style.display = 'none';
+                    return true;
+                }
+            }
 
 
 
-    function validateCylinderDiameter() {
-        if (cylinder_diameter_Input && cylinder_diameter_Error) {
-            if (cylinder_diameter_Input.value.trim() === "") {
-                cylinder_diameter_Error.style.display = "block";
-                return false;
-            } else {
-                cylinder_diameter_Error.style.display = "none";
+            function validateTerms() {
+                if (termsInput.value.trim() === '') {
+                    termsError.style.display = 'block';
+                    return false;
+                } else {
+                    termsError.style.display = 'none';
+                    return true;
+                }
+            }
+
+            function validateTaxableValue() {
+                if (taxableValueInput.value.trim() === '') {
+                    taxableValueError.style.display = 'block';
+                    return false;
+                } else {
+                    taxableValueError.style.display = 'none';
+                    return true;
+                }
+            }
+
+            function validateTotalAmount() {
+                if (totalAmountInput.value.trim() === '') {
+                    totalAmountError.style.display = 'block';
+                    return false;
+                } else {
+                    totalAmountError.style.display = 'none';
+                    return true;
+                }
+            }
+
+
+
+            function validateBankDetails() {
+                if (bankDetailsInput.value.trim() === '') {
+                    bankDetailsError.style.display = 'block';
+                    return false;
+                } else {
+                    bankDetailsError.style.display = 'none';
+                    return true;
+                }
+            }
+
+
+
+            function validateCylinderDiameter() {
+                if (cylinder_diameter_Input && cylinder_diameter_Error) {
+                    if (cylinder_diameter_Input.value.trim() === "") {
+                        cylinder_diameter_Error.style.display = "block";
+                        return false;
+                    } else {
+                        cylinder_diameter_Error.style.display = "none";
+                        return true;
+                    }
+                }
                 return true;
             }
-        }
-        return true;
-    }
 
-    function validateCylinderHeight() {
-        if (cylinder_height_Input && cylinder_height_Error) {
-            if (cylinder_height_Input.value.trim() === "") {
-                cylinder_height_Error.style.display = "block";
-                return false;
-            } else {
-                cylinder_height_Error.style.display = "none";
+            function validateCylinderHeight() {
+                if (cylinder_height_Input && cylinder_height_Error) {
+                    if (cylinder_height_Input.value.trim() === "") {
+                        cylinder_height_Error.style.display = "block";
+                        return false;
+                    } else {
+                        cylinder_height_Error.style.display = "none";
+                        return true;
+                    }
+                }
                 return true;
             }
-        }
-        return true;
-    }
 
 
-    function validatePouchOpenDiameter() {
-        if (pouch_open_diameter_Input && pouch_open_diameter_Error) {
-            if (pouch_open_diameter_Input.value.trim() === "") {
-                pouch_open_diameter_Error.style.display = "block";
-                return false;
-            } else {
-                pouch_open_diameter_Error.style.display = "none";
+            function validatePouchOpenDiameter() {
+                if (pouch_open_diameter_Input && pouch_open_diameter_Error) {
+                    if (pouch_open_diameter_Input.value.trim() === "") {
+                        pouch_open_diameter_Error.style.display = "block";
+                        return false;
+                    } else {
+                        pouch_open_diameter_Error.style.display = "none";
+                        return true;
+                    }
+                }
                 return true;
             }
-        }
-        return true;
-    }
 
-    function validatePouchOpenHeight() {
-        if (pouch_open_height_Input && pouch_open_height_Error) {
-            if (pouch_open_height_Input.value.trim() === "") {
-                pouch_open_height_Error.style.display = "block";
-                return false;
-            } else {
-                pouch_open_height_Error.style.display = "none";
+            function validatePouchOpenHeight() {
+                if (pouch_open_height_Input && pouch_open_height_Error) {
+                    if (pouch_open_height_Input.value.trim() === "") {
+                        pouch_open_height_Error.style.display = "block";
+                        return false;
+                    } else {
+                        pouch_open_height_Error.style.display = "none";
+                        return true;
+                    }
+                }
                 return true;
             }
-        }
-        return true;
-    }
 
-    function validateForm() {
-        const isInvoiceStatus = validateInvoiceStatus();
-        const isTitleValid = validateTitle()
-        const isJobNameValid = validateJobName();
-        const isPRPCValid = validatePRPCPrice();
-        const isInvoiceNoValid = validateInvoiceNo();
-        const isInvoiceDateValid = validateInvoiceDate();
-        const isModePaymentValid = validateModePayment();
-        const isCompanyNameValid = validateCompanyName();
-        const isCompanyContactValid = validateCompanyContact();
-        const isCompanyEmailValid = validateCompanyEmail();
-        const isBillingAddressValid = validateBillingAddress();
-        const isBillingStateNameValid = validateBillingStateName();
-        const isBillingGstinNoValid = validateBillingGstinNo();
-        const isTermsValid = validateTerms();
-        const isQuantityValid = validateQuantity();
-        const isTaxableValueValid = validateTaxableValue();
-        const isTotalAmountValid = validateTotalAmount();
-        const isBankDetailsValid = validateBankDetails();
-        const isvalidateCylinderDiameter =  validateCylinderDiameter();
-        const isvalidateCylinderHeigh = validateCylinderHeight();
+            function validateForm() {
+                const isInvoiceStatus = validateInvoiceStatus();
+                const isTitleValid = validateTitle()
+                const isJobNameValid = validateJobName();
+                const isPRPCValid = validatePRPCPrice();
+                const isInvoiceNoValid = validateInvoiceNo();
+                const isInvoiceDateValid = validateInvoiceDate();
+                const isModePaymentValid = validateModePayment();
+                const isCompanyNameValid = validateCompanyName();
+                const isCompanyContactValid = validateCompanyContact();
+                const isCompanyEmailValid = validateCompanyEmail();
+                const isBillingAddressValid = validateBillingAddress();
+                const isBillingStateNameValid = validateBillingStateName();
+                const isBillingGstinNoValid = validateBillingGstinNo();
+                const isTermsValid = validateTerms();
+                const isQuantityValid = validateQuantity();
+                const isTaxableValueValid = validateTaxableValue();
+                const isTotalAmountValid = validateTotalAmount();
+                const isBankDetailsValid = validateBankDetails();
+                const isvalidateCylinderDiameter =  validateCylinderDiameter();
+                const isvalidateCylinderHeigh = validateCylinderHeight();
 
-        const isvalidatePouchOpenDiameter =  validatePouchOpenDiameter();
-        const isvalidatePouchOpenHeight = validatePouchOpenHeight();
+                const isvalidatePouchOpenDiameter =  validatePouchOpenDiameter();
+                const isvalidatePouchOpenHeight = validatePouchOpenHeight();
 
-        return (
-            isInvoiceNoValid &&
-            isInvoiceDateValid &&
-            isModePaymentValid &&
-            isCompanyNameValid &&
-            isCompanyContactValid &&
-            isCompanyEmailValid &&
-            isBillingAddressValid &&
-            isBillingStateNameValid &&
-            isBillingGstinNoValid &&
-            isTermsValid &&
-            isTaxableValueValid &&
-            isTotalAmountValid &&
-            isBankDetailsValid &&
-            isQuantityValid &&
-            isPRPCValid &&
-            isJobNameValid && 
-            isvalidateCylinderDiameter &&
-            isvalidateCylinderHeigh &&
-            isvalidatePouchOpenHeight &&
-            isvalidatePouchOpenDiameter &&
-            isTitleValid &&
-            isInvoiceStatus
+                return (
+                    isInvoiceNoValid &&
+                    isInvoiceDateValid &&
+                    isModePaymentValid &&
+                    isCompanyNameValid &&
+                    isCompanyContactValid &&
+                    isCompanyEmailValid &&
+                    isBillingAddressValid &&
+                    isBillingStateNameValid &&
+                    isBillingGstinNoValid &&
+                    isTermsValid &&
+                    isTaxableValueValid &&
+                    isTotalAmountValid &&
+                    isBankDetailsValid &&
+                    isQuantityValid &&
+                    isPRPCValid &&
+                    isJobNameValid &&
+                    isvalidateCylinderDiameter &&
+                    isvalidateCylinderHeigh &&
+                    isvalidatePouchOpenHeight &&
+                    isvalidatePouchOpenDiameter &&
+                    isTitleValid &&
+                    isInvoiceStatus
 
 
 
-        );
-    }
-    
-    jobNameInput.addEventListener('change', validateJobName);
-    newJobInput.addEventListener('input', validateJobName);
-    invoiceNoInput.addEventListener('input', validateInvoiceNo);
-    invoiceDateInput.addEventListener('input', validateInvoiceDate);
-    modePaymentInput.addEventListener('input', validateModePayment);
-    companyNameInput.addEventListener('input', validateCompanyName);
-    companyContactInput.addEventListener('input', validateCompanyContact);
-    companyEmailInput.addEventListener('input', validateCompanyEmail);
-    billingAddressInput.addEventListener('input', validateBillingAddress);
-    billingStateNameInput.addEventListener('input', validateBillingStateName);
-    billingGstinNoInput.addEventListener('input', validateBillingGstinNo);
-    termsInput.addEventListener('input', validateTerms);
-    taxableValueInput.addEventListener('input', validateTaxableValue);
-    totalAmountInput.addEventListener('input', validateTotalAmount);
-    QuantityInput.addEventListener('input', validateQuantity);
-    bankDetailsInput.addEventListener('input', validateBankDetails);
-    PRPCInput.addEventListener('input' ,validatePRPCPrice);
-    cylinder_diameter_Input.addEventListener('input',validateCylinderDiameter);
-    cylinder_height_Input.addEventListener('input',validateCylinderHeight);
-    TitleInput.addEventListener('input',validateTitle);
-    pouch_open_diameter_Input.addEventListener('input',validatePouchOpenDiameter);
-    pouch_open_height_Input.addEventListener('input',validatePouchOpenHeight);
-    InvoiceStatusInput.addEventListener('input',validateInvoiceStatus);
-
-
-
-
-    const loaderOverlay = document.getElementById("loader-overlay");
-    proformaForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        if (validateForm()) {
-            if (loaderOverlay) {
-                    loaderOverlay.style.display = "flex";
-                }requestAnimationFrame(() => {
-                proformaForm.submit();});
-        } else {
-            const firstError = document.querySelector('[style*="display: block"]');
-            if (firstError) {
-                firstError.scrollIntoView({ behavior: 'smooth' });
+                );
             }
-        }
-    });
-});
 
-</script>
-<script>
-$(document).ready(function() {
+            jobNameInput.addEventListener('change', validateJobName);
+            newJobInput.addEventListener('input', validateJobName);
+            invoiceNoInput.addEventListener('input', validateInvoiceNo);
+            invoiceDateInput.addEventListener('input', validateInvoiceDate);
+            modePaymentInput.addEventListener('input', validateModePayment);
+            companyNameInput.addEventListener('input', validateCompanyName);
+            companyContactInput.addEventListener('input', validateCompanyContact);
+            companyEmailInput.addEventListener('input', validateCompanyEmail);
+            billingAddressInput.addEventListener('input', validateBillingAddress);
+            billingStateNameInput.addEventListener('input', validateBillingStateName);
+            billingGstinNoInput.addEventListener('input', validateBillingGstinNo);
+            termsInput.addEventListener('input', validateTerms);
+            taxableValueInput.addEventListener('input', validateTaxableValue);
+            totalAmountInput.addEventListener('input', validateTotalAmount);
+            QuantityInput.addEventListener('input', validateQuantity);
+            bankDetailsInput.addEventListener('input', validateBankDetails);
+            PRPCInput.addEventListener('input' ,validatePRPCPrice);
+            cylinder_diameter_Input.addEventListener('input',validateCylinderDiameter);
+            cylinder_height_Input.addEventListener('input',validateCylinderHeight);
+            TitleInput.addEventListener('input',validateTitle);
+            pouch_open_diameter_Input.addEventListener('input',validatePouchOpenDiameter);
+            pouch_open_height_Input.addEventListener('input',validatePouchOpenHeight);
+            InvoiceStatusInput.addEventListener('input',validateInvoiceStatus);
 
-    $(document).on('input change', '#billing_state_name, #company_name, input[name="gst[]"], .item_check, input[name="quantity[]"], input[name="prpc_price[]"], .pouch-diameter, .pouch-height, .cylinder-diameter, .cylinder-height, .new-job, .job-name', function() {
-        var changedField = $(this).attr('id') || $(this).attr('name');
-        var billing_state_name = $('#billing_state_name').val();
-        var company_name = $('#company_name').val();
 
-     
-        var igst = $('#igst').is(':checked') ? 18 : 0;
-        var cgst = $('#cgst').is(':checked') ? 9 : 0;
-        var sgst = $('#sgst').is(':checked') ? 9 : 0;
 
-        var quantities = $('input[name="quantity[]"]').map(function() {
-            return $(this).val() || 0;
-        }).get();
-        var prpc_prices = $('input[name="prpc_price[]"]').map(function() {
-            return $(this).val() || 0;
-        }).get();
 
-        if (company_name === "others") {
-            $("#new_company").show();
-        } else {
-            $("#new_company").hide();
-        }
+            const loaderOverlay = document.getElementById("loader-overlay");
+            proformaForm.addEventListener('submit', function (event) {
+                event.preventDefault();
 
-        if (changedField === 'company_name') {
-            $('#company_email').val('');
-            $('#company_contact').val('');
-            $('#billing_address').val('');
-        }
+                if (validateForm()) {
+                    if (loaderOverlay) {
+                        loaderOverlay.style.display = "flex";
+                    }requestAnimationFrame(() => {
+                        proformaForm.submit();});
+                } else {
+                    const firstError = document.querySelector('[style*="display: block"]');
+                    if (firstError) {
+                        firstError.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            $(document).on('input change', '#billing_state_name, #company_name, input[name="gst[]"], .item_check, input[name="quantity[]"], input[name="prpc_price[]"], .pouch-diameter, .pouch-height, .cylinder-diameter, .cylinder-height, .new-job, .job-name', function() {
+                var changedField = $(this).attr('id') || $(this).attr('name');
+                var billing_state_name = $('#billing_state_name').val();
+                var company_name = $('#company_name').val();
+
+
+                var igst = $('#igst').is(':checked') ? 18 : 0;
+                var cgst = $('#cgst').is(':checked') ? 9 : 0;
+                var sgst = $('#sgst').is(':checked') ? 9 : 0;
+
+                var quantities = $('input[name="quantity[]"]').map(function() {
+                    return $(this).val() || 0;
+                }).get();
+                var prpc_prices = $('input[name="prpc_price[]"]').map(function() {
+                    return $(this).val() || 0;
+                }).get();
+
+                if (company_name === "others") {
+                    $("#new_company").show();
+                } else {
+                    $("#new_company").hide();
+                }
+
+                if (changedField === 'company_name') {
+                    $('#company_email').val('');
+                    $('#company_contact').val('');
+                    $('#billing_address').val('');
+                }
 
         // Set GST options visibility
-        if (billing_state_name === "Gujarat") {
-            $("#igst_div").hide();
-            $("#sgst_div").show();
-            $("#cgst_div").show();
-            igst = 0;
-        } else if (billing_state_name) {
-            $("#igst_div").show();
-            $("#sgst_div").hide();
-            $("#cgst_div").hide();
-            sgst = 0;
-            cgst = 0;
-        }
-
-        $.ajax({
-            url: "{% url 'proforma_invoice_ajax' %}",
-            type: "GET",
-            data: {
-                billing_state_name: billing_state_name,
-                company_name: company_name,
-                igsts: igst,
-                cgsts: cgst,
-                sgsts: sgst,
-                quantities: quantities,
-                prpc_prices: prpc_prices
-            },
-            success: function(response) {
-              
-                if (changedField === 'company_name') {
-                   
-                    $('#billing_address').val(response.billing_address || '');
+                if (billing_state_name === "Gujarat") {
+                    $("#igst_div").hide();
+                    $("#sgst_div").show();
+                    $("#cgst_div").show();
+                    igst = 0;
+                } else if (billing_state_name) {
+                    $("#igst_div").show();
+                    $("#sgst_div").hide();
+                    $("#cgst_div").hide();
+                    sgst = 0;
+                    cgst = 0;
                 }
-                if ((response.contacts && response.contacts.length) || changedField === 'company_name') {
-                    var $select = $('#company_contact');
-                    var previous = $select.val();
-                    $select.empty().append('<option value="" selected disabled>Select Company Contact</option>');
-                    if (response.contacts && response.contacts.length) {
-                        $.each(response.contacts, function(index, contact) {
-                            $select.append('<option value="' + contact.party_contacts__party_number + '">' + contact.party_contacts__party_number + '</option>');
-                        });
-                    }
-                    $select.append('<option value="others">Other</option>');
 
-                    if (previous) {
-                        if ($select.find('option[value="' + previous + '"]').length) {
-                            $select.val(previous);
-                        } else {
-                            if (previous !== 'others' && previous !== '') {
-                                $select.append('<option class="custom-contact" value="' + previous + '" selected>' + previous + '</option>');
-                            } else {
-                                $select.prop('selectedIndex', 0);
+                $.ajax({
+                    url: "{% url 'proforma_invoice_ajax' %}",
+                    type: "GET",
+                    data: {
+                        billing_state_name: billing_state_name,
+                        company_name: company_name,
+                        igsts: igst,
+                        cgsts: cgst,
+                        sgsts: sgst,
+                        quantities: quantities,
+                        prpc_prices: prpc_prices
+                    },
+                    success: function(response) {
+
+                        if (changedField === 'company_name') {
+
+                            $('#billing_address').val(response.billing_address || '');
+                        }
+                        if ((response.contacts && response.contacts.length) || changedField === 'company_name') {
+                            var $select = $('#company_contact');
+                            var previous = $select.val();
+                            $select.empty().append('<option value="" selected disabled>Select Company Contact</option>');
+                            if (response.contacts && response.contacts.length) {
+                                $.each(response.contacts, function(index, contact) {
+                                    $select.append('<option value="' + contact.party_contacts__party_number + '">' + contact.party_contacts__party_number + '</option>');
+                                });
                             }
-                        }
-                    }
-                }      
-                if ((response.emails && response.emails.length) || changedField === 'company_name') {
-                    var $select = $('#company_email');
-                    var previous = $select.val();
-                    $select.empty().append('<option value="" selected disabled>Select Company Email</option>');
-                    if (response.emails && response.emails.length) {
-                        $.each(response.emails, function(index, email) {
-                            $select.append('<option value="' + email.party_emails__email + '">' + email.party_emails__email + '</option>');
-                        });
-                    }
-                    $select.append('<option value="others">Other</option>');
+                            $select.append('<option value="others">Other</option>');
 
-                    if (previous) {
-                        if ($select.find('option[value="' + previous + '"]').length) {
-                            $select.val(previous);
-                        } else {
-                            if (previous !== 'others' && previous !== '') {
-                                $select.append('<option class="custom-email" value="' + previous + '" selected>' + previous + '</option>');
-                            } else {
-                                $select.prop('selectedIndex', 0);
-                            }
-                        }
-                    }
-                }
-             
-                if ((response.job && response.job.length) || changedField === 'company_name') {
-                    $('.job-name').each(function() {
-                        var $select = $(this);
-                        var previous = $select.val();
-                        $select.empty().append('<option value="" selected disabled>Select Job Name</option>');
-                        if (response.job && response.job.length) {
-                            $.each(response.job, function(index, job) {
-                                $select.append('<option value="' + job.job_name + '">' + job.job_name + '</option>');
-                            });
-                        }
-                        $select.append('<option value="others">Other</option>');
-
-                        if (previous) {
-                            if ($select.find('option[value="' + previous + '"]').length) {
-                                $select.val(previous);
-                            } else {
-                               
-                                if (previous !== 'others' && previous !== '') {
-                                    $select.append('<option class="custom-job" value="' + previous + '" selected>' + previous + '</option>');
+                            if (previous) {
+                                if ($select.find('option[value="' + previous + '"]').length) {
+                                    $select.val(previous);
                                 } else {
-                                    $select.prop('selectedIndex', 0);
+                                    if (previous !== 'others' && previous !== '') {
+                                        $select.append('<option class="custom-contact" value="' + previous + '" selected>' + previous + '</option>');
+                                    } else {
+                                        $select.prop('selectedIndex', 0);
+                                    }
                                 }
                             }
                         }
-                    });
+                        if ((response.emails && response.emails.length) || changedField === 'company_name') {
+                            var $select = $('#company_email');
+                            var previous = $select.val();
+                            $select.empty().append('<option value="" selected disabled>Select Company Email</option>');
+                            if (response.emails && response.emails.length) {
+                                $.each(response.emails, function(index, email) {
+                                    $select.append('<option value="' + email.party_emails__email + '">' + email.party_emails__email + '</option>');
+                                });
+                            }
+                            $select.append('<option value="others">Other</option>');
+
+                            if (previous) {
+                                if ($select.find('option[value="' + previous + '"]').length) {
+                                    $select.val(previous);
+                                } else {
+                                    if (previous !== 'others' && previous !== '') {
+                                        $select.append('<option class="custom-email" value="' + previous + '" selected>' + previous + '</option>');
+                                    } else {
+                                        $select.prop('selectedIndex', 0);
+                                    }
+                                }
+                            }
+                        }
+
+                        if ((response.job && response.job.length) || changedField === 'company_name') {
+                            $('.job-name').each(function() {
+                                var $select = $(this);
+                                var previous = $select.val();
+                                $select.empty().append('<option value="" selected disabled>Select Job Name</option>');
+                                if (response.job && response.job.length) {
+                                    $.each(response.job, function(index, job) {
+                                        $select.append('<option value="' + job.job_name + '">' + job.job_name + '</option>');
+                                    });
+                                }
+                                $select.append('<option value="others">Other</option>');
+
+                                if (previous) {
+                                    if ($select.find('option[value="' + previous + '"]').length) {
+                                        $select.val(previous);
+                                    } else {
+
+                                        if (previous !== 'others' && previous !== '') {
+                                            $select.append('<option class="custom-job" value="' + previous + '" selected>' + previous + '</option>');
+                                        } else {
+                                            $select.prop('selectedIndex', 0);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+
+                        if (response.total_amount !== undefined) {
+                            $('#total_amount').val(Number(response.total_amount).toFixed(2));
+                        }
+                        if (response.taxable_value !== undefined) {
+                            $('#taxable_value').val(Number(response.taxable_value).toFixed(2));
+                        }
+                        if (response.gst_amount !== undefined) {
+                            $('#gst_value').val(Number(response.gst_amount).toFixed(2));
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log("Error:", error);
+                    }
+                });
+            });
+
+
+            $(document).on('change', '.job-name', function() {
+                const section = $(this).closest('.job-section');
+                const newJobInput = section.find('.new-job');
+
+                if ($(this).val() === 'others') {
+                    newJobInput.show().focus();
+                } else {
+                    newJobInput.hide().val('');
+                    section.find('.job-name option.custom-job').remove();
                 }
+            });
 
-                if (response.total_amount !== undefined) {
-                    $('#total_amount').val(Number(response.total_amount).toFixed(2));
+            $(document).on('input', '.new-job', function() {
+                const section = $(this).closest('.job-section');
+                const dropdown = section.find('.job-name');
+                const newJobName = $(this).val().trim();
+
+                dropdown.find('option.custom-job').remove();
+
+                if (newJobName !== '') {
+                    dropdown.append(`<option class="custom-job" value="${newJobName}" selected>${newJobName}</option>`);
+                } else {
+                    dropdown.val('others');
                 }
-                if (response.taxable_value !== undefined) {
-                    $('#taxable_value').val(Number(response.taxable_value).toFixed(2));
+            });
+
+
+            $(document).on('change', '#company_email', function() {
+                const val = $(this).val();
+                if (val === 'others') {
+                    $('#new_company_email').show().focus();
+                } else {
+                    $('#new_company_email').hide().val('');
+                    $('#company_email option.custom-email').remove();
                 }
-                if (response.gst_amount !== undefined) {
-                    $('#gst_value').val(Number(response.gst_amount).toFixed(2));
+            });
+
+            $(document).on('input', '#new_company_email', function() {
+                const email = $(this).val().trim();
+                const $dropdown = $('#company_email');
+                $dropdown.find('option.custom-email').remove();
+
+                if (email !== '') {
+                    $dropdown.append(`<option class="custom-email" value="${email}" selected>${email}</option>`);
+                } else {
+                    $dropdown.val('others');
                 }
-            },
-            error: function(xhr, status, error) {
-                console.log("Error:", error);
-            }
-        });
-    });
+            });
 
-   
-    $(document).on('change', '.job-name', function() {
-        const section = $(this).closest('.job-section');
-        const newJobInput = section.find('.new-job');
+            $(document).on('change', '#company_contact', function() {
+                const val = $(this).val();
+                if (val === 'others') {
+                    $('#new_company_contact').show().focus();
+                } else {
+                    $('#new_company_contact').hide().val('');
+                    $('#company_contact option.custom-contact').remove();
+                }
+            });
 
-        if ($(this).val() === 'others') {
-            newJobInput.show().focus();
-        } else {
-            newJobInput.hide().val('');
-            section.find('.job-name option.custom-job').remove();
-        }
-    });
+            $(document).on('input', '#new_company_contact', function() {
+                const contact = $(this).val().trim();
+                const $dropdown = $('#company_contact');
+                $dropdown.find('option.custom-contact').remove();
 
-    $(document).on('input', '.new-job', function() {
-        const section = $(this).closest('.job-section');
-        const dropdown = section.find('.job-name');
-        const newJobName = $(this).val().trim();
+                if (contact !== '') {
+                    $dropdown.append(`<option class="custom-contact" value="${contact}" selected>${contact}</option>`);
+                } else {
+                    $dropdown.val('others');
+                }
+            });
 
-        dropdown.find('option.custom-job').remove();
 
-        if (newJobName !== '') {
-            dropdown.append(`<option class="custom-job" value="${newJobName}" selected>${newJobName}</option>`);
-        } else {
-            dropdown.val('others');
-        }
-    });
+            $(document).on('input', '.pouch-diameter, .pouch-height', function() {
+                const section = $(this).closest('.job-section');
+                const diameter = section.find('.pouch-diameter').val();
+                const height = section.find('.pouch-height').val();
+                if (diameter && height) {
+                    section.find('.pouch-open-size').val(`${height}x${diameter}`);
+                }
+            });
 
-   
-    $(document).on('change', '#company_email', function() {
-        const val = $(this).val();
-        if (val === 'others') {
-            $('#new_company_email').show().focus();
-        } else {
-            $('#new_company_email').hide().val('');
-            $('#company_email option.custom-email').remove();
-        }
-    });
+            $(document).on('input', '.cylinder-diameter, .cylinder-height', function() {
+                const section = $(this).closest('.job-section');
+                const diameter = section.find('.cylinder-diameter').val();
+                const height = section.find('.cylinder-height').val();
+                if (diameter && height) {
+                    section.find('.cylinder-size').val(`${height}x${diameter}`);
+                }
+            });
 
-    $(document).on('input', '#new_company_email', function() {
-        const email = $(this).val().trim();
-        const $dropdown = $('#company_email');
-        $dropdown.find('option.custom-email').remove();
 
-        if (email !== '') {
-            $dropdown.append(`<option class="custom-email" value="${email}" selected>${email}</option>`);
-        } else {
-            $dropdown.val('others');
-        }
-    });
-
-    $(document).on('change', '#company_contact', function() {
-        const val = $(this).val();
-        if (val === 'others') {
-            $('#new_company_contact').show().focus();
-        } else {
-            $('#new_company_contact').hide().val('');
-            $('#company_contact option.custom-contact').remove();
-        }
-    });
-
-    $(document).on('input', '#new_company_contact', function() {
-        const contact = $(this).val().trim();
-        const $dropdown = $('#company_contact');
-        $dropdown.find('option.custom-contact').remove();
-
-        if (contact !== '') {
-            $dropdown.append(`<option class="custom-contact" value="${contact}" selected>${contact}</option>`);
-        } else {
-            $dropdown.val('others');
-        }
-    });
-
-    
-    $(document).on('input', '.pouch-diameter, .pouch-height', function() {
-        const section = $(this).closest('.job-section');
-        const diameter = section.find('.pouch-diameter').val();
-        const height = section.find('.pouch-height').val();
-        if (diameter && height) {
-            section.find('.pouch-open-size').val(`${height}x${diameter}`);
-        }
-    });
-
-    $(document).on('input', '.cylinder-diameter, .cylinder-height', function() {
-        const section = $(this).closest('.job-section');
-        const diameter = section.find('.cylinder-diameter').val();
-        const height = section.find('.cylinder-height').val();
-        if (diameter && height) {
-            section.find('.cylinder-size').val(`${height}x${diameter}`);
-        }
-    });
-   
-    
-    $('#add-job').on('click', function(e) {
-    e.preventDefault();
-    let newSection = $('.job-section:first').clone();
-    newSection.find('input').val('');
-    newSection.find('select').prop('selectedIndex', 0);
-    newSection.find('.new-job').hide();
-    newSection.find('option.custom-job').remove();
-    newSection.find('h5').after(`
+            $('#add-job').on('click', function(e) {
+                e.preventDefault();
+                let newSection = $('.job-section:first').clone();
+                newSection.find('input').val('');
+                newSection.find('select').prop('selectedIndex', 0);
+                newSection.find('.new-job').hide();
+                newSection.find('option.custom-job').remove();
+                newSection.find('h5').after(`
   <div class="d-grid gap-2 d-md-flex justify-content-md-end">
     <button class="btn btn-danger me-md-2 SN" id="close_job" type="button">X</button>
   </div>
 `);
 
-    
 
-    $('#job-container').append(newSection);
-    jobIndex++;
-  });
-  $(document).on('click', '#close_job', function(e) {
-        e.preventDefault();
-        $(this).closest('.job-section').remove();
-    });
-});
-</script>
+
+                $('#job-container').append(newSection);
+                jobIndex++;
+            });
+            $(document).on('click', '#close_job', function(e) {
+                e.preventDefault();
+                $(this).closest('.job-section').remove();
+            });
+        });
+    </script>
 
 {% endblock script %}
 
