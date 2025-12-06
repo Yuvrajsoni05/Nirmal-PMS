@@ -8767,3 +8767,4 @@ Traceback (most recent call last):
     folder_id = get_data.folder_url
                 ^^^^^^^^^^^^^^^^^^^
 AttributeError: 'Job_detail' object has no attribute 'folder_url'
+ERROR 2025-12-06 13:18:54,197 myapp login_page Invalid Username or Password views.py
