@@ -40,7 +40,7 @@ urlpatterns = [
         job_page_ajax,
         name="job_page_ajax",
     ),
-    path('bank_detailss', bank, name='bank_details'),
+ 
     path(
         "cdr_page_ajax",
         cdr_page_ajax,

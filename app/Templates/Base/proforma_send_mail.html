@@ -111,6 +111,38 @@
             .products-section tr:last-child td {
                 border-top: none;
             }
+            .company-logo-css {
+                position: relative;
+                width: 80px;
+                height: 70px;
+                margin-right: 15px;
+            }
+
+            /* Big purple triangle */
+            .company-logo-css::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 10px;
+                width: 0;
+                height: 0;
+                border-left: 30px solid transparent;
+                border-right: 30px solid transparent;
+                border-bottom: 70px solid #5b2e91; /* purple */
+            }
+
+            /* Inner gold triangle */
+            .company-logo-css::after {
+                content: "";
+                position: absolute;
+                top: 18px;
+                left: 25px;
+                width: 0;
+                height: 0;
+                border-left: 15px solid transparent;
+                border-right: 15px solid transparent;
+                border-bottom: 35px solid #cba14b; /* gold */
+            }
         </style>
     </head>
     <body>
@@ -118,18 +150,27 @@
             <div class="header">PROFORMA INVOICE</div>
             <table>
                 <tr>
-                    <td style="width: 45%">
-                        <b
-                            >shrri nirmal ventures private limited (Pack. Div.)
-                            {{ data.date }}</b
-                        ><br />
-                        1601, 16th Floor, B Block,<br />
-                        Navratna Corporate Park, Nr. Jayantilal Park<br />
-                        Ambli Bopal Road, Ambli, Ahmedabad - 380058<br />
-                        GSTIN/UIN: 24AABCN6372N1Z4<br />
-                        State Name : Gujarat, Code : 24<br />
-                        CIN: U25200GJ1995PTC027623
+                    <td class="p-2">
+                        <div class="d-flex align-items-center company-row">
+                            <!-- Company Logo with pure CSS -->
+                            <div class="company-logo-css"></div>
+
+                            <!-- Company Info -->
+                            <div class="company-info">
+                                <b
+                                    >Shrri Nirmal Ventures Private Limited {{
+                                    data.date }}</b
+                                ><br />
+                                Unit 1601, 16th Floor, B Block,<br />
+                                Navratna Corporate Park, Nr. Jayantilal Park<br />
+                                Ambli Bopal Road, Ambli, Ahmedabad - 380058<br />
+                                GSTIN/UIN: 24AABCN6372N1Z4<br />
+                                State Name : Gujarat, Code : 24<br />
+                                CIN: U25200GJ1995PTC027623
+                            </div>
+                        </div>
                     </td>
+
                     <td style="width: 55%; font-size: 8px">
                         <table
                             style="
@@ -374,9 +415,9 @@
                         INR {{ total_in_words }} Only<br /><br />
                         <b>Company's PAN : </b> AABCN6372N<br /><br />
                         <b>Declaration:</b><br />
-                        We declare that this invoice shows the actual price of
-                        the goods described and that all particulars are true
-                        and correct.
+                        We declare that this proforma invoice shows the actual
+                        price of the goods described and that all particulars
+                        are true and correct.
                     </td>
                     <td
                         style="
@@ -386,10 +427,7 @@
                             font-size: 12px;
                         "
                     >
-                        <div>
-                            for Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.)
-                            {{data.date}}
-                        </div>
+                        <div>Shrri Nirmal Ventures Private Limited</div>
                         <br /><br /><br /><br />
                         <div class="signature-line"></div>
 
@@ -424,7 +462,7 @@
             </table>
 
             <div class="text-center" style="margin-top: 10px; font-size: 12px">
-                shrri nirmal ventures private limited
+                Shrri Nirmal Ventures Private Limited
             </div>
         </div>
     </body>

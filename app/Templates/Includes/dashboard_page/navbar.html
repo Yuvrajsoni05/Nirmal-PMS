@@ -1,0 +1,34 @@
+{% if venues.paginator.num_pages > 1 %}
+<nav aria-label="Page navigation example">
+    <div class="pagination-info">
+        Page {{ venues.number }} of {{ venues.paginator.num_pages }}
+    </div>
+    <ul class="pagination justify-content-end">
+        {% if venues.has_previous %}
+        <li class="page-item">
+            <a
+                class="page-link"
+                href="?page={{ venues.previous_page_number }}&q={{ request.GET.q }}&date={{ request.GET.date }}&job_name_sorting={{ request.GET.job_name_sorting }}&sorting={{ request.GET.sorting }}&company_name_sorting={{ request.GET.company_name_sorting }}&date_sorting={{ request.GET.date_sorting }}&cylinder_date_sorting={{ request.GET.cylinder_date_sorting }}&cylinder_made_in_sorting={{ request.GET.cylinder_made_in_sorting }}&end_date={{ request.GET.end_date }}"
+                >Previous</a
+            >
+        </li>
+        {% endif %} {% for i in venues.paginator.page_range %}
+        <li class="page-item {% if venues.number == i %}active{% endif %}">
+            <a
+                class="page-link"
+                href="?page={{ i }}&q={{ request.GET.q }}&date={{ request.GET.date }}&job_name_sorting={{ request.GET.job_name_sorting }}&sorting={{ request.GET.sorting }}&company_name_sorting={{ request.GET.company_name_sorting }}&date_sorting={{ request.GET.date_sorting }}&cylinder_date_sorting={{ request.GET.cylinder_date_sorting }}&cylinder_made_in_sorting={{ request.GET.cylinder_made_in_sorting }}&end_date={{ request.GET.end_date }}"
+                >{{ i }}</a
+            >
+        </li>
+        {% endfor %} {% if venues.has_next %}
+        <li class="page-item">
+            <a
+                class="page-link"
+                href="?page={{ venues.next_page_number }}&q={{ request.GET.q }}&date={{ request.GET.date }}&job_name_sorting={{ request.GET.job_name_sorting }}&sorting={{ request.GET.sorting }}&company_name_sorting={{ request.GET.company_name_sorting }}&date_sorting={{ request.GET.date_sorting }}&cylinder_date_sorting={{ request.GET.cylinder_date_sorting }}&cylinder_made_in_sorting={{ request.GET.cylinder_made_in_sorting }}&end_date={{ request.GET.end_date }}"
+                >Next</a
+            >
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

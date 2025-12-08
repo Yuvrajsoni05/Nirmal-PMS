@@ -9,3 +9,5 @@ static/
 .vscode/
 .idea/
 *.env
+*media
+*.gitignore

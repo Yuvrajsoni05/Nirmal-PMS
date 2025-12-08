@@ -8,92 +8,135 @@
       aria-labelledby="exampleModalCenterTitle"
       aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title">Job Details</h5>
+        <div class="modal-content border-0 shadow">
+            <!-- Header -->
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-semibold mb-0">Job Detail -  {{ i.job_name }}</h5>
                 <button type="button"
-                        class="btn-close btn-close-white"
+                        class="btn-close"
                         data-bs-dismiss="modal"
                         aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            
+            <!-- Body -->
+            <div class="modal-body p-3">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <p>
-                                <strong>Date:</strong> {{ i.date }}
-                            </p>
-                            <p>
-                                <strong>Bill No:</strong> {{ i.bill_no }}
-                            </p>
+                    <!-- Basic Information -->
+                    <div class="mb-3">
+                        <h6 class="text-muted text-uppercase small mb-2" style="letter-spacing: 0.5px; font-weight: 600;">Basic Information</h6>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <small class="text-muted d-block">Date</small>
+                                <span class="fw-medium">{{ i.date }}</span>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted d-block">Bill No</small>
+                                <span class="fw-medium">{{ i.bill_no }}</span>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted d-block">Job Status</small>
+                                <span class="fw-medium">{{ i.job_status }}</span>
+                            </div>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <p>
-                                <strong>Job Name:</strong> {{ i.job_name }}
-                            </p>
-                            <p>
-                                <strong>Job Type:</strong> {{ i.job_type }}
-                            </p>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <p>
-                                <strong>Party Name:</strong> {{ i.party_details.party_name }}
-                            </p>
-                            <p>
-                                <strong>No. of Colors (NOC):</strong> {{ i.noc }}
-                            </p>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <p>
-                                <strong>Rate/Cylinder (Purchase):</strong> ₹ {{ i.prpc_purchase|indian_currency_format }}
-                            </p>
-                            <p>
-                                <strong>Rate/Cylinder (Sales):</strong> ₹ {{ i.prpc_sell|indian_currency_format }}
-                            </p>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <p>
-                                <strong>Cylinder Size:</strong> {{ i.cylinder_size }}
-                            </p>
-                            <p>
-                                <strong>Made In:</strong> {{ i.cylinder_made_in }}
-                            </p>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <p>
-                                <strong>Cylinder Bill No:</strong> {{ i.cylinder_bill_no }}
-                            </p>
-                            <p>
-                                <strong>Cylinder Date:</strong> {{ i.cylinder_date }}
-                            </p>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <p>
-                                <strong>Pouch Size:</strong> {{ i.pouch_size }}
-                            </p>
-                            <p>
-                                <strong>Open Size:</strong> {{ i.pouch_open_size }}
-                            </p>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <p>
-                                <strong>Pouch Combination:</strong> {{ i.pouch_combination }}
-                            </p>
-                            <p>
-                                <strong>Correction:</strong> {{ i.correction }}
-                            </p>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <p>
-                                <strong>Job Status:</strong> {{ i.job_status }}
-                            </p>
+                    </div>
 
+                    <hr class="my-2">
+
+                    <!-- Job Information -->
+                    <div class="mb-3">
+                        <h6 class="text-muted text-uppercase small mb-2" style="letter-spacing: 0.5px; font-weight: 600;">Job Information</h6>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <small class="text-muted d-block">Job Name</small>
+                                <span class="fw-medium">{{ i.job_name }}</span>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted d-block">Job Type</small>
+                                <span class="fw-medium">{{ i.job_type }}</span>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted d-block">Party Name</small>
+                                <span class="fw-medium">{{ i.party_details.party_name }}</span>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted d-block">No. of Colors (NOC)</small>
+                                <span class="fw-medium">{{ i.noc }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-2">
+
+                    <!-- Pricing Information -->
+                    <div class="mb-3">
+                        <h6 class="text-muted text-uppercase small mb-2" style="letter-spacing: 0.5px; font-weight: 600;">Pricing</h6>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <small class="text-muted d-block">Rate/Cylinder (Purchase)</small>
+                                <span class="fw-medium">₹ {{ i.prpc_purchase|indian_currency_format }}</span>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted d-block">Rate/Cylinder (Sales)</small>
+                                <span class="fw-medium">₹ {{ i.prpc_sell|indian_currency_format }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-2">
+
+                    <!-- Cylinder Details -->
+                    <div class="mb-3">
+                        <h6 class="text-muted text-uppercase small mb-2" style="letter-spacing: 0.5px; font-weight: 600;">Cylinder Details</h6>
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <small class="text-muted d-block">Cylinder Size</small>
+                                <span class="fw-medium">{{ i.cylinder_size }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted d-block">Made In</small>
+                                <span class="fw-medium">{{ i.cylinder_made_in }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted d-block">Bill No</small>
+                                <span class="fw-medium">{{ i.cylinder_bill_no }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted d-block">Date</small>
+                                <span class="fw-medium">{{ i.cylinder_date }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-2">
+
+                    <!-- Pouch Details -->
+                    <div class="mb-0">
+                        <h6 class="text-muted text-uppercase small mb-2" style="letter-spacing: 0.5px; font-weight: 600;">Pouch Details</h6>
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <small class="text-muted d-block">Pouch Size</small>
+                                <span class="fw-medium">{{ i.pouch_size }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted d-block">Open Size</small>
+                                <span class="fw-medium">{{ i.pouch_open_size }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted d-block">Combination</small>
+                                <span class="fw-medium">{{ i.pouch_combination }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted d-block">Correction</small>
+                                <span class="fw-medium">{{ i.correction }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary"
+            
+            <!-- Footer -->
+            <div class="modal-footer border-top bg-light">
+                <button class="btn btn-outline-secondary"
                         onclick="printJobDetails(this)"
                         data-id="{{ i.id }}"
                         data-job_name="{{ i.job_name }}"
@@ -110,20 +153,23 @@
                         data-pouch_combination="{{ i.pouch_combination }}"
                         data-correction="{{ i.correction }}"
                         data-job_status="{{ i.job_status }}"
-                        data-noc = "{{i.noc }}"
-                >
+                        data-noc="{{ i.noc }}">
                     Print
                 </button>
                 <button type="button"
-                        class="btn btn-secondary"
+                        class="btn btn-outline-secondary"
                         data-bs-toggle="modal"
                         data-bs-target="#emailModal{{ i.id }}"
-                        data-bs-dismiss="modal">Mail</button>
+                        data-bs-dismiss="modal">
+                    Mail
+                </button>
                 <button type="button"
-                        class="btn btn-warning"
+                        class="btn btn-dark"
                         data-bs-toggle="modal"
                         data-bs-target="#exampleModal{{ i.id }}"
-                        data-bs-dismiss="modal">Edit</button>
+                        data-bs-dismiss="modal">
+                    Edit
+                </button>
             </div>
         </div>
     </div>

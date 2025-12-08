@@ -1,20 +1,19 @@
 from calendar import c
 import json
 import logging
-from operator import inv
+
 import os
 import re
 from datetime import datetime
 
 
-
-from pyparsing import C
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import (PasswordResetConfirmView,
                                        PasswordResetDoneView,
                                        PasswordResetView)
+
 from django.contrib.sessions.models import Session
 # mail
 from django.core.mail import EmailMultiAlternatives
@@ -27,13 +26,12 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
 
-from app.models import CDRDetail, Job_detail, ProformaInvoice, ProformaJob
-from app.utils import file_name_convert, phone_number_check
 
-from . import utils 
+from app.utils import *
+
 from .decorators import *
 from .models import *
-from django.db import transaction
+
 
 # Password
 
@@ -53,7 +51,7 @@ from django.db import transaction
 # Lecco ai
 # Cookies in  Django Section in django
 
-
+logger = logging.getLogger("myapp")
 class CustomPasswordResetView(PasswordResetView):
     template_name = "Password/password_reset_form.html"
     email_template_name = "Password/password_reset_email.html"
@@ -73,7 +71,7 @@ def password_reset_done(request):
     return render(request, "Password/password_update_done.html")
 
 
-logger = logging.getLogger("myapp")
+
 
 
 def login_page(request):
@@ -302,13 +300,13 @@ def update_user(request, user_id):
 @custom_login_required
 def dashboard_page(request):
     try:
-        get_q = request.GET.get("q", "").strip()
+        party_name_search = request.GET.get("party_name", "").strip()
         job_name_search = request.GET.get("job_name_search", "").strip()
-        date_s = request.GET.get("date", "").strip()
-        date_e = request.GET.get("end_date", "").strip()
-        sorting = request.GET.get("sort ing", "").strip()
+        start_date = request.GET.get("start_date", "").strip()
+        end_date = request.GET.get("end_date", "").strip()
+        sorting = request.GET.get("sorting", "").strip()
         date_sorting = request.GET.get("date_sorting", "").strip()
-        company_name_sorting = request.GET.get("company_name_sorting", "").strip()
+        party_name_sorting = request.GET.get("party_name_sorting", "").strip()
         job_name_sorting = request.GET.get("job_name_sorting", "").strip()
         cylinder_date_sorting = request.GET.get("cylinder_date_sorting", "").strip()
         cylinder_made_in_sorting = request.GET.get("cylinder_made_in_sorting", "").strip()
@@ -316,24 +314,21 @@ def dashboard_page(request):
         filters = Q()
 
  
-        if get_q:
-            filters &= Q(party_details__party_name__icontains=get_q)
+        if party_name_search:
+            filters &= Q(party_details__party_name__icontains=party_name_search)
         if job_name_search:
             filters &= Q(job_name__icontains=job_name_search)
 
         # Date filters
-        if date_s and date_e:
-            filters &= Q(date__range=[date_s, date_e])
-        elif date_s:
-            filters &= Q(date__icontains=date_s)
-        elif date_e:
-            filters &= Q(date__icontains=date_e)
+        if start_date and end_date:
+            filters &= Q(date__range=[start_date, end_date])
+        elif start_date:
+            filters &= Q(date__icontains=start_date)
+        elif end_date:
+            filters &= Q(date__icontains=end_date)
         
-        
-        
-        db_sqlite3 = Job_detail.objects.filter(filters)
+        job_details = Job_detail.objects.filter(filters)
         job_status = Job_detail.objects.values("job_status").distinct()
-
        
         sorting_map = {
             "asc": "id",
@@ -354,44 +349,42 @@ def dashboard_page(request):
             f"job_name_{job_name_sorting}" if job_name_sorting else
             f"date_{date_sorting}" if date_sorting else
             f"cyl_date_{cylinder_date_sorting}" if cylinder_date_sorting else
-            f"company_{company_name_sorting}" if company_name_sorting else
+            f"company_{party_name_sorting}" if party_name_sorting else
             f"madein_{cylinder_made_in_sorting}" if cylinder_made_in_sorting else
             sorting
         )
    
 
         if sort_key in sorting_map:
-            db_sqlite3 = db_sqlite3.order_by(sorting_map[sort_key])
+            job_details = job_details.order_by(sorting_map[sort_key])
         else:
-            db_sqlite3 = db_sqlite3.order_by("-job_status", "date" ,"id")
-        p = Paginator(db_sqlite3, 10)
-        page = request.GET.get("page")
-        datas = p.get_page(page)
-        total_job = db_sqlite3.count()
+            job_details = job_details.order_by("-job_status", "date" ,"id")
+            
+        paginator = Paginator(job_details, 10)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        total_job = job_details.count()
 
         company_names = Party.objects.values("party_name").distinct()
-        job_names = Job_detail.objects.values("job_name").distinct()
+        job_names = job_details.values("job_name").distinct()
         count_of_company = Party.objects.all().order_by("party_name").count()
 
         cylinder_company_names = CylinderMadeIn.objects.all()
-        total_active_job = Job_detail.objects.filter(job_status="In Progress").count()
+        total_active_job = job_details.filter(job_status="In Progress").count()
         count_of_cylinder_company = cylinder_company_names.count()
-        nums = " " * datas.paginator.num_pages
+        nums = " " * page_obj.paginator.num_pages
         
         context = {
             "nums": nums,
-            "venues": datas,
+            "jobrecoreds": page_obj,
             "total_job": total_job,
             "job_names": job_names,
             "company_name": company_names,
             "cylinder_company_names": cylinder_company_names,
             "count_of_company": count_of_company,
             "count_of_cylinder_company": count_of_cylinder_company,
-            # 'total_sales':total_sales,
-            "datas": datas,
-          
             "sorting": sorting,
-            "company_name_sorting": company_name_sorting,
+            "party_name_sorting": party_name_sorting,
             "job_name_sorting": job_name_sorting,
             "date_sorting": date_sorting,
             "cylinder_date_sorting": cylinder_date_sorting,
@@ -404,11 +397,8 @@ def dashboard_page(request):
         messages.warning(request, "Something went wrong  try again")
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
         return redirect("dashboard_page")
-
     return render(request, "dashboard.html", context)
 
-def bank(request):
-    return render(request, "BankDetails/bank_details_page.html")
 
 @custom_login_required
 def delete_data(request, delete_id):
@@ -554,7 +544,7 @@ def add_job(request):
                     Jobimage.objects.create(job=job, image=file_obj)
 
                 job.save()
-            messages.success(request, "Data successfully Add ")
+            messages.success(request, "New job Add Successfully")
             return redirect("dashboard_page")
     except Exception as e:
         messages.error(request, f"Something went wrong {e}")
@@ -564,7 +554,7 @@ def add_job(request):
 
 
 
-from django.db import transaction
+
 
 @custom_login_required
 def update_job(request, update_id):
@@ -640,7 +630,7 @@ def update_job(request, update_id):
         try:
             old_job = Job_detail.objects.get(id=update_id)
             update_job_data = get_object_or_404(Job_detail, id=update_id)
-            print(Job_detail.objects.values("pouch_combination").get(id=update_id))
+            # print(Job_detail.objects.values("pouch_combination").get(id=update_id))
             job = old_job
             for field in [
                 "job_status",
@@ -1149,7 +1139,7 @@ def cdr_update(request, update_id):
             file_obj = file_data[1]
             CDRImage.objects.create(cdr=update_details, image=file_obj) 
         
-        messages.success(request, "Data Updated Successfully")
+        messages.success(request, "CDR Updated Successfully")
         return redirect("company_add_page")
     return redirect("company_add_page")
 
@@ -1325,14 +1315,8 @@ def cdr_page_ajax(request):
     company_name = request.GET.get("company_name", "")
     
     if company_name:
-        jobs = list(Job_detail.objects.filter(
-            party_details__party_name__iexact=company_name
-        ).values("job_name").distinct().union(
-            CDRDetail.objects.filter(party_details__party_name__iexact=company_name)
-            .values("job_name")
-            .distinct().union(ProformaJob.objects.filter(proforma_invoice__party_details__party_name=company_name)
-            .values("job_name").distinct())
-        ))
+        jobs = utils.all_job_name_list(company_name)
+        jobs = list(jobs)
         email = list(Party.objects.filter(party_name=company_name).values('party_emails__email').distinct())
         contacts = list(
             Party.objects
@@ -1346,23 +1330,16 @@ def cdr_page_ajax(request):
         return JsonResponse({"email": email, "jobs": jobs, "contact":contacts})
     return JsonResponse({"error": "Invalid request"}, status=400)
 
+
 @require_GET
 @custom_login_required
 def job_page_ajax(request):
     company_name = request.GET.get("company_name", "")
 
     if company_name:
-        job_detail = (
-            Job_detail.objects.filter(party_details__party_name__iexact=company_name)
-            .values("job_name")
-            .distinct().union(CDRDetail.objects.filter(party_details__party_name__iexact=company_name)
-            .values("job_name").distinct().union(
-                ProformaJob.objects.filter(proforma_invoice__party_details__party_name=company_name)
-                .values("job_name").distinct()
-            )
-        ))
+        jobs = utils.all_job_name_list(company_name)
         
-        jobs = list(job_detail) 
+        jobs = list(jobs) 
         
         return JsonResponse({"jobs": jobs})
     return JsonResponse({"error": "Invalid request"}, status=400)
@@ -1816,21 +1793,16 @@ def ProformaInvoicePageAJAX(request):
     company_email_qs = []
     
     
+    
+   
     if company:
-        job_qs = Job_detail.objects.filter(party_details__party_name=company).values("job_name").distinct()
-        job_qs = job_qs.union(
-            ProformaJob.objects.filter(proforma_invoice__party_details__party_name=company)
-            .values("job_name").distinct().union(CDRDetail.objects.filter(
-                party_details__party_name=company
-            ).values("job_name").distinct())
-        )
-        job = list(job_qs)
         
+        jobs = utils.all_job_name_list(company)
+        job = list(jobs)
         company_email_qs = list(Party.objects.filter(
             party_name=company
         ).values('party_emails__email').distinct())
 
-        
         
         company_contact_qs = list(Party.objects.filter(
             party_name__iexact=company

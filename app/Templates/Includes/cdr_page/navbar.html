@@ -1,0 +1,37 @@
+{% if cdr_details %}
+<nav aria-label="Page navigation">
+    <div class="pagination-info">
+        Page {{ cdr_details.number }} of {{ cdr_details.paginator.num_pages }}
+    </div>
+    <ul class="pagination justify-content-end">
+        {% if cdr_details.has_previous %}
+        <li class="page-item">
+            <a
+                class="page-link"
+                href="?page={{ cdr_details.previous_page_number }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}"
+            >
+                Previous
+            </a>
+        </li>
+        {% endif %} {% for i in cdr_details.paginator.page_range %}
+        <li class="page-item {% if cdr_details.number == i %}active{% endif %}">
+            <a
+                class="page-link"
+                href="?page={{ i }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}"
+            >
+                {{ i }}
+            </a>
+        </li>
+        {% endfor %} {% if cdr_details.has_next %}
+        <li class="page-item">
+            <a
+                class="page-link"
+                href="?page={{ cdr_details.next_page_number }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}"
+            >
+                Next
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}

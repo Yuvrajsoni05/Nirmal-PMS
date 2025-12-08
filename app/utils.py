@@ -3,7 +3,7 @@ import random
 import requests
 import re
 import os
-
+from .models import *
 from app.models import Registration
 
 
@@ -73,5 +73,25 @@ def file_name_convert(files):
         
         
         
+    
+def all_job_name_list(party_name):
+    try:
+        party =  Party.objects.get(party_name=party_name)
+    except Party.DoesNotExist:
+        return []
+    
+    if party:
+        job_qs = Job_detail.objects.filter(party_details__party_name = party).values("job_name").distinct()
+        job_qs = job_qs.union(
+            ProformaJob.objects.filter(proforma_invoice__party_details__party_name=party)
+            .values("job_name").distinct().union(CDRDetail.objects.filter(
+                party_details__party_name=party
+            ).values("job_name").distinct())
+        )
+    else :
+        job_qs = ''
+        
+    return job_qs
+    
     
     

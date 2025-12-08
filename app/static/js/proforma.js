@@ -67,8 +67,8 @@ function printProforma(button) {
     <table>
         <tr>
             <td style="width: 45%">
-                <b>Shrri nirmal ventures private limited. Ltd. (Pack. Div.)</b><br />
-                1601, 16th Floor, B Block,<br />
+                <b>Shrri Nirmal Ventures Private Limited</b><br />
+                Unit. 1601, 16th Floor, B Block,<br />
                 Navratna Corporate Park, Nr. Jayantilal Park<br />
                 Ambli Bopal Road, Ambli, Ahmedabad - 380058<br />
                 GSTIN/UIN: 24AABCN6372N1Z4<br />
@@ -225,10 +225,10 @@ function printProforma(button) {
                 INR ${data.total_in_worlds} Only<br/><br/>
                 <b>Company's PAN:</b> AABCN6372N<br/><br/>
                 <b>Declaration:</b><br/>
-                We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
+                We declare that this Proforma invoice shows the actual price of the goods described and that all particulars are true and correct.
             </td>
             <td style="width:48%; text-align:center; vertical-align:middle; font-size:12px;">
-                for Shrri Nirmal Ventures Pvt. Ltd. (Pack. Div.)<br/><br/><br/><br/>
+                for Shrri Nirmal Ventures  Private  Limited <br/><br/><br/><br/>
                 <div class="signature-line"> 
                 <img src="https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png" alt="Signature" style="width: 100%; max-width: 180px;" /></div>
                 Authorized Signatory
@@ -259,7 +259,7 @@ function printProforma(button) {
             </table>
 
     <div class="text-center" style="margin-top:10px; font-size:12px">
-        Shrri Nirmal Ventures Pvt. Ltd
+        Shrri Nirmal Ventures Private Limited
     </div>
 </div>
 

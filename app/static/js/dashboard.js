@@ -265,9 +265,9 @@ function printJobDetails(btn) {
                          alt="Logo" class="company-logo">
                 </div>
                 <div class="col text-end">
-                    <div class="company-name">Shrri nirmal ventures private limited. Ltd.</div>
+                    <div class="company-name">Shrri Nirmal Ventures Private Limited.</div>
                     <div style="font-size: 0.8rem; color: #666;">
-                        1601, 16th Floor, B Block, Navratna Corporate Park<br>
+                        Unit. 1601, 16th Floor, B Block, Navratna Corporate Park<br>
                         Ambli Bopal Road, Ambli, Ahmedabad - 380058
                     </div>
                 </div>
@@ -287,7 +287,7 @@ function printJobDetails(btn) {
         </div>
 
         <div class="info-row">
-            <span class="label">Company Name:</span> ${company_name}
+            <span class="label">Party Name:</span> ${company_name}
         </div>
 
         <div class="info-row">

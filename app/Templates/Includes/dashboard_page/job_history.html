@@ -1,0 +1,34 @@
+<div class="modal fade" id="OldBackdrop{{ i.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title fw-semibold mb-0">Job History – {{ i.job_name }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body p-3" style="max-height: 50vh; overflow-y: auto;">
+                {% if i.job_history.all %}
+                    {% for history in i.job_history.all %}
+                        <div class="py-2 border-bottom">
+                            <div class="fw-semibold mb-1">{{ history.field_name }}</div>
+                            <div class="mb-1">
+                                <small class="text-muted">Old:</small> 
+                                <span>{{ history.old_value }}</span>
+                            </div>
+                            <div class="mb-1">
+                                <small class="text-muted">New:</small> 
+                                <span>{{ history.new_value }}</span>
+                            </div>
+                            <div>
+                                <small class="text-muted">Date:</small> 
+                                <span class="small">{{ history.changed_at|date:"M d, Y H:i" }}</span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-center text-muted m-0">No job history available.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

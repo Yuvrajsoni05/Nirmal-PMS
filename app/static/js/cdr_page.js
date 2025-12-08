@@ -344,9 +344,9 @@ function printJobDetails(btn) {
         <img  src="https://nirmalgroup.com/wp-content/uploads/2024/11/Mask-group-2.png" 
                 alt="Logo" class="company-logo" style="height: 30px;">
     </div>
-        <div class="company-name">Shrri nirmal ventures private limited. Ltd.</div>
+        <div class="company-name">Shrri Nirmal Ventures Private Limited </div>
         <div class="company-address">
-            1601, 16th Floor, B Block, Navratna Corporate Park<br>
+            Unit. 1601, 16th Floor, B Block, Navratna Corporate Park<br>
             Ambli Bopal Road, Ambli, Ahmedabad - 380058
         </div>
     </div>
@@ -470,87 +470,3 @@ function validateUpdateForm(form) {
         return true;
     }
 }
-
-// AJAX: Load Related Data on Company Selection
-$("#company_name").change(function () {
-    let companyName = $(this).val();
-
-    if (companyName) {
-        $.ajax({
-            url: '{% url "cdr_page_ajax" %}',
-            data: { company_name: companyName },
-            success: function (data) {
-                // Reset Job Name dropdown
-                $("#job_name")
-                    .empty()
-                    .append('<option value="">Select Job</option>')
-                    .append('<option value="others">Other</option>');
-
-                // Reset Company Email dropdown
-                $("#company_email")
-                    .empty()
-                    .append('<option value="">Select Company Email</option>')
-                    .append('<option value="other">Other</option>');
-
-                // Reset Party Contact dropdown
-                $("#party_contact_used")
-                    .empty()
-                    .append('<option value="">Select Contact Number</option>')
-                    .append('<option value="others">Other</option>');
-
-                // Populate Party Contact
-                if (data.contact && data.contact.length > 0) {
-                    $.each(data.contact, function (index, contact) {
-                        $("#party_contact_used").append(
-                            '<option value="' +
-                                contact.party_contacts__party_number +
-                                '">' +
-                                contact.party_contacts__party_number +
-                                "</option>"
-                        );
-                    });
-                }
-
-                // Populate Company Email
-                if (data.email && data.email.length > 0) {
-                    $.each(data.email, function (index, email) {
-                        $("#company_email").append(
-                            '<option value="' +
-                                email.party_emails__email +
-                                '">' +
-                                email.party_emails__email +
-                                "</option>"
-                        );
-                    });
-                }
-
-                // Populate Job Names
-                $.each(data.jobs, function (index, job) {
-                    $("#job_name").append(
-                        '<option value="' +
-                            job.job_name +
-                            '">' +
-                            job.job_name +
-                            "</option>"
-                    );
-                });
-            },
-        });
-    } else {
-        // Reset all dropdowns when no company is selected
-        $("#job_name")
-            .empty()
-            .append('<option value="">Select Job</option>')
-            .append('<option value="others">Other</option>');
-
-        $("#company_email")
-            .empty()
-            .append('<option value="">Select Company Email</option>')
-            .append('<option value="other">Other</option>');
-
-        $("#party_contact_used")
-            .empty()
-            .append('<option value="">Select Contact Number</option>')
-            .append('<option value="others">Other</option>');
-    }
-});

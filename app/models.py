@@ -7,9 +7,6 @@ import uuid
 from django.core.validators import validate_email
 from django.forms import CharField
 
-
-
-
 from num2words import num2words
 
 
@@ -86,8 +83,6 @@ class Job_detail(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
     party_details =  models.ForeignKey(Party,on_delete=models.SET_NULL,blank=True,null=True)
 
-    # def __str__(self):
-    #     return self.party_details
 
     
     @property
@@ -100,6 +95,10 @@ class Job_detail(models.Model):
             return []
         images = cdr.cdr_images.all()
         return [img.image.url for img in images if img.image]
+    
+    
+    def __str__(self):
+        return f"{self.job_name}"
 
 
 

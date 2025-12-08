@@ -1,0 +1,121 @@
+{% load custom_tags %}
+{% load humanize %}
+<div class="modal fade" id="viewModal{{ proforma.id }}" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <!-- HEADER -->
+      <div class="modal-header ">
+        <h5 class="modal-title">Proforma Invoice – {{ proforma.invoice_no }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- BODY -->
+      <div class="modal-body">
+
+        <!-- INVOICE DETAILS -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-header bg-light fw-bold">Invoice Details</div>
+          <div class="card-body">
+            <div class="row mb-2">
+              <div class="col-md-4"><strong>Invoice No:</strong> {{ proforma.invoice_no }}</div>
+              <div class="col-md-4"><strong>Date:</strong> {{ proforma.invoice_date }}</div>
+              <div class="col-md-4"><strong>Payment Mode:</strong> {{ proforma.mode_payment }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PARTY DETAILS -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-header bg-light fw-bold">Party Details</div>
+          <div class="card-body">
+            <div class="row mb-2">
+              <div class="col-md-4"><strong>Name:</strong> {{ proforma.party_details.party_name }}</div>
+              <div class="col-md-4"><strong>Contact:</strong> {{ proforma.party_contact_used.party_number }}</div>
+              <div class="col-md-4"><strong>Email:</strong> {{ proforma.party_email_used.email }}</div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6"><strong>Billing Address:</strong><br>{{ proforma.billing_address }}</div>
+              <div class="col-md-3"><strong>GSTIN:</strong> {{ proforma.billing_gstin_no }}</div>
+              <div class="col-md-3"><strong>State:</strong> {{ proforma.billing_state_name }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- JOB DETAILS (NO TABLE – CARD PER JOB) -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-header bg-light fw-bold">Job Details</div>
+          <div class="card-body">
+
+            {% for job in proforma.job_details.all %}
+            <div class="border rounded p-3 mb-3 bg-white">
+
+              <div class="row mb-2">
+                <div class="col-md-4"><strong>Title:</strong> {{ job.title }}</div>
+                <div class="col-md-4"><strong>Job Name:</strong> {{ job.job_name }}</div>
+                <div class="col-md-4"><strong>Pouch Size:</strong> {{ job.pouch_open_size }}</div>
+              </div>
+
+              <div class="row mb-2">
+                <div class="col-md-4"><strong>Cylinder Size:</strong> {{ job.cylinder_size }}</div>
+                <div class="col-md-4"><strong>Quantity:</strong> {{ job.quantity }}</div>
+                <div class="col-md-4"><strong>PRPC Rate:</strong> {{ job.prpc_rate|indian_currency_format }}</div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4"><strong>Taxable Value:</strong> {{ job.taxable_value|indian_currency_format }}</div>
+              </div>
+
+            </div>
+            {% endfor %}
+
+          </div>
+        </div>
+
+        <!-- GST DETAILS -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-header bg-light fw-bold">GST Details</div>
+          <div class="card-body">
+            {% for gst in proforma.gst %}
+              <span class="badge bg-info text-dark me-2">{{ gst }}</span>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- TOTAL VALUES -->
+        <div class="card mb-3 shadow-sm">
+          <div class="card-header bg-light fw-bold">Totals</div>
+          <div class="card-body">
+            <div class="row mb-2">
+              <div class="col-md-4"><strong>Total Taxable:</strong> {{ proforma.total_taxable_value|indian_currency_format }}</div>
+              <div class="col-md-4"><strong>GST Value:</strong> {{ proforma.gst_value|indian_currency_format }}</div>
+              <div class="col-md-4"><strong>Grand Total:</strong> {{ proforma.total|indian_currency_format }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATUS -->
+        <div class="card shadow-sm">
+          <div class="card-header bg-light fw-bold">Invoice Status</div>
+          <div class="card-body">
+            {% if proforma.invoice_status == "Pending" %}
+              <span class="badge bg-danger">Pending</span>
+            {% elif proforma.invoice_status == "Confirmed" %}
+              <span class="badge bg-success">Confirmed</span>
+            {% else %}
+              <span class="badge bg-secondary">{{ proforma.invoice_status }}</span>
+            {% endif %}
+          </div>
+        </div>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>

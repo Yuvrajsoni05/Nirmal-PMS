@@ -118,10 +118,10 @@
                                             <label for="date" class="form-label mb-1 fw-bold">Start Date</label>
                                             <input type="date"
                                                    class="form-control"
-                                                   id="date"
-                                                   name="date"
+                                                   id="start_date"
+                                                   name="start_date"
                                                    placeholder="Start Date"
-                                                   value="{{ request.GET.date|default_if_none:'' }}">
+                                                   value="{{ request.GET.start_date|default_if_none:'' }}">
                                         </div>
 
                                         <!-- End Date -->
@@ -137,20 +137,20 @@
 
                                         <!-- Company Name -->
                                         <div class="col-12 col-md-auto" style="min-width: 220px;">
-                                            <label for="q" class="form-label mb-1 fw-bold">Party name Search</label>
+                                            <label for="party_name" class="form-label mb-1 fw-bold">Party name Search</label>
                                             <select class="form-select form-control"
-                                                    name="q"
-                                                    id="q">
-                                                {% if request.GET.q %}
+                                                    name="party_name"
+                                                    id="party_name">
+                                                {% if request.GET.party_name %}
                                                     <!-- Show the selected value as first option -->
-                                                    <option value="{{ request.GET.q }}">{{ request.GET.q }}</option>
+                                                    <option value="{{ request.GET.party_name }}">{{ request.GET.party_name }}</option>
 
                                                 {% else %}
                                                     <option value="">Select Party Name</option>
                                                 {% endif %}
 
                                                 {% for company in company_name %}
-                                                    {% if company.party_name != request.GET.q %}
+                                                    {% if company.party_name != request.GET.party_name %}
                                                         <option value="{{ company.party_name }}">
                                                             {{ company.party_name }}
                                                         </option>
@@ -213,29 +213,29 @@
                                     <thead class="thead-light">
                                         <tr class="text-nowrap text-start">
                                             <th scope="col" class="sticky-left">
-                                                <a href="?sorting={% if request.GET.sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.q }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Sr No</a>
+                                                <a href="?sorting={% if request.GET.sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Sr No</a>
                                             </th>
                                             <th scope="col">
-                                                <a href="?date_sorting={% if request.GET.date_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.q }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Date</a>
+                                                <a href="?date_sorting={% if request.GET.date_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Date</a>
                                             </th>
                                             <th scope="col">Bill No</th>
                                             <th scope="col">
-                                                <a href="?job_name_sorting={% if request.GET.job_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.q }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Job Name</a>
+                                                <a href="?job_name_sorting={% if request.GET.job_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Job Name</a>
                                             </th>
                                             <th scope="col">Job Type</th>
                                             <th scope="col">
-                                                <a href="?company_name_sorting={% if request.GET.company_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.q }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Party Name</a>
+                                                <a href="?party_name_sorting={% if request.GET.party_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Party Name</a>
                                             </th>
                                             <th scope="col">Noc(No of Colors)</th>
                                             <th scope="col">Rate/Cylinder Purchase</th>
                                             <th scope="col">Rate/Cylinder sales</th>
                                             <th scope="col">Cylinder Size</th>
                                             <th scope="col">
-                                                <a href="?cylinder_made_in_sorting={% if request.GET.cylinder_made_in_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.q }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Cylinder Made In</a>
+                                                <a href="?cylinder_made_in_sorting={% if request.GET.cylinder_made_in_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Cylinder Made In</a>
                                             </th>
                                             <th scope="col">Cylinder Bill No</th>
                                             <th scope="col">
-                                                <a href="?cylinder_date_sorting={% if request.GET.cylinder_date_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.q }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Cylinder Date</a>
+                                                <a href="?cylinder_date_sorting={% if request.GET.cylinder_date_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Cylinder Date</a>
                                             </th>
                                             <th scope="col">Pouch Size</th>
                                             <th scope="col">Open Size</th>
@@ -249,14 +249,13 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% if venues %}
-                                            {% for i in venues %}
+                                        {% if jobrecoreds %}
+                                            {% for i in jobrecoreds %}
 
                                                 <tr class="text-start">
                                                     <td class="text-truncate sticky-left"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#viewModal{{ i.id }}">
-                                                        {{ forloop.counter|add:datas.start_index|add:"-1" }}
+                                                        data-bs-target="#viewModal{{ i.id }}">   
                                                     </td>
                                                     <td class="text-truncate">{{ i.date }}</td>
                                                     <td class="text-truncate">{{ i.bill_no }}</td>
@@ -273,9 +272,7 @@
                                                     <td class="text-truncate">{{ i.pouch_size }}</td>
                                                     <td class="text-truncate">{{ i.pouch_open_size }}</td>
                                                     <td class="text-truncate">{{ i.pouch_combination }}</td>
-
-
-                                                        <!-- Correction Column -->
+                                                    <!-- Correction Column -->
                                                     {% if i.correction %}
                                                         <td class="text-truncate"
                                                             data-bs-toggle="modal"
@@ -288,8 +285,7 @@
                                                             <span class="fw-bold">-</span>
                                                         </td>
                                                     {% endif %}
-                                                        <!-- Folder/Images Column -->
-
+                                                    <!-- Folder/Images Column -->
                                                     <td class="text-truncate">
                                                         <div id="carousel-{{ i.id }}"
                                                              class="carousel slide"
@@ -323,7 +319,7 @@
                                                         </div>
                                                     </td>
 
-                                                        <!-- Job Status Column -->
+                                                    <!-- Job Status Column -->
                                                     <td class="text-truncate sticky-right">
                                                         {% if i.job_status == 'In Progress' %}
                                                             <span class="badge bg-success text-white">
@@ -335,7 +331,7 @@
                                                             </span>
                                                         {% endif %}
                                                     </td>
-                                                        <!-- CDR Links Column -->
+                                                    <!-- CDR Links Column -->
                                                     <td class="text-truncate">
                                                         {% if i.cdr_file_url %}
                                                             <a class="icon-link" href="{{ i.cdr_file_url }}" target="_blank">CDR</a>
@@ -372,12 +368,8 @@
                                                             {% else %}
                                                                 <p>-</p>
                                                             {% endif %}
-
-
                                                         {% endif %}
                                                     </td>
-
-
                                                     <td class="text-truncate"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#OldBackdrop{{ i.id }}"
@@ -385,8 +377,7 @@
                                                         {{ i.job_history.count }} Records
                                                     </td>
 
-
-                                                        <!-- Actions Column -->
+                                                    <!-- Actions Column -->
                                                     <td class="text-truncate sticky-right">
                                                         <div class="action-buttons">
                                                                 <!-- Delete Button -->
@@ -399,7 +390,7 @@
                                                                 </button>
                                                             </form>
 
-                                                                <!-- Edit Button -->
+                                                            <!-- Edit Button -->
                                                             <button type="button"
                                                                     class="btn btn-sm btn-outline-primary"
                                                                     data-bs-toggle="modal"
@@ -414,7 +405,7 @@
                                                                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
                                                                 </svg>
                                                             </button>
-                                                                <!-- Email Button -->
+                                                            <!-- Email Button -->
                                                             <button type="button"
                                                                     class="btn btn-sm btn-outline-success"
                                                                     data-bs-toggle="modal"
@@ -431,9 +422,9 @@
                                                         </div>
                                                     </td>
                                                 </tr>
-                                                    <!-- Modals for each row -->
+                                                <!-- Modals for each row -->
 
-                                                    <!-- Modal Structure -->
+                                                <!-- Modal Structure -->
                                                 <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
@@ -454,64 +445,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                    <!-- View Details Modal -->
+                                                <!-- View Details Modal -->
                                                  {% include 'Includes/dashboard_page/view.html' %}
                                                     <!-- Email Modal -->
                                                  {% include 'Includes/dashboard_page/send_mail.html' %} 
                                                     <!-- Model Correction Job -->
                                                  {% include 'Includes/dashboard_page/correction.html' %} 
                                                     <!-- Edit Job -->
-                                                {% include 'Includes/dashboard_page/edit_job.html' %}
-
-                                                    <!-- Model Correction Job -->
-                                                <div class="modal fade" id="OldBackdrop{{ i.id }}" tabindex="-1" aria-hidden="true">
-                                                    <div class="modal-dialog modal-lg">
-                                                        <div class="modal-content">
-
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Job History – {{ i.job_name }}</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                            </div>
-
-                                                            <div class="modal-body" style="max-height: 50vh; overflow-y: auto;">
-
-                                                                {% if i.job_history.all %}
-
-                                                                    {% for history in i.job_history.all %}
-                                                                        <div style="padding: 12px 0; border-bottom: 1px solid #eee;">
-
-                                                                            <div style="font-weight: 600; margin-bottom: 6px;">
-                                                                                {{ history.field_name }}
-                                                                            </div>
-
-                                                                            <div style="margin-bottom: 4px;">
-                                                                                <small>Old:</small> {{ history.old_value }}
-                                                                            </div>
-
-                                                                            <div style="margin-bottom: 4px;">
-                                                                                <small>New:</small> {{ history.new_value }}
-                                                                            </div>
-
-                                                                            <div>
-                                                                                <small>Date:</small> {{ history.changed_at|date:"M d, Y H:i" }}
-                                                                            </div>
-
-                                                                        </div>
-                                                                    {% endfor %}
-                                                                    </div>
-                                                                    </div>
-                                                                    </div>
-                                                                    </div>
-
-                                                                {% else %}
-                                                                    <p class="text-center m-0">No job history available.</p>
-                                                                {% endif %}
-
-
-
-                                                    {% comment %} Model {% endcomment %}
-                                                                
-
+                                                 {% include 'Includes/dashboard_page/edit_job.html' %}
+                                                    <!-- Model  Job History -->
+                                                 {% include 'Includes/dashboard_page/job_history.html' %}
+                                                       
                                             {% endfor %}
                                         {% else %}
                                             <tr>
@@ -524,37 +468,13 @@
                         </div>
                     </div>
                 </div>
-                {% if venues.paginator.num_pages > 1 %}
-                    <nav aria-label="Page navigation example">
-                        <div class="pagination-info">Page {{ venues.number }} of {{ venues.paginator.num_pages }}</div>
-                        <ul class="pagination justify-content-end">
-                            {% if venues.has_previous %}
-                                <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ venues.previous_page_number }}&q={{ request.GET.q }}&date={{ request.GET.date }}&job_name_sorting={{ request.GET.job_name_sorting }}&sorting={{ request.GET.sorting }}&company_name_sorting={{ request.GET.company_name_sorting }}&date_sorting={{ request.GET.date_sorting }}&cylinder_date_sorting={{ request.GET.cylinder_date_sorting }}&cylinder_made_in_sorting={{ request.GET.cylinder_made_in_sorting }}&end_date={{ request.GET.end_date }}">Previous</a>
-                                </li>
-                            {% endif %}
-                            {% for i in venues.paginator.page_range %}
-                                <li class="page-item {% if venues.number == i %}active{% endif %}">
-                                    <a class="page-link"
-                                       href="?page={{ i }}&q={{ request.GET.q }}&date={{ request.GET.date }}&job_name_sorting={{ request.GET.job_name_sorting }}&sorting={{ request.GET.sorting }}&company_name_sorting={{ request.GET.company_name_sorting }}&date_sorting={{ request.GET.date_sorting }}&cylinder_date_sorting={{ request.GET.cylinder_date_sorting }}&cylinder_made_in_sorting={{ request.GET.cylinder_made_in_sorting }}&end_date={{ request.GET.end_date }}">{{ i }}</a>
-                                </li>
-                            {% endfor %}
-                            {% if venues.has_next %}
-                                <li class="page-item">
-                                    <a class="page-link"
-                                       href="?page={{ venues.next_page_number }}&q={{ request.GET.q }}&date={{ request.GET.date }}&job_name_sorting={{ request.GET.job_name_sorting }}&sorting={{ request.GET.sorting }}&company_name_sorting={{ request.GET.company_name_sorting }}&date_sorting={{ request.GET.date_sorting }}&cylinder_date_sorting={{ request.GET.cylinder_date_sorting }}&cylinder_made_in_sorting={{ request.GET.cylinder_made_in_sorting }}&end_date={{ request.GET.end_date }}">Next</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </nav>
-                {% endif %}
+                {% include 'Includes/dashboard_page/navbar.html' %}
+
             </div>
         </div>
     </section>
 {% endblock main_block %}
 </div>
-
 
 {% block script %}
     <script>
@@ -568,6 +488,3 @@
     </script>
     <script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock script %}
-%}
-
-%}

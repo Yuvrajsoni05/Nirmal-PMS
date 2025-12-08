@@ -369,28 +369,8 @@
                                                 </button>
                                             </td>
 
-                                    <!-- Corrections Modal -->
-
-                                            <div class="modal fade"
-
-                                                 id="event_corrections{{ i.id }}"
-                                                 tabindex="-1"
-                                                 role="dialog"
-                                                 aria-labelledby="exampleModalCenterTitle"
-                                                 aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLongTitle">Correction</h5>
-                                                            <button type="button"
-                                                                    class="btn-close btn-close-white"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">{{ i.cdr_corrections }}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <!-- Corrections Modal -->
+                                             {% include 'Includes/cdr_page/correction.html' %}
                                             <!-- Update Modal -->
                                             {% include 'Includes/cdr_page/update_cdr.html' %}
                                             <!-- Email Modal -->
@@ -411,38 +391,7 @@
                 </div>
             </div>
         <!-- Pagination -->
-            {% if cdr_details %}
-                <nav aria-label="Page navigation">
-                    <div class="pagination-info">
-                        Page {{ cdr_details.number }} of {{ cdr_details.paginator.num_pages }}
-                    </div>
-                    <ul class="pagination justify-content-end">
-                        {% if cdr_details.has_previous %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ cdr_details.previous_page_number }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}">
-                                    Previous
-                                </a>
-                            </li>
-                        {% endif %}
-
-                        {% for i in cdr_details.paginator.page_range %}
-                            <li class="page-item {% if cdr_details.number == i %}active{% endif %}">
-                                <a class="page-link" href="?page={{ i }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}">
-                                    {{ i }}
-                                </a>
-                            </li>
-                        {% endfor %}
-
-                        {% if cdr_details.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ cdr_details.next_page_number }}&search={{ request.GET.search }}&date={{ request.GET.date }}&end_date={{ request.GET.end_date }}">
-                                    Next
-                                </a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </nav>
-            {% endif %}
+           {% include 'Includes/cdr_page/navbar.html' %}
         </div>
     </div>
 
@@ -469,4 +418,89 @@
 
 {% block script %}
 <script src="{% static 'js/cdr_page.js' %}"></script>
+<script>
+    // AJAX: Load Related Data on Company Selection
+$("#company_name").change(function () {
+    let companyName = $(this).val();
+
+    if (companyName) {
+        $.ajax({
+            url: '{% url "cdr_page_ajax" %}',
+            data: { company_name: companyName },
+            success: function (data) {
+                // Reset Job Name dropdown
+                $("#job_name")
+                    .empty()
+                    .append('<option value="">Select Job</option>')
+                    .append('<option value="others">Other</option>');
+
+                // Reset Company Email dropdown
+                $("#company_email")
+                    .empty()
+                    .append('<option value="">Select Company Email</option>')
+                    .append('<option value="other">Other</option>');
+
+                // Reset Party Contact dropdown
+                $("#party_contact_used")
+                    .empty()
+                    .append('<option value="">Select Contact Number</option>')
+                    .append('<option value="others">Other</option>');
+
+                // Populate Party Contact
+                if (data.contact && data.contact.length > 0) {
+                    $.each(data.contact, function (index, contact) {
+                        $("#party_contact_used").append(
+                            '<option value="' +
+                                contact.party_contacts__party_number +
+                                '">' +
+                                contact.party_contacts__party_number +
+                                "</option>"
+                        );
+                    });
+                }
+
+                // Populate Company Email
+                if (data.email && data.email.length > 0) {
+                    $.each(data.email, function (index, email) {
+                        $("#company_email").append(
+                            '<option value="' +
+                                email.party_emails__email +
+                                '">' +
+                                email.party_emails__email +
+                                "</option>"
+                        );
+                    });
+                }
+
+                // Populate Job Names
+                $.each(data.jobs, function (index, job) {
+                    $("#job_name").append(
+                        '<option value="' +
+                            job.job_name +
+                            '">' +
+                            job.job_name +
+                            "</option>"
+                    );
+                });
+            },
+        });
+    } else {
+        // Reset all dropdowns when no company is selected
+        $("#job_name")
+            .empty()
+            .append('<option value="">Select Job</option>')
+            .append('<option value="others">Other</option>');
+
+        $("#company_email")
+            .empty()
+            .append('<option value="">Select Company Email</option>')
+            .append('<option value="other">Other</option>');
+
+        $("#party_contact_used")
+            .empty()
+            .append('<option value="">Select Contact Number</option>')
+            .append('<option value="others">Other</option>');
+    }
+});
+</script>
 {% endblock script %}

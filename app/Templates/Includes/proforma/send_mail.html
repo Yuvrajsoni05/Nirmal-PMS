@@ -1,0 +1,237 @@
+{% load custom_tags %} 
+{% load humanize %}
+
+<div class="modal fade" id="proformaemailModal{{ proforma.id }}" tabindex="-1" aria-labelledby="emailModalLabel{{ i.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+
+            <!-- Header -->
+            <div class="modal-header ">
+                <h4 class="modal-title fw-semibold" id="emailModalLabel{{ i.id }}">
+                    Send Proforma Mail
+                </h4>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body -->
+            <div class="modal-body bg-light">
+
+                <form method="post" action="{% url 'proforma_sendmail' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="proforma_id" value="{{ proforma.id }}">
+
+                    <div class="row g-3">
+
+                        <!-- Invoice No -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Invoice No</label>
+                            <input type="text" class="form-control" name="invoice_no" value="{{ proforma.invoice_no }}" readonly>
+                        </div>
+
+                        <!-- Invoice Date -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Invoice Date</label>
+                            <input type="date" class="form-control" name="invoice_date" value="{{ proforma.invoice_date|date:'Y-m-d' }}">
+                        </div>
+
+                        <!-- Party Name -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Party Name</label>
+                            <input type="text" class="form-control" name="company_name" value="{{ proforma.party_details.party_name }}" readonly>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Party Email</label>
+                            <input type="email" class="form-control" name="company_email" value="{{ proforma.party_email_used.email }}">
+                        </div>
+
+                        <!-- Contact -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Party Contact</label>
+                            <input type="tel" class="form-control" name="company_contact" value="{{ proforma.party_contact_used.party_number }}">
+                        </div>
+
+                        <!-- GSTIN -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">GSTIN</label>
+                            <input type="text" class="form-control" name="billing_gstin_no" value="{{ proforma.billing_gstin_no }}" readonly>
+                        </div>
+
+                        <!-- State -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">State</label>
+                            <input type="text" class="form-control" name="billing_state_name" value="{{ proforma.billing_state_name }}" readonly>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Billing Address</label>
+                            <textarea class="form-control" name="billing_address" rows="2">{{ proforma.billing_address }}</textarea>
+                        </div>
+
+                        <!-- Payment Mode -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Payment Mode</label>
+                            <input type="text" class="form-control" name="mode_payment" value="{{ proforma.mode_payment }}" readonly>
+                        </div>
+
+                        <!-- JOB DETAILS -->
+                        {% for job in proforma.job_details.all %}
+                        <div class="col-md-12">
+                            <div class="card shadow-sm border-0">
+                                <div class="card-header fw-bold bg-white">
+                                    Job {{ forloop.counter }} — {{ job.job_name }}
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="row g-3">
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Job Name</label>
+                                            <input type="text" class="form-control" value="{{ job.job_name }}" readonly>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label fw-semibold">Title</label>
+                                            <input type="text" class="form-control" value="{{ job.title }}" readonly>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold">Quantity</label>
+                                            <input type="text" class="form-control" value="{{ job.quantity }}" readonly>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold">Pouch Open Size</label>
+                                            <input type="text" class="form-control" value="{{ job.pouch_open_size }}" readonly>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold">Cylinder Size</label>
+                                            <input type="text" class="form-control" value="{{ job.cylinder_size }}" readonly>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold">Per Cylinder Rate</label>
+                                            <input type="text" class="form-control" value="{{ job.prpc_rate|indian_currency_format }}" readonly>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold">Taxable Value</label>
+                                            <input type="text" class="form-control" value="{{ job.taxable_value|indian_currency_format }}" readonly>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Tax Section -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Total Taxable Value</label>
+                            <input type="text" class="form-control" value="{{ proforma.total_taxable_value|indian_currency_format }}" readonly>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">GST</label>
+                            <input type="text" class="form-control" value="{% for gst in proforma.gst %}{{ gst }} {% endfor %}" readonly>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">GST Value</label>
+                            <input type="text" class="form-control" value="{{ proforma.gst_value|indian_currency_format }}" readonly>
+                        </div>
+
+                        <!-- Total -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Total</label>
+                            <input type="text" class="form-control" value="{{ proforma.total|indian_currency_format }}" readonly>
+                        </div>
+
+                        <!-- Bank Details -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Bank Name</label>
+                            <input type="text" class="form-control" value="{{ proforma.bank_details.bank_name }}" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Account Name</label>
+                            <input type="text" class="form-control" value="{{ proforma.bank_details.account_name }}" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Account Number</label>
+                            <input type="text" class="form-control" value="{{ proforma.bank_details.bank_account_number }}" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">IFSC Code</label>
+                            <input type="text" class="form-control" value="{{ proforma.bank_details.bank_ifsc_code }}" readonly>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Branch Address</label>
+                            <textarea class="form-control" rows="2" readonly>{{ proforma.bank_details.bank_brnach_address }}</textarea>
+                        </div>
+
+                        <!-- Terms -->
+                        <div class="col-md-12">
+                            <label class="form-label fw-semibold">Terms</label>
+                            <textarea class="form-control" name="term_note" rows="3">{{ proforma.terms_note }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="mt-4 d-flex justify-content-end gap-2">
+                        <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Send Mail</button>
+
+                        <!-- Print Button -->
+                        <button type="button" class="btn btn-info" onclick="printProforma(this)"
+                            data-id="{{ proforma.id }}"
+                            data-invoice_no="{{ proforma.invoice_no }}"
+                            data-invoice_date="{{ proforma.invoice_date|date:'Y-m-d' }}"
+                            data-company_name="{{ proforma.party_details.party_name }}"
+                            data-company_email="{{ proforma.party_email_used.email }}"
+                            data-company_contact="{{ proforma.party_contact_used.party_number }}"
+                            data-billing_gstin_no="{{ proforma.billing_gstin_no }}"
+                            data-billing_state_name="{{ proforma.billing_state_name }}"
+                            data-billing_address="{{ proforma.billing_address|escapejs }}"
+                            data-mode_payment="{{ proforma.mode_payment }}"
+                            data-total_taxable_value="{{ proforma.total_taxable_value }}"
+                            data-gst="{{ proforma.gst|join:', ' }}"
+                            data-gst_value="{{ proforma.gst_value }}"
+                            data-total="{{ proforma.total }}"
+                            data-banking_details="{{ proforma.banking_details|escapejs }}"
+                            data-terms_note="{{ proforma.terms_note|escapejs }}"
+                            data-total_in_worlds="{{ proforma.total_worlds }}"
+                            data-bank_name="{{ proforma.bank_details.bank_name }}"
+                            data-bank_account_number="{{ proforma.bank_details.bank_account_number }}"
+                            data-bank_brnach_address="{{ proforma.bank_details.bank_brnach_address }}"
+                            data-bank_ifsc_code="{{ proforma.bank_details.bank_ifsc_code }}"
+                            data-bank_account_name="{{ proforma.bank_details.account_name }}"
+                            data-jobs='[
+                                {% for job in proforma.job_details.all %}
+                                    {
+                                        "job_name": "{{ job.job_name|escapejs }}",
+                                        "title": "{{ job.title|escapejs }}",
+                                        "quantity": "{{ job.quantity }}",
+                                        "pouch_open_size": "{{ job.pouch_open_size|escapejs }}",
+                                        "cylinder_size": "{{ job.cylinder_size|escapejs }}",
+                                        "prpc_rate": "{{ job.prpc_rate }}",
+                                        "taxable_value": "{{ job.taxable_value }}"
+                                    }{% if not forloop.last %},{% endif %}
+                                {% endfor %}
+                            ]'>
+                            Print
+                        </button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
