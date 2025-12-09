@@ -82,31 +82,31 @@
                                             id="bill_no_error"
                                             style="display: none"
                                         >
-                                            Please provide Bill No.
+                                            please provide bill no.
                                         </div>
                                     </div>
 
                                     <div class="col-12 col-lg-4">
                                         <label
-                                            for="company_name"
+                                            for="party_name"
                                             class="form-label fw-semibold text-dark"
                                         >
-                                            Company Name
+                                            Party Name
                                             <span class="text-danger">*</span>
                                         </label>
                                         <select
-                                            id="company_name"
-                                            name="company_name"
+                                            id="party_name"
+                                            name="party_name"
                                             class="form-control form-select border-1"
                                         >
                                             <option value="">
-                                                Select Company
+                                                Select Party Name
                                             </option>
-                                            {% for company in company_name %}
+                                            {% for party in party_names %}
                                             <option
-                                                value="{{ company.party_name }}"
+                                                value="{{ party.party_name }}"
                                             >
-                                                {{ company.party_name }}
+                                                {{ party.party_name }}
                                             </option>
                                             {% endfor %}
                                             <option value="other">Other</option>
@@ -115,18 +115,18 @@
                                         <!-- New company input (outside select) -->
                                         <input
                                             type="text"
-                                            name="new_company"
+                                            name="new_party_name"
                                             class="form-control border-1 mt-2"
-                                            id="new_company"
+                                            id="new_party_name"
                                             style="display: none"
-                                            placeholder="Enter New Company Name"
+                                            placeholder="enter new party name"
                                         />
 
                                         <div
                                             class="invalid-feedback"
-                                            id="company_name_error"
+                                            id="party_name_error"
                                         >
-                                            Please provide Company Name.
+                                            please provide party name.
                                         </div>
                                     </div>
                                 </div>
@@ -177,20 +177,20 @@
 
                                                 <input
                                                     type="text"
-                                                    name="new_job_name[]"
+                                                    name="new_job_name"
                                                     class="form-control mt-2"
                                                     style="display: none"
                                                     placeholder="Enter new job name"
                                                 />
                                                 <input
                                                     type="hidden"
-                                                    name="job_name_real[]"
+                                                    name="job_name_real"
                                                 />
                                                 <div
                                                     class="invalid-feedback"
                                                     id="job_name_error"
                                                 >
-                                                    Please provide Job Name
+                                                    please provide job name
                                                 </div>
                                             </div>
 
@@ -208,7 +208,7 @@
                                                 </label>
                                                 <select
                                                     id="job_type"
-                                                    name="job_type[]"
+                                                    name="job_type"
                                                     class="form-control form-select border-1"
                                                 >
                                                     <option value="">
@@ -223,7 +223,7 @@
                                                     class="invalid-feedback"
                                                     id="job_type_error"
                                                 >
-                                                    Please provide Job Type
+                                                    please provide job type
                                                 </div>
                                             </div>
 
@@ -241,14 +241,14 @@
                                                     type="text"
                                                     class="form-control border-1"
                                                     id="noc"
-                                                    name="noc[]"
+                                                    name="noc"
                                                     placeholder="Enter Number of Colors"
                                                 />
                                                 <div
                                                     class="invalid-feedback"
                                                     id="noc_error"
                                                 >
-                                                    Please provide NOC
+                                                    please provide NOC
                                                 </div>
                                             </div>
                                         </div>
@@ -284,7 +284,7 @@
                                                         type="text"
                                                         class="form-control border-1"
                                                         id="prpc_purchase"
-                                                        name="prpc_purchase[]"
+                                                        name="prpc_purchase"
                                                         onkeyup="formatNumberWithCommas(this)"
                                                         maxlength="10"
                                                         placeholder="00"
@@ -321,7 +321,7 @@
                                                         type="text"
                                                         class="form-control border-1"
                                                         id="prpc_sell"
-                                                        name="prpc_sell[]"
+                                                        name="prpc_sell"
                                                         onkeyup="formatNumberWithCommas(this)"
                                                         maxlength="10"
                                                         placeholder="00"
@@ -382,7 +382,7 @@
                                                 </div>
                                                 <input
                                                     type="hidden"
-                                                    name="cylinder_size[]"
+                                                    name="cylinder_size"
                                                 />
                                             </div>
                                         </div>
@@ -430,7 +430,7 @@
                                                 <!-- Hidden real field that you read in Django -->
                                                 <input
                                                     type="hidden"
-                                                    name="cylinder_made_in_real[]"
+                                                    name="cylinder_made_in_real"
                                                 />
 
                                                 <div
@@ -458,7 +458,7 @@
                                                 class="form-control border-1"
                                                 id="cylinder_dates" value="{%
                                                 now "Y-m-d" %}"
-                                                name="cylinder_date[]">
+                                                name="cylinder_date">
                                                 <div
                                                     class="invalid-feedback"
                                                     id="cylinder_date_error"
@@ -484,7 +484,7 @@
                                                     type="text"
                                                     class="form-control border-1"
                                                     id="cylinder_bill_no"
-                                                    name="cylinder_bill_no[]"
+                                                    name="cylinder_bill_no"
                                                     placeholder="Enter Cylinder Bill Number"
                                                 />
                                                 <div
@@ -556,7 +556,7 @@
                                                 <input
                                                     type="hidden"
                                                     id="pouch_size"
-                                                    name="pouch_size[]"
+                                                    name="pouch_size"
                                                 />
                                             </div>
 
@@ -610,7 +610,7 @@
                                                 <input
                                                     type="hidden"
                                                     id="pouch_open_size"
-                                                    name="pouch_open_size[]"
+                                                    name="pouch_open_size"
                                                 />
                                             </div>
 
@@ -700,7 +700,7 @@
                                                     type="hidden"
                                                     class="form-control border-1"
                                                     id="pouch_combination"
-                                                    name="pouch_combination[]"
+                                                    name="pouch_combination"
                                                 />
                                             </div>
                                             <br />
@@ -854,18 +854,18 @@
 {% endblock main_block %} {% block script %}
 
 <script>
-    $("#company_name").change(function () {
-        let companyName = $(this).val();
-        if (companyName === "other") {
-            $("#new_company").show();
+    $("#party_name").change(function () {
+        let PartyName = $(this).val();
+        if (PartyName === "other") {
+            $("#new_party_name").show();
         } else {
-            $("#new_company").hide();
+            $("#new_party_name").hide();
         }
 
-        if (companyName) {
+        if (PartyName) {
             $.ajax({
                 url: '{% url "job_page_ajax" %}',
-                data: { company_name: companyName },
+                data: { party_name: PartyName },
                 success: function (data) {
                     $("#job_name")
                         .empty()
@@ -945,10 +945,10 @@
             const jobSelect = e.target;
             const block = jobSelect.closest("div");
             const newJobInput = block.querySelector(
-                'input[name="new_job_name[]"]'
+                'input[name="new_job_name"]'
             );
             const hiddenField = block.querySelector(
-                'input[name="job_name_real[]"]'
+                'input[name="job_name_real"]'
             );
 
             if (jobSelect.value === "others") {
@@ -965,12 +965,12 @@
                     : jobSelect.value;
         }
 
-        if (e.target.matches('input[name="new_job_name[]"]')) {
+        if (e.target.matches('input[name="new_job_name"]')) {
             const newJobInput = e.target;
             const block = newJobInput.closest("div");
             const jobSelect = block.querySelector('select[name="job_name[]"]');
             const hiddenField = block.querySelector(
-                'input[name="job_name_real[]"]'
+                'input[name="job_name_real"]'
             );
 
             // Update value for backend
@@ -988,7 +988,7 @@
                 'input[name="cylinder_made_in_other[]"]'
             );
             const hiddenField = block.querySelector(
-                'input[name="cylinder_made_in_real[]"]'
+                'input[name="cylinder_made_in_real"]'
             );
 
             if (selectEl.value === "others") {
@@ -1010,7 +1010,7 @@
             const otherInput = e.target;
             const block = otherInput.closest(".col-12"); // same wrapper as above
             const hiddenField = block.querySelector(
-                'input[name="cylinder_made_in_real[]"]'
+                'input[name="cylinder_made_in_real"]'
             );
 
             hiddenField.value = otherInput.value.trim();

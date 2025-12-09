@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("cdr_form");
 
-    const companyNameSelect = document.getElementById("company_name");
-    const newCompanyInput = document.getElementById("new_company_name");
-    const companyNameError = document.getElementById("company_name_error");
+    const PartyNameSelect = document.getElementById("party_name");
+    const newPartyNameSelect = document.getElementById("new_party_name");
+    const partyNameError = document.getElementById("party_name_error");
 
-    const companyEmailSelect = document.getElementById("company_email");
-    const newCompanyEmailInput = document.getElementById("new_company_email");
-    const companyEmailError = document.getElementById("company_email_error");
+    const partyEmailSelect = document.getElementById("party_email");
+    const newPartyEmailInput = document.getElementById("new_party_email");
+    const PartyEmailError = document.getElementById("party_email_error");
 
     const job_nameSelect = document.getElementById("job_name");
     const new_job_nameInput = document.getElementById("new_job_name");
@@ -40,20 +40,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    companyNameSelect.addEventListener("change", function () {
+    PartyNameSelect.addEventListener("change", function () {
         if (this.value === "others") {
-            newCompanyInput.style.display = "block";
-            newCompanyInput.focus();
+            newPartyNameSelect.style.display = "block";
+            newPartyNameSelect.focus();
         } else {
-            newCompanyInput.style.display = "none";
-            newCompanyInput.value = "";
-            companyNameError.style.display = "none";
+            newPartyNameSelect.style.display = "none";
+            newPartyNameSelect.value = "";
+            partyNameError.style.display = "none";
         }
     });
 
-    newCompanyInput.addEventListener("input", function () {
+    newPartyNameSelect.addEventListener("input", function () {
         if (this.value.trim() !== "") {
-            companyNameError.style.display = "none";
+            partyNameError.style.display = "none";
         }
     });
 
@@ -74,20 +74,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    companyEmailSelect.addEventListener("change", function () {
+    partyEmailSelect.addEventListener("change", function () {
         if (this.value === "other") {
-            newCompanyEmailInput.style.display = "block";
-            newCompanyEmailInput.focus();
+            newPartyEmailInput.style.display = "block";
+            newPartyEmailInput.focus();
         } else {
-            newCompanyEmailInput.style.display = "none";
-            newCompanyEmailInput.value = "";
-            companyEmailError.style.display = "none";
+            newPartyEmailInput.style.display = "none";
+            newPartyEmailInput.value = "";
+            PartyEmailError.style.display = "none";
         }
     });
 
-    newCompanyEmailInput.addEventListener("input", function () {
+    newPartyEmailInput.addEventListener("input", function () {
         if (this.value.trim() !== "") {
-            companyEmailError.style.display = "none";
+            PartyEmailError.style.display = "none";
         }
     });
 
@@ -106,13 +106,13 @@ document.addEventListener("DOMContentLoaded", function () {
     function validateForm() {
         let isValid = true;
 
-        if (companyNameSelect.value === "others") {
-            if (newCompanyInput.value.trim() === "") {
-                companyNameError.style.display = "block";
+        if (PartyNameSelect.value === "others") {
+            if (newPartyNameSelect.value.trim() === "") {
+                partyNameError.style.display = "block";
                 isValid = false;
             }
-        } else if (companyNameSelect.value === "") {
-            companyNameError.style.display = "block";
+        } else if (PartyNameSelect.value === "") {
+            partyNameError.style.display = "block";
             isValid = false;
         }
 
@@ -126,16 +126,16 @@ document.addEventListener("DOMContentLoaded", function () {
             isValid = false;
         }
 
-        if (companyEmailSelect.value === "other") {
+        if (partyEmailSelect.value === "other") {
             if (
-                newCompanyEmailInput.value.trim() === "" ||
-                !validateEmail(newCompanyEmailInput.value)
+                newPartyEmailInput.value.trim() === "" ||
+                !validateEmail(newPartyEmailInput.value)
             ) {
-                companyEmailError.style.display = "block";
+                PartyEmailError.style.display = "block";
                 isValid = false;
             }
-        } else if (companyEmailSelect.value === "") {
-            companyEmailError.style.display = "block";
+        } else if (partyEmailSelect.value === "") {
+            PartyEmailError.style.display = "block";
             isValid = false;
         }
 

@@ -82,7 +82,7 @@
                                                 Limited</b
                                             ><br />
                                             Navratna Corporate Park, Block - B,
-                                            Unit. 1601 Opp. Jayntilal Park,
+                                            Unit. 1601 Opp. Jayntilal Park,<br>
                                             Ambli, Bopal Road, Ahmedabad -
                                             380058
                                         </td>
@@ -111,8 +111,8 @@
                                             align="right"
                                             style="font-size: 13px"
                                         >
-                                            <b>Job Date:</b> {% if date %} {{
-                                            date }} {% else %} none {% endif %}
+                                            <b>Job Date:</b> {% if date %} 
+                                            {{ date }} {% else %} none {% endif %}
                                         </td>
                                     </tr>
                                 </table>
@@ -129,19 +129,18 @@
                             >
                                 <table width="100%">
                                     <tr>
-                                        {% if company_name %}
+                                        {% if party_name %}
                                         <td style="font-size: 13px">
-                                            <b>Company Name:</b> {{ company_name
-                                            }}
+                                            <b>Party Name:</b> {{ party_name }}
                                         </td>
-                                        {% endif %} {% if company_email_address
-                                        %}
+                                        {% endif %} 
+                                        {% if party_email_address %}
                                         <td
                                             align="right"
                                             style="font-size: 13px"
                                         >
-                                            <b>Company Email:</b> {{
-                                            company_email_address }}
+                                            <b>Party Email:</b> 
+                                            {{ party_email_address }}
                                         </td>
                                         {% endif %}
                                     </tr>

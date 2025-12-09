@@ -1,9 +1,3 @@
-function formatNumberWithCommas(input) {
-    let value = input.value;
-    value = value.replace(/,/g, "");
-    let formattedValue = Number(value).toLocaleString("EN-IN");
-    input.value = formattedValue;
-}
 
 function formatNumberWithCommas(input) {
     let value = input.value;
@@ -11,8 +5,7 @@ function formatNumberWithCommas(input) {
     // Remove all commas first
     value = value.replace(/,/g, "");
 
-    // Allow only numbers and decimal point
-    // Remove any character that is not a digit or decimal point
+    
     value = value.replace(/[^0-9.]/g, "");
 
     // Ensure only one decimal point

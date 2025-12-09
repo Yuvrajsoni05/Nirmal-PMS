@@ -67,6 +67,3 @@ admin.site.register(ProformaJob , ProformaJobAdmin)
 
 admin.site.register(CDRImage)
     
-# class AdminCompanyName(admin.ModelAdmin):
-#     list_display = ("company_name")
-# admin.site.register(CompanyName,AdminCompanyName)

@@ -3,36 +3,26 @@ function printProforma(button) {
     const jobs = JSON.parse(data.jobs || "[]");
     const currentDate = new Date();
     const jobRows = jobs
-        .map(
-            (job, index) => `
-                <tr>
-                    <td style="vertical-align: top; padding: 6px 4px; font-weight: bold;">
-                        ${index + 1}
-                    </td>
-                    <td style="padding: 6px 4px">
-                        <b>${job.title}</b><br />
-                        <span style="font-style: italic; font-size: 12px">
-                            ${job.job_name}<br />
-                            Pouch Open Size : ${job.pouch_open_size}<br />
-                            Cylinder Size : ${job.cylinder_size}<br /><br />
-                            <span style="margin-left: 150px"></span><br />
-                        </span>
-                    </td>
-                    <td class="text-right" style="padding: 6px 4px"></td>
-                    <td class="text-right" style="padding: 6px 4px">-</td>
-                    <td class="text-right" style="padding: 6px 4px">
-                        ${job.quantity} Nos.
-                    </td>
-                    <td style="padding: 6px 4px" class="text-right">
-                        ${job.prpc_rate}
-                    </td>
-                    <td style="padding: 6px 4px">Nos.</td>
-                    <td class="text-right" style="padding: 6px 4px">
-                        ${job.taxable_value}
-                    </td>
-                </tr>`
-        )
-        .join("");
+    
+    .map((job, index) => `
+        <tr> 
+            <td style="vertical-align: top; padding: 6px 4px; font-weight: bold;">${index + 1}</td> 
+            <td colspan="2" style="padding: 6px 4px">
+                <b>${job.title}</b><br />
+                <span style="font-style: italic; font-size: 12px">
+                    ${job.job_name}<br />
+                    Pouch Open Size : ${job.pouch_open_size}<br />
+                    Cylinder Size : ${job.cylinder_size}<br /><br />
+                </span>
+            </td>
+            <td class="text-right" style="padding: 6px 4px">-</td> 
+            <td class="text-right" style="padding: 6px 4px">${job.quantity} Nos.</td>
+            <td style="padding: 6px 4px" class="text-right">${job.prpc_rate}</td>
+            <td style="padding: 6px 4px">Nos.</td>
+            <td class="text-right" style="padding: 6px 4px">${job.taxable_value}</td>
+        </tr>`)
+    .join('');
+
 
     const printWindow = window.open("", "_blank");
     printWindow.document.write(`
@@ -67,6 +57,11 @@ function printProforma(button) {
     <table>
         <tr>
             <td style="width: 45%">
+
+                 <div style="margin-bottom:5%;">
+                                <img src="http://localhost:8000/static/assets/img/logo_icon.png" alt="logo"
+                            height="70px" />
+                            </div>
                 <b>Shrri Nirmal Ventures Private Limited</b><br />
                 Unit. 1601, 16th Floor, B Block,<br />
                 Navratna Corporate Park, Nr. Jayantilal Park<br />
@@ -102,14 +97,14 @@ function printProforma(button) {
         <tr>
             <td style="width: 50%">
                 <b>Consignee (Ship to)</b><br />
-                <b>${data.company_name}</b><br />
+                <b>${data.party_name}</b><br />
                 ${data.billing_address}<br />
                 GSTIN/UIN : ${data.billing_gstin_no}<br />
                 State Name : ${data.billing_state_name}
             </td>
             <td style="width: 50%">
                 <b>Buyer (Bill to)</b><br />
-                <b>${data.company_name}</b><br />
+                <b>${data.party_name}</b><br />
                 ${data.billing_address}<br />
                 GSTIN/UIN : ${data.billing_gstin_no}<br />
                 State Name : ${data.billing_state_name}<br />
@@ -123,6 +118,7 @@ function printProforma(button) {
             <tr>
                 <th>Sl No.</th>
                 <th colspan="2">Description of Services</th>
+             
                 <th>HSN Code</th>
                 <th>Quantity</th>
                 <th>Rate</th>
@@ -253,14 +249,12 @@ function printProforma(button) {
                  
                     <td style="width: 50%; font-size: 10px; text-align: center">
                         
-                        ${data.terms}
+                        ${data.terms_note}
                     </td>
                 </tr>
             </table>
 
-    <div class="text-center" style="margin-top:10px; font-size:12px">
-        Shrri Nirmal Ventures Private Limited
-    </div>
+ 
 </div>
 
 <script>

@@ -153,11 +153,7 @@ class CDRImage(models.Model):
     
     
     
-# class CompanyName(models.Model):
-#     company_name = models.CharField(max_length=300)
-#     def __str__(self):
-#         return f"{self.company_name}"
-   
+
 
 class CylinderMadeIn(models.Model):
     cylinder_made_in =  models.CharField(max_length=300,unique=True,blank=True, null=True)

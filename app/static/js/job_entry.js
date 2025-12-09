@@ -118,9 +118,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const billInput = document.getElementById("bill_no");
     const billError = document.getElementById("bill_no_error");
 
-    const companyName = document.getElementById("company_name");
-    const companyNameError = document.getElementById("company_name_error");
-    const newCompanyInput = document.getElementById("new_company");
+    const PartyName = document.getElementById("party_name");
+    const PartyNameError = document.getElementById("party_name_error");
+    const newPartyInput = document.getElementById("new_party_name");
 
     // Job Details (first job-section)
     const jobName = document.getElementById("job_name");
@@ -220,33 +220,33 @@ document.addEventListener("DOMContentLoaded", function () {
         return true;
     }
 
-    function validateCompanyName() {
-        if (!companyName) return true;
+    function validatePartyName() {
+        if (!PartyName) return true;
 
-        const value = companyName.value.trim();
+        const value = PartyName.value.trim();
 
         // If nothing selected
         if (value === "") {
-            companyNameError.style.display = "block";
-            newCompanyInput.style.display = "none";
+            PartyNameError.style.display = "block";
+            newPartyInput.style.display = "none";
             return false;
         }
 
         // If "other" selected, new_company required
         if (value === "other") {
-            newCompanyInput.style.display = "block";
-            if (newCompanyInput.value.trim() === "") {
-                companyNameError.textContent =
-                    "Please provide New Company Name.";
-                companyNameError.style.display = "block";
+            newPartyInput.style.display = "block";
+            if (newPartyInput.value.trim() === "") {
+                PartyNameError.textContent =
+                    "please provide new party name.";
+                PartyNameError.style.display = "block";
                 return false;
             }
         } else {
-            newCompanyInput.style.display = "none";
+            newPartyInput.style.display = "none";
         }
 
-        companyNameError.textContent = "Please provide Company Name.";
-        companyNameError.style.display = "none";
+        PartyNameError.textContent = "please provide party name.";
+        PartyNameError.style.display = "none";
         return true;
     }
 
@@ -429,7 +429,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function validateForm() {
         const vJobDate = validateJobDate();
         const vInvoice = validateInvoiceNo();
-        const vCompany = validateCompanyName();
+        const vCompany = validatePartyName();
 
         const vJobName = validateJobName();
         const vJobType = validateJobType();
@@ -481,10 +481,10 @@ document.addEventListener("DOMContentLoaded", function () {
     if (jobDate) jobDate.addEventListener("change", validateJobDate);
     if (billInput) billInput.addEventListener("input", validateInvoiceNo);
 
-    if (companyName)
-        companyName.addEventListener("change", validateCompanyName);
-    if (newCompanyInput)
-        newCompanyInput.addEventListener("input", validateCompanyName);
+    if (PartyName)
+        PartyName.addEventListener("change", validatePartyName);
+    if (newPartyInput)
+        newPartyInput.addEventListener("input", validatePartyName);
 
     if (jobName) jobName.addEventListener("change", validateJobName);
     if (jobType) jobType.addEventListener("change", validateJobType);

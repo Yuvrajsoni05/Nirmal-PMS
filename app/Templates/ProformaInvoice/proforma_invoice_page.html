@@ -30,14 +30,14 @@
                             </div>
 
                             <div class="col-md-4">
-                                <label for="due_date" class="form-label fw-semibold">Mode / Term of Payment</label>
+                                <label for="mode_payment" class="form-label fw-semibold">Mode / Term of Payment</label>
                                 <input type="text" class="form-control" id="mode_payment" name="mode_payment" value="100%" placeholder="Mode / Term of Payment">
                                 <span class="invalid-feedback" id="mode_payment_error">This field is required</span>
                             </div>
 
                             <div class="col-md-6">
-                                <label for="company_name" class="form-label fw-semibold">Customer / Party Name</label>
-                                <select class="form-control form-select" id="company_name" name="company_name" >
+                                <label for="party_name" class="form-label fw-semibold">Customer / Party Name</label>
+                                <select class="form-control form-select" id="party_name" name="party_name" >
                                     <option value="" selected disabled>Select Customer / Party Name</option>
                                     {% for party in party_name_list %}
                                         <option value="{{ party.party_name }}">{{ party.party_name }}</option>
@@ -45,33 +45,33 @@
                                     <option value="others">Other</option>
                                 </select>
 
-                                <input type="text" id="new_company"  name="new_company" style="display: none" placeholder="New Company Name"  name="new_company" class="form-control">
-                                <span class="invalid-feedback"  id="company_name_error">This field is required</span>
+                                <input type="text" id="new_party_name"  name="new_party_name" style="display: none" placeholder="New Party Name"  name="new_party_name" class="form-control">
+                                <span class="invalid-feedback"  id="party_name_error">This field is required</span>
                             </div>
 
                             <div class="col-md-3">
-                                <label for="company_contact" class="form-label fw-semibold">Party Contact</label>
-                                <select class="form-control form-select" id="company_contact" name="company_contact">
-                                    <option value="" selected disabled>Select Company Contact</option>
+                                <label for="party_contact" class="form-label fw-semibold">Party Contact</label>
+                                <select class="form-control form-select" id="party_contact" name="party_contact">
+                                    <option value="" selected disabled>Select Party Contact</option>
                                     <option value="others">Other</option>
                                 </select>
-                                <input type="number" id="new_company_contact" name="new_company_contact" class="form-control mt-2" placeholder="Enter company contact" style="display: none;" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel">
-                                <span class="invalid-feedback" id="company_contact_error">This field is required</span>
+                                <input type="number" id="new_party_contact" name="new_party_contact" class="form-control mt-2" placeholder="Enter Party Contact" style="display: none;" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel">
+                                <span class="invalid-feedback" id="party_contact_error">This field is required</span>
                             </div>
 
                             <div class="col-md-3">
-                                <label for="company_email" class="form-label fw-semibold">Party Email</label>
-                                <select class="form-control form-select" id="company_email" name="company_email">
-                                    <option value="" selected disabled>Select Company Email</option>
+                                <label for="party_email" class="form-label fw-semibold">Party Email</label>
+                                <select class="form-control form-select" id="party_email" name="party_email">
+                                    <option value="" selected disabled>Select Party Email</option>
                                     {% for company in company_list %}
-                                        {% if company.company_email %}
-                                            <option value="{{ company.company_email }}">{{ company.company_email }}</option>
+                                        {% if company.party_email %}
+                                            <option value="{{ company.party_email }}">{{ company.party_email }}</option>
                                         {% endif %}
                                     {% endfor %}
                                     <option value="others">Other</option>
                                 </select>
-                                <input type="email" id="new_company_email" name="new_company_email" class="form-control mt-2" placeholder="Enter company email" style="display: none;">
-                                <span class="invalid-feedback" id="company_email_error">This field is required</span>
+                                <input type="email" id="new_party_email" name="new_party_email" class="form-control mt-2" placeholder="Enter Party email" style="display: none;">
+                                <span class="invalid-feedback" id="party_email_error">This field is required</span>
                             </div>
 
                             <div class="col-12">
@@ -272,14 +272,14 @@
             const modePaymentInput = document.getElementById('mode_payment');
             const modePaymentError = document.getElementById('mode_payment_error');
 
-            const companyNameInput = document.getElementById('company_name');
-            const companyNameError = document.getElementById('company_name_error');
+            const PartyNameInput = document.getElementById('party_name');
+            const PartyNameError = document.getElementById('party_name_error');
 
-            const companyContactInput = document.getElementById('company_contact');
-            const companyContactError = document.getElementById('company_contact_error');
+            const PartyContactInput = document.getElementById('party_contact');
+            const PartyContactError = document.getElementById('party_contact_error');
 
-            const companyEmailInput = document.getElementById('company_email');
-            const companyEmailError = document.getElementById('company_email_error');
+            const PartyEmailInput = document.getElementById('party_email');
+            const PartyEmailError = document.getElementById('party_email_error');
 
             const billingAddressInput = document.getElementById('billing_address');
             const billingAddressError = document.getElementById('billing_address_error');
@@ -410,12 +410,12 @@
                 }
             }
 
-            function validateCompanyName() {
-                if (companyNameInput.value.trim() === '') {
-                    companyNameError.style.display = 'block';
+            function validatePartyName() {
+                if (PartyNameInput.value.trim() === '') {
+                    PartyNameError.style.display = 'block';
                     return false;
                 } else {
-                    companyNameError.style.display = 'none';
+                    PartyNameError.style.display = 'none';
                     return true;
                 }
             }
@@ -432,26 +432,26 @@
                 }
             }
 
-            function validateCompanyContact() {
-                const contact = companyContactInput.value.trim();
+            function validatePartyContact() {
+                const contact = PartyContactInput.value.trim();
                 const contactPattern = /^\d{10}$/;
                 if (contact === '' || !contactPattern.test(contact)) {
-                    companyContactError.style.display = 'block';
+                    PartyContactError.style.display = 'block';
                     return false;
                 } else {
-                    companyContactError.style.display = 'none';
+                    PartyContactError.style.display = 'none';
                     return true;
                 }
             }
 
-            function validateCompanyEmail() {
-                const email = companyEmailInput.value.trim();
+            function validatePartyEmail() {
+                const email = PartyEmailInput.value.trim();
                 const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 if (email === '' || !emailPattern.test(email)) {
-                    companyEmailError.style.display = 'block';
+                    PartyEmailError.style.display = 'block';
                     return false;
                 } else {
-                    companyEmailError.style.display = 'none';
+                    PartyEmailError.style.display = 'none';
                     return true;
                 }
             }
@@ -605,9 +605,9 @@
                 const isInvoiceNoValid = validateInvoiceNo();
                 const isInvoiceDateValid = validateInvoiceDate();
                 const isModePaymentValid = validateModePayment();
-                const isCompanyNameValid = validateCompanyName();
-                const isCompanyContactValid = validateCompanyContact();
-                const isCompanyEmailValid = validateCompanyEmail();
+                const isPartyNameValid = validatePartyName();
+                const isPartyContactValid = validatePartyContact();
+                const isPartyEmailValid = validatePartyEmail();
                 const isBillingAddressValid = validateBillingAddress();
                 const isBillingStateNameValid = validateBillingStateName();
                 const isBillingGstinNoValid = validateBillingGstinNo();
@@ -626,9 +626,9 @@
                     isInvoiceNoValid &&
                     isInvoiceDateValid &&
                     isModePaymentValid &&
-                    isCompanyNameValid &&
-                    isCompanyContactValid &&
-                    isCompanyEmailValid &&
+                    isPartyNameValid &&
+                    isPartyContactValid &&
+                    isPartyEmailValid &&
                     isBillingAddressValid &&
                     isBillingStateNameValid &&
                     isBillingGstinNoValid &&
@@ -656,9 +656,9 @@
             invoiceNoInput.addEventListener('input', validateInvoiceNo);
             invoiceDateInput.addEventListener('input', validateInvoiceDate);
             modePaymentInput.addEventListener('input', validateModePayment);
-            companyNameInput.addEventListener('input', validateCompanyName);
-            companyContactInput.addEventListener('input', validateCompanyContact);
-            companyEmailInput.addEventListener('input', validateCompanyEmail);
+            PartyNameInput.addEventListener('input', validatePartyName);
+            PartyContactInput.addEventListener('input', validatePartyContact);
+            PartyEmailInput.addEventListener('input', validatePartyEmail);
             billingAddressInput.addEventListener('input', validateBillingAddress);
             billingStateNameInput.addEventListener('input', validateBillingStateName);
             billingGstinNoInput.addEventListener('input', validateBillingGstinNo);
@@ -700,10 +700,10 @@
     <script>
         $(document).ready(function() {
 
-            $(document).on('input change', '#billing_state_name, #company_name, input[name="gst[]"], .item_check, input[name="quantity[]"], input[name="prpc_price[]"], .pouch-diameter, .pouch-height, .cylinder-diameter, .cylinder-height, .new-job, .job-name', function() {
+            $(document).on('input change', '#billing_state_name, #party_name, input[name="gst[]"], .item_check, input[name="quantity[]"], input[name="prpc_price[]"], .pouch-diameter, .pouch-height, .cylinder-diameter, .cylinder-height, .new-job, .job-name', function() {
                 var changedField = $(this).attr('id') || $(this).attr('name');
                 var billing_state_name = $('#billing_state_name').val();
-                var company_name = $('#company_name').val();
+                var party_name = $('#party_name').val();
 
 
                 var igst = $('#igst').is(':checked') ? 18 : 0;
@@ -717,15 +717,15 @@
                     return $(this).val() || 0;
                 }).get();
 
-                if (company_name === "others") {
-                    $("#new_company").show();
+                if (party_name === "others") {
+                    $("#new_party_name").show();
                 } else {
-                    $("#new_company").hide();
+                    $("#new_party_name").hide();
                 }
 
-                if (changedField === 'company_name') {
-                    $('#company_email').val('');
-                    $('#company_contact').val('');
+                if (changedField === 'party_name') {
+                    $('#party_email').val('');
+                    $('#party_contact').val('');
                     $('#billing_address').val('');
                 }
 
@@ -748,7 +748,7 @@
                     type: "GET",
                     data: {
                         billing_state_name: billing_state_name,
-                        company_name: company_name,
+                        party_name: party_name,
                         igsts: igst,
                         cgsts: cgst,
                         sgsts: sgst,
@@ -757,14 +757,14 @@
                     },
                     success: function(response) {
 
-                        if (changedField === 'company_name') {
+                        if (changedField === 'party_name') {
 
                             $('#billing_address').val(response.billing_address || '');
                         }
-                        if ((response.contacts && response.contacts.length) || changedField === 'company_name') {
-                            var $select = $('#company_contact');
+                        if ((response.contacts && response.contacts.length) || changedField === 'party_name') {
+                            var $select = $('#party_contact');
                             var previous = $select.val();
-                            $select.empty().append('<option value="" selected disabled>Select Company Contact</option>');
+                            $select.empty().append('<option value="" selected disabled>Select Party Contact</option>');
                             if (response.contacts && response.contacts.length) {
                                 $.each(response.contacts, function(index, contact) {
                                     $select.append('<option value="' + contact.party_contacts__party_number + '">' + contact.party_contacts__party_number + '</option>');
@@ -784,10 +784,10 @@
                                 }
                             }
                         }
-                        if ((response.emails && response.emails.length) || changedField === 'company_name') {
-                            var $select = $('#company_email');
+                        if ((response.emails && response.emails.length) || changedField === 'party_name') {
+                            var $select = $('#party_email');
                             var previous = $select.val();
-                            $select.empty().append('<option value="" selected disabled>Select Company Email</option>');
+                            $select.empty().append('<option value="" selected disabled>Select Party Email</option>');
                             if (response.emails && response.emails.length) {
                                 $.each(response.emails, function(index, email) {
                                     $select.append('<option value="' + email.party_emails__email + '">' + email.party_emails__email + '</option>');
@@ -808,7 +808,7 @@
                             }
                         }
 
-                        if ((response.job && response.job.length) || changedField === 'company_name') {
+                        if ((response.job && response.job.length) || changedField === 'party_name') {
                             $('.job-name').each(function() {
                                 var $select = $(this);
                                 var previous = $select.val();
@@ -879,19 +879,19 @@
             });
 
 
-            $(document).on('change', '#company_email', function() {
+            $(document).on('change', '#party_email', function() {
                 const val = $(this).val();
                 if (val === 'others') {
-                    $('#new_company_email').show().focus();
+                    $('#new_party_email').show().focus();
                 } else {
-                    $('#new_company_email').hide().val('');
-                    $('#company_email option.custom-email').remove();
+                    $('#new_party_email').hide().val('');
+                    $('#party_email option.custom-email').remove();
                 }
             });
 
-            $(document).on('input', '#new_company_email', function() {
+            $(document).on('input', '#new_party_email', function() {
                 const email = $(this).val().trim();
-                const $dropdown = $('#company_email');
+                const $dropdown = $('#party_email');
                 $dropdown.find('option.custom-email').remove();
 
                 if (email !== '') {
@@ -901,19 +901,19 @@
                 }
             });
 
-            $(document).on('change', '#company_contact', function() {
+            $(document).on('change', '#party_contact', function() {
                 const val = $(this).val();
                 if (val === 'others') {
-                    $('#new_company_contact').show().focus();
+                    $('#new_party_contact').show().focus();
                 } else {
-                    $('#new_company_contact').hide().val('');
-                    $('#company_contact option.custom-contact').remove();
+                    $('#new_party_contact').hide().val('');
+                    $('#party_contact option.custom-contact').remove();
                 }
             });
 
-            $(document).on('input', '#new_company_contact', function() {
+            $(document).on('input', '#new_party_contact', function() {
                 const contact = $(this).val().trim();
-                const $dropdown = $('#company_contact');
+                const $dropdown = $('#party_contact');
                 $dropdown.find('option.custom-contact').remove();
 
                 if (contact !== '') {

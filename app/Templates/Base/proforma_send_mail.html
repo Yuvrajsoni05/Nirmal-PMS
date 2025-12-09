@@ -111,38 +111,6 @@
             .products-section tr:last-child td {
                 border-top: none;
             }
-            .company-logo-css {
-                position: relative;
-                width: 80px;
-                height: 70px;
-                margin-right: 15px;
-            }
-
-            /* Big purple triangle */
-            .company-logo-css::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 10px;
-                width: 0;
-                height: 0;
-                border-left: 30px solid transparent;
-                border-right: 30px solid transparent;
-                border-bottom: 70px solid #5b2e91; /* purple */
-            }
-
-            /* Inner gold triangle */
-            .company-logo-css::after {
-                content: "";
-                position: absolute;
-                top: 18px;
-                left: 25px;
-                width: 0;
-                height: 0;
-                border-left: 15px solid transparent;
-                border-right: 15px solid transparent;
-                border-bottom: 35px solid #cba14b; /* gold */
-            }
         </style>
     </head>
     <body>
@@ -151,12 +119,15 @@
             <table>
                 <tr>
                     <td class="p-2">
-                        <div class="d-flex align-items-center company-row">
-                            <!-- Company Logo with pure CSS -->
-                            <div class="company-logo-css"></div>
+                        <div class="d-flex align-items-center party-row">
+                            <!-- party Logo with pure CSS -->
+                            <div style="margin-bottom:5%;">
+                                <img src="http://localhost:8000/static/assets/img/logo_icon.png" alt="logo"
+                            height="70px" />
+                            </div>
 
-                            <!-- Company Info -->
-                            <div class="company-info">
+                            <!-- party Info -->
+                            <div class="party-info">
                                 <b
                                     >Shrri Nirmal Ventures Private Limited {{
                                     data.date }}</b
@@ -234,7 +205,7 @@
                 <tr>
                     <td style="width: 50%">
                         <b>Consignee (Ship to)</b><br />
-                        <b>{{ data.company_name }}</b><br />
+                        <b>{{ data.party_name }}</b><br />
                         {{ data.billing_address }}<br />
 
                         GSTIN/UIN : {{ data.billing_gstin_no }}<br />
@@ -242,7 +213,7 @@
                     </td>
                     <td style="width: 50%">
                         <b>Buyer (Bill to)</b><br />
-                        <b>{{ data.company_name }}</b><br />
+                        <b>{{ data.party_name }}</b><br />
                         {{ data.billing_address }},<br />
 
                         GSTIN/UIN : {{ data.billing_gstin_no }}<br />
@@ -337,7 +308,7 @@
                         class="text-center bold"
                         style="border-left: none; border-right: none"
                     >
-                        INR {{data.total_in_words}} Only
+                        INR {{ data.total_in_words }} Only
                     </td>
                     <td class="bold text-right" style="border-left: none">
                         E. & O.E
@@ -412,7 +383,7 @@
                 <tr>
                     <td style="width: 52%; padding: 5px; vertical-align: top">
                         <b>Tax Amount (in words) :</b><br />
-                        INR {{ total_in_words }} Only<br /><br />
+                        INR {{ data.total_in_words }} Only<br /><br />
                         <b>Company's PAN : </b> AABCN6372N<br /><br />
                         <b>Declaration:</b><br />
                         We declare that this proforma invoice shows the actual
@@ -456,7 +427,7 @@
                 </tr>
                 <tr>
                     <td style="width: 52%; font-size: 10px">
-                        {{data.term_note}}
+                        {{ data.term_note }}
                     </td>
                 </tr>
             </table>

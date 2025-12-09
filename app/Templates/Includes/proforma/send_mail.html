@@ -37,19 +37,19 @@
                         <!-- Party Name -->
                         <div class="col-md-12">
                             <label class="form-label fw-semibold">Party Name</label>
-                            <input type="text" class="form-control" name="company_name" value="{{ proforma.party_details.party_name }}" readonly>
+                            <input type="text" class="form-control" name="party_name" value="{{ proforma.party_details.party_name }}" readonly>
                         </div>
 
                         <!-- Email -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Party Email</label>
-                            <input type="email" class="form-control" name="company_email" value="{{ proforma.party_email_used.email }}">
+                            <input type="email" class="form-control" name="party_email" value="{{ proforma.party_email_used.email }}">
                         </div>
 
                         <!-- Contact -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Party Contact</label>
-                            <input type="tel" class="form-control" name="company_contact" value="{{ proforma.party_contact_used.party_number }}">
+                            <input type="tel" class="form-control" name="party_contact" value="{{ proforma.party_contact_used.party_number }}">
                         </div>
 
                         <!-- GSTIN -->
@@ -89,37 +89,37 @@
 
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold">Job Name</label>
-                                            <input type="text" class="form-control" value="{{ job.job_name }}" readonly>
+                                            <input type="text" class="form-control" name="job_name[]" value="{{ job.job_name }}" readonly>
                                         </div>
 
                                         <div class="col-md-6">
                                             <label class="form-label fw-semibold">Title</label>
-                                            <input type="text" class="form-control" value="{{ job.title }}" readonly>
+                                            <input type="text" class="form-control" name="title[]" value="{{ job.title }}" readonly>
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label fw-semibold">Quantity</label>
-                                            <input type="text" class="form-control" value="{{ job.quantity }}" readonly>
+                                            <input type="text" class="form-control" name="quantity[]" value="{{ job.quantity }}" readonly>
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label fw-semibold">Pouch Open Size</label>
-                                            <input type="text" class="form-control" value="{{ job.pouch_open_size }}" readonly>
+                                            <input type="text" class="form-control" name="pouch_open_size[]" value="{{ job.pouch_open_size }}" readonly>
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label fw-semibold">Cylinder Size</label>
-                                            <input type="text" class="form-control" value="{{ job.cylinder_size }}" readonly>
+                                            <input type="text" class="form-control" name="cylinder_size[]" value="{{ job.cylinder_size }}" readonly>
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label fw-semibold">Per Cylinder Rate</label>
-                                            <input type="text" class="form-control" value="{{ job.prpc_rate|indian_currency_format }}" readonly>
+                                            <input type="text" class="form-control" name="prpc_rate[]" value="{{ job.prpc_rate|indian_currency_format }}" readonly>
                                         </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label fw-semibold">Taxable Value</label>
-                                            <input type="text" class="form-control" value="{{ job.taxable_value|indian_currency_format }}" readonly>
+                                            <input type="text" class="form-control" name="taxable_value[]" value="{{ job.taxable_value|indian_currency_format }}" readonly>
                                         </div>
 
                                     </div>
@@ -131,58 +131,61 @@
                         <!-- Tax Section -->
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">Total Taxable Value</label>
-                            <input type="text" class="form-control" value="{{ proforma.total_taxable_value|indian_currency_format }}" readonly>
+                            <input type="text" class="form-control" name="total_taxable_value" value="{{ proforma.total_taxable_value|indian_currency_format }}" readonly>
                         </div>
 
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">GST</label>
-                            <input type="text" class="form-control" value="{% for gst in proforma.gst %}{{ gst }} {% endfor %}" readonly>
+                            <input type="text" class="form-control" name="gst" value="{% for gst in proforma.gst %}{{ gst }} {% endfor %}" readonly>
                         </div>
 
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">GST Value</label>
-                            <input type="text" class="form-control" value="{{ proforma.gst_value|indian_currency_format }}" readonly>
+                            <input type="text" class="form-control" name="gst_value" value="{{ proforma.gst_value|indian_currency_format }}" readonly>
                         </div>
 
                         <!-- Total -->
                         <div class="col-md-12">
                             <label class="form-label fw-semibold">Total</label>
-                            <input type="text" class="form-control" value="{{ proforma.total|indian_currency_format }}" readonly>
+                            <input type="text" class="form-control" name="total" value="{{ proforma.total|indian_currency_format }}" readonly>
                         </div>
 
                         <!-- Bank Details -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Bank Name</label>
-                            <input type="text" class="form-control" value="{{ proforma.bank_details.bank_name }}" readonly>
+                            <input type="text" class="form-control" name="bank_name" value="{{ proforma.bank_details.bank_name }}" readonly>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Account Name</label>
-                            <input type="text" class="form-control" value="{{ proforma.bank_details.account_name }}" readonly>
+                            <input type="text" class="form-control" name="account_name" value="{{ proforma.bank_details.account_name }}" readonly>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Account Number</label>
-                            <input type="text" class="form-control" value="{{ proforma.bank_details.bank_account_number }}" readonly>
+                            <input type="text" class="form-control" name="bank_account_number" value="{{ proforma.bank_details.bank_account_number }}" readonly>
                         </div>
 
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">IFSC Code</label>
-                            <input type="text" class="form-control" value="{{ proforma.bank_details.bank_ifsc_code }}" readonly>
+                            <input type="text" class="form-control" name="bank_ifsc_code" value="{{ proforma.bank_details.bank_ifsc_code }}" readonly>
                         </div>
+
+
+                        
 
                         <div class="col-md-12">
                             <label class="form-label fw-semibold">Branch Address</label>
-                            <textarea class="form-control" rows="2" readonly>{{ proforma.bank_details.bank_brnach_address }}</textarea>
+                            <textarea class="form-control" rows="2" name="bank_brnach_address" readonly>{{ proforma.bank_details.bank_brnach_address }}</textarea>
                         </div>
 
                         <!-- Terms -->
                         <div class="col-md-12">
                             <label class="form-label fw-semibold">Terms</label>
-                            <textarea class="form-control" name="term_note" rows="3">{{ proforma.terms_note }}</textarea>
+                            <textarea class="form-control" name="term_note" name="term_note" rows="3">{{ proforma.terms_note }}</textarea>
                         </div>
                     </div>
-
+                        <input type="hidden" name="total_in_words" value="{{ proforma.total_worlds }}" >
                     <!-- Buttons -->
                     <div class="mt-4 d-flex justify-content-end gap-2">
                         <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -193,9 +196,9 @@
                             data-id="{{ proforma.id }}"
                             data-invoice_no="{{ proforma.invoice_no }}"
                             data-invoice_date="{{ proforma.invoice_date|date:'Y-m-d' }}"
-                            data-company_name="{{ proforma.party_details.party_name }}"
-                            data-company_email="{{ proforma.party_email_used.email }}"
-                            data-company_contact="{{ proforma.party_contact_used.party_number }}"
+                            data-party_name="{{ proforma.party_details.party_name }}"
+                            data-party_email="{{ proforma.party_email_used.email }}"
+                            data-party_contact="{{ proforma.party_contact_used.party_number }}"
                             data-billing_gstin_no="{{ proforma.billing_gstin_no }}"
                             data-billing_state_name="{{ proforma.billing_state_name }}"
                             data-billing_address="{{ proforma.billing_address|escapejs }}"

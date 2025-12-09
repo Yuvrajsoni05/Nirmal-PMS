@@ -75,14 +75,14 @@
                                 <input
                                     class="form-check-input"
                                     type="checkbox"
-                                    name="company_name"
-                                    value="{{ i.company_name }}"
-                                    id="company_name"
+                                    name="party_name"
+                                    value="{{ i.party_details.party_name }}"
+                                    id="party_name"
                                 />
                                 <label
                                     class="form-check-label"
-                                    for="company_name"
-                                    >{{ i.company_name }}</label
+                                    for="party_name"
+                                    >{{ i.party_details.party_name }}</label
                                 >
                             </div>
                         </div>
@@ -94,7 +94,7 @@
                             <input
                                 type="email"
                                 class="form-control"
-                                name="company_address"
+                                name="party_email_address"
                                 placeholder="Enter email address"
                                 maxlength="50"
                                 required

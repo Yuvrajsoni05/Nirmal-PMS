@@ -149,10 +149,10 @@
                                                     <option value="">Select Party Name</option>
                                                 {% endif %}
 
-                                                {% for company in company_name %}
-                                                    {% if company.party_name != request.GET.party_name %}
-                                                        <option value="{{ company.party_name }}">
-                                                            {{ company.party_name }}
+                                                {% for party in party_names %}
+                                                    {% if party.party_name != request.GET.party_name %}
+                                                        <option value="{{ party.party_name }}">
+                                                            {{ party.party_name }}
                                                         </option>
                                                     {% endif %}
                                                 {% endfor %}
@@ -255,7 +255,8 @@
                                                 <tr class="text-start">
                                                     <td class="text-truncate sticky-left"
                                                         data-bs-toggle="modal"
-                                                        data-bs-target="#viewModal{{ i.id }}">   
+                                                        data-bs-target="#viewModal{{ i.id }}"> 
+                                                        {{ forloop.counter }}  
                                                     </td>
                                                     <td class="text-truncate">{{ i.date }}</td>
                                                     <td class="text-truncate">{{ i.bill_no }}</td>
