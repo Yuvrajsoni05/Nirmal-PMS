@@ -10329,3 +10329,15 @@ Traceback (most recent call last):
     "datas": datas,
              ^^^^^
 NameError: name 'datas' is not defined
+ERROR 2025-12-10 12:18:52,405 myapp add_job Something went wrong: 'list' object has no attribute 'strip' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 458, in add_job
+    job_name = request.POST.getlist("job_name_real").strip()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'strip'
+ERROR 2025-12-10 12:22:14,839 myapp add_job Something went wrong: 'list' object has no attribute 'strip' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 458, in add_job
+    job_name_list = request.POST.getlist("job_name_real").strip()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'list' object has no attribute 'strip'

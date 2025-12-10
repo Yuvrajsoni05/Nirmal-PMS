@@ -69,9 +69,6 @@ def file_name_convert(files):
             file_dic[file_key] = (file.name, file, file.content_type)
     return file_dic
         
-     
-        
-        
         
     
 def all_job_name_list(party_name):
@@ -92,6 +89,20 @@ def all_job_name_list(party_name):
         job_qs = ''
         
     return job_qs
+
+
+def email_attachment_size(total_attachment_size):
+    MAX_SIZE_MB =  25
+    
+    if total_attachment_size > MAX_SIZE_MB * 1024 * 1024:
+        return f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files."
+
+    return None
+    
+    
+    
+    
+    
     
     
     

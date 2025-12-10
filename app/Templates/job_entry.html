@@ -382,7 +382,7 @@
                                                 </div>
                                                 <input
                                                     type="hidden"
-                                                    name="cylinder_size"
+                                                    name="cylinder_size[]"
                                                 />
                                             </div>
                                         </div>
@@ -456,8 +456,7 @@
                                                 </label>
                                                 <input type="date"
                                                 class="form-control border-1"
-                                                id="cylinder_dates" value="{%
-                                                now "Y-m-d" %}"
+                                                id="cylinder_dates" value="{% now "Y-m-d" %}"
                                                 name="cylinder_date">
                                                 <div
                                                     class="invalid-feedback"
@@ -556,7 +555,7 @@
                                                 <input
                                                     type="hidden"
                                                     id="pouch_size"
-                                                    name="pouch_size"
+                                                    name="pouch_size[]"
                                                 />
                                             </div>
 
@@ -610,7 +609,7 @@
                                                 <input
                                                     type="hidden"
                                                     id="pouch_open_size"
-                                                    name="pouch_open_size"
+                                                    name="pouch_open_size[]"
                                                 />
                                             </div>
 
@@ -700,7 +699,7 @@
                                                     type="hidden"
                                                     class="form-control border-1"
                                                     id="pouch_combination"
-                                                    name="pouch_combination"
+                                                    name="pouch_combination[]"
                                                 />
                                             </div>
                                             <br />

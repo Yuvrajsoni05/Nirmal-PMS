@@ -1,6 +1,4 @@
-{% load static %} {% load humanize %}
-{% load custom_tags %}
-{% load humanize %}
+{% load static %} {% load humanize %} {% load custom_tags %} {% load humanize %}
 <html lang="en">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -9,6 +7,7 @@
             href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css"
             rel="stylesheet"
         />
+
         <meta
             content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
             name="viewport"
@@ -163,20 +162,6 @@
         <!-- Kaiadmin JS -->
         <script src="{% static 'assets/js/kaiadmin.min.js' %}"></script>
 
-        <link
-            href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css"
-            rel="stylesheet"
-        />
-        {% comment %} <script type="module">
-            import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
-
-            createChat({
-                webhookUrl:
-                    "http://localhost:5678/webhook/4d6327ef-aac3-4bb7-a0ae-e751339b93e2/chat",
-            });
-        </script> {% endcomment %}
-
-        {% comment %} {% endcomment %}
         <script>
             // Check internet connectivity on page load
             if (!navigator.onLine) {
@@ -217,6 +202,15 @@
                         closeToast(id);
                     }, 5000);
                 });
+            });
+        </script>
+
+        <script type="module">
+            import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
+
+            createChat({
+                webhookUrl:
+                    "http://localhost:5678/webhook/ae12f1a8-67cc-44f9-9456-fbfbdbc96ff2/chat",
             });
         </script>
 

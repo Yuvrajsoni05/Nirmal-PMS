@@ -102,9 +102,6 @@ class Job_detail(models.Model):
 
 
 
-   
-    
-      
 class JobHistory(models.Model):
     job = models.ForeignKey(Job_detail, on_delete=models.CASCADE, related_name="job_history")
     field_name = models.CharField(max_length=200)

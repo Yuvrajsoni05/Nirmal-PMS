@@ -363,8 +363,10 @@ def dashboard_page(request):
         paginator = Paginator(job_details, 10)
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
+        
         total_job = job_details.count()
-
+        for i in job_details:
+            print(i)
         party_names = Party.objects.values("party_name").distinct()
         job_names = job_details.values("job_name").distinct()
         count_of_company = Party.objects.all().order_by("party_name").count()
@@ -453,22 +455,22 @@ def add_job(request):
             bill_no = request.POST.get("bill_no"  ,'')
             party_name = request.POST.get("party_name", "")
             new_party_name = request.POST.get("new_party_name", "").strip()
-            job_name = request.POST.getlist("job_name_real")
+            job_name_list = request.POST.getlist("job_name_real")
             job_type = request.POST.getlist("job_type")
             noc = request.POST.getlist("noc")
             prpc_purchase = request.POST.getlist("prpc_purchase")
             prpc_sell = request.POST.getlist("prpc_sell")
-            cylinder_size = request.POST.getlist("cylinder_size")
+            cylinder_size = request.POST.getlist("cylinder_size[]")
             cylinder_made_in_s = request.POST.getlist("cylinder_made_in_real")
             cylinder_date = request.POST.getlist("cylinder_date")
             cylinder_bill_no = request.POST.getlist("cylinder_bill_no")
-            pouch_size = request.POST.getlist("pouch_size")
-            pouch_open_size = request.POST.getlist("pouch_open_size")
-            pouch_combination = request.POST.getlist('pouch_combination')
+            pouch_size = request.POST.getlist("pouch_size[]")
+            pouch_open_size = request.POST.getlist("pouch_open_size[]")
+            pouch_combination = request.POST.getlist('pouch_combination[]')
             correction = request.POST.get("correction")
             job_status = request.POST.get("job_status")
         
-
+            job_name = [name.strip() for name in job_name_list]
 
             required_filed = {
                 "Date": date,
@@ -489,6 +491,7 @@ def add_job(request):
             }            
             
             for i, r in required_filed.items():
+                print(i,r)
                 if not r:
                     messages.error(
                         request,
@@ -550,13 +553,8 @@ def add_job(request):
         return redirect("job_entry")
     
 
-
-
-
-
 @custom_login_required
 def update_job(request, update_id):
-
     try:
         if request.method == "POST":
             date = request.POST.get("date")
@@ -612,8 +610,7 @@ def update_job(request, update_id):
 
        
 
-        
-
+    
         file_error = utils.file_validation(files)
         if file_error:
             messages.error(request, file_error, extra_tags="custom-success-style")
@@ -628,7 +625,6 @@ def update_job(request, update_id):
         try:
             old_job = Job_detail.objects.get(id=update_id)
             update_job_data = get_object_or_404(Job_detail, id=update_id)
-            # print(Job_detail.objects.values("pouch_combination").get(id=update_id))
             job = old_job
             for field in [
                 "job_status",
@@ -898,7 +894,7 @@ def cdr_page(request):
 
     page_obj = paginator.get_page(page_number)
     page_range_placeholder = "a" * page_obj.paginator.num_pages
-    print(page_obj)
+   
     context = {
         
         "cdr_details": page_obj,
@@ -1156,14 +1152,11 @@ def cdr_sendmail_data(request):
             cdr_corrections = cdr_corrections
 
         total_attachment_size = sum(f.size for f in attachments)
-        MAX_SIZE_MB = 25
-        if total_attachment_size > MAX_SIZE_MB * 1024 * 1024:
-            messages.error(
-                request,
-                f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files.",
-                extra_tags="custom-success-style",
-            )
+        email_attachment_check = utils.email_attachment_size(total_attachment_size)
+        if email_attachment_check:
+            messages.error(request, email_attachment_check, extra_tags="custom-success-style")
             return redirect("company_add_page")
+
 
         email_error = utils.email_validator(cdr_party_address)
         if email_error:
@@ -1246,15 +1239,15 @@ def send_mail_data(request):
         return redirect("dashboard_page")
 
     total_attachment_size = sum(f.size for f in attachments)
-
-    MAX_SIZE_MB = 25
-    if total_attachment_size > MAX_SIZE_MB * 1024 * 1024:
-        messages.error(
-            request,
-            f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files.",
-            extra_tags="custom-success-style",
-        )
+    
+    
+    
+    email_attachment_check = utils.email_attachment_size(total_attachment_size)
+    if email_attachment_check:
+        messages.error(request, email_attachment_check, extra_tags="custom-success-style")
         return redirect("dashboard_page")
+
+
 
     job_info = {
         "date": date,
@@ -1433,44 +1426,44 @@ def ViewProformaInvoice(request):
     )
 
 
-def UpdateProformaInvoice(request, proforma_id):
-    if request.method == "POST":
-        invoice_date = request.POST.get("invoice_date")
-        mode_payment = request.POST.get("mode_payment")
-        billing_address = request.POST.get("billing_address")
-        billing_gstin = request.POST.get("billing_gstin_no")
-        billing_state_name = request.POST.get("billing_state_name")
-        quantity = request.POST.get("quantity")
-        pouch_open_size = request.POST.get("pouch_open_size")
-        cylinder_size = request.POST.get("cylinder_size")
-        prpc_rate = request.POST.get("prpc_rate")
+# def UpdateProformaInvoice(request, proforma_id):
+#     if request.method == "POST":
+#         invoice_date = request.POST.get("invoice_date")
+#         mode_payment = request.POST.get("mode_payment")
+#         billing_address = request.POST.get("billing_address")
+#         billing_gstin = request.POST.get("billing_gstin_no")
+#         billing_state_name = request.POST.get("billing_state_name")
+#         quantity = request.POST.get("quantity")
+#         pouch_open_size = request.POST.get("pouch_open_size")
+#         cylinder_size = request.POST.get("cylinder_size")
+#         prpc_rate = request.POST.get("prpc_rate")
 
-        total = request.POST.getlist("total")
+#         total = request.POST.getlist("total")
 
-        company_name = request.POST.get("company_name")
-        company_email = request.POST.get("company_email")
-        company_contact = request.POST.get("company_contact")
-        title = request.POST.get("title")
-        banking_details = request.POST.get("banking_details")
-        item = get_object_or_404(ProformaInvoice, id=proforma_id)
-        item.invoice_date = invoice_date
-        item.mode_payment = mode_payment
-        item.billing_address = billing_address
-        item.billing_state_name = billing_state_name
-        item.billing_gstin_no = billing_gstin
-        item.quantity = quantity
-        item.pouch_open_size = pouch_open_size
-        item.cylinder_size = cylinder_size
-        item.prpc_rate = prpc_rate
-        item.company_name = company_name
-        item.company_email = company_email
-        item.company_contact = company_contact
-        item.title = title
-        item.banking_details = banking_details
-        item.save()
-        messages.success(request, "Data  Successfully")
-        return redirect("view_proforma_invoice")
-    return redirect("view_proforma_invoice")
+#         company_name = request.POST.get("company_name")
+#         company_email = request.POST.get("company_email")
+#         company_contact = request.POST.get("company_contact")
+#         title = request.POST.get("title")
+#         banking_details = request.POST.get("banking_details")
+#         item = get_object_or_404(ProformaInvoice, id=proforma_id)
+#         item.invoice_date = invoice_date
+#         item.mode_payment = mode_payment
+#         item.billing_address = billing_address
+#         item.billing_state_name = billing_state_name
+#         item.billing_gstin_no = billing_gstin
+#         item.quantity = quantity
+#         item.pouch_open_size = pouch_open_size
+#         item.cylinder_size = cylinder_size
+#         item.prpc_rate = prpc_rate
+#         item.company_name = company_name
+#         item.company_email = company_email
+#         item.company_contact = company_contact
+#         item.title = title
+#         item.banking_details = banking_details
+#         item.save()
+#         messages.success(request, "Data  Successfully")
+#         return redirect("view_proforma_invoice")
+#     return redirect("view_proforma_invoice")
 
 
 @custom_login_required
@@ -1512,7 +1505,7 @@ def ProformaSendMail(request):
             field_value = request.POST.get(field, "")
             if field_value:
                 item_dic[field] = field_value
-                print(field , field_value)
+          
         job_names = request.POST.getlist("job_name[]")
         titles = request.POST.getlist("title[]")
         quantities = request.POST.getlist("quantity[]")
@@ -1745,65 +1738,70 @@ def ProformaInvoicePageAJAX(request):
             return float(value)
         except (TypeError, ValueError):
             return default
-
-    igst = request.GET.get("igsts")
-    cgst = request.GET.get("cgsts")
-    sgst = request.GET.get("sgsts")
-    quantities = request.GET.getlist("quantities[]")
-    prpc_prices = request.GET.getlist("prpc_prices[]")
-    party_name = request.GET.get("party_name", "")
-
-    igst_val = safe_int(igst)
-    cgst_val = safe_int(cgst)
-    sgst_val = safe_int(sgst)
-    gst = igst_val + cgst_val + sgst_val
-
-    
-    quantities = [safe_float(q) for q in quantities if q not in (None, "", "0", 0)]
-    prpc_prices = [safe_float(p) for p in prpc_prices if p not in (None, "", "0", 0)]
-
-    taxable_value = sum(q * p for q, p in zip(quantities, prpc_prices))
-    gst_amount = taxable_value * (gst / 100) if gst else 0
-    total_amount = round(taxable_value + gst_amount, 2)
-    job = []  
-   
-    billing_address = []
-    party_contact_qs = []
-    party_email_qs = []
-    
-    
-    
-   
-    if party_name:
+    try:
         
-        jobs = utils.all_job_name_list(party_name)
-        job = list(jobs)
-        party_email_qs = list(Party.objects.filter(
-            party_name=party_name
-        ).values('party_emails__email').distinct())
+        igst = request.GET.get("igsts")
+        cgst = request.GET.get("cgsts")
+        sgst = request.GET.get("sgsts")
+        quantities = request.GET.getlist("quantities[]")
+        prpc_prices = request.GET.getlist("prpc_prices[]")
+        party_name = request.GET.get("party_name", "")
+
+        igst_val = safe_int(igst)
+        cgst_val = safe_int(cgst)
+        sgst_val = safe_int(sgst)
+        gst = igst_val + cgst_val + sgst_val
 
         
-        party_contact_qs = list(Party.objects.filter(
-            party_name__iexact=party_name
-        ).values("party_contacts__party_number").distinct())
-                
-        billing_address_qs = ProformaInvoice.objects.filter(
-            party_details__party_name__iexact=party_name
-        ).values("billing_address").distinct()
+        quantities = [safe_float(q) for q in quantities if q not in (None, "", "0", 0)]
+        prpc_prices = [safe_float(p) for p in prpc_prices if p not in (None, "", "0", 0)]
+
+        taxable_value = sum(q * p for q, p in zip(quantities, prpc_prices))
+        gst_amount = taxable_value * (gst / 100) if gst else 0
+        total_amount = round(taxable_value + gst_amount, 2)
+        job = []  
+    
+        billing_address = []
+        party_contact_qs = []
+        party_email_qs = []
         
-        billing_address = (
-            billing_address_qs[0]["billing_address"] if billing_address_qs else ""
-        )
         
-    context = {
-        "total_amount": total_amount,
-        "job": job, 
-        "contacts": party_contact_qs,
-        "emails": party_email_qs,
-        "billing_address": billing_address,
-        "taxable_value": taxable_value,
-        "gst_amount": gst_amount,
-    }
+        
+    
+        if party_name:
+            
+            jobs = utils.all_job_name_list(party_name)
+            job = list(jobs)
+            party_email_qs = list(Party.objects.filter(
+                party_name=party_name
+            ).values('party_emails__email').distinct())
+
+            
+            party_contact_qs = list(Party.objects.filter(
+                party_name__iexact=party_name
+            ).values("party_contacts__party_number").distinct())
+                    
+            billing_address_qs = ProformaInvoice.objects.filter(
+                party_details__party_name__iexact=party_name
+            ).values("billing_address").distinct()
+            
+            billing_address = (
+                billing_address_qs[0]["billing_address"] if billing_address_qs else ""
+            )
+            
+        context = {
+            "total_amount": total_amount,
+            "job": job, 
+            "contacts": party_contact_qs,
+            "emails": party_email_qs,
+            "billing_address": billing_address,
+            "taxable_value": taxable_value,
+            "gst_amount": gst_amount,
+        }
+    except Exception as e:
+        messages.error(request,f"Something went wrong try again ")
+        logger.error(f"something went wrong {str(e)}",exc_info=True)
+        return redirect("dashboard_page")
 
     
     return JsonResponse(context)
