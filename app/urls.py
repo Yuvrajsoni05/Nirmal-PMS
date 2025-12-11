@@ -10,7 +10,7 @@ urlpatterns = [
     path("logout", user_logout, name="logout"),
     path("edit_user", edit_user_page, name="edit_user_page"),
     path("dashboard/", dashboard_page, name="dashboard_page"),
-   
+    
     path("job_entry/", job_entry, name="job_entry"),
     path("delete_data/<int:delete_id>/", delete_data, name="delete_data"),
     path("update_data/<int:update_id>/", update_job, name="update_job"),

@@ -35,7 +35,7 @@ from .models import *
 from . import utils 
 # Password
 
-
+from django.http import HttpResponse
 
 # Swagger Setting
 
@@ -51,6 +51,7 @@ from . import utils
 # Lecco ai
 # Cookies in  Django Section in django
 
+    
 logger = logging.getLogger("myapp")
 class CustomPasswordResetView(PasswordResetView):
     template_name = "Password/password_reset_form.html"
@@ -84,6 +85,8 @@ def login_page(request):
             valid = re.fullmatch(
                 r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", username_email
             )
+            print("Received Login:", username_email, password)
+    
             if valid:
                 try:
                     user_login = Registration.objects.get(
@@ -119,8 +122,26 @@ def login_page(request):
 
 
 
+
+        
+            
+    
+
 @custom_login_required
 def register_page(request):
+    if "HX-Request" in request.headers:
+        username = request.GET.get("username", "").strip()
+        email = request.GET.get("emailAddress","").strip()
+        
+        if username:
+            if Registration.objects.filter(username=username).exists():
+                return HttpResponse("username already exists")
+        if email:
+            if Registration.objects.filter(email=email).exists():
+                return HttpResponse("email already exists")
+        
+        return HttpResponse()
+ 
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         first_name = request.POST.get("firstName", "").strip()
@@ -375,7 +396,8 @@ def dashboard_page(request):
         total_active_job = job_details.filter(job_status="In Progress").count()
         count_of_cylinder_company = cylinder_company_names.count()
         nums = " " * page_obj.paginator.num_pages
-        
+        if not job_details:
+            messages.error(request,"No data available", extra_tags="custom-success-style")
         context = {
             "nums": nums,
             "jobrecoreds": page_obj,
@@ -837,7 +859,8 @@ def cdr_page(request):
     job_name_sorting = request.GET.get("job_name_sorting", "")
     date_sorting = request.GET.get("date_sorting", "")
     sorting = request.GET.get("sorting", "")
-
+    
+    
     cdr_data = CDRDetail.objects.all()
     if search and date:
         cdr_data = CDRDetail.objects.filter(
@@ -1414,6 +1437,10 @@ def ViewProformaInvoice(request):
         cleaned = gst_value.replace("[", "").replace("]", "").replace('"', "")
         proforma.gst = [x for x in cleaned.split(",") if x]
 
+    
+    if not proformaInvoice:
+        messages.error(request,"No data available",extra_tags="custom-success-style")
+       
     context = {
         "nums": nums,
         "proformaInvoices": proformaInvoice,

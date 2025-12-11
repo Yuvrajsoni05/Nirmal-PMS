@@ -52,21 +52,39 @@
                                     <input type="text"
                                            id="username"
                                            name="username"
+                                           hx-get="{% url 'register_page' %}"
+                                            hx-trigger="keyup changed delay:0ms"
+                                            hx-target="#username-messages"
+                                            hx-swap="innerHTML"
+                                            autocomplete="off"
                                            class="form-control"
                                            maxlength="15"
                                            placeholder="Username" />
-                                    <div class="invalid-feedback"  id="username_error">Please provide a Username.</div>
+
+
+                                        <span   style="color: red; font-size:small" id="username-messages"></span>
+                          
+
+                                    <div class="invalid-feedback"  id="username_error">Please provide a Username.</div> 
                                 </div>
                                 <div class="col-md-6">
                                     <label for="email" class="form-label fw-semibold text-dark">Email</label>
                                     <span style="color:red;">*</span>
                                     <input type="email"
+                                            
                                            id="email"
+                                           hx-get="{% url 'register_page' %}"
+                                        hx-trigger="keyup changed delay:0ms"
+                                        hx-target="#email-messages"
+                                        hx-swap="innerHTML"
+                                        autocomplete="off"
                                            name="emailAddress"
                                            class="form-control"
                                            maxlength="50"
                                            placeholder="Enter Email" />
-                                    <span class="invalid-feedback" id="email_error">Please provide Valid Email.</span>
+
+                                    <span style="color: red; font-size:small" id="email-messages" ></span>
+                                    <span class="invalid-feedback" id="email_error">Please provide Valid Email.</span> 
                                 </div>
                             </div>
                             <div class="row mb-3">
