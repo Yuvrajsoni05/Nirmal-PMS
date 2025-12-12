@@ -23,27 +23,17 @@
 {% endblock styles %}
 
 {% block main_block %}
-    <div class="container-fluid py-4">
-    <!-- Upload CDR Form Section -->
-        <div class="row justify-content-center">
-            <div class="col-11">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h3 class="fw-bold mb-0">Upload CDR</h3>
-                </div>
-
-                <div class="card shadow col-12">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="mb-0">
-                            <i class="bi bi-plus-circle me-2"></i>Upload CDR File
-                        </h5>
-                    </div>
-
-                    {% include 'Includes/cdr_page/form.html' %}
+    <div class="page-inner">
+            <div
+                class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4" >
+                <div>
+                    <h3 class="fw-bold mb-3">Upload CDR</h3>
                 </div>
             </div>
-        </div>
-
-    <!-- CDR Details Table Section -->
+            {% include 'Includes/cdr_page/form.html' %}
+        
+            
+        <!-- CDR Details Table Section -->
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-round">
@@ -259,7 +249,7 @@
                     </div>
                 </div>
             </div>
-        <!-- Pagination -->
+            <!-- Pagination -->
            {% include 'Includes/cdr_page/navbar.html' %}
         </div>
     </div>

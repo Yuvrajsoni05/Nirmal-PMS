@@ -12,9 +12,9 @@ urlpatterns = [
     path("dashboard/", dashboard_page, name="dashboard_page"),
     
     path("job_entry/", job_entry, name="job_entry"),
-    path("delete_data/<int:delete_id>/", delete_data, name="delete_data"),
-    path("update_data/<int:update_id>/", update_job, name="update_job"),
-    path("add_data", add_job, name="add_data"),
+    path("delete_data/<uuid:delete_id>/", delete_data, name="delete_data"),
+    path("update_data/<uuid:update_id>/", update_job, name="update_job"),
+    path("create_job", create_job, name="create_job"),
     path("profile_page", profile_page, name="profile_page"),
     path("update_profile/<uuid:users_id>/", update_profile, name="update_profile"),
     path("update_password", user_password, name="update_password"),

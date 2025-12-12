@@ -161,36 +161,36 @@ def register_page(request):
                 messages.error(
                     request,
                     f" {i} field is Required",
-                    extra_tags="custom-success-style",
+                    extra_tags="custom-danger-style",
                 )
                 return redirect("register_page")
 
         if Registration.objects.filter(username=username).exists():
             messages.error(
-                request, "Username Already Exist", extra_tags="custom-success-style"
+                request, "Username Already Exist", extra_tags="custom-danger-style"
             )
             return redirect("register_page")
 
         email_error = utils.email_validator(email)
         if email_error:
-            messages.error(request, email_error, extra_tags="custom-success-style")
+            messages.error(request, email_error, extra_tags="custom-danger-style")
             return redirect("register_page")
 
         email_check_error = utils.email_check(email)
         if email_check_error:
             messages.error(
-                request, email_check_error, extra_tags="custom-success-style"
+                request, email_check_error, extra_tags="custom-danger-style"
             )
             return redirect("register_page")
 
         password_error = utils.validator_password(password)
         if password_error:
-            messages.error(request, password_error, extra_tags="custom-success-style")
+            messages.error(request, password_error, extra_tags="custom-danger-style")
             if password != confirm_password:
                 messages.error(
                     request,
                     "Password Confirm Password must be same",
-                    extra_tags="custom-success-style",
+                    extra_tags="custom-danger-style",
                 )
                 return redirect("register_page")
 
@@ -248,13 +248,13 @@ def update_user(request, user_id):
                     messages.error(
                         request,
                         f"{field_name} is required.",
-                        extra_tags="custom-success-style",
+                        extra_tags="custom-danger-style",
                     )
                     return redirect("edit_user_page")
 
             email_error = email_error = utils.email_validator(email)
             if email_error:
-                messages.error(request, email_error, extra_tags="custom-success-style")
+                messages.error(request, email_error, extra_tags="custom-danger-style")
                 return redirect("edit_user_page")
 
             if (
@@ -264,7 +264,7 @@ def update_user(request, user_id):
                 messages.error(
                     request,
                     "Username already exists.",
-                    extra_tags="custom-success-style",
+                    extra_tags="custom-danger-style",
                 )
                 return redirect("edit_user_page")
 
@@ -273,7 +273,7 @@ def update_user(request, user_id):
                 and Registration.objects.filter(email=email).exists()
             ):
                 messages.error(
-                    request, "Email already exists.", extra_tags="custom-success-style"
+                    request, "Email already exists.", extra_tags="custom-danger-style"
                 )
                 return redirect("edit_user_page")
 
@@ -289,7 +289,7 @@ def update_user(request, user_id):
                     messages.error(
                         request,
                         f"{field_name} is required.",
-                        extra_tags="custom-success-style",
+                        extra_tags="custom-danger-style",
                     )
                     return redirect("edit_user_page")
 
@@ -313,7 +313,7 @@ def update_user(request, user_id):
     except Exception as e:
     
         messages.error(
-            request, f"Something went wrong", extra_tags="custom-success-style"
+            request, f"Something went wrong", extra_tags="custom-danger-style"
         )
         return redirect("edit_user_page")
 
@@ -331,16 +331,13 @@ def dashboard_page(request):
         job_name_sorting = request.GET.get("job_name_sorting", "").strip()
         cylinder_date_sorting = request.GET.get("cylinder_date_sorting", "").strip()
         cylinder_made_in_sorting = request.GET.get("cylinder_made_in_sorting", "").strip()
-
         filters = Q()
-
- 
         if party_name_search:
             filters &= Q(party_details__party_name__icontains=party_name_search)
         if job_name_search:
             filters &= Q(job_name__icontains=job_name_search)
 
-        # Date filters
+
         if start_date and end_date:
             filters &= Q(date__range=[start_date, end_date])
         elif start_date:
@@ -389,7 +386,7 @@ def dashboard_page(request):
         for i in job_details:
             print(i)
         party_names = Party.objects.values("party_name").distinct()
-        job_names = job_details.values("job_name").distinct()
+        job_names = Job_detail.objects.values("job_name").distinct()
         count_of_company = Party.objects.all().order_by("party_name").count()
 
         cylinder_company_names = CylinderMadeIn.objects.all()
@@ -397,7 +394,7 @@ def dashboard_page(request):
         count_of_cylinder_company = cylinder_company_names.count()
         nums = " " * page_obj.paginator.num_pages
         if not job_details:
-            messages.error(request,"No data available", extra_tags="custom-success-style")
+            messages.error(request,"No data available", extra_tags="custom-danger-style")
         context = {
             "nums": nums,
             "jobrecoreds": page_obj,
@@ -408,7 +405,6 @@ def dashboard_page(request):
             "count_of_company": count_of_company,
             "count_of_cylinder_company": count_of_cylinder_company,
             "sorting": sorting,
-            
             "party_name_sorting": party_name_sorting,
             "job_name_sorting": job_name_sorting,
             "date_sorting": date_sorting,
@@ -454,8 +450,8 @@ def delete_data(request, delete_id):
 @custom_login_required
 def job_entry(request):
     party_names = Party.objects.values("party_name").distinct()
-    job_status = Job_detail._meta.get_field("job_status").choices
-    job_type = Job_detail.JOB_STATUS_CHOICES
+    job_status = Job_detail.JOB_STATUS_CHOICES
+    job_type = Job_detail.JOB_TYPE_CHOICES
      
     cylinder_company_names = CylinderMadeIn.objects.all()
     cdr_job_name = CDRDetail.objects.values("job_name").distinct()
@@ -470,7 +466,7 @@ def job_entry(request):
 
 
 @custom_login_required
-def add_job(request):
+def create_job(request):
     try:
         if request.method == "POST":
             date = request.POST.get("job_date" ,'')
@@ -518,7 +514,7 @@ def add_job(request):
                     messages.error(
                         request,
                         f"This {i} Filed Was Required",
-                        extra_tags="custom-success-style",
+                        extra_tags="custom-danger-style",
                     )
                     return redirect("job_entry")
 
@@ -626,7 +622,7 @@ def update_job(request, update_id):
                 messages.error(
                     request,
                     f"This {i} field is required.",
-                    extra_tags="custom-success-style",
+                    extra_tags="custom-danger-style",
                 )
                 return redirect("dashboard_page")
 
@@ -635,7 +631,7 @@ def update_job(request, update_id):
     
         file_error = utils.file_validation(files)
         if file_error:
-            messages.error(request, file_error, extra_tags="custom-success-style")
+            messages.error(request, file_error, extra_tags="custom-danger-style")
             return redirect("dashboard_page")
 
         get_data = Job_detail.objects.all().get(id=update_id)
@@ -750,7 +746,7 @@ def update_profile(request, users_id):
         for filed, required in required_filed.items():
             if not required:
                 messages.error(
-                    request, f"{filed} is Required", extra_tags="custom-success-style"
+                    request, f"{filed} is Required", extra_tags="custom-danger-style"
                 )
                 return redirect("profile_page")
 
@@ -758,7 +754,7 @@ def update_profile(request, users_id):
             email_check_error = utils.email_check(email)
             if email_check_error:
                 messages.error(
-                    request, email_check_error, extra_tags="custom-success-style"
+                    request, email_check_error, extra_tags="custom-danger-style"
                 )
                 return redirect("profile_page")
 
@@ -767,13 +763,13 @@ def update_profile(request, users_id):
             and Registration.objects.filter(username=username).exists()
         ):
             messages.error(
-                request, "Username already exists", extra_tags="custom-success-style"
+                request, "Username already exists", extra_tags="custom-danger-style"
             )
             return redirect("profile_page")
 
         email_error = utils.email_validator(email)
         if email_error:
-            messages.error(request, email_error, extra_tags="custom-success-style")
+            messages.error(request, email_error, extra_tags="custom-danger-style")
             return redirect("profile_page")
         update_profile.username = username
         update_profile.last_name = last_name
@@ -809,7 +805,7 @@ def user_password(request):
                 messages.error(
                     request,
                     "old Password is Incorrect",
-                    extra_tags="custom-success-style",
+                    extra_tags="custom-danger-style",
                 )
                 return redirect("profile_page")
 
@@ -820,7 +816,7 @@ def user_password(request):
             password_error = utils.validator_password(new_password)
             if password_error:
                 messages.error(
-                    request, password_error, extra_tags="custom-success-style"
+                    request, password_error, extra_tags="custom-danger-style"
                 )
                 return redirect("profile_page")
 
@@ -828,7 +824,7 @@ def user_password(request):
                 messages.error(
                     request,
                     "Your Current Password or New Password will same Add some Different",
-                    extra_tags="custom-success-style",
+                    extra_tags="custom-danger-style",
                 )
                 return redirect("profile_page")
 
@@ -836,7 +832,7 @@ def user_password(request):
                 messages.error(
                     request,
                     "new password or confirm Passwords Must be same ",
-                    extra_tags="custom-success-style",
+                    extra_tags="custom-danger-style",
                 )
                 return redirect("profile_page")
 
@@ -960,13 +956,13 @@ def cdr_add(request):
         for field, required in required_fields.items():
             if not required:
                 messages.error(
-                    request, f"{field} is Required", extra_tags="custom-success-style"
+                    request, f"{field} is Required", extra_tags="custom-danger-style"
                 )
                 return redirect("company_add_page")
             
         if not cdr_files:
             messages.error(
-                request, "CDR File is Required", extra_tags="custom-success-style")
+                request, "CDR File is Required", extra_tags="custom-danger-style")
             return redirect("company_add_page")
 
         if new_job_name != "":
@@ -988,27 +984,27 @@ def cdr_add(request):
                 messages.error(
                     request,
                     "This Party Name is already exists.",
-                    extra_tags="custom-success-style",
+                    extra_tags="custom-danger-style",
                 )
                 return redirect("company_add_page")
         
         party_number_check = utils.phone_number_check(party_contact_used)
         if party_number_check:
             messages.error(
-                request, party_number_check, extra_tags="custom-success-style"
+                request, party_number_check, extra_tags="custom-danger-style"
             )
             return redirect("company_add_page")
             
             
         email_error = utils.email_validator(party_email)
         if email_error:
-            messages.error(request, email_error, extra_tags="custom-success-style")
+            messages.error(request, email_error, extra_tags="custom-danger-style")
             return redirect("company_add_page")
         
     
         file_error = utils.file_validation(cdr_files)
         if file_error:
-            messages.error(request, file_error, extra_tags="custom-success-style")
+            messages.error(request, file_error, extra_tags="custom-danger-style")
             return redirect("company_add_page")
         file_dic = utils.file_name_convert(cdr_files)
 
@@ -1083,13 +1079,13 @@ def cdr_update(request, update_id):
       
         email_error = utils.email_validator(party_email)
         if email_error:
-            messages.error(request, email_error, extra_tags="custom-success-style")
+            messages.error(request, email_error, extra_tags="custom-danger-style")
             return redirect("company_add_page")
         
 
         file_error = utils.file_validation(cdr_files)
         if file_error:
-            messages.error(request, file_error, extra_tags="custom-success-style")
+            messages.error(request, file_error, extra_tags="custom-danger-style")
             return redirect("job_entry")
 
         file_dic = utils.file_name_convert(cdr_files)
@@ -1107,7 +1103,7 @@ def cdr_update(request, update_id):
             messages.error(
                 request,
                 "This email is already exists.",
-                extra_tags="custom-success-style",
+                extra_tags="custom-danger-style",
             )
             return redirect("company_add_page")
         
@@ -1119,7 +1115,7 @@ def cdr_update(request, update_id):
             messages.error(
                 request,
                 "This contact number is already exists.",
-                extra_tags="custom-success-style",
+                extra_tags="custom-danger-style",
             )
             return redirect("company_add_page")
         
@@ -1177,13 +1173,13 @@ def cdr_sendmail_data(request):
         total_attachment_size = sum(f.size for f in attachments)
         email_attachment_check = utils.email_attachment_size(total_attachment_size)
         if email_attachment_check:
-            messages.error(request, email_attachment_check, extra_tags="custom-success-style")
+            messages.error(request, email_attachment_check, extra_tags="custom-danger-style")
             return redirect("company_add_page")
 
 
         email_error = utils.email_validator(cdr_party_address)
         if email_error:
-            messages.error(request, email_error, extra_tags="custom-success-style")
+            messages.error(request, email_error, extra_tags="custom-danger-style")
             return redirect("company_add_page")
 
         CDR_INFO = {
@@ -1252,13 +1248,13 @@ def send_mail_data(request):
 
     if party_email_address == "" or party_email_address == None:
         messages.error(
-            request, "Kindly provide Company email", extra_tags="custom-success-style"
+            request, "Kindly provide Company email", extra_tags="custom-danger-style"
         )
         return redirect("dashboard_page")
 
     email_error = utils.email_validator(party_email_address)
     if email_error:
-        messages.error(request, email_error, extra_tags="custom-success-style")
+        messages.error(request, email_error, extra_tags="custom-danger-style")
         return redirect("dashboard_page")
 
     total_attachment_size = sum(f.size for f in attachments)
@@ -1267,7 +1263,7 @@ def send_mail_data(request):
     
     email_attachment_check = utils.email_attachment_size(total_attachment_size)
     if email_attachment_check:
-        messages.error(request, email_attachment_check, extra_tags="custom-success-style")
+        messages.error(request, email_attachment_check, extra_tags="custom-danger-style")
         return redirect("dashboard_page")
 
 
@@ -1439,7 +1435,7 @@ def ViewProformaInvoice(request):
 
     
     if not proformaInvoice:
-        messages.error(request,"No data available",extra_tags="custom-success-style")
+        messages.error(request,"No data available",extra_tags="custom-danger-style")
        
     context = {
         "nums": nums,
@@ -1521,7 +1517,7 @@ def ProformaSendMail(request):
         ]
         if party_email == None or party_email == "":
             messages.error(
-                request, "Company email is Required", extra_tags="custom-success-style"
+                request, "Company email is Required", extra_tags="custom-danger-style"
             )
             return redirect("view_proforma_invoice")
 
@@ -1568,7 +1564,7 @@ def ProformaSendMail(request):
 
         email_error = utils.email_validator(party_email)
         if email_error:
-            messages.error(request, email_error, extra_tags="custom-success-style")
+            messages.error(request, email_error, extra_tags="custom-danger-style")
             return redirect("view_proforma_invoice")
 
         receiver_email = party_email
@@ -1652,7 +1648,7 @@ def ProformaInvoiceCreate(request):
         for field, required in required_fields.items():
             if not required:
                 messages.error(
-                    request, f"{field} is Required", extra_tags="custom-success-style"
+                    request, f"{field} is Required", extra_tags="custom-danger-style"
                 )
                 return redirect("proforma_invoice_page")
         
@@ -1666,21 +1662,21 @@ def ProformaInvoiceCreate(request):
                 messages.error(
                     request,
                     "This Party Name is already exists.",
-                    extra_tags="custom-success-style",
+                    extra_tags="custom-danger-style",
                 )
                 return redirect("proforma_invoice_page")
             
         party_number_check = utils.phone_number_check(party_contact)
         if party_number_check:
             messages.error(
-                request, party_number_check, extra_tags="custom-success-style"
+                request, party_number_check, extra_tags="custom-danger-style"
             )
             return redirect("proforma_invoice_page")
         
         
         email_error = utils.email_validator(party_email)
         if email_error:
-            messages.error(request, email_error, extra_tags="custom-success-style")
+            messages.error(request, email_error, extra_tags="custom-danger-style")
             return redirect("proforma_invoice_page")
         
         bank_instance = (
@@ -1691,7 +1687,7 @@ def ProformaInvoiceCreate(request):
             messages.error(
                 request,
                 "Invoice number already exists",
-                extra_tags="custom-success-style",
+                extra_tags="custom-danger-style",
             )
             return redirect("proforma_invoice_page")
 

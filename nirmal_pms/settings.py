@@ -38,7 +38,7 @@ LOGIN_URL = 'login_page'
 LOGOUT_REDIRECT_URL = 'logout'
 LOGIN_REDIRECT_URL = "/dashboard"
 MESSAGE_TAGS = {
-    messages.ERROR: 'bg-danger  alert-danger', 
+    messages.ERROR: 'bg-danger', 
     messages.DEBUG: 'alert-info',
  
 } 

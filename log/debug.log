@@ -10392,3 +10392,464 @@ ERROR 2025-12-11 18:32:33,423 myapp login_page Invalid Username or Password view
 ERROR 2025-12-11 18:32:41,844 myapp login_page Invalid Username or Password views.py
 ERROR 2025-12-11 18:32:50,298 myapp login_page Invalid Username or Password views.py
 ERROR 2025-12-11 18:32:59,600 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-12 11:15:09,920 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:09,948 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:09,977 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,005 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,036 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,065 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,095 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,122 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,169 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,206 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,239 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,280 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,307 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,338 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,369 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,423 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,451 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,484 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,535 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:10,564 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,627 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,658 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,686 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,714 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,744 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,771 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,797 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,825 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,853 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,889 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,916 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,951 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:11,985 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:12,018 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:12,046 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:12,075 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:12,103 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:12,131 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:12,157 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:12,188 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,334 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,368 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,404 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,440 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,469 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,498 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,526 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,553 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,585 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,623 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,653 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,691 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,723 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,751 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,801 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,839 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,873 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,905 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,944 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:15,983 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail.values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 11:15:21,057 myapp dashboard_page Something went wrong: type object 'Job_detail' has no attribute 'values' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 392, in dashboard_page
+    job_names = Job_detail..values("job_name").distinct()
+                ^^^^^^^^^^^^^^^^^
+AttributeError: type object 'Job_detail' has no attribute 'values'
+ERROR 2025-12-12 14:56:47,290 myapp create_job Something went wrong: column "id" is of type bigint but expression is of type uuid
+LINE 1: ...tatus", "created_at", "party_details_id") VALUES ('12d7571c-...
+                                                             ^
+HINT:  You will need to rewrite or cast the expression.
+ views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+psycopg2.errors.DatatypeMismatch: column "id" is of type bigint but expression is of type uuid
+LINE 1: ...tatus", "created_at", "party_details_id") VALUES ('12d7571c-...
+                                                             ^
+HINT:  You will need to rewrite or cast the expression.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 538, in create_job
+    job = Job_detail.objects.create(
+        date=date,
+    ...<15 lines>...
+        cylinder_bill_no=cylinder_bill_no[i],
+    )
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\models\query.py", line 663, in create
+    obj.save(force_insert=True, using=self.db)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\models\base.py", line 902, in save
+    self.save_base(
+    ~~~~~~~~~~~~~~^
+        using=using,
+        ^^^^^^^^^^^^
+    ...<2 lines>...
+        update_fields=update_fields,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\models\base.py", line 1008, in save_base
+    updated = self._save_table(
+        raw,
+    ...<4 lines>...
+        update_fields,
+    )
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\models\base.py", line 1169, in _save_table
+    results = self._do_insert(
+        cls._base_manager, using, fields, returning_fields, raw
+    )
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\models\base.py", line 1210, in _do_insert
+    return manager._insert(
+           ~~~~~~~~~~~~~~~^
+        [self],
+        ^^^^^^^
+    ...<3 lines>...
+        raw=raw,
+        ^^^^^^^^
+    )
+    ^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\models\query.py", line 1868, in _insert
+    return query.get_compiler(using=using).execute_sql(returning_fields)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1882, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\nirmal_pms\Nirmal-PMS\venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+django.db.utils.ProgrammingError: column "id" is of type bigint but expression is of type uuid
+LINE 1: ...tatus", "created_at", "party_details_id") VALUES ('12d7571c-...
+                                                             ^
+HINT:  You will need to rewrite or cast the expression.
+
+ERROR 2025-12-12 15:04:54,892 myapp login_page Invalid Username or Password views.py

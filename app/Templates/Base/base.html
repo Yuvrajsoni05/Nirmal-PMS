@@ -1,4 +1,4 @@
-{% load static %} {% load humanize %} {% load custom_tags %} {% load humanize %}
+{% load static %} {% load humanize %} {% load custom_tags %}
 <html lang="en">
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -71,9 +71,11 @@
             <div class="container">
                 {% block main_block %} {% endblock main_block %}
             </div>
+
             <div id="loader-overlay" style="display: none">
                 <div id="loader-spinner"></div>
             </div>
+
             {% include 'Base/footer.html' %}
         </div>
 
@@ -89,7 +91,6 @@
             >
                 <div class="d-flex">
                     <div class="toast-body d-flex align-items-center fs-5">
-                        <!-- fs-5 for larger font size -->
                         {% if message.tags == 'error' %}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -141,25 +142,8 @@
         <script src="{% static 'assets/js/core/bootstrap.min.js' %}"></script>
         <!-- jQuery Scrollbar -->
         <script src="{% static 'assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
-        <!-- Chart JS -->
-        {% comment %}
-        <script src="assets/js/plugin/chart.js/chart.min.js"></script>
-        {% endcomment %}
         <!-- jQuery Sparkline -->
         <script src="{% static 'assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js' %}"></script>
-        <!-- Chart Circle -->
-        <script src="{% static 'assets/js/plugin/chart-circle/circles.min.js' %}"></script>
-        <!-- Datatables -->
-        <script src="{% static 'assets/js/plugin/datatables/datatables.min.js' %}"></script>
-        <!-- Bootstrap Notify -->
-        <script src="{% static 'assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js' %}"></script>
-        <!-- jQuery Vector Maps -->
-        <script src="{% static 'assets/js/plugin/jsvectormap/jsvectormap.min.js' %}"></script>
-        <script src="{% static 'assets/js/plugin/jsvectormap/world.js' %}"></script>
-        <!-- Sweet Alert -->
-        {% comment %}
-        <script src="{% static 'assets/js/plugin/sweetalert/sweetalert.min.js' %}"></script>
-        {% endcomment %}
         <!-- Kaiadmin JS -->
         <script src="{% static 'assets/js/kaiadmin.min.js' %}"></script>
 
@@ -170,13 +154,12 @@
             }
 
             // Listen for online/offline events
-            window.addEventListener('offline', function() {
+            window.addEventListener("offline", function () {
                 window.location.href = "{% url 'offline-page' %}"; // Redirect on going offline
             });
 
-            window.addEventListener('online', function() {
-
-                window.location.href = "{% url "login_page" %}";
+            window.addEventListener("online", function () {
+                window.location.href = "{% url 'login_page' %}";
             });
         </script>
         <script>
@@ -187,7 +170,6 @@
                     setTimeout(() => {
                         if (toast.parentNode) {
                             toast.parentNode.removeChild(toast);
-                            s;
                         }
                     }, 300);
                 }
@@ -203,15 +185,6 @@
                         closeToast(id);
                     }, 5000);
                 });
-            });
-        </script>
-
-        <script type="module">
-            import { createChat } from "https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js";
-
-            createChat({
-                webhookUrl:
-                    "http://localhost:5678/webhook/ae12f1a8-67cc-44f9-9456-fbfbdbc96ff2/chat",
             });
         </script>
 

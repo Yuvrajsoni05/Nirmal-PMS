@@ -1,0 +1,241 @@
+ <div class="row">
+            <div class="col-12">
+                <div class="card card-round mb-3">
+                    <div class="card-header">
+                        <div class="card-title">Proforma Details</div>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" id="proformaInvoiceForm" autocomplete="off" class="row g-4" action="{% url "proforma_invoice_create" %} ">
+                            {% csrf_token %}
+
+                            <div class="col-md-4">
+                                <label for="invoice_no" class="form-label fw-semibold">Invoice No.</label>
+                                <input type="text" class="form-control" id="invoice_no" name="invoice_no" placeholder="Enter invoice number" >
+                                <span class="invalid-feedback" id="invoice_no_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="invoice_date" class="form-label fw-semibold">Date</label>
+                                <input type="date" class="form-control" id="invoice_date" name="invoice_date" >
+                                <span class="invalid-feedback" id="invoice_date_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="mode_payment" class="form-label fw-semibold">Mode / Term of Payment</label>
+                                <input type="text" class="form-control" id="mode_payment" name="mode_payment" value="100%" placeholder="Mode / Term of Payment">
+                                <span class="invalid-feedback" id="mode_payment_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="party_name" class="form-label fw-semibold">Customer / Party Name</label>
+                                <select class="form-control form-select" id="party_name" name="party_name" >
+                                    <option value="" selected disabled>Select Customer / Party Name</option>
+                                    {% for party in party_name_list %}
+                                        <option value="{{ party.party_name }}">{{ party.party_name }}</option>
+                                    {% endfor %}
+                                    <option value="others">Other</option>
+                                </select>
+
+                                <input type="text" id="new_party_name"  name="new_party_name" style="display: none" placeholder="New Party Name"  name="new_party_name" class="form-control">
+                                <span class="invalid-feedback"  id="party_name_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="party_contact" class="form-label fw-semibold">Party Contact</label>
+                                <select class="form-control form-select" id="party_contact" name="party_contact">
+                                    <option value="" selected disabled>Select Party Contact</option>
+                                    <option value="others">Other</option>
+                                </select>
+                                <input type="number" id="new_party_contact" name="new_party_contact" class="form-control mt-2" placeholder="Enter Party Contact" style="display: none;" inputmode="numeric" pattern="\d{10}" maxlength="10" title="Enter 10 digit mobile number" autocomplete="tel">
+                                <span class="invalid-feedback" id="party_contact_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="party_email" class="form-label fw-semibold">Party Email</label>
+                                <select class="form-control form-select" id="party_email" name="party_email">
+                                    <option value="" selected disabled>Select Party Email</option>
+                                    {% for company in company_list %}
+                                        {% if company.party_email %}
+                                            <option value="{{ company.party_email }}">{{ company.party_email }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <option value="others">Other</option>
+                                </select>
+                                <input type="email" id="new_party_email" name="new_party_email" class="form-control mt-2" placeholder="Enter Party email" style="display: none;">
+                                <span class="invalid-feedback" id="party_email_error">This field is required</span>
+                            </div>
+
+                            <div class="col-12">
+                                <label for="billing_address" class="form-label fw-semibold">Billing Address</label>
+                                <textarea class="form-control" id="billing_address" name="billing_address" rows="2" placeholder="Street, City, State, ZIP"></textarea>
+                                <span class="invalid-feedback" id="billing_address_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label for="billing_state_name" class="form-label fw-semibold">Billing State Name</label>
+                                <select class="form-control form-select" id="billing_state_name" name="billing_state_name" >
+                                    <option value="" selected disabled>Select State</option>
+                                    {% for value, label in states %}
+                                        <option value="{{ value }}">
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+
+                                <span class="invalid-feedback" id="billing_state_name_error">This field is required</span>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <label for="billing_gstin_no" class="form-label fw-semibold">Billing GSTIN/UN.</label>
+                                <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No.">
+                                <span class="invalid-feedback" id="billing_gstin_no_error">This field is required</span>
+                            </div>
+
+
+                            <div id="job-container">
+                                <div class="row job-section border rounded p-3 mb-3">
+                                    <h5>Job Detail Section</h5>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">Title</label>
+                                        <select id="title" name="title[]" class="form-control form-select">
+                                            <option value="" selected disabled>Select Title</option>
+                                            <option value="JobWork on Cylinder">JobWork on Cylinder</option>
+                                            <option value="Copper Engraved Cylinder">Copper Engraved Cylinder</option>
+                                        </select>
+                                        <span class="invalid-feedback" id="title_input_error"  >This field is required</span>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="job_name" class="form-label fw-semibold">Job Name</label>
+                                        <select name="job_name" id="job_name" class="form-control job-name" >
+                                            <option value="" selected disabled>Select Job Name</option>
+                                            {% for i in job_names %}
+                                                <option >
+                                                    {{i.job_name}}
+
+                                                </option>{% endfor %}
+                                            <option value="others">Other</option>
+                                        </select>
+                                        <input type="text" name="new_job" class="form-control mt-2 new-job" style="display:none;" placeholder="Enter new Job">
+                                        <span class="invalid-feedback job-name-error" id="job-name-error"  style="display:none;">This field is required</span>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">Pouch Open Size</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control pouch-height" id="pouch_open_size_height" name="pouch_height[]" placeholder="Height (e.g. 100)" step="any">
+                                            <span class="invalid-feedback" id="pouch_open_height_error">Please provide Pouch Open Size  Height</span>  <span class="input-group-text bg-light border-1 fw-bold">×</span>
+                                            <input type="number" id="pouch_open_size_diameter" class="form-control pouch-diameter" name="pouch_diameter[]" placeholder="Diameter (e.g. 50)" step="any">
+                                            <span class="invalid-feedback" id="pouch_open_diameter_error">Please provide Pouch Open Size  Diameter</span>
+
+                                            <input type="hidden" class="pouch-open-size" name="pouch_open_size[]">
+                                        </div>
+                                        <span class="invalid-feedback pouch-open-size-error" style="display:none;">This field is required</span>
+                                    </div>
+
+                                    <div class="col-md-4 mt-3">
+                                        <label class="form-label fw-semibold">Cylinder Size</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control cylinder-height" name="cylinder_height[]" id="cylinder_height" placeholder="Height (e.g. 100)" step="any">
+                                            <span class="invalid-feedback" id="cylinder_height_error">Please provide Cylinder  Height</span> <span class="input-group-text bg-light border-1 fw-bold">×</span>
+                                            <input type="number" class="form-control cylinder-diameter" name="cylinder_diameter[]" id="cylinder_diameter" placeholder="Diameter (e.g. 50)" step="any">
+                                            <span class="invalid-feedback" id="cylinder_diameter_error">Please provide Cylinder Diameter</span>
+
+                                            <input type="hidden" class="cylinder-size" name="cylinder_size[]">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4 mt-3">
+                                        <label for="quantity" class="form-label fw-semibold">Quantity</label>
+                                        <input type="number" class="form-control item_check" step="any" id="quantity" name="quantity[]" placeholder="Quantity" >
+                                        <span class="invalid-feedback" id="quantity_error">This field is required</span>
+                                    </div>
+
+                                    <div class="col-md-4 mt-3">
+                                        <label for="prpc" class="form-label fw-semibold">Per Rate Per Cylinder</label>
+                                        <input type="number" class="form-control item_check" step="any" id="prpc_price" name="prpc_price[]" placeholder="Per Rate Per Cylinder" >
+                                        <span class="invalid-feedback" id="prpc_price_error">This field is required</span>
+                                    </div>
+
+
+                                </div>
+
+                            <!-- Add Button -->
+                                <div class="form-check form-check-inline">
+                                    <button type="button" id="add-job" class="btn btn-primary d-flex align-items-center">
+                                        <i class="fa fa-plus" aria-hidden="true"></i>&nbsp;&nbsp;Add New Job
+                                    </button>
+                                </div>
+
+                                <div class="col-md-4 mt-3 d-flex align-items-center">
+                                    <label class="form-label fw-semibold me-3">GST</label>
+                                    <div class="form-check form-check-inline"id="sgst_div">
+                                        <input class="form-check-input gst-checkbox" id="sgst" type="checkbox" name="gst[]" value="SGST - 9" >
+                                        <label class="form-check-label">SGST 9%</label>
+                                    </div>
+                                    <div class="form-check form-check-inline"id="cgst_div">
+                                        <input class="form-check-input gst-checkbox" type="checkbox" id="cgst" name="gst[]" value="CGST - 9" >
+                                        <label class="form-check-label">CGST 9%</label>
+                                    </div>
+                                    <div class="form-check form-check-inline"id="igst_div">
+                                        <input class="form-check-input gst-checkbox" type="checkbox" id="igst" name="gst[]" value="IGST - 18" >
+                                        <label class="form-check-label">IGST 18%</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="gst_value" id="gst_value" >
+                            </div>
+                            <div class="col-md-6">
+                                <label for="terms" class="form-label fw-semibold">Terms & Notes</label>
+                                <input type="text" id="terms" name="terms" class="form-control" placeholder="e.g. Net 30, Delivery within 7 days">
+                                <span class="invalid-feedback" id="terms_error">This field is required</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="taxable_value" class="form-label fw-semibold">Total Taxable Value</label>
+                                <input type="text" id="taxable_value" name="taxable_value" class="form-control" placeholder="Total Taxable Value" readonly>
+                                <span class="invalid-feedback" id="taxable_value_error">This field is required</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="total" class="form-label fw-semibold">Total</label>
+                                <input type="text" id="total_amount" name="total_amount" class="form-control" placeholder="Total" readonly>
+                                <span class="invalid-feedback" id="total_amount_error">This field is required</span>
+                            </div>
+
+                            <div class="col-md-3">
+                                <label for="invoice_status" class="form-label fw-semibold">Invoice Status</label>
+                                <select id="invoice_status" name="invoice_status" class="form-control">
+                                    <option value="" selected disabled selected>Order Status</option>
+                                    {% for value, label in invoice_status %}
+                                        <option value="{{ value }}">
+                                            {{ label }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <span class="invalid-feedback" id="order_status_error">This field is required</span>
+                            </div>
+
+
+                            <div class="col-md-9">
+                                <label for="bank_details" class="form-label fw-semibold">Bank Details</label>
+                                <select id="bank_details" name="bank_details" class="form-control form-select">
+                                    <option value=""> Select Bank  </option>
+                                    {% for bank in bank_details  %}
+                                        <option value="{{ bank.id }}" >{{ bank.bank_name }} - {{ bank.bank_brnach_address }}</option>
+                                    {% endfor %}
+
+                                </select>
+                                <span class="invalid-feedback" id="bank_details_error">This field is required</span>
+                            </div>
+
+
+                            <div class="col-12 d-flex justify-content-end">
+                                <button type="reset" class="btn btn-secondary me-2">Reset</button>
+                                <button type="submit" class="btn btn-primary">Save Proforma</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>

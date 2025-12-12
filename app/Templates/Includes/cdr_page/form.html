@@ -1,197 +1,207 @@
-<div class="card-body">
-    <form
-        action="{% url 'new_cdr_upload' %}"
-        id="cdr_form"
-        method="post"
-        autocomplete="off"
-        enctype="multipart/form-data"
-        class="need-validation"
-    >
-        {% csrf_token %}
+<div class="card shadow col-12">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+            <i class="bi bi-plus-circle me-2"></i>Upload CDR File
+        </h5>
+    </div>
 
-        <!-- Row 1: Party Name, Job Name, Party Email -->
-        <div class="row mb-3">
-            <!-- Party Name -->
-            <div class="col-md-4">
-                <label class="form-label fw-semibold text-dark">
-                    Party Name<span class="text-danger">*</span>
-                </label>
-                <select
-                    id="party_name"
-                    name="party_name"
-                    class="form-select form-control"
-                >
-                    <option value="" selected>Select Party Name</option>
-                    {% for party in party_names %}
-                    <option value="{{ party.party_name }}">
-                        {{ party.party_name }}
-                    </option>
-                    {% endfor %}
-                    <option value="others">Other</option>
-                </select>
-                <input
-                    type="text"
-                    id="new_party_name"
-                    name="new_party_name"
-                    class="form-control mt-2"
-                    placeholder="Enter New Party Name"
-                    style="display: none"
-                />
-                <div class="invalid-feedback" id="party_name_error">
-                    Please provide a Party Name.
+    <div class="card-body">
+        <form
+            action="{% url 'new_cdr_upload' %}"
+            id="cdr_form"
+            method="post"
+            autocomplete="off"
+            enctype="multipart/form-data"
+            class="need-validation"
+        >
+            {% csrf_token %}
+
+            <!-- Row 1: Party Name, Job Name, Party Email -->
+            <div class="row mb-3">
+                <!-- Party Name -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-dark">
+                        Party Name<span class="text-danger">*</span>
+                    </label>
+                    <select
+                        id="party_name"
+                        name="party_name"
+                        class="form-select form-control"
+                    >
+                        <option value="" selected>Select Party Name</option>
+                        {% for party in party_names %}
+                        <option value="{{ party.party_name }}">
+                            {{ party.party_name }}
+                        </option>
+                        {% endfor %}
+                        <option value="others">Other</option>
+                    </select>
+                    <input
+                        type="text"
+                        id="new_party_name"
+                        name="new_party_name"
+                        class="form-control mt-2"
+                        placeholder="Enter New Party Name"
+                        style="display: none"
+                    />
+                    <div class="invalid-feedback" id="party_name_error">
+                        Please provide a Party Name.
+                    </div>
+                </div>
+
+                <!-- Job Name -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-dark">
+                        Job Name<span class="text-danger">*</span>
+                    </label>
+                    <select
+                        id="job_name"
+                        name="job_name"
+                        class="form-select form-control"
+                    >
+                        <option value="">Select Job...</option>
+                        {% for j in cdr_job_names %}
+                        <option value="{{ j.job_name }}">
+                            {{ j.job_name }}
+                        </option>
+                        {% endfor %}
+                        <option value="others">Other</option>
+                    </select>
+                    <input
+                        type="text"
+                        id="new_job_name"
+                        name="new_job_name"
+                        class="form-control mt-2"
+                        placeholder="Enter New Job Name"
+                        style="display: none"
+                    />
+                    <div class="invalid-feedback" id="job_name_error">
+                        Please provide Job Name.
+                    </div>
+                </div>
+
+                <!-- Party Email -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-dark">
+                        Party Email<span class="text-danger">*</span>
+                    </label>
+                    <select
+                        id="party_email"
+                        name="party_email"
+                        class="form-select form-control"
+                    >
+                        <option value="" selected>Select Party Email</option>
+                        {% for email in cdr_email %}
+                        <option value="{{ email.company_email }}">
+                            {{ email.company_email }}
+                        </option>
+                        {% endfor %}
+                        <option value="other">Other</option>
+                    </select>
+                    <input
+                        type="email"
+                        id="new_party_email"
+                        name="new_party_email"
+                        class="form-control mt-2"
+                        placeholder="Enter Email Address"
+                        style="display: none"
+                    />
+                    <div class="invalid-feedback" id="party_email_error">
+                        Please provide a valid email address.
+                    </div>
                 </div>
             </div>
 
-            <!-- Job Name -->
-            <div class="col-md-4">
-                <label class="form-label fw-semibold text-dark">
-                    Job Name<span class="text-danger">*</span>
-                </label>
-                <select
-                    id="job_name"
-                    name="job_name"
-                    class="form-select form-control"
-                >
-                    <option value="">Select Job...</option>
-                    {% for j in cdr_job_names %}
-                    <option value="{{ j.job_name }}">{{ j.job_name }}</option>
-                    {% endfor %}
-                    <option value="others">Other</option>
-                </select>
-                <input
-                    type="text"
-                    id="new_job_name"
-                    name="new_job_name"
-                    class="form-control mt-2"
-                    placeholder="Enter New Job Name"
-                    style="display: none"
-                />
-                <div class="invalid-feedback" id="job_name_error">
-                    Please provide Job Name.
+            <!-- Row 2: Party Contact, Upload Date, CDR File, Correction -->
+            <div class="row mb-3">
+                <!-- Party Contact -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold text-dark">
+                        Party Contact<span class="text-danger">*</span>
+                    </label>
+                    <select
+                        id="party_contact_used"
+                        name="party_contact_used"
+                        class="form-select form-control"
+                    >
+                        <option value="" selected>Select Contact Number</option>
+                        <option value="others">Other</option>
+                    </select>
+                    <input
+                        type="number"
+                        id="new_party_contact"
+                        name="new_party_contact"
+                        class="form-control mt-2"
+                        placeholder="Enter Contact Number"
+                        maxlength="15"
+                        style="display: none"
+                    />
+                    <div class="invalid-feedback" id="party_contact_error">
+                        Please provide a valid contact number.
+                    </div>
+                </div>
+
+                <!-- CDR Upload Date -->
+                <div class="col-md-2">
+                    <label class="form-label fw-semibold text-dark">
+                        CDR Upload Date<span class="text-danger">*</span>
+                    </label>
+                    <input
+                        type="date"
+                        id="cdr_upload_date"
+                        name="cdr_upload_date"
+                        value="{% now 'Y-m-d' %}"
+                        class="form-control"
+                    />
+                    <div class="invalid-feedback" id="cdr_upload_date_error">
+                        Please provide a date.
+                    </div>
+                </div>
+
+                <!-- CDR File Upload -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-dark">
+                        Upload CDR File<span class="text-danger">*</span>
+                    </label>
+                    <input
+                        type="file"
+                        id="cdr_files"
+                        name="cdr_files"
+                        class="form-control"
+                        multiple
+                        accept=".jpeg,.png,.jpg,.ai,.cdr"
+                    />
+                    <div class="invalid-feedback" id="cdr_files_error">
+                        Please upload CDR files.
+                    </div>
+                </div>
+
+                <!-- CDR Correction -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold text-dark"
+                        >CDR Correction</label
+                    >
+                    <input
+                        type="text"
+                        id="cdr_corrections"
+                        name="cdr_corrections"
+                        class="form-control"
+                        placeholder="Enter CDR Corrections"
+                    />
                 </div>
             </div>
 
-            <!-- Party Email -->
-            <div class="col-md-4">
-                <label class="form-label fw-semibold text-dark">
-                    Party Email<span class="text-danger">*</span>
-                </label>
-                <select
-                    id="party_email"
-                    name="party_email"
-                    class="form-select form-control"
-                >
-                    <option value="" selected>Select Party Email</option>
-                    {% for email in cdr_email %}
-                    <option value="{{ email.company_email }}">
-                        {{ email.company_email }}
-                    </option>
-                    {% endfor %}
-                    <option value="other">Other</option>
-                </select>
-                <input
-                    type="email"
-                    id="new_party_email"
-                    name="new_party_email"
-                    class="form-control mt-2"
-                    placeholder="Enter Email Address"
-                    style="display: none"
-                />
-                <div class="invalid-feedback" id="party_email_error">
-                    Please provide a valid email address.
-                </div>
-            </div>
-        </div>
-
-        <!-- Row 2: Party Contact, Upload Date, CDR File, Correction -->
-        <div class="row mb-3">
-            <!-- Party Contact -->
-            <div class="col-md-4">
-                <label class="form-label fw-semibold text-dark">
-                    Party Contact<span class="text-danger">*</span>
-                </label>
-                <select
-                    id="party_contact_used"
-                    name="party_contact_used"
-                    class="form-select form-control"
-                >
-                    <option value="" selected>Select Contact Number</option>
-                    <option value="others">Other</option>
-                </select>
-                <input
-                    type="number"
-                    id="new_party_contact"
-                    name="new_party_contact"
-                    class="form-control mt-2"
-                    placeholder="Enter Contact Number"
-                    maxlength="15"
-                    style="display: none"
-                />
-                <div class="invalid-feedback" id="party_contact_error">
-                    Please provide a valid contact number.
-                </div>
-            </div>
-
-            <!-- CDR Upload Date -->
-            <div class="col-md-2">
-                <label class="form-label fw-semibold text-dark">
-                    CDR Upload Date<span class="text-danger">*</span>
-                </label>
-                <input
-                    type="date"
-                    id="cdr_upload_date"
-                    name="cdr_upload_date"
-                    value="{% now 'Y-m-d' %}"
-                    class="form-control"
-                />
-                <div class="invalid-feedback" id="cdr_upload_date_error">
-                    Please provide a date.
-                </div>
-            </div>
-
-            <!-- CDR File Upload -->
-            <div class="col-md-3">
-                <label class="form-label fw-semibold text-dark">
-                    Upload CDR File<span class="text-danger">*</span>
-                </label>
-                <input
-                    type="file"
-                    id="cdr_files"
-                    name="cdr_files"
-                    class="form-control"
-                    multiple
-                    accept=".jpeg,.png,.jpg,.ai,.cdr"
-                />
-                <div class="invalid-feedback" id="cdr_files_error">
-                    Please upload CDR files.
-                </div>
-            </div>
-
-            <!-- CDR Correction -->
-            <div class="col-md-3">
-                <label class="form-label fw-semibold text-dark"
-                    >CDR Correction</label
-                >
-                <input
-                    type="text"
-                    id="cdr_corrections"
-                    name="cdr_corrections"
-                    class="form-control"
-                    placeholder="Enter CDR Corrections"
-                />
-            </div>
-        </div>
-
-        <!-- Form Action Buttons -->
-        <div class="d-flex justify-content-end gap-2 border-top pt-3">
-            <a href="{% url 'company_add_page' %}">
-                <button type="reset" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-clockwise me-1"></i>Reset
+            <!-- Form Action Buttons -->
+            <div class="d-flex justify-content-end gap-2 border-top pt-3">
+                <a href="{% url 'company_add_page' %}">
+                    <button type="reset" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Reset
+                    </button>
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-check-circle me-1"></i>Create
                 </button>
-            </a>
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-check-circle me-1"></i>Create
-            </button>
-        </div>
-    </form>
+            </div>
+        </form>
+    </div>
 </div>

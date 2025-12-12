@@ -53,20 +53,23 @@ class PartyContact(models.Model):
 
 
 class Job_detail(models.Model):
-    job_status = [
+    JOB_STATUS_CHOICES = [
         ("In Progress","In Progress"),
         ("Close Job","Close Job")
     ] 
-    JOB_STATUS_CHOICES = [
+    JOB_TYPE_CHOICES = [
         ("New Job" , "New Job"),
         ("Damage Repair","Damage Repair"),
         ("Job Work" , "Job Work")
     ]
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False, db_index=True
+    )
     date = models.DateField()
     bill_no = models.CharField(max_length=200)
     
     job_name = models.CharField(max_length=200)
-    job_type  = models.CharField(max_length=200,choices=JOB_STATUS_CHOICES)
+    job_type  = models.CharField(max_length=200,choices=JOB_TYPE_CHOICES)
     noc =  models.TextField(blank=True, null=True)
     prpc_purchase = models.CharField(max_length=200)
     prpc_sell = models.CharField(max_length=200,blank=True, null=True)
@@ -79,7 +82,7 @@ class Job_detail(models.Model):
 
     cylinder_date = models.DateField(blank=True, null=True)
     cylinder_bill_no = models.CharField(blank=True, null=True)
-    job_status = models.CharField(max_length=200,blank=True, null=True,choices=job_status)
+    job_status = models.CharField(max_length=200,blank=True, null=True,choices=JOB_STATUS_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
     party_details =  models.ForeignKey(Party,on_delete=models.SET_NULL,blank=True,null=True)
 
