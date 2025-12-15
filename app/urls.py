@@ -58,5 +58,10 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     path("reset_done", password_reset_done, name="password_reset_complete"),
+    path('quotation_page',quotation_page,name="quotation_page"),
+
+    
+    
+    
 
 ]

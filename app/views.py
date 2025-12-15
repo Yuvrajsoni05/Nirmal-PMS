@@ -10,8 +10,7 @@ from datetime import datetime
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import (PasswordResetConfirmView,
-                                       PasswordResetDoneView,
+from django.contrib.auth.views import (PasswordResetConfirmView,PasswordResetDoneView,
                                        PasswordResetView)
 
 from django.contrib.sessions.models import Session
@@ -392,7 +391,7 @@ def dashboard_page(request):
         cylinder_company_names = CylinderMadeIn.objects.all()
         total_active_job = job_details.filter(job_status="In Progress").count()
         count_of_cylinder_company = cylinder_company_names.count()
-        nums = " " * page_obj.paginator.num_pages
+        nums = "*" * page_obj.paginator.num_pages
         if not job_details:
             messages.error(request,"No data available", extra_tags="custom-danger-style")
         context = {
@@ -1449,45 +1448,6 @@ def ViewProformaInvoice(request):
     )
 
 
-# def UpdateProformaInvoice(request, proforma_id):
-#     if request.method == "POST":
-#         invoice_date = request.POST.get("invoice_date")
-#         mode_payment = request.POST.get("mode_payment")
-#         billing_address = request.POST.get("billing_address")
-#         billing_gstin = request.POST.get("billing_gstin_no")
-#         billing_state_name = request.POST.get("billing_state_name")
-#         quantity = request.POST.get("quantity")
-#         pouch_open_size = request.POST.get("pouch_open_size")
-#         cylinder_size = request.POST.get("cylinder_size")
-#         prpc_rate = request.POST.get("prpc_rate")
-
-#         total = request.POST.getlist("total")
-
-#         company_name = request.POST.get("company_name")
-#         company_email = request.POST.get("company_email")
-#         company_contact = request.POST.get("company_contact")
-#         title = request.POST.get("title")
-#         banking_details = request.POST.get("banking_details")
-#         item = get_object_or_404(ProformaInvoice, id=proforma_id)
-#         item.invoice_date = invoice_date
-#         item.mode_payment = mode_payment
-#         item.billing_address = billing_address
-#         item.billing_state_name = billing_state_name
-#         item.billing_gstin_no = billing_gstin
-#         item.quantity = quantity
-#         item.pouch_open_size = pouch_open_size
-#         item.cylinder_size = cylinder_size
-#         item.prpc_rate = prpc_rate
-#         item.company_name = company_name
-#         item.company_email = company_email
-#         item.company_contact = company_contact
-#         item.title = title
-#         item.banking_details = banking_details
-#         item.save()
-#         messages.success(request, "Data  Successfully")
-#         return redirect("view_proforma_invoice")
-#     return redirect("view_proforma_invoice")
-
 
 @custom_login_required
 def ProformaSendMail(request):
@@ -1828,4 +1788,81 @@ def ProformaInvoicePageAJAX(request):
 
     
     return JsonResponse(context)
+
+
+
+def quotation_page(request):
+    
+    
+    party_names = Party.objects.values('party_name')
+    pouch_types =  PouchQuotation.POUCH_TYPE
+    
+    if request.method == 'POST':
+        if 'save_quotation' in request.POST:
+            delivery_date =  request.POST.get('delivery_date')
+            party_name = request.POST.get('party_name')
+            job_name = request.POST.get('job_name')
+            pouch_open_size = request.POST.get('pouch_size')
+            pouch_combination = request.POST.get('pouch_combination')
+            quantity = request.POST.get('quantity')
+            purchase_rate_per_kg = request.POST.get('purchase_rate_per_kg')
+            no_of_pouch_kg = request.POST.get('no_of_pouch_kg')
+            per_pouch_rate_basic = request.POST.get('per_pouch_rate_basic')
+            zipper_cost = request.POST.get('zipper_cost')
+            final_rare = request.POST.get('final_rare')
+            minium_quantity = request.POST.get('minium_quantity')
+            pouch_type = request.POST.get('pouch_type')
+            special_instruction = request.POST.get('special_instruction')
+            delivery_address = request.POST.get('delivery_address')
+            quantity_variation = request.POST.get('quantity_variation')
+            freight = request.POST.get('freight')
+            gst = request.POST.get('gst')
+            note = request.POST.get('note')
+            party_details, _ = Party.objects.get_or_create(
+                    party_name=party_name.strip() if party_name else None
+                )
+        
+
+            pq = PouchQuotation.objects.create(
+                delivery_date=delivery_date,
+                party_details=party_details,
+                job_name=job_name,
+                pouch_open_size=pouch_open_size,
+                pouch_combination=pouch_combination,
+                quantity=quantity,
+                purchase_rate_per_kg=purchase_rate_per_kg,
+                no_of_pouch_kg=no_of_pouch_kg,
+                per_pouch_rate_basic=per_pouch_rate_basic,
+                zipper_cost=zipper_cost,
+                final_rare=final_rare,
+                minium_quantity=minium_quantity,
+                pouch_type=pouch_type,
+                special_instruction=special_instruction,
+                delivery_address=delivery_address,
+                quantity_variate=quantity_variation,
+                freight=freight,
+                gst=gst,
+                note=note,    
+            )
+            pq.save()
+            return redirect('quotation_page')
+            
+        
+    context = {
+        'pouch_types':pouch_types,
+        'party_names':party_names
+    }
+    
+    return render(request, "Quotation/quotation.html",context)
+
+
+# def create_quotation(request):
+#     if request.method == 'POST':
+         
+        
+    
+        
+
+
+
 

@@ -10853,3 +10853,4 @@ LINE 1: ...tatus", "created_at", "party_details_id") VALUES ('12d7571c-...
 HINT:  You will need to rewrite or cast the expression.
 
 ERROR 2025-12-12 15:04:54,892 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-15 10:16:37,673 myapp login_page Invalid Username or Password views.py

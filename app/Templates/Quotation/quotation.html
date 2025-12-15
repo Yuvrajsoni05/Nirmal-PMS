@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %} {% load static %} {% block main_block %}
+<div class="page-inner">
+    <div
+        class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+    >
+        <div>
+            <h3 class="fw-bold mb-3">Create Quotation</h3>
+        </div>
+    </div>
+    {% include "Includes/quotation/form.html" %}
+</div>
+
+{% endblock main_block %} {% block script %}
+<script src="{% static 'js/quotation.js' %}"></script>
+
+{% endblock script %}

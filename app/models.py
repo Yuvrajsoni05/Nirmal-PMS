@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 import uuid
 from django.core.validators import validate_email
 from django.forms import CharField
+from rest_framework.fields import DateField
 
 from num2words import num2words
 
@@ -278,6 +279,55 @@ class ProformaJob(models.Model):
     
     def __str__(self):
         return f"{self.title} {self.taxable_value}"
+    
+    
+    
+class PouchQuotation(models.Model):
+    POUCH_TYPE = [
+        ('1 - Center Seal Pouch' , '1 - Center Seal Pouch'),
+        ('2- 3 Side Seal Pouch' , '2- 3 Side Seal Pouch'),
+        ('3- 6 Side Seal Pouch' , '3- 6 Side Seal Pouch'),
+        ('4- 6 Side Seal Pouch With D Cut' , '4- 6 Side Seal Pouch With D Cut'),
+        ('5- Stand Up Pouch With Zipper' , '5- Stand Up Pouch With Zipper'),
+        ('6- Perforation Pouch' , '6- Perforation Pouch'),
+        ('7- 3 Side Seal Bag With Dori Handel' , '7- 3 Side Seal Bag With Dori Handel'),
+        ('8- 3 Side Seal Zipper With V Nouch' , '8- 3 Side Seal Zipper With V Nouch'),
+        ('9- Printed Roll' , '9- Printed Roll'),
+        ('10- Flat Bottom Pouch With Zipper' , '10- Flat Bottom Pouch With Zipper'),
+    ]
+    
+
+    delivery_date  = models.DateField()
+    party_details = models.ForeignKey(
+        Party,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="quotations_party_name"
+    )
+    job_name = models.CharField(max_length=200)
+    pouch_open_size = models.CharField(max_length=200)
+    pouch_combination = models.CharField(max_length=200)
+    purchase_rate_per_kg = models.DecimalField(max_digits=10, decimal_places=2)
+    no_of_pouch_kg = models.DecimalField(max_digits=10, decimal_places=2)
+    per_pouch_rate_basic = models.DecimalField(max_digits=10, decimal_places=2)
+    zipper_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    final_rare = models.CharField(max_length=200)
+    minium_quantity = models.CharField(max_length=200)
+    pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE,blank=True, null=True)
+    special_instruction = models.TextField()
+    quantity =  models.CharField(max_length=200,blank=True, null=True)
+    delivery_address = models.TextField()
+    # the  Term 
+    quantity_variate = models.CharField(max_length=200)
+    freight = models.CharField(max_length=200)
+    gst = models.CharField(max_length=200)
+    note = models.TextField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
+    
+    
+    def __str__(self):
+        return f"{self.job_name} - {self.party_details}"
     
     
     

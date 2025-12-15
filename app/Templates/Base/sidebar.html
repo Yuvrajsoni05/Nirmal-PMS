@@ -103,6 +103,28 @@
                     </div>
                 </li>
 
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#quotation_page">
+                        <i class="fas fa-th-list"></i>
+                        <p>Quotation</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="quotation_page">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{% url "quotation_page" %}">
+                                    <span class="sub-item">Quotation</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url "view_proforma_invoice" %}">
+                                    <span class="sub-item">View Quotation</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
 
                 
 
