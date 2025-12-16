@@ -11,7 +11,9 @@ import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import (PasswordResetConfirmView,PasswordResetDoneView,
+
                                        PasswordResetView)
+
 
 from django.contrib.sessions.models import Session
 # mail
@@ -1818,10 +1820,42 @@ def quotation_page(request):
             freight = request.POST.get('freight')
             gst = request.POST.get('gst')
             note = request.POST.get('note')
+            pouch_charge = request.POST.get('pouch_charge')
+            
+            
             party_details, _ = Party.objects.get_or_create(
                     party_name=party_name.strip() if party_name else None
                 )
-        
+
+            required_fields = {
+                "delivery_date":delivery_date,
+                    "party_name":party_name,
+                    "job_name":job_name,
+                    "pouch_open_size":pouch_open_size,
+                    "pouch_combination":pouch_combination,
+                    "quantity":quantity,
+                    "purchase_rate_per_kg":purchase_rate_per_kg,
+                    "no_of_pouch_kg":no_of_pouch_kg,
+                    "per_pouch_rate_basic":per_pouch_rate_basic,
+                    "zipper_cost":zipper_cost,
+                    "final_rare":final_rare,
+                    "minium_quantity":minium_quantity,
+                    "pouch_type":pouch_type,
+                    "special_instruction":special_instruction,
+                    "delivery_address":delivery_address,
+                    "quantity_variation":quantity_variation,
+                    
+                                
+            }
+            for field, required in required_fields.items():
+                if not required:
+                    messages.error(
+                        request, f"{field} is Required", extra_tags="custom-danger-style"
+                    )
+                    return redirect("quotation_page")
+            
+            
+            
 
             pq = PouchQuotation.objects.create(
                 delivery_date=delivery_date,
@@ -1830,6 +1864,7 @@ def quotation_page(request):
                 pouch_open_size=pouch_open_size,
                 pouch_combination=pouch_combination,
                 quantity=quantity,
+                pouch_charge=pouch_charge,
                 purchase_rate_per_kg=purchase_rate_per_kg,
                 no_of_pouch_kg=no_of_pouch_kg,
                 per_pouch_rate_basic=per_pouch_rate_basic,
@@ -1856,9 +1891,32 @@ def quotation_page(request):
     return render(request, "Quotation/quotation.html",context)
 
 
-# def create_quotation(request):
-#     if request.method == 'POST':
-         
+def quotation_page_htmxs(request):
+    if request.headers.get("HX-Request"):
+        purchase_rate = request.GET.get('purchase_rate') 
+        purchase_rate_unit = request.GET.get('purchase_rate_unit')
+        no_of_pouch_kg = float(request.GET.get('no_of_pouch_kg') or 1)  
+
+        total_ppb = 0
+        if purchase_rate_unit == 'polyester_printed_bug':
+            total_ppb = float(purchase_rate)  / float(no_of_pouch_kg)
+        elif purchase_rate == 'polyester_printed_roll':
+            total_ppb = purchase_rate
+            
+        else :
+            total_ppb = purchase_rate
+        print(total_ppb)
+        return HttpResponse(
+                            { total_ppb}
+        )
+    return HttpResponse("")
+        
+    
+        
+        
+        
+        
+        
         
     
         

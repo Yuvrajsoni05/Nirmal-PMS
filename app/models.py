@@ -318,6 +318,7 @@ class PouchQuotation(models.Model):
     special_instruction = models.TextField()
     quantity =  models.CharField(max_length=200,blank=True, null=True)
     delivery_address = models.TextField()
+    pouch_charge = models.CharField(max_length=200,blank=True, null=True)
     # the  Term 
     quantity_variate = models.CharField(max_length=200)
     freight = models.CharField(max_length=200)

@@ -12,5 +12,20 @@
 
 {% endblock main_block %} {% block script %}
 <script src="{% static 'js/quotation.js' %}"></script>
+<script>
+    function syncSpanToInput() {
+        $("#per_pouch_rate_basic").val($("#total_ppb").text().trim());
+    }
+
+    // Initial sync
+    syncSpanToInput();
+
+    // Live update
+    const observer = new MutationObserver(syncSpanToInput);
+    observer.observe(document.getElementById("total_ppb"), {
+        childList: true,
+        subtree: true
+    });
+</script>
 
 {% endblock script %}
