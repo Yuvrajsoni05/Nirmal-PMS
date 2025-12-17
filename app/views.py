@@ -12,6 +12,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import (PasswordResetConfirmView,PasswordResetDoneView,
 
+
+
                                        PasswordResetView)
 
 
@@ -1757,6 +1759,8 @@ def ProformaInvoicePageAJAX(request):
             
             jobs = utils.all_job_name_list(party_name)
             job = list(jobs)
+            
+            
             party_email_qs = list(Party.objects.filter(
                 party_name=party_name
             ).values('party_emails__email').distinct())
@@ -1880,6 +1884,7 @@ def quotation_page(request):
                 note=note,    
             )
             pq.save()
+            messages.success(request,"Quotation created successfully ")
             return redirect('quotation_page')
             
         
@@ -1891,26 +1896,63 @@ def quotation_page(request):
     return render(request, "Quotation/quotation.html",context)
 
 
-def quotation_page_htmxs(request):
-    if request.headers.get("HX-Request"):
-        purchase_rate = request.GET.get('purchase_rate') 
-        purchase_rate_unit = request.GET.get('purchase_rate_unit')
-        no_of_pouch_kg = float(request.GET.get('no_of_pouch_kg') or 1)  
-
-        total_ppb = 0
-        if purchase_rate_unit == 'polyester_printed_bug':
-            total_ppb = float(purchase_rate)  / float(no_of_pouch_kg)
-        elif purchase_rate == 'polyester_printed_roll':
-            total_ppb = purchase_rate
-            
-        else :
-            total_ppb = purchase_rate
-        print(total_ppb)
-        return HttpResponse(
-                            { total_ppb}
-        )
-    return HttpResponse("")
+def view_quotations(request):
+    quotations = PouchQuotation.objects.all()
+    
+    
+    
+    if request.method == "POST":
         
+
+        if 'delete_quotation' in request.POST:
+            q_id = request.POST.get('delete_quotation')
+            PouchQuotation.objects.filter(id=q_id).delete()
+            messages.success(request,'Quotation Delete successfully')
+            return redirect('view_quotations')
+
+        elif 'edit_quotation' in request.POST:
+            print("edit call")
+    
+    context  = {
+        "quotations" : quotations
+    }
+    return render(request,"Quotation/view_quotation.html",context)
+
+
+def quotation_page_ajax(request):
+    if request.method == "GET":
+        party_name = request.GET.get('party_name')
+
+        purchase_rate = float(request.GET.get("purchase_rate") or 0)
+        no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 0)
+        unit = request.GET.get("purchase_rate_unit")
+        per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
+        zipper_cost =float(request.GET.get("zipper_cost") or 0)
+        pouch_charge = float(request.GET.get("pouch_charge") or 0)
+        jobs = list(utils.all_job_name_list(party_name))
+        
+        total_ppb = 0
+   
+        if purchase_rate > 0:   
+            if unit == "polyester_printed_bug" and no_of_pouch_kg > 0:
+                total_ppb = purchase_rate / no_of_pouch_kg
+            elif unit == "polyester_printed_roll":
+                total_ppb = purchase_rate
+
+        total_ppb = round(total_ppb, 2)
+        
+        
+        final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
+        
+        minium_quantity  = no_of_pouch_kg * 500
+        return JsonResponse({
+            "per_pouch_rate_basic": total_ppb,
+            "final_rare": final_rare,
+            "jobs":jobs,
+            "minium_quantity":minium_quantity
+        })
+
+    return HttpResponse("")
     
         
         

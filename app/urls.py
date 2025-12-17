@@ -59,7 +59,8 @@ urlpatterns = [
     ),
     path("reset_done", password_reset_done, name="password_reset_complete"),
     path('quotation_page',quotation_page,name="quotation_page"),
-    path('quotation_page_htmxs',quotation_page_htmxs,name='quotation_page_htmxs')
+    path('quotation_page_ajax',quotation_page_ajax,name='quotation_page_ajax'),
+    path('view_quotations',view_quotations,name='view_quotations')
     
 
     

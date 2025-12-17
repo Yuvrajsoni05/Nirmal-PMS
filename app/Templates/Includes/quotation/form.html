@@ -1,537 +1,343 @@
 <div class="row">
     <div class="card border">
         <div class="card-header">
-            <div class="card-title">Quotation</div>
+            <h5 class="card-title mb-0">Quotation</h5>
         </div>
-        <div class="card-body">
-            <form
-                action="{% url 'quotation_page' %}"
-                method="post"
-                autocomplete="off"
-            >
-                {% csrf_token %}
-                <div class="row g-3">
-                    <!-- Delivery Date -->
-                    <div class="col-lg-4 col-md-6 form-group">
-                        <label
-                            for="delivery_date"
-                            class="form-label small fw-semibold"
-                        >
-                            Delivery Date <span class="text-danger">*</span>
-                        </label>
-                        <input
-                            type="date"
-                            class="form-control"
-                            name="delivery_date"
-                            id="delivery_date"
-                            required
-                        />
-                        <div class="invalid-feedback">
-                            Delivery date is required
-                        </div>
-                    </div>
 
-                    <!-- Party Name -->
-                    <div class="col-lg-4 col-md-6 form-group">
-                        <label
-                            for="party_name"
-                            class="form-label small fw-semibold"
-                        >
-                            Party Name <span class="text-danger">*</span>
-                        </label>
-                        <select
-                            id="party_name"
-                            name="party_name"
-                            class="form-control form-select"
-                            required
-                        >
-                            <option value="">Select Party Name</option>
-                            {% for party_name in party_names %}
-                            <option value="{{ party_name.party_name }}">
-                                {{ party_name.party_name }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                        <div class="invalid-feedback">
-                            Party name is required
-                        </div>
-                    </div>
-
-                    <!-- Job Name -->
-                    <div class="col-lg-4 col-md-6 form-group">
-                        <label
-                            for="job_name"
-                            class="form-label small fw-semibold"
-                        >
-                            Job Name <span class="text-danger">*</span>
-                        </label>
-                        <input
-                            type="text"
-                            class="form-control"
-                            name="job_name"
-                            id="job_name"
-                            required
-                        />
-                        <div class="invalid-feedback">Job name is required</div>
-                    </div>
-
-                    <!-- Pouch Open Size -->
-                    <div class="col-md-4 form-group">
-                        <label for="pouch_height" class="form-label fw-semibold"
-                            >Pouch Open Size</label
-                        >
-                        <div class="input-group">
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="pouch_height"
-                                name="pouch_height"
-                                placeholder="Height (e.g. 100)"
-                                step="any"
-                                required
-                            />
-                            <span
-                                class="invalid-feedback"
-                                id="pouch_height_error"
-                                >Please provide Pouch Open Size Height</span
-                            >
-                            <span
-                                class="input-group-text bg-light border-1 fw-bold"
-                                >×</span
-                            >
-                            <input
-                                type="number"
-                                class="form-control"
-                                id="pouch_diameter"
-                                name="pouch_diameter"
-                                placeholder="Diameter (e.g. 50)"
-                                step="any"
-                                required
-                            />
-                            <span
-                                class="invalid-feedback"
-                                id="pouch_open_diameter_error"
-                                >Please provide Pouch Open Size Diameter</span
-                            >
-                        </div>
-                        <input
-                            type="hidden"
-                            id="pouch_size"
-                            name="pouch_size"
-                        />
-                    </div>
-
-                    <!-- Pouch Combination -->
-                    <div class="col-12 col-lg-6 form-group">
-                        <label
-                            for="pouch_combination1"
-                            class="form-label fw-semibold text-dark"
-                            >Pouch Combination (thickness)</label
-                        >
-                        <div class="input-group">
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="pouch_combination1"
-                                name="pouch_combination1[]"
-                                placeholder="Combination 1"
-                                step="0.01"
-                                min="0"
-                            />
-                            <div
-                                class="invalid-feedback"
-                                id="pouch_combination1_error"
-                            >
-                                Please provide Pouch Combination
-                            </div>
-                            <span
-                                class="input-group-text bg-light border-1 fw-bold"
-                                >+</span
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="pouch_combination2"
-                                name="pouch_combination2[]"
-                                placeholder="Combination 2"
-                                step="0.01"
-                                min="0"
-                            />
-                            <div
-                                class="invalid-feedback"
-                                id="pouch_combination2_error"
-                            >
-                                Please provide Pouch Combination
-                            </div>
-                            <span
-                                class="input-group-text bg-light border-1 fw-bold"
-                                >+</span
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="pouch_combination3"
-                                name="pouch_combination3[]"
-                                placeholder="Combination 3"
-                                step="0.01"
-                                min="0"
-                            />
-                            <span
-                                class="input-group-text bg-light border-1 fw-bold"
-                                >+</span
-                            >
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="pouch_combination4"
-                                name="pouch_combination4[]"
-                                placeholder="Combination 4"
-                                step="0.01"
-                                min="0"
-                            />
-                        </div>
-                        <input
-                            type="hidden"
-                            class="form-control"
-                            id="pouch_combination"
-                            name="pouch_combination"
-                        />
-                    </div>
-
-                    <!-- Quantity -->
-                    <div class="col-lg-3 col-md-6 form-group">
-                        <label
-                            for="quantity"
-                            class="form-label small fw-semibold"
-                        >
-                            Quantity <span class="text-danger">*</span>
-                        </label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            name="quantity"
-                            id="quantity"
-                            required
-                        />
-                        <div class="invalid-feedback">Quantity is required</div>
-                    </div>
-
-                    <!-- Purchase Rate -->
-                    <div class="col-lg-3 col-md-6 form-group">
-                        <label
-                            for="purchase_rate"
-                            class="form-label small fw-semibold"
-                        >
-                            Purchase Rate <span class="text-danger">*</span>
-                        </label>
-                        <div class="input-group">
-                            <input
-                                type="number"
-                                class="form-control"
-                                
-                                hx-get="{% url 'quotation_page_htmxs' %}"
-                                hx-trigger="keyup changed delay:300ms"
-                                hx-target="#total_ppb"
-                                hx-swap="innerHTML"
-                                autocomplete="off"
-                                
-                                id="purchase_rate"
-                                name="purchase_rate"
-                                placeholder="Enter rate"
-                                required
-                            />
-                            <select
-                                class="form-select"
-                                hx-get="{% url 'quotation_page_htmxs' %}"
-                                hx-trigger="keyup changed delay:30ms"
-                                hx-target="#total_ppb"
-                                hx-swap="innerHTML"
-                                
-                                autocomplete="off"
-                                name="purchase_rate_unit"
-                                id="purchase_rate_unit"
-                                required
-                            >
-                                <option value="polyester_printed_roll">Polyester printed Roll</option>
-                                <option value="polyester_printed_bug">
-                                    Polyester printed Bug
-                                </option>
-                            </select>
-                        </div>
-                        <div class="invalid-feedback">
-                            Rate and unit are required
-                        </div>
-                    </div>
-
-                    <!-- No of Pouch per Kg -->
-                    <div class="col-lg-3 col-md-6 form-group">
-                        <label
-                            for="no_of_pouch_kg"
-                            class="form-label small fw-semibold"
-                        >
-                            No. of Pouch / Kg <span class="text-danger">*</span>
-                        </label>
-                        <input
-                            type="number"
-                            hx-get="{% url 'quotation_page_htmxs' %}"
-                            hx-trigger="keyup changed delay:300ms"
-                            hx-target="#total_ppb"
-                            hx-swap="innerHTML"
-                            autocomplete="off"
-                            class="form-control"
-                            name="no_of_pouch_kg"
-                            id="no_of_pouch_kg"
-                            placeholder="No. of Pouch / Kg"
-                            required
-                        />
-                        <div class="invalid-feedback">
-                            Pouch per kg is required
-                        </div>
-                    </div>
-
-                    <!-- Per Pouch Rate Basic -->
-                    <div class="col-lg-3 col-md-6 form-group">
-                        <label
-                            for="per_pouch_rate_basic"
-                            class="form-label small fw-semibold"
-                        >
-                            Per Pouch Rate Basic
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input
-                            type="number"
-                            hx-get="{% url 'quotation_page_htmxs' %}"
-                            hx-trigger="keyup changed delay:0ms"
-                            hx-target="#total_ppb"
-                            hx-swap="innerHTML"
-                            autocomplete="off"
-                            
-                            class="form-control"
-                            name="per_pouch_rate_basic"
-                            id="per_pouch_rate_basic"
-                            placeholder="Per Pouch Rate Basic"
-                            required
-                        />
-                        <div class="invalid-feedback">
-                            Per Pouch Rate Basic is required
-                        </div>
-                    </div>
-                    <!-- Pouch charge -->
-                    <div class="col-lg-3 col-md-6 form-group">
-                        <label
-                            for="pouch_charge"
-                            class="form-label small fw-semibold"
-                        >
-                            Pouch charge <span class="text-danger">*</span>
-                        </label>
-                                <input name="pouch_charge" class="form-control" hx-get="{% url 'quotation_page_htmxs' %}" hx-trigger="keyup changed delay:300ms" hx-target="#calc_area">
-
-                        <div class="invalid-feedback">
-                            Pouch charge is required
-                        </div>
-                    </div>
-
-                    <!-- Zipper Cost -->
-                    <div class="col-lg-3 col-md-6 form-group">
-                        <label
-                            for="zipper_cost"
-                            class="form-label small fw-semibold"
-                        >
-                            Zipper Cost <span class="text-danger">*</span>
-                        </label>
-                        <input name="zipper_cost" class="form-control" hx-get="{% url 'quotation_page_htmxs' %}" hx-trigger="keyup changed delay:300ms" hx-target="#calc_area">
-
-                        <div class="invalid-feedback">
-                            Zipper Cost is required
-                        </div>
-                    </div>
-
-                    <!-- Final Rate -->
-                    
-
-
-                    <div class="col-lg-3 col-md-6 form-group " >
-                        <label
-                            for="final_rare"
-                            class="form-label small fw-semibold"
-                        >
-                            Final Rate <span class="text-danger">*</span>
-                        </label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            name="final_rare"
-                            id="final_rare"
-                            required
-                        />
-                        <div class="invalid-feedback">
-                            Final Rate is required
-                        </div>
-                    </div>
-
-                    <!-- Minimum Quantity -->
-                    <div class="col-lg-3 col-md-6 form-group">
-                        <label
-                            for="minium_quantity"
-                            class="form-label small fw-semibold"
-                        >
-                            Minimum Quantity <span class="text-danger">*</span>
-                        </label>
-                        <input
-                            type="number"
-                            class="form-control"
-                            name="minium_quantity"
-                            id="minium_quantity"
-                            required
-                        />
-                        <div class="invalid-feedback">
-                            Minimum Quantity is required
-                        </div>
-                    </div>
-
-                    <!-- Pouch Type -->
-                    <div class="col-lg-3 col-md-6 form-group">
-                        <label
-                            for="pouch_type"
-                            class="form-label small fw-semibold"
-                        >
-                            Pouch Type <span class="text-danger">*</span>
-                        </label>
-                        <select
-                            class="form-select form-control"
-                            name="pouch_type"
-                            id="pouch_type"
-                            required
-                        >
-                            <option value="">Select pouch type</option>
-                            {% for value, label in pouch_types %}
-                            <option value="{{ value }}">{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                        <div class="invalid-feedback">
-                            Pouch type is required
-                        </div>
-                    </div>
-
-                    <!-- Special Instruction -->
-                    <div class="col-12">
-                        <label class="form-label small fw-semibold">
-                            Special Instruction
-                        </label>
-                        <textarea
-                            class="form-control"
-                            name="special_instruction"
-                            id="special_instruction"
-                            rows="2"
-                        ></textarea>
-                    </div>
-
-                    <!-- Delivery Address -->
-                    <div class="col-12">
-                        <label class="form-label small fw-semibold">
-                            Delivery Address <span class="text-danger">*</span>
-                        </label>
-                        <textarea
-                            class="form-control"
-                            name="delivery_address"
-                            id="delivery_address"
-                            rows="2"
-                            required
-                        ></textarea>
-                        <span
-                            class="invalid-feedback"
-                            class="text-danger small"
-                        >
-                            Delivery address is required
-                        </span>
-                    </div>
-
-                    <!-- Terms & Conditions -->
-
-                    <div class="col-12">
-                        <label class="form-label small fw-semibold mb-2">
-                            Other Term
-                        </label>
-
-                        <div class="border rounded p-3 bg-light small">
-                            <div class="row mb-2">
-                                <div class="col-md-1 fw-semibold">
-                                    Quantity Variation :
-                                </div>
-                                <div class="col-md-8">
-                                    <input
-                                        type="text"
-                                        name="quantity_variation"
-                                        id="quantity_variation"
-                                        class="form-control"
-                                        placeholder="Quantity variation"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="col-md-1 fw-semibold">
-                                    Freight :
-                                </div>
-                                <div class="col-md-8">
-                                    <input
-                                        type="text"
-                                        name="freight"
-                                        id="freight"
-                                        class="form-control"
-                                        placeholder="Freight"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="col-md-1 fw-semibold">G.S.T. :</div>
-                                <div class="col-md-8">
-                                    <input
-                                        name="gst"
-                                        id="gst"
-                                        type="text"
-                                        class="form-control"
-                                        placeholder="GST"
-                                    />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-1 fw-semibold">Note :</div>
-                                <div class="col-md-8">
-                                    <input
-                                        type="text"
-                                        name="note"
-                                        id="note"
-                                        class="form-control"
-                                        placeholder="Note"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Submit -->
-                <div class="text-end mt-4">
-                    <button
-                        type="submit"
-                        name="save_quotation"
-                        class="btn btn-primary px-4"
-                    >
-                        Save Quotation
-                    </button>
-                    <button type="reset" class="btn btn-secondary px-4">
-                        Reset
-                    </button>
-                </div>
-            </form>
-
-            <div id="total_ppb">
-                <strong>Total PPB: ₹0</strong>
-
+     <div class="card-body">
+    <form action="{% url 'quotation_page' %}"
+          method="post"
+          autocomplete="off">
+        {% csrf_token %}
+        <div class="row g-3">
+            <!-- Delivery Date -->
+            <div class="col-lg-4 col-md-6">
+                <label class="form-label fw-semibold">
+                    Delivery Date <span class="text-danger">*</span>
+                </label>
+                <input type="date"
+                       class="form-control"
+                       id="delivery_date"
+                       name="delivery_date"
+                       required>
+                <span class="invalid-feedback" id="delivery_date_error">
+                    Delivery date is required
+                </span>
             </div>
 
+            <!-- Party Name -->
+            <div class="col-lg-4 col-md-6">
+                <label class="form-label fw-semibold">
+                    Party Name <span class="text-danger">*</span>
+                </label>
+                <select class="form-select"
+                        id="party_name"
+                        name="party_name"
+                        required>
+                    <option value="">Select Party Name</option>
+                    {% for party_name in party_names %}
+                        <option value="{{ party_name.party_name }}">
+                            {{ party_name.party_name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <span class="invalid-feedback" id="party_name_error">
+                    Party name is required
+                </span>
+            </div>
+
+            <!-- Job Name -->
+            <div class="col-lg-4 col-md-6">
+                <label class="form-label fw-semibold">
+                    Job Name <span class="text-danger">*</span>
+                </label>
+                <select class="form-select"
+                        id="job_name"
+                        name="job_name"
+                        required>
+                    <option value="">Select Job Name</option>
+                    <option value="others">Others</option>
+                </select>
+                <span class="invalid-feedback" id="job_name_error">
+                    Job name is required
+                </span>
+            </div>
+
+            <!-- Pouch Open Size -->
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">
+                    Pouch Open Size <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                    <input type="number"
+                           class="form-control"
+                           id="pouch_height"
+                           name="pouch_height"
+                           placeholder="Height"
+                           required>
+                    <span class="input-group-text">×</span>
+                    <input type="number"
+                           class="form-control"
+                           id="pouch_diameter"
+                           name="pouch_diameter"
+                           placeholder="Diameter"
+                           required>
+                </div>
+                <span class="invalid-feedback" id="pouch_size_error">
+                    Pouch height and diameter are required
+                </span>
+                <input type="hidden" id="pouch_size" name="pouch_size">
+            </div>
+
+            <!-- Pouch Combination -->
+            <div class="col-12 col-lg-6">
+                <label class="form-label fw-semibold">
+                    Pouch Combination (Thickness)
+                    <span class="text-danger">*</span>
+                </label>
+
+                <div class="input-group">
+                    <input type="number" step="0.01"
+                           class="form-control"
+                           id="pouch_combination1"
+                           name="pouch_combination1"
+                           placeholder="Layer 1">
+                    <span class="input-group-text">+</span>
+
+                    <input type="number" step="0.01"
+                           class="form-control"
+                           id="pouch_combination2"
+                           name="pouch_combination2"
+                           placeholder="Layer 2">
+                    <span class="input-group-text">+</span>
+
+                    <input type="number" step="0.01"
+                           class="form-control"
+                           id="pouch_combination3"
+                           name="pouch_combination3"
+                           placeholder="Layer 3">
+                    <span class="input-group-text">+</span>
+
+                    <input type="number" step="0.01"
+                           class="form-control"
+                           id="pouch_combination4"
+                           name="pouch_combination4"
+                           placeholder="Layer 4">
+                </div>
+
+                <span class="invalid-feedback" id="pouch_combination_error">
+                    At least one pouch combination value is required
+                </span>
+
+                <input type="hidden"
+                       id="pouch_combination"
+                       name="pouch_combination">
+            </div>
+
+            <!-- Quantity -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label fw-semibold">
+                    Quantity <span class="text-danger">*</span>
+                </label>
+                <input type="number"
+                       class="form-control"
+                       id="quantity"
+                       name="quantity"
+                       required>
+                <span class="invalid-feedback" id="quantity_error">
+                    Quantity is required
+                </span>
+            </div>
+
+            <!-- Purchase Rate -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label fw-semibold">
+                    Purchase Rate <span class="text-danger">*</span>
+                </label>
+                <div class="input-group">
+                    <input type="number"
+                           class="form-control"
+                           id="purchase_rate_per_kg"
+                           name="purchase_rate_per_kg"
+                           required>
+                    <select class="form-select"
+                            id="purchase_rate_unit"
+                            name="purchase_rate_unit"
+                            required>
+                        <option value="">Unit</option>
+                        <option value="polyester_printed_roll">
+                            Polyester Printed Roll
+                        </option>
+                        <option value="polyester_printed_bug">
+                            Polyester Printed Bug
+                        </option>
+                    </select>
+                </div>
+                <span class="invalid-feedback" id="purchase_rate_error">
+                    Purchase rate and unit are required
+                </span>
+            </div>
+
+            <!-- No of Pouch / Kg -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label fw-semibold">
+                    No. of Pouch / Kg <span class="text-danger">*</span>
+                </label>
+                <input type="number" id="no_of_pouch_kg"
+                    name="no_of_pouch_kg"
+                    class="form-control" required>
+                <span class="invalid-feedback" id="no_of_pouch_kg_error">
+                    Value is required
+                </span>
+            </div>
+
+            <!-- Per Pouch Rate -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label fw-semibold">
+                    Per Pouch Rate Basic
+                </label>
+                <input type="number" id="per_pouch_rate_basic"
+                    name="per_pouch_rate_basic"
+                    class="form-control" readonly>
+            </div>
+
+            <!-- Pouch Charge -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label fw-semibold">
+                    Pouch Charge <span class="text-danger">*</span>
+                </label>
+                <input type="number" id="pouch_charge"
+                    name="pouch_charge"
+                    class="form-control" required>
+                <span class="invalid-feedback" id="pouch_charge_error">
+                    Pouch charge is required
+                </span>
+            </div>
+
+            <!-- Zipper Cost -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label fw-semibold">
+                    Zipper Cost <span class="text-danger">*</span>
+                </label>
+                <input type="number" id="zipper_cost"
+                    name="zipper_cost"
+                    class="form-control" required>
+                <span class="invalid-feedback" id="zipper_cost_error">
+                    Zipper cost is required
+                </span>
+            </div>
+
+            <!-- Final Rate -->
+            <div class="col-lg-3 col-md-6">
+                <label class="form-label fw-semibold">
+                    Final Rate <span class="text-danger">*</span>
+                </label>
+                <input type="number" id="final_rare"
+                    name="final_rare"
+                    class="form-control" required>
+                <span class="invalid-feedback" id="final_rare_error">
+                    Final rate is required
+                </span>
+            </div>
+
+            <!-- Minimum Quantity -->
+            <div class="col-lg-3 col-md-6 form-group">
+                <label for="minium_quantity" class="form-label small fw-semibold">
+                    Minimum Quantity <span class="text-danger">*</span>
+                </label>
+                <input type="number" class="form-control" name="minium_quantity" id="minium_quantity" required />
+                <span class="invalid-feedback" id="minium_quantity_error">
+                    Minimum Quantity is required
+                </span>
+            </div>
+
+            <!-- Pouch Type -->
+            <div class="col-lg-3 col-md-6 form-group">
+                <label for="pouch_type" class="form-label small fw-semibold">
+                    Pouch Type <span class="text-danger">*</span>
+                </label>
+                <select class="form-select form-control" name="pouch_type" id="pouch_type" required>
+                    <option value="">Select pouch type</option>
+                    {% for value, label in pouch_types %}
+                    <option value="{{ value }}">{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <span class="invalid-feedback" id="pouch_type_error">
+                    Pouch type is required
+                </span>
+            </div>
+
+            <!-- Special Instruction -->
+            <div class="col-12">
+                <label class="form-label small fw-semibold">
+                    Special Instruction
+                </label>
+                <textarea class="form-control" name="special_instruction" id="special_instruction" rows="2"></textarea>
+            </div>
+
+            <!-- Delivery Address -->
+            <div class="col-12">
+                <label class="form-label fw-semibold">
+                    Delivery Address <span class="text-danger">*</span>
+                </label>
+                <textarea id="delivery_address"
+                        name="delivery_address"
+                        class="form-control"
+                        rows="2" required></textarea>
+                <span class="invalid-feedback" id="delivery_address_error">
+                    Delivery address is required
+                </span>
+            </div>
+
+            <!-- Terms & Conditions -->
+            <div class="col-12">
+                <label class="form-label small fw-semibold mb-2">
+                    Other Term
+                </label>
+
+                <div class="border rounded p-3 bg-light small">
+                    <div class="row mb-2">
+                        <div class="col-md-1 fw-semibold">
+                            Quantity Variation :
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="quantity_variation" id="quantity_variation" class="form-control" placeholder="Quantity variation" />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-1 fw-semibold">
+                            Freight :
+                        </div>
+                        <div class="col-md-8">
+                            <input type="text" name="freight" id="freight" class="form-control" placeholder="Freight" />
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-1 fw-semibold">G.S.T. :</div>
+                        <div class="col-md-8">
+                            <input name="gst" id="gst" type="text" class="form-control" placeholder="GST" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1 fw-semibold">Note :</div>
+                        <div class="col-md-8">
+                            <input type="text" name="note" id="note" class="form-control" placeholder="Note" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit -->
+            <div class="col-12 text-end mt-4">
+                <button type="submit" name="save_quotation" class="btn btn-primary px-4">
+                    Save Quotation
+                </button>
+                <button type="reset" class="btn btn-secondary px-4">
+                    Reset
+                </button>
+            </div>
         </div>
+    </form>
+</div>
     </div>
 </div>

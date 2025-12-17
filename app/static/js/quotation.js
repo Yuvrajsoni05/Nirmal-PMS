@@ -21,19 +21,18 @@ $(document).on(
     }
 );
 
-
 $(document).on(
     "input",
-    "[name='pouch_combination1[]'], [name='pouch_combination2[]'], [name='pouch_combination3[]'], [name='pouch_combination4[]']",
+    "[name='pouch_combination1'], [name='pouch_combination2'], [name='pouch_combination3'], [name='pouch_combination4']",
     function () {
         const section = $(this).closest(".col-12");
 
         const values = [
-            section.find("[name='pouch_combination1[]']").val(),
-            section.find("[name='pouch_combination2[]']").val(),
-            section.find("[name='pouch_combination3[]']").val(),
-            section.find("[name='pouch_combination4[]']").val()
-        ].filter(v => v); // remove empty values
+            section.find("[name='pouch_combination1']").val(),
+            section.find("[name='pouch_combination2']").val(),
+            section.find("[name='pouch_combination3']").val(),
+            section.find("[name='pouch_combination4']").val(),
+        ].filter((v) => v); // remove empty values
 
         const combined = values.join("+");
 
