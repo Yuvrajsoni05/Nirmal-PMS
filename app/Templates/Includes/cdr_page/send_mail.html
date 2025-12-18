@@ -1,58 +1,46 @@
 <div
     class="modal fade"
-    data-bs-backdrop="static"
     id="emailModal{{ i.id }}"
     tabindex="-1"
-    role="dialog"
-    aria-labelledby="emailModalLabel{{ i.id }}"
     aria-hidden="true"
 >
-    <div class="modal-dialog modal-xl modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title" id="emailModalLabel{{ i.id }}">
-                    Send Mail
-                </h5>
+            <div class="modal-header">
+                <h5 class="modal-title">Send Mail</h5>
                 <button
                     type="button"
                     class="btn-close"
                     data-bs-dismiss="modal"
-                    aria-label="Close"
                 ></button>
             </div>
 
-            <div class="modal-body">
-                <form
-                    method="post"
-                    action="{% url 'cdr_sendmail_data' %}"
-                    enctype="multipart/form-data"
-                    autocomplete="off"
-                >
-                    {% csrf_token %}
-
+            <form
+                method="POST"
+                action="{% url 'cdr_sendmail_data' %}"
+                enctype="multipart/form-data"
+                autocomplete="off"
+            >
+                {% csrf_token %}
+                <div class="modal-body">
                     <div class="row g-3">
-
                         <!-- CDR Date -->
                         <div class="col-md-6">
-                            <label for="date{{ i.id }}" class="form-label fw-bold">CDR Date</label>
-
-                            <div class="form-check mb-2">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    name="cdr_date_check"
-                                    value="true"
-                                    id="cdrDateCheck{{ i.id }}"
-                                />
-                                <label class="form-check-label" for="cdrDateCheck{{ i.id }}">
-                                    Enable Date
-                                </label>
-                            </div>
-
+                            <label class="form-label">CDR Date</label>
+                            <input
+                                class="form-check-input me-2"
+                                type="checkbox"
+                                name="cdr_date_check"
+                                id="cdrDateCheck{{ i.id }}"
+                            />
+                            <label
+                                class="form-check-label"
+                                for="cdrDateCheck{{ i.id }}"
+                                >Enable</label
+                            >
                             <input
                                 type="date"
-                                class="form-control"
-                                id="date{{ i.id }}"
+                                class="form-control mt-2"
                                 name="date"
                                 value="{{ i.date|date:'Y-m-d' }}"
                             />
@@ -60,8 +48,7 @@
 
                         <!-- Party Name -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Party Name</label>
-
+                            <label class="form-label">Party Name</label>
                             <div class="form-check mt-2">
                                 <input
                                     class="form-check-input"
@@ -73,33 +60,28 @@
                                 <label
                                     class="form-check-label"
                                     for="cdr_party_name{{ i.id }}"
+                                    >{{ i.party_details.party_name }}</label
                                 >
-                                    {{ i.party_details.party_name }}
-                                </label>
                             </div>
                         </div>
 
-                        <!-- Party Email Address -->
+                        <!-- Party Email -->
                         <div class="col-md-6">
-                            <label for="cdr_party_address{{ i.id }}" class="form-label fw-bold">
-                                Party Email Address
-                            </label>
-
+                            <label class="form-label"
+                                >Party Email Address</label
+                            >
                             <input
                                 type="email"
-                                id="cdr_party_address{{ i.id }}"
-                                name="cdr_party_address"
                                 class="form-control"
-                                placeholder="Enter Party Email Address"
-                                maxlength="50"
+                                name="cdr_party_address"
                                 value="{{ i.party_email_used.email }}"
+                                placeholder="Enter Email"
                             />
                         </div>
 
                         <!-- Job Name -->
                         <div class="col-md-6">
-                            <label class="form-label fw-bold">Job Name</label>
-
+                            <label class="form-label">Job Name</label>
                             <div class="form-check mt-2">
                                 <input
                                     class="form-check-input"
@@ -111,51 +93,40 @@
                                 <label
                                     class="form-check-label"
                                     for="cdr_job_name{{ i.id }}"
+                                    >{{ i.job_name }}</label
                                 >
-                                    {{ i.job_name }}
-                                </label>
                             </div>
                         </div>
 
                         <!-- Correction -->
                         <div class="col-md-6">
-                            <label for="cdr_corrections{{ i.id }}" class="form-label fw-bold">
-                                Correction
-                            </label>
-
-                            <div class="form-check mb-2">
-                                <input
-                                    class="form-check-input"
-                                    type="checkbox"
-                                    name="correction_check"
-                                    value="true"
-                                    id="enableCorrection{{ i.id }}"
-                                />
-                                <label class="form-check-label" for="enableCorrection{{ i.id }}">
-                                    Enable Correction
-                                </label>
-                            </div>
-
+                            <label class="form-label">Correction</label>
+                            <input
+                                class="form-check-input me-2"
+                                type="checkbox"
+                                id="enableCorrection{{ i.id }}"
+                                name="correction_check"
+                            />
+                            <label
+                                class="form-check-label"
+                                for="enableCorrection{{ i.id }}"
+                                >Enable</label
+                            >
                             <input
                                 type="text"
-                                id="cdr_corrections{{ i.id }}"
+                                class="form-control mt-2"
                                 name="cdr_corrections"
-                                class="form-control"
-                                placeholder="Enter Corrections"
                                 value="{{ i.cdr_corrections }}"
+                                placeholder="Enter Corrections"
                             />
                         </div>
 
                         <!-- Attachment -->
                         <div class="col-md-6">
-                            <label for="attachment{{ i.id }}" class="form-label fw-bold">
-                                Attachment
-                            </label>
-
+                            <label class="form-label">Attachment</label>
                             <input
                                 type="file"
                                 class="form-control"
-                                id="attachment{{ i.id }}"
                                 name="attachment"
                                 accept=".jpeg,.png,.jpg,.ai"
                                 multiple
@@ -164,38 +135,30 @@
 
                         <!-- Notes -->
                         <div class="col-md-6">
-                            <label for="notes{{ i.id }}" class="form-label fw-bold">
-                                Note
-                            </label>
-
+                            <label class="form-label">Notes</label>
                             <input
                                 type="text"
-                                id="notes{{ i.id }}"
-                                name="notes"
                                 class="form-control"
+                                name="notes"
                                 placeholder="Write Notes"
                             />
                         </div>
-
-                        <!-- Buttons -->
-                        <div class="col-12 text-end mt-3">
-                            <button
-                                type="reset"
-                                class="btn btn-secondary me-2"
-                                data-bs-dismiss="modal"
-                            >
-                                Close
-                            </button>
-
-                            <button type="submit" class="btn btn-primary">
-                                Send Mail
-                            </button>
-                        </div>
-
                     </div>
-                </form>
-            </div>
+                </div>
 
+                <div class="modal-footer">
+                    <button
+                        type="reset"
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        Send Mail
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

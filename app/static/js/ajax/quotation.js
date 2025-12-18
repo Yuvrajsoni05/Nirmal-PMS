@@ -1,13 +1,13 @@
 $(document).on(
     "input change",
-    "#purchase_rate, #no_of_pouch_kg, #party_name, #purchase_rate_unit, #per_pouch_rate_basic, #pouch_charge, #zipper_cost",
+    "#purchase_rate_per_kg, #no_of_pouch_kg, #party_name, #purchase_rate_unit, #per_pouch_rate_basic, #pouch_charge, #zipper_cost" ,
     function () {
         $.ajax({
             url: pouchRateAjaxUrl,
             type: "GET",
             data: {
-                party_name : $("#party_name").val(),
-                purchase_rate: $("#purchase_rate").val(),
+                party_name: $("#party_name").val(),
+                purchase_rate_per_kg: $("#purchase_rate_per_kg").val(),
                 no_of_pouch_kg: $("#no_of_pouch_kg").val(),
                 purchase_rate_unit: $("#purchase_rate_unit").val(),
                 per_pouch_rate_basic: $("#per_pouch_rate_basic").val(),
@@ -15,28 +15,35 @@ $(document).on(
                 zipper_cost: $("#zipper_cost").val(),
             },
             success: function (response) {
-
-                $("#per_pouch_rate_basic").val(response.per_pouch_rate_basic || 0);
+                $("#per_pouch_rate_basic").val(
+                    response.per_pouch_rate_basic || 0
+                );
                 $("#final_rare").val(response.final_rare || 0);
                 $("#minium_quantity").val(response.minium_quantity || 0);
-
+                console.log("#per_pouch_rate_basic");
 
                 if (response.jobs) {
-                    let jobSelect = $("#job_name");
+                let jobSelect = $("#job_name");
+                let prevValue = jobSelect.val();  // store current value
 
-                    jobSelect.empty();
-                    jobSelect.append('<option value="">Select Job Name</option>');
+                jobSelect.empty();
+                jobSelect.append('<option value="">Select Job Name</option>');
 
-                    $.each(response.jobs, function (i, job) {
-                        jobSelect.append(
-                            '<option value="' + job.job_name + '">' + job.job_name + "</option>"
-                        );
-                    });
+                $.each(response.jobs, function (i, job) {
+                    jobSelect.append(
+                        '<option value="' + job.job_name + '">' + job.job_name + "</option>"
+                    );
+                });
 
-                    jobSelect.append('<option value="others">Others</option>');
+                jobSelect.append('<option value="others">Others</option>');
+
+                // restore if still exists
+                if ($("#job_name option[value='" + prevValue + "']").length) {
+                    jobSelect.val(prevValue);
                 }
             }
 
+            },
         });
     }
 );

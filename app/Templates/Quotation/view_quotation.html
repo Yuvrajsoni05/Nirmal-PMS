@@ -1,16 +1,11 @@
-{% extends 'base/base.html' %}
-{% load static %}
-
-{% block main_block %}
+{% extends 'base/base.html' %} {% load static %} {% block main_block %}
 <div class="page-inner">
-
     <!-- Page Header -->
     <div class="d-flex align-items-center pt-2 pb-4">
         <h3 class="fw-bold mb-0">View Quotation</h3>
     </div>
 
     <div class="card card-round">
-        <!-- Card Header -->
         <div class="card-header">
             <h5 class="card-title mb-0">Quotation List</h5>
         </div>
@@ -18,36 +13,37 @@
         <!-- Card Body -->
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-striped align-middle text-nowrap mb-0">
+                <table
+                    class="table table-striped align-middle text-nowrap mb-0"
+                >
                     <thead class="table-light">
                         <tr class="text-center">
                             <th>Sr</th>
                             <th>Delivery Date</th>
-                            <th>Party</th>
-                            <th>Job</th>
+                            <th>Party Name</th>
+                            <th>Job Name</th>
                             <th>Pouch Size</th>
-                            <th>Combination</th>
+                            <th>Pouch Combination</th>
                             <th>Qty</th>
-                            <th>Purchase ₹/Kg</th>
-                            <th>Pouch/Kg</th>
-                            <th>Per Pouch ₹</th>
+                            <th>Purchase Rate Per/Kg </th>
+                            <th>No of Pouch Kg</th>
+                            <th>Per Pouch Rate Basic</th>
                             <th>Zipper ₹</th>
-                            <th>Pouch ₹</th>
-                            <th>Final ₹</th>
+                            <th>Pouch Charge</th>
+                            <th>Final Rare</th>
                             <th>Min Qty</th>
-                            <th>Type</th>
-                            <th>Variation</th>
+                            <th>Pouch Type</th>
+                            <th>Quantity Variate</th>
                             <th>Freight ₹</th>
                             <th>GST</th>
                             <th>Address</th>
-                            <th>Instruction</th>
+                            <th>Spacial Instruction</th>
                             <th>Note</th>
                             <th class="sticky-right">Actions</th>
                         </tr>
                     </thead>
                     {% if quotations %}
                     <tbody>
-                   
                         {% for quotation in quotations %}
                         <tr class="text-center">
                             <td>{{ forloop.counter }}</td>
@@ -62,58 +58,88 @@
                             <td>₹ {{ quotation.per_pouch_rate_basic }}</td>
                             <td>₹ {{ quotation.zipper_cost }}</td>
                             <td>₹ {{ quotation.pouch_charge }}</td>
-                            <td>
-                                ₹ {{ quotation.final_rare }}
-                            </td>
+                            <td>₹ {{ quotation.final_rare }}</td>
                             <td>{{ quotation.minium_quantity }}</td>
                             <td>{{ quotation.pouch_type }}</td>
                             <td>{{ quotation.quantity_variate }}</td>
                             <td>₹ {{ quotation.freight }}</td>
                             <td>{{ quotation.gst }}%</td>
-                            <td class="text-start">{{ quotation.delivery_address }}</td>
-                            <td class="text-start">{{ quotation.special_instruction|default:"—" }}</td>
-                            <td class="text-start">{{ quotation.note|default:"—" }}</td>
+                            <td class="text-start">
+                                {{ quotation.delivery_address }}
+                            </td>
+                            <td class="text-start">
+                                {{ quotation.special_instruction|default:"—" }}
+                            </td>
+                            <td class="text-start">
+                                {{ quotation.note|default:"—" }}
+                            </td>
 
                             <!-- Actions -->
                             <td class="sticky-right text-center">
                                 <!-- Edit -->
                                 <button
-                                    class="btn btn-outline-primary btn-sm"
+                                    class="btn btn-outline-primary "
                                     data-bs-toggle="modal"
-                                    data-bs-target="#editQuotationModal{{ quotation.id }}">
+                                    data-bs-target="#editQuotationModal{{ quotation.id }}"
+                                >
                                     <i class="fas fa-edit"></i>
                                 </button>
 
                                 <!-- Delete -->
-                                <form method="POST" class="d-inline">
+                                <form
+                                    method="POST"
+                                    id="delete-form-{{ quotation.id }}"
+                                    class="d-inline"
+                                >
                                     {% csrf_token %}
-                                    <input type="hidden" name="delete_quotation" value="{{ quotation.id }}">
-                                    <button class="btn btn-outline-danger btn-sm">
+                                    <input
+                                        type="hidden"
+                                        name="delete_quotation"
+                                        value="{{ quotation.id }}"
+                                    />
+
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-danger  delete-btn"
+                                        data-id="{{ quotation.id }}"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmationModal"
+                                    >
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </form>
 
                                 <!-- Email -->
                                 <button
-                                    class="btn btn-outline-success btn-sm"
+                                    class="btn btn-outline-success "
                                     data-bs-toggle="modal"
-                                    data-bs-target="#mailQuotationModal{{ quotation.id }}">
-                                    <i class="fa fa-envelope"></i>
+                                    data-bs-target="#PurchaseQuotationModal{{ quotation.id }}"
+                                >
+                              <i class="fa fa-plus-square" aria-hidden="true"></i>
+
                                 </button>
                             </td>
-                       
+
                             <!-- Update Modal -->
                             {% include 'Includes/quotation/update_quotation.html' %}
 
+
+                            <!-- Purchase_order Modal -->
+                            {% include 'Includes/quotation/purchase_order.html' %}
+
+                            
                         </tr>
-                    {% endfor %}
+                        {% endfor %}    -
                     </tbody>
                     {% else %}
                     <tbody>
                         <tr>
                             <td colspan="22">Block</td>
-                        <tr>
+                        </tr>
+
+                        <tr></tr>
                     </tbody>
+
                     {% endif %}
                 </table>
             </div>
@@ -121,12 +147,59 @@
     </div>
 </div>
 
+<!-- Delete Confirmation Modal (Global) -->
+<div class="modal fade" id="confirmationModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <h5 class="modal-title">Confirm Deletion</h5>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer">
+                <button
+                    type="button"
+                    class="btn btn-danger"
+                    id="confirmDeleteBtn"
+                >
+                    Yes, Delete
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                >
+                    No
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
+{% endblock %} {% block script %}
+<script>
+    let deleteId = null;
 
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+                deleteId = this.dataset.id;
+            });
+        });
 
-
-{%  endblock %}
-
-{% block script %}
-
+        document
+            .getElementById("confirmDeleteBtn")
+            .addEventListener("click", function () {
+                if (deleteId) {
+                    document.getElementById("delete-form-" + deleteId).submit();
+                }
+            });
+    });
+</script>
 {% endblock script %}

@@ -284,16 +284,16 @@ class ProformaJob(models.Model):
     
 class PouchQuotation(models.Model):
     POUCH_TYPE = [
-        ('1 - Center Seal Pouch' , '1 - Center Seal Pouch'),
-        ('2- 3 Side Seal Pouch' , '2- 3 Side Seal Pouch'),
-        ('3- 6 Side Seal Pouch' , '3- 6 Side Seal Pouch'),
-        ('4- 6 Side Seal Pouch With D Cut' , '4- 6 Side Seal Pouch With D Cut'),
-        ('5- Stand Up Pouch With Zipper' , '5- Stand Up Pouch With Zipper'),
-        ('6- Perforation Pouch' , '6- Perforation Pouch'),
-        ('7- 3 Side Seal Bag With Dori Handel' , '7- 3 Side Seal Bag With Dori Handel'),
-        ('8- 3 Side Seal Zipper With V Nouch' , '8- 3 Side Seal Zipper With V Nouch'),
-        ('9- Printed Roll' , '9- Printed Roll'),
-        ('10- Flat Bottom Pouch With Zipper' , '10- Flat Bottom Pouch With Zipper'),
+        ('Center Seal Pouch' , 'Center Seal Pouch'),
+        ('3 Side Seal Pouch' , '3 Side Seal Pouch'),
+        ('6 Side Seal Pouch' , '6 Side Seal Pouch'),
+        ('6 Side Seal Pouch With D Cut' ,'6 Side Seal Pouch With D Cut'),
+        ('Stand Up Pouch With Zipper' , 'Stand Up Pouch With Zipper'),
+        ('Perforation Pouch' , 'Perforation Pouch'),
+        ('3 Side Seal Bag With Dori Handel' ,'3 Side Seal Bag With Dori Handel'),
+        ('3 Side Seal Zipper With V Nouch' ,'3 Side Seal Zipper With V Nouch'),
+        ('Printed Roll' , 'Printed Roll'),
+        ('Flat Bottom Pouch With Zipper' ,'Flat Bottom Pouch With Zipper'),
     ]
     
 
@@ -308,10 +308,10 @@ class PouchQuotation(models.Model):
     job_name = models.CharField(max_length=200)
     pouch_open_size = models.CharField(max_length=200)
     pouch_combination = models.CharField(max_length=200)
-    purchase_rate_per_kg = models.DecimalField(max_digits=10, decimal_places=2)
-    no_of_pouch_kg = models.DecimalField(max_digits=10, decimal_places=2)
-    per_pouch_rate_basic = models.DecimalField(max_digits=10, decimal_places=2)
-    zipper_cost = models.DecimalField(max_digits=10, decimal_places=2)
+    purchase_rate_per_kg = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
+    no_of_pouch_kg = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
+    per_pouch_rate_basic = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
+    zipper_cost = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
     final_rare = models.CharField(max_length=200)
     minium_quantity = models.CharField(max_length=200)
     pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE,blank=True, null=True)

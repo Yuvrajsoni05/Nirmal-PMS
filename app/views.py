@@ -1912,7 +1912,51 @@ def view_quotations(request):
 
         elif 'edit_quotation' in request.POST:
             print("edit call")
-    
+        
+        
+        elif 'create_purchase_order' in request.POST:
+            print('create Purchase Order')
+            
+        if 'send_quotation_mail' in request.POST:
+            if request.method == 'POST':
+                
+                update_map = {
+                    "chk_delivery_date": "delivery_date",
+                    "chk_party_details": "party_details",
+                    "chk_job_name": "job_name",
+                    "chk_pouch_open_size": "pouch_open_size",
+                    "chk_pouch_combination": "pouch_combination",
+                    "chk_quantity": "quantity",
+                    "chk_purchase_rate_per_kg": "purchase_rate_per_kg",
+                    "chk_no_of_pouch_kg": "no_of_pouch_kg",
+                    "chk_per_pouch_rate_basic": "per_pouch_rate_basic",
+                    "chk_zipper_cost": "zipper_cost",
+                    "chk_pouch_charge": "pouch_charge",
+                    "chk_final_rare": "final_rare",
+                    "chk_minimum_quantity": "minium_quantity",
+                    "chk_pouch_type": "pouch_type",
+                    "chk_quantity_variate": "quantity_variate",
+                    "chk_freight": "freight",
+                    "chk_gst": "gst",
+                    "chk_delivery_address": "delivery_address",
+                    "chk_special_instruction": "special_instruction",
+                    "chk_note": "note",
+                }
+                selected_values = {}
+                for checkbox, field in update_map.items():
+                    if request.POST.get(checkbox):
+                        value = request.POST.get(field)
+
+                        if value in [None, "", "null"]:
+                            continue
+                        
+                        # Handle Foreign Keys
+                        if field == "party_details":
+                            value = Party.objects.get(id=value)
+
+                        selected_values[field] = value
+                Qu = PouchQuotation.objects.create(**selected_values)
+              
     context  = {
         "quotations" : quotations
     }
@@ -1923,8 +1967,8 @@ def quotation_page_ajax(request):
     if request.method == "GET":
         party_name = request.GET.get('party_name')
 
-        purchase_rate = float(request.GET.get("purchase_rate") or 0)
-        no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 0)
+        purchase_rate_per_kg = float(request.GET.get("purchase_rate_per_kg") or 0)
+        no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 1)
         unit = request.GET.get("purchase_rate_unit")
         per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
         zipper_cost =float(request.GET.get("zipper_cost") or 0)
@@ -1932,12 +1976,12 @@ def quotation_page_ajax(request):
         jobs = list(utils.all_job_name_list(party_name))
         
         total_ppb = 0
-   
-        if purchase_rate > 0:   
-            if unit == "polyester_printed_bug" and no_of_pouch_kg > 0:
-                total_ppb = purchase_rate / no_of_pouch_kg
+        
+        if purchase_rate_per_kg:   
+            if unit == "polyester_printed_bug":
+                total_ppb = purchase_rate_per_kg / no_of_pouch_kg
             elif unit == "polyester_printed_roll":
-                total_ppb = purchase_rate
+                total_ppb = purchase_rate_per_kg
 
         total_ppb = round(total_ppb, 2)
         
