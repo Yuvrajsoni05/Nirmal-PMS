@@ -334,3 +334,55 @@ class PouchQuotation(models.Model):
     
 
 
+class PurchaseOrder(models.Model):
+    POUCH_TYPE = [
+        ('Center Seal Pouch' , 'Center Seal Pouch'),
+        ('3 Side Seal Pouch' , '3 Side Seal Pouch'),
+        ('6 Side Seal Pouch' , '6 Side Seal Pouch'),
+        ('6 Side Seal Pouch With D Cut' ,'6 Side Seal Pouch With D Cut'),
+        ('Stand Up Pouch With Zipper' , 'Stand Up Pouch With Zipper'),
+        ('Perforation Pouch' , 'Perforation Pouch'),
+        ('3 Side Seal Bag With Dori Handel' ,'3 Side Seal Bag With Dori Handel'),
+        ('3 Side Seal Zipper With V Nouch' ,'3 Side Seal Zipper With V Nouch'),
+        ('Printed Roll' , 'Printed Roll'),
+        ('Flat Bottom Pouch With Zipper' ,'Flat Bottom Pouch With Zipper'),
+    ]
+    
+    
+    POLYESTER_UNIT =[
+        ('polyester_printed_roll' , 'Polyester Printed Roll'),
+        ('polyester_printed_bag' ,'Polyester Printed Bag')
+    ]
+    delivery_date  = models.DateField()
+    party_details = models.ForeignKey(
+        Party,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="purchase_party_name"
+    )
+    job_name = models.CharField(max_length=200)
+    pouch_open_size = models.CharField(max_length=200)
+    pouch_combination = models.CharField(max_length=200)
+    purchase_rate_per_kg = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
+    polyester_unit = models.CharField(max_length=200,choices=POLYESTER_UNIT,blank=True, null=True)
+    no_of_pouch_kg = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
+    per_pouch_rate_basic = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
+    zipper_cost = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
+    final_rare = models.CharField(max_length=200)
+    minium_quantity = models.CharField(max_length=200)
+    pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE,blank=True, null=True)
+    special_instruction = models.TextField()
+    quantity =  models.CharField(max_length=200,blank=True, null=True)
+    delivery_address = models.TextField()
+    pouch_charge = models.CharField(max_length=200,blank=True, null=True)
+    quantity_variate = models.CharField(max_length=200)
+    freight = models.CharField(max_length=200)
+    gst = models.CharField(max_length=200)
+    note = models.TextField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
+    
+    
+    def __str__(self):
+        return f"{self.job_name} - {self.party_details}"
+    

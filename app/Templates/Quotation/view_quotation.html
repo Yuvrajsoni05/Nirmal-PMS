@@ -25,7 +25,7 @@
                             <th>Pouch Size</th>
                             <th>Pouch Combination</th>
                             <th>Qty</th>
-                            <th>Purchase Rate Per/Kg </th>
+                            <th>Purchase Rate Per/Kg</th>
                             <th>No of Pouch Kg</th>
                             <th>Per Pouch Rate Basic</th>
                             <th>Zipper ₹</th>
@@ -78,7 +78,7 @@
                             <td class="sticky-right text-center">
                                 <!-- Edit -->
                                 <button
-                                    class="btn btn-outline-primary "
+                                    class="btn btn-outline-primary"
                                     data-bs-toggle="modal"
                                     data-bs-target="#editQuotationModal{{ quotation.id }}"
                                 >
@@ -100,7 +100,7 @@
 
                                     <button
                                         type="button"
-                                        class="btn btn-outline-danger  delete-btn"
+                                        class="btn btn-outline-danger delete-btn"
                                         data-id="{{ quotation.id }}"
                                         data-bs-toggle="modal"
                                         data-bs-target="#confirmationModal"
@@ -111,25 +111,24 @@
 
                                 <!-- Email -->
                                 <button
-                                    class="btn btn-outline-success "
+                                    class="btn btn-outline-success"
                                     data-bs-toggle="modal"
                                     data-bs-target="#PurchaseQuotationModal{{ quotation.id }}"
                                 >
-                              <i class="fa fa-plus-square" aria-hidden="true"></i>
-
+                                    <i
+                                        class="fa fa-plus-square"
+                                        aria-hidden="true"
+                                    ></i>
                                 </button>
                             </td>
 
                             <!-- Update Modal -->
                             {% include 'Includes/quotation/update_quotation.html' %}
 
-
                             <!-- Purchase_order Modal -->
-                            {% include 'Includes/quotation/purchase_order.html' %}
-
-                            
+                            {% include 'Includes/quotation/purchase_order.html'%}
                         </tr>
-                        {% endfor %}    -
+                        {% endfor %} -
                     </tbody>
                     {% else %}
                     <tbody>
@@ -145,13 +144,14 @@
             </div>
         </div>
     </div>
+    {% include 'Includes/quotation/navbar.html' %}
 </div>
 
 <!-- Delete Confirmation Modal (Global) -->
 <div class="modal fade" id="confirmationModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header ">
+            <div class="modal-header">
                 <h5 class="modal-title">Confirm Deletion</h5>
                 <button
                     type="button"

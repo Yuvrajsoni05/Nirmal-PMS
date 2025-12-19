@@ -10,11 +10,7 @@ from datetime import datetime
 import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import (PasswordResetConfirmView,PasswordResetDoneView,
-
-
-
-                                       PasswordResetView)
+from django.contrib.auth.views import (PasswordResetConfirmView,PasswordResetDoneView,PasswordResetView)
 
 
 from django.contrib.sessions.models import Session
@@ -1897,13 +1893,9 @@ def quotation_page(request):
 
 
 def view_quotations(request):
-    quotations = PouchQuotation.objects.all()
-    
-    
-    
-    if request.method == "POST":
-        
+    quotations = PouchQuotation.objects.all().order_by('-id')
 
+    if request.method == "POST":
         if 'delete_quotation' in request.POST:
             q_id = request.POST.get('delete_quotation')
             PouchQuotation.objects.filter(id=q_id).delete()
@@ -1911,15 +1903,37 @@ def view_quotations(request):
             return redirect('view_quotations')
 
         elif 'edit_quotation' in request.POST:
-            print("edit call")
-        
-        
-        elif 'create_purchase_order' in request.POST:
-            print('create Purchase Order')
             
-        if 'send_quotation_mail' in request.POST:
+            q_id = request.POST.get('edit_quotation')
+
+            edit_quotation = get_object_or_404(PouchQuotation, id=q_id)
+
+            edit_quotation.delivery_date = request.POST.get("delivery_date")
+            edit_quotation.job_name = request.POST.get("job_name")
+            edit_quotation.pouch_open_size = request.POST.get("pouch_open_size")
+            edit_quotation.pouch_combination = request.POST.get("pouch_combination")
+            edit_quotation.quantity = request.POST.get("quantity")
+            edit_quotation.purchase_rate_per_kg = request.POST.get("purchase_rate_per_kg")
+            edit_quotation.no_of_pouch_kg = request.POST.get("no_of_pouch_kg")
+            edit_quotation.per_pouch_rate_basic = request.POST.get("per_pouch_rate_basic")
+            edit_quotation.zipper_cost = request.POST.get("zipper_cost")
+            edit_quotation.pouch_charge = request.POST.get("pouch_charge")
+            edit_quotation.final_rare = request.POST.get("final_rare")
+            edit_quotation.minium_quantity = request.POST.get("minium_quantity")
+            edit_quotation.pouch_type = request.POST.get("pouch_type")
+            edit_quotation.quantity_variate = request.POST.get("quantity_variate")
+            edit_quotation.freight = request.POST.get("freight")
+            edit_quotation.gst = request.POST.get("gst")
+            edit_quotation.delivery_address = request.POST.get("delivery_address")
+            edit_quotation.special_instruction = request.POST.get("special_instruction")
+            edit_quotation.note = request.POST.get("note")
+            edit_quotation.save()
+            messages.success(request,'Quotation Updated Successfully')
+            return redirect('view_quotations')           
+            
+        elif 'send_quotation_mail' in request.POST or 'create_purchase_order' in request.POST:
             if request.method == 'POST':
-                
+                selected_values = {}
                 update_map = {
                     "chk_delivery_date": "delivery_date",
                     "chk_party_details": "party_details",
@@ -1942,23 +1956,60 @@ def view_quotations(request):
                     "chk_special_instruction": "special_instruction",
                     "chk_note": "note",
                 }
-                selected_values = {}
+              
                 for checkbox, field in update_map.items():
+                   
                     if request.POST.get(checkbox):
+                        
                         value = request.POST.get(field)
-
+                      
                         if value in [None, "", "null"]:
                             continue
                         
-                        # Handle Foreign Keys
                         if field == "party_details":
                             value = Party.objects.get(id=value)
 
                         selected_values[field] = value
-                Qu = PouchQuotation.objects.create(**selected_values)
-              
+                        
+            if 'send_quotation_mail' in request.POST:
+                print(selected_values)
+                receiver_email = 'soniyuvraj9499@gmail.com'
+                template_name = "Base/quotation_mail.html"
+                convert_to_html_content = render_to_string(
+                    template_name=template_name, context=selected_values
+                )
+                email = EmailMultiAlternatives(
+                    subject='Quotation',
+                    body= 'plain_text',
+                    from_email= 'soniyuvraj9499@gmail.com',
+                    to=[receiver_email]
+                )
+                email.attach_alternative(convert_to_html_content,"text/html")
+                email.send()
+                messages.success(request, "Mail Send successfully")
+                return redirect("view_quotations")
+            elif 'create_purchase_order' in request.POST:
+                purchase_order =  request.POST.get('quotation_id')
+                quotation = PouchQuotation.objects.get(id=purchase_order)
+                party_names = Party.objects.values('party_name')
+                pouch_types =  PurchaseOrder.POUCH_TYPE
+                polyester_unit = PurchaseOrder.POLYESTER_UNIT
+                context ={
+                        'party_names':party_names,
+                        'pouch_types':pouch_types,
+                        'polyester_unit':polyester_unit,
+                        'quotation' : quotation
+                    }
+                return render(request , 'Purchase Order/purchase_order.html',context)
+            
+    paginator =  Paginator(quotations,10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    page_range_placeholder = "a" * page_obj.paginator.num_pages
+    
     context  = {
-        "quotations" : quotations
+        "page_range":page_range_placeholder,
+        "quotations" : page_obj
     }
     return render(request,"Quotation/view_quotation.html",context)
 
@@ -1998,13 +2049,25 @@ def quotation_page_ajax(request):
 
     return HttpResponse("")
     
+def purchase_order(request):
+    party_names = Party.objects.values('party_name')
+    pouch_types =  PurchaseOrder.POUCH_TYPE
+    polyester_unit = PurchaseOrder.POLYESTER_UNIT
+    context ={
+        'party_names':party_names,
+        'pouch_types':pouch_types,
+        'polyester_unit':polyester_unit
+    }
+    return render(request,"Purchase Order/purchase_order.html",context)
+
+def view_purchase_order(request):        
+    return render(request,"Purchase Order/view_purchase_order.html")
         
         
         
         
-        
-        
-    
+def purchase_order_ajax(request):
+    return JsonResponse()
         
 
 

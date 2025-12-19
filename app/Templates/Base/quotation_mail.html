@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Quotation Details</title>
+</head>
+<body style="font-family: Arial, sans-serif; background:#f6f6f6; padding:20px;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" 
+         style="max-width:700px; margin:auto; background:#ffffff; border-radius:6px; padding:20px; border:1px solid #ddd;">
+    <tr>
+      <td style="text-align:center; padding-bottom:20px;">
+        <h2 style="margin:0; color:#333;">Quotation Details</h2>
+      </td>
+    </tr>
+
+    <tr>
+      <td>
+        <table width="100%" cellpadding="8" cellspacing="0" style="border-collapse: collapse;">
+          
+          <tr>
+            <td width="40%" style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Delivery Date</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ delivery_date }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Party</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ party_details }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Job Name</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ job_name }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Pouch Size</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ pouch_open_size }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Pouch Combination</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ pouch_combination }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Quantity</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ quantity }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Purchase Rate / Kg</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ purchase_rate_per_kg }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>No. Pouch / Kg</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ no_of_pouch_kg }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Basic Per-Pouch Rate</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ per_pouch_rate_basic }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Zipper Cost</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ zipper_cost }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Pouch Charge</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ pouch_charge }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Final Rate</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ final_rare }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Minimum Qty</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ minium_quantity }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Pouch Type</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ pouch_type }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Qty Variation</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ quantity_variate }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Freight</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ freight }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>GST %</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ gst }}%</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa; border-bottom:1px solid #eee;"><strong>Delivery Address</strong></td>
+            <td style="border-bottom:1px solid #eee;">{{ delivery_address }}</td>
+          </tr>
+
+          <tr>
+            <td style="background:#fafafa;"><strong>Special Instruction</strong></td>
+            <td>{{ special_instruction }}</td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+
+    <tr>
+      <td style="text-align:center; padding-top:20px;">
+        <p style="color:#555; font-size:14px; margin:0;">Thank You!</p>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

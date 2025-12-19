@@ -125,6 +125,28 @@
                     </div>
                 </li>
 
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#purchase_order_page">
+                        <i class="fas fa-th-list"></i>
+                        <p>Purchase Order</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="purchase_order_page">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{% url "purchase_order" %}">
+                                    <span class="sub-item">Purchase Order</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url "view_purchase_order" %}">
+                                    <span class="sub-item">View Purchase Order Page</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
 
                 
 
