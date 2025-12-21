@@ -588,7 +588,6 @@ def update_job(request, update_id):
             cylinder_bill_no = request.POST.get("cylinder_bill_no")
             pouch_size = request.POST.get("pouch_size")
             pouch_open_size = request.POST.get("pouch_open_size")
-           
             pouch_combination1 = request.POST.get("pouch_combination1")
             pouch_combination2 = request.POST.get("pouch_combination2")
             pouch_combination3 = request.POST.get("pouch_combination3")
@@ -1821,6 +1820,15 @@ def quotation_page(request):
             gst = request.POST.get('gst')
             note = request.POST.get('note')
             pouch_charge = request.POST.get('pouch_charge')
+            new_party_name = request.POST.get('new_party_name')
+            new_job_name = request.POST.get('new_job_name')
+            
+            
+            if new_party_name:
+                party_details = new_party_name
+                
+            if new_job_name:
+                job_name = new_job_name
             
             
             party_details, _ = Party.objects.get_or_create(
@@ -2017,7 +2025,7 @@ def view_quotations(request):
 def quotation_page_ajax(request):
     if request.method == "GET":
         party_name = request.GET.get('party_name')
-
+        
         purchase_rate_per_kg = float(request.GET.get("purchase_rate_per_kg") or 0)
         no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 1)
         unit = request.GET.get("purchase_rate_unit")
@@ -2053,6 +2061,11 @@ def purchase_order(request):
     party_names = Party.objects.values('party_name')
     pouch_types =  PurchaseOrder.POUCH_TYPE
     polyester_unit = PurchaseOrder.POLYESTER_UNIT
+    
+    
+    if request.method == 'POST':
+        print('POST')
+    
     context ={
         'party_names':party_names,
         'pouch_types':pouch_types,

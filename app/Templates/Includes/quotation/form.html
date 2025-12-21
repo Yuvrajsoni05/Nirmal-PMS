@@ -34,27 +34,29 @@
 
                         <!-- Party Name -->
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold"
-                                >Party Name
-                                <span class="text-danger">*</span></label
-                            >
-                            <select
-                                class="form-select form-control"
-                                id="party_name"
-                                name="party_name"
-                                required
-                            >
+                            <label class="form-label fw-semibold">
+                                Party Name <span class="text-danger">*</span>
+                            </label>
+
+                            <select class="form-select form-control" id="party_name" name="party_name" required>
                                 <option value="">Select Party Name</option>
                                 {% for party in party_names %}
-                                <option value="{{ party.party_name }}">
-                                    {{ party.party_name }}
-                                </option>
+                                <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                                 {% endfor %}
+                                <option value="others">Others</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Party name is required
+
+                            <input 
+                                type="text" 
+                                class="form-control mt-2 d-none"
+                                placeholder="Enter New Party Name"
+                                name="new_party_name" 
+                                id="new_party_name"
+                            />
+
+                            <div class="invalid-feedback">Party name is required</div>
                             </div>
-                        </div>
+
 
                         <!-- Job Name -->
                         <div class="col-md-4">
@@ -62,18 +64,22 @@
                                 >Job Name
                                 <span class="text-danger">*</span></label
                             >
-                            <select
-                                class="form-select form-control"
-                                id="job_name"
-                                name="job_name"
-                                required
-                            >
-                                <option value="">Select Job Name</option>
-                                <option value="others">Others</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Job name is required
-                            </div>
+                            <select class="form-select form-control" id="job_name" name="job_name" required>
+                                    <option value="">Select Job Name</option>
+                                    <option value="others">Others</option>
+                                </select>
+
+                                <input 
+                                    type="text" 
+                                    class="form-control mt-2 d-none"
+                                    placeholder="Enter New Job Name"
+                                    name="new_job_name" 
+                                    id="new_job_name"
+                                />
+
+                                <div class="invalid-feedback d-none" id="new_job_error">
+                                    New Job Name is required
+                                </div>
                         </div>
 
                         <!-- Pouch Size -->
