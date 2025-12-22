@@ -62,7 +62,8 @@ urlpatterns = [
     path('quotation_page_ajax',quotation_page_ajax,name='quotation_page_ajax'),
     path('view_quotations',view_quotations,name='view_quotations'),
     path('purchase_order',purchase_order,name='purchase_order'),
-    path('view_purchase_order',view_purchase_order,name='view_purchase_order')
+    path('view_purchase_order',view_purchase_order,name='view_purchase_order'),
+    path('purchase_order_ajax',purchase_order_ajax,name='purchase_order_ajax'),
     
 
     

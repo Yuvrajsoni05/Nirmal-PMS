@@ -1,13 +1,15 @@
-
 function printProforma(button) {
     const data = button.dataset;
     const jobs = JSON.parse(data.jobs || "[]");
     const currentDate = new Date();
     const jobRows = jobs
-    
-    .map((job, index) => `
+
+        .map(
+            (job, index) => `
         <tr> 
-            <td style="vertical-align: top; padding: 6px 4px; font-weight: bold;">${index + 1}</td> 
+            <td style="vertical-align: top; padding: 6px 4px; font-weight: bold;">${
+                index + 1
+            }</td> 
             <td colspan="2" style="padding: 6px 4px">
                 <b>${job.title}</b><br />
                 <span style="font-style: italic; font-size: 12px">
@@ -17,15 +19,21 @@ function printProforma(button) {
                 </span>
             </td>
             <td class="text-right" style="padding: 6px 4px">-</td> 
-            <td class="text-right" style="padding: 6px 4px">${job.quantity} Nos.</td>
-            <td style="padding: 6px 4px" class="text-right">${job.prpc_rate}</td>
+            <td class="text-right" style="padding: 6px 4px">${
+                job.quantity
+            } Nos.</td>
+            <td style="padding: 6px 4px" class="text-right">${
+                job.prpc_rate
+            }</td>
             <td style="padding: 6px 4px">Nos.</td>
-            <td class="text-right" style="padding: 6px 4px">${job.taxable_value}</td>
-        </tr>`)
-    .join('');
+            <td class="text-right" style="padding: 6px 4px">${
+                job.taxable_value
+            }</td>
+        </tr>`
+        )
+        .join("");
 
-
-    const printWindow = window.open("", "_blank");
+    const printWindow = window.open("about:blank", "_blank");
     printWindow.document.write(`
 <!DOCTYPE html>
 <html lang="en">
@@ -263,9 +271,21 @@ function printProforma(button) {
         window.print();
         window.close();
     };
-<\/script>
+</script>
 </body>
 </html>
 `);
+    printWindow.document.close(); // important for Chrome
+    printWindow.focus(); // ensure window is active
+
+    printWindow.onload = function () {
+        setTimeout(() => {
+            printWindow.print();
+        }, 600);
+    };
+
+    printWindow.onafterprint = function () {
+        printWindow.close();
+    };
     printWindow.document.close();
 }

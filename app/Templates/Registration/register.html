@@ -52,18 +52,9 @@
                                     <input type="text"
                                            id="username"
                                            name="username"
-                                           hx-get="{% url 'register_page' %}"
-                                            hx-trigger="keyup changed delay:0ms"
-                                            hx-target="#username-messages"
-                                            hx-swap="innerHTML"
-                                            autocomplete="off"
                                            class="form-control"
                                            maxlength="15"
                                            placeholder="Username" />
-
-
-                                        <span   style="color: red; font-size:small" id="username-messages"></span>
-                          
 
                                     <div class="invalid-feedback"  id="username_error">Please provide a Username.</div> 
                                 </div>
@@ -71,13 +62,8 @@
                                     <label for="email" class="form-label fw-semibold text-dark">Email</label>
                                     <span style="color:red;">*</span>
                                     <input type="email"
-                                            
                                            id="email"
-                                           hx-get="{% url 'register_page' %}"
-                                        hx-trigger="keyup changed delay:0ms"
-                                        hx-target="#email-messages"
-                                        hx-swap="innerHTML"
-                                        autocomplete="off"
+                                         
                                            name="emailAddress"
                                            class="form-control"
                                            maxlength="50"
@@ -120,11 +106,11 @@
                                 </div>
                             </div>
                             <div class="d-flex justify-content-end gap-2 border-top pt-3">
-                                <a href="{% url "register_page" %}">
-                                    <button type="button" class="btn btn-outline-secondary">
+                                
+                                    <button type="reset" class="btn btn-outline-secondary">
                                         <i class="bi bi-arrow-clockwise me-1"></i>Reset
                                     </button>
-                                </a>
+                               
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-check-circle me-1"></i>Create
                                 </button>

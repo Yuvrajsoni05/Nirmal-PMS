@@ -120,27 +120,8 @@ def login_page(request):
     return render(request, "Registration/login_page.html")
 
 
-
-
-        
-            
-    
-
 @custom_login_required
-def register_page(request):
-    if "HX-Request" in request.headers:
-        username = request.GET.get("username", "").strip()
-        email = request.GET.get("emailAddress","").strip()
-        
-        if username:
-            if Registration.objects.filter(username=username).exists():
-                return HttpResponse("username already exists")
-        if email:
-            if Registration.objects.filter(email=email).exists():
-                return HttpResponse("email already exists")
-        
-        return HttpResponse()
- 
+def register_page(request): 
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
         first_name = request.POST.get("firstName", "").strip()
@@ -872,7 +853,7 @@ def cdr_page(request):
             Q(job_name__icontains=search)
             | Q(party_details__party_name__icontains=search)
         )
-   
+    
     elif search:
         cdr_data = CDRDetail.objects.filter(
             Q(job_name__icontains=search)
@@ -903,7 +884,7 @@ def cdr_page(request):
     else:
         cdr_data = cdr_data.order_by("date","id")
 
-    paginator = Paginator(cdr_data, 3)
+    paginator = Paginator(cdr_data, 10)
     page_number = request.GET.get("page")
 
     party_names = Party.objects.values("party_name").distinct()
@@ -911,7 +892,6 @@ def cdr_page(request):
 
     page_obj = paginator.get_page(page_number)
     page_range_placeholder = "a" * page_obj.paginator.num_pages
-   
     context = {
         
         "cdr_details": page_obj,
@@ -1190,7 +1170,7 @@ def cdr_sendmail_data(request):
         }
 
         receiver_email = cdr_party_address
-        template_name = "Base/cdr_email.html"
+        template_name = "Mail/cdr_mail.html"
         convert_to_html_content = render_to_string(
             template_name=template_name, context=CDR_INFO
         )
@@ -1206,7 +1186,7 @@ def cdr_sendmail_data(request):
         email.send()
         messages.success(request, "Mail Send successfully")
         return redirect("company_add_page")
-        # return render(request, 'Base/cdr_email.html',context=CDR_INFO)
+      
     return redirect("company_add_page")
 
 
@@ -1283,7 +1263,7 @@ def send_mail_data(request):
     
 
     receiver_email = party_email_address
-    template_name = "Base/send_email.html"
+    template_name = "Mail/job_mail.html"
     convert_to_html_content = render_to_string(
         template_name=template_name, context=job_info
     )
@@ -1527,7 +1507,7 @@ def ProformaSendMail(request):
             return redirect("view_proforma_invoice")
 
         receiver_email = party_email
-        template_name = "Base/proforma_send_mail.html"
+        template_name = "Mail/proforma_mail.html"
         convert_to_html_content = render_to_string(
             template_name=template_name, context={"data": item_dic}
         )
@@ -1811,7 +1791,7 @@ def quotation_page(request):
             per_pouch_rate_basic = request.POST.get('per_pouch_rate_basic')
             zipper_cost = request.POST.get('zipper_cost')
             final_rare = request.POST.get('final_rare')
-            minium_quantity = request.POST.get('minium_quantity')
+            minimum_quantity = request.POST.get('minimum_quantity')
             pouch_type = request.POST.get('pouch_type')
             special_instruction = request.POST.get('special_instruction')
             delivery_address = request.POST.get('delivery_address')
@@ -1847,7 +1827,7 @@ def quotation_page(request):
                     "per_pouch_rate_basic":per_pouch_rate_basic,
                     "zipper_cost":zipper_cost,
                     "final_rare":final_rare,
-                    "minium_quantity":minium_quantity,
+                    "minimum_quantity":minimum_quantity,
                     "pouch_type":pouch_type,
                     "special_instruction":special_instruction,
                     "delivery_address":delivery_address,
@@ -1878,7 +1858,7 @@ def quotation_page(request):
                 per_pouch_rate_basic=per_pouch_rate_basic,
                 zipper_cost=zipper_cost,
                 final_rare=final_rare,
-                minium_quantity=minium_quantity,
+                minimum_quantity=minimum_quantity,
                 pouch_type=pouch_type,
                 special_instruction=special_instruction,
                 delivery_address=delivery_address,
@@ -1899,7 +1879,7 @@ def quotation_page(request):
     
     return render(request, "Quotation/quotation.html",context)
 
-
+@custom_login_required
 def view_quotations(request):
     quotations = PouchQuotation.objects.all().order_by('-id')
 
@@ -1927,7 +1907,7 @@ def view_quotations(request):
             edit_quotation.zipper_cost = request.POST.get("zipper_cost")
             edit_quotation.pouch_charge = request.POST.get("pouch_charge")
             edit_quotation.final_rare = request.POST.get("final_rare")
-            edit_quotation.minium_quantity = request.POST.get("minium_quantity")
+            edit_quotation.minimum_quantity = request.POST.get("minimum_quantity")
             edit_quotation.pouch_type = request.POST.get("pouch_type")
             edit_quotation.quantity_variate = request.POST.get("quantity_variate")
             edit_quotation.freight = request.POST.get("freight")
@@ -1955,7 +1935,7 @@ def view_quotations(request):
                     "chk_zipper_cost": "zipper_cost",
                     "chk_pouch_charge": "pouch_charge",
                     "chk_final_rare": "final_rare",
-                    "chk_minimum_quantity": "minium_quantity",
+                    "chk_minimum_quantity": "minimum_quantity",
                     "chk_pouch_type": "pouch_type",
                     "chk_quantity_variate": "quantity_variate",
                     "chk_freight": "freight",
@@ -1982,7 +1962,7 @@ def view_quotations(request):
             if 'send_quotation_mail' in request.POST:
                 print(selected_values)
                 receiver_email = 'soniyuvraj9499@gmail.com'
-                template_name = "Base/quotation_mail.html"
+                template_name = "Mail/quotation_mail.html"
                 convert_to_html_content = render_to_string(
                     template_name=template_name, context=selected_values
                 )
@@ -1996,19 +1976,19 @@ def view_quotations(request):
                 email.send()
                 messages.success(request, "Mail Send successfully")
                 return redirect("view_quotations")
-            elif 'create_purchase_order' in request.POST:
-                purchase_order =  request.POST.get('quotation_id')
-                quotation = PouchQuotation.objects.get(id=purchase_order)
-                party_names = Party.objects.values('party_name')
-                pouch_types =  PurchaseOrder.POUCH_TYPE
-                polyester_unit = PurchaseOrder.POLYESTER_UNIT
-                context ={
-                        'party_names':party_names,
-                        'pouch_types':pouch_types,
-                        'polyester_unit':polyester_unit,
-                        'quotation' : quotation
-                    }
-                return render(request , 'Purchase Order/purchase_order.html',context)
+            elif "create_purchase_order" in request.POST:
+                quotation_id = request.POST.get("quotation_id")
+                quotation = PouchQuotation.objects.get(id=quotation_id)
+                print(selected_values)
+                context = {
+                    "selected_values": selected_values,  
+                    "quotation": selected_values,
+                    "party_names": Party.objects.values("party_name"),
+                    "pouch_types": PurchaseOrder.POUCH_TYPE,
+                    "polyester_unit": PurchaseOrder.POLYESTER_UNIT,
+                }
+                return render(request, "Purchase Order/purchase_order.html", context)
+                
             
     paginator =  Paginator(quotations,10)
     page_number = request.GET.get("page")
@@ -2021,7 +2001,7 @@ def view_quotations(request):
     }
     return render(request,"Quotation/view_quotation.html",context)
 
-
+@custom_login_required
 def quotation_page_ajax(request):
     if request.method == "GET":
         party_name = request.GET.get('party_name')
@@ -2047,16 +2027,17 @@ def quotation_page_ajax(request):
         
         final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
         
-        minium_quantity  = no_of_pouch_kg * 500
+        minimum_quantity  = no_of_pouch_kg * 500
         return JsonResponse({
             "per_pouch_rate_basic": total_ppb,
             "final_rare": final_rare,
             "jobs":jobs,
-            "minium_quantity":minium_quantity
+            "minimum_quantity":minimum_quantity
         })
 
     return HttpResponse("")
-    
+
+@custom_login_required
 def purchase_order(request):
     party_names = Party.objects.values('party_name')
     pouch_types =  PurchaseOrder.POUCH_TYPE
@@ -2064,23 +2045,132 @@ def purchase_order(request):
     
     
     if request.method == 'POST':
-        print('POST')
-    
+        if 'create_purchase_order' in request.POST:
+            delivery_date =  request.POST.get('delivery_date')
+            party_name = request.POST.get('party_name')
+            job_name = request.POST.get('job_name')
+            pouch_open_size = request.POST.get('pouch_size')
+            pouch_combination = request.POST.get('pouch_combination')
+            quantity = request.POST.get('quantity')
+            purchase_rate_per_kg = request.POST.get('purchase_rate_per_kg')
+            no_of_pouch_kg = request.POST.get('no_of_pouch_kg')
+            per_pouch_rate_basic = request.POST.get('per_pouch_rate_basic')
+            zipper_cost = request.POST.get('zipper_cost')
+            final_rare = request.POST.get('final_rare')
+            minimum_quantity = request.POST.get('minimum_quantity')
+            pouch_type = request.POST.get('pouch_type')
+            special_instruction = request.POST.get('special_instruction')
+            delivery_address = request.POST.get('delivery_address')
+            quantity_variation = request.POST.get('quantity_variation')
+            freight = request.POST.get('freight')
+            gst = request.POST.get('gst')
+            note = request.POST.get('note')
+            pouch_charge = request.POST.get('pouch_charge')
+            
+            
+            
+            
+            party_details, _ = Party.objects.get_or_create(
+                    party_name=party_name.strip() if party_name else None
+                )
+            pq = PurchaseOrder.objects.create(
+                delivery_date=delivery_date,
+                party_details=party_details,
+                job_name=job_name,
+                pouch_open_size=pouch_open_size,
+                pouch_combination=pouch_combination,
+                quantity=quantity,
+                pouch_charge=pouch_charge,
+                purchase_rate_per_kg=purchase_rate_per_kg,
+                no_of_pouch_kg=no_of_pouch_kg,
+                per_pouch_rate_basic=per_pouch_rate_basic,
+                zipper_cost=zipper_cost,
+                final_rare=final_rare,
+                minimum_quantity=minimum_quantity,
+                pouch_type=pouch_type,
+                special_instruction=special_instruction,
+                delivery_address=delivery_address,
+                quantity_variate=quantity_variation,
+                freight=freight,
+                gst=gst,
+                note=note,    
+            )
+            pq.save()
+            messages.success(request,"Purchase Order created successfully ")
+            return redirect('quotation_page')
+            
+            
+            
     context ={
         'party_names':party_names,
         'pouch_types':pouch_types,
         'polyester_unit':polyester_unit
     }
     return render(request,"Purchase Order/purchase_order.html",context)
+@custom_login_required
+def view_purchase_order(request):
+    purchase_orders = PurchaseOrder.objects.all().order_by('-id')
+    
+    
+    if request.method == "POST":
+        if 'delete_purchase_order' in request.POST:
+            po_id = request.POST.get('delete_purchase_order')
+            PurchaseOrder.objects.filter(id=po_id).delete()
+            messages.success(request,'Purchase Order Delete successfully')
+            return redirect('view_purchase_order')
+        
+    
 
-def view_purchase_order(request):        
-    return render(request,"Purchase Order/view_purchase_order.html")
+    
+    paginator =  Paginator(purchase_orders,10)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+    page_range_placeholder = "a" * page_obj.paginator.num_pages
+    
+    context  = {
+        "page_range":page_range_placeholder,
+        "purchase_orders" : page_obj       }
+    return render(request,"Purchase Order/view_purchase_order.html",context)
         
         
         
-        
+@custom_login_required       
 def purchase_order_ajax(request):
-    return JsonResponse()
+    
+    if request.method == "GET":
+        party_name = request.GET.get('party_name')
+        
+        purchase_rate_per_kg = float(request.GET.get("purchase_rate_per_kg") or 0)
+        no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 1)
+        unit = request.GET.get("purchase_rate_unit")
+        per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
+        zipper_cost =float(request.GET.get("zipper_cost") or 0)
+        pouch_charge = float(request.GET.get("pouch_charge") or 0)
+        jobs = list(utils.all_job_name_list(party_name))
+        
+        total_ppb = 0
+    
+        if purchase_rate_per_kg:   
+            if unit == "polyester_printed_bug":
+                total_ppb = purchase_rate_per_kg / no_of_pouch_kg
+            elif unit == "polyester_printed_roll":
+                total_ppb = purchase_rate_per_kg
+
+        total_ppb = round(total_ppb, 2)
+    
+    
+        final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
+    
+        minimum_quantity  = no_of_pouch_kg * 500
+        return JsonResponse({
+            "per_pouch_rate_basic": total_ppb,
+            "final_rare": final_rare,
+            "jobs":jobs,
+            "minimum_quantity":minimum_quantity
+        })
+
+    return HttpResponse("")
+ 
         
 
 

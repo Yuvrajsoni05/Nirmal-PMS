@@ -46,14 +46,16 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
   
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://957b6503b8f2.ngrok-free.app"
+]
 
 
 
 
 
 
-
-CSRF_COOKIE_SECURE = False  # Set this to True if using HTTPS
+CSRF_COOKIE_SECURE = False  
 CSRF_COOKIE_HTTPONLY = True
 CSRF_USE_SESSIONS = False
 
@@ -66,7 +68,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.humanize',
     'django.contrib.staticfiles',
-    'debug_toolbar',
     'app',
    
     
@@ -81,11 +82,10 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+   
     
 
 ]

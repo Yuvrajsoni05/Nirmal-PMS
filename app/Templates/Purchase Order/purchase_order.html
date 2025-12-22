@@ -14,4 +14,10 @@
             {% include "Includes/purchase_order/form.html" %}
 
     </div>
-{% endblock main_block %}
+{% endblock %}
+{% block script %}
+<script>
+    const pouchRateAjaxUrl = "{% url 'purchase_order_ajax' %}";
+</script>
+    <script src="{% static 'js/ajax/purchase_order.js' %}"></script>
+{% endblock %}

@@ -1,172 +1,170 @@
-<div class="modal fade" id="editQuotationModal{{ quotation.id }}" tabindex="-1">
-    <div class="modal-dialog modal-xl ">
-        <div class="modal-content">
+<div class="modal fade" id="editQuotationModal{{ quotation.id }}" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-xl  modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-sm">
+
             <form method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="edit_quotation" value="{{ quotation.id }}">
 
-                <!-- Modal Header -->
-                <div class="modal-header bg-light">
-                <h5 class="modal-title">Update Quotation</h5>
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                ></button>
-            </div>
+                <!-- Header -->
+                <div class="modal-header py-2">
+                    <h5 class="modal-title fw-semibold">Update Quotation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
 
-                <!-- Modal Body -->
-                <div class="modal-body">
+                <!-- Body -->
+                <div class="modal-body p-4" style="max-height:70vh; overflow-y:auto;">
 
-                    <!-- Basic Details -->
-                    <h6 class="border-bottom pb-2 mb-3">Basic Details</h6>
+                    <!-- Section: Basic Details -->
+                    <h6 class="fw-bold border-bottom pb-2 mb-3">Basic Details</h6>
                     <div class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Delivery Date</label>
-                            <input type="date" name="delivery_date" class="form-control"
+                            <label class="form-label small">Delivery Date</label>
+                            <input type="date" name="delivery_date" class="form-control form-control-sm"
                                    value="{{ quotation.delivery_date|date:'Y-m-d' }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Party Name</label>
-                            <input type="text" class="form-control" readonly
+                            <label class="form-label small">Party Name</label>
+                            <input type="text" class="form-control form-control-sm" readonly
                                    value="{{ quotation.party_details.party_name }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Job Name</label>
-                            <input type="text" name="job_name" class="form-control"
+                            <label class="form-label small">Job Name</label>
+                            <input type="text" name="job_name" class="form-control form-control-sm"
                                    value="{{ quotation.job_name }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Pouch Type</label>
-                            <input type="text" name="pouch_type" class="form-control"
+                            <label class="form-label small">Pouch Type</label>
+                            <input type="text" name="pouch_type" class="form-control form-control-sm"
                                    value="{{ quotation.pouch_type }}">
                         </div>
                     </div>
 
-                    <!-- Pouch Details -->
-                    <h6 class="border-bottom pb-2 mt-4 mb-3">Pouch Details</h6>
+                    <!-- Section: Pouch Details -->
+                    <h6 class="fw-bold border-bottom pb-2 mt-4 mb-3">Pouch Details</h6>
                     <div class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Open Size</label>
-                            <input type="text" name="pouch_open_size" class="form-control"
+                            <label class="form-label small">Open Size</label>
+                            <input type="text" name="pouch_open_size" class="form-control form-control-sm"
                                    value="{{ quotation.pouch_open_size }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Combination</label>
-                            <input type="text" name="pouch_combination" class="form-control"
+                            <label class="form-label small">Combination</label>
+                            <input type="text" name="pouch_combination" class="form-control form-control-sm"
                                    value="{{ quotation.pouch_combination }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Minimum Quantity</label>
-                            <input type="number" name="minium_quantity" class="form-control"
-                                   value="{{ quotation.minium_quantity }}">
+                            <label class="form-label small">Minimum Quantity</label>
+                            <input type="number" name="minimum_quantity" class="form-control form-control-sm"
+                                   value="{{ quotation.minimum_quantity }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Quantity Variate</label>
-                            <input type="text" name="quantity_variate" class="form-control"
+                            <label class="form-label small">Quantity Variate</label>
+                            <input type="text" name="quantity_variate" class="form-control form-control-sm"
                                    value="{{ quotation.quantity_variate }}">
                         </div>
                     </div>
 
-                    <!-- Quantity & Rate -->
-                    <h6 class="border-bottom pb-2 mt-4 mb-3">Quantity & Rate</h6>
+                    <!-- Section: Quantity & Rate -->
+                    <h6 class="fw-bold border-bottom pb-2 mt-4 mb-3">Quantity & Rate</h6>
                     <div class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Quantity</label>
-                            <input type="number" name="quantity" class="form-control"
+                            <label class="form-label small">Quantity</label>
+                            <input type="number" name="quantity" class="form-control form-control-sm"
                                    value="{{ quotation.quantity }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Purchase Rate / Kg</label>
-                            <input type="number" step="0.01" name="purchase_rate_per_kg" class="form-control"
+                            <label class="form-label small">Purchase Rate / Kg</label>
+                            <input type="number" step="0.01" name="purchase_rate_per_kg" class="form-control form-control-sm"
                                    value="{{ quotation.purchase_rate_per_kg }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">No. of Pouch / Kg</label>
-                            <input type="number" name="no_of_pouch_kg" class="form-control"
+                            <label class="form-label small">No. of Pouch / Kg</label>
+                            <input type="number" name="no_of_pouch_kg" class="form-control form-control-sm"
                                    value="{{ quotation.no_of_pouch_kg }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Per Pouch Rate</label>
-                            <input type="number" step="0.01" name="per_pouch_rate_basic" class="form-control"
+                            <label class="form-label small">Per Pouch Rate</label>
+                            <input type="number" step="0.01" name="per_pouch_rate_basic" class="form-control form-control-sm"
                                    value="{{ quotation.per_pouch_rate_basic }}">
                         </div>
                     </div>
 
-                    <!-- Charges -->
-                    <h6 class="border-bottom pb-2 mt-4 mb-3">Charges</h6>
+                    <!-- Section: Charges -->
+                    <h6 class="fw-bold border-bottom pb-2 mt-4 mb-3">Charges</h6>
                     <div class="row g-3">
                         <div class="col-md-3">
-                            <label class="form-label">Zipper Cost</label>
-                            <input type="number" step="0.01" name="zipper_cost" class="form-control"
+                            <label class="form-label small">Zipper Cost</label>
+                            <input type="number" step="0.01" name="zipper_cost" class="form-control form-control-sm"
                                    value="{{ quotation.zipper_cost }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Pouch Charge</label>
-                            <input type="number" step="0.01" name="pouch_charge" class="form-control"
+                            <label class="form-label small">Pouch Charge</label>
+                            <input type="number" step="0.01" name="pouch_charge" class="form-control form-control-sm"
                                    value="{{ quotation.pouch_charge }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">Freight</label>
-                            <input type="number" step="0.01" name="freight" class="form-control"
+                            <label class="form-label small">Freight</label>
+                            <input type="number" step="0.01" name="freight" class="form-control form-control-sm"
                                    value="{{ quotation.freight }}">
                         </div>
 
                         <div class="col-md-3">
-                            <label class="form-label">GST (%)</label>
-                            <input type="number" name="gst" class="form-control"
+                            <label class="form-label small">GST (%)</label>
+                            <input type="number" name="gst" class="form-control form-control-sm"
                                    value="{{ quotation.gst }}">
                         </div>
                     </div>
 
-                    <!-- Final Rate -->
-                    <div class="row g-3 mt-2">
+                    <!-- Section: Final Rate -->
+                    <div class="row g-3 mt-3">
                         <div class="col-md-4">
-                            <label class="form-label fw-bold">Final Rate</label>
+                            <label class="form-label fw-semibold small">Final Rate</label>
                             <input type="number" step="0.01" name="final_rare"
-                                   class="form-control"
+                                   class="form-control form-control-sm fw-semibold"
                                    value="{{ quotation.final_rare }}">
                         </div>
                     </div>
 
-                    <!-- Address & Notes -->
-                    <h6 class="border-bottom pb-2 mt-4 mb-3">Additional Info</h6>
+                    <!-- Section: Notes -->
+                    <h6 class="fw-bold border-bottom pb-2 mt-4 mb-3">Additional Info</h6>
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label">Delivery Address</label>
-                            <textarea name="delivery_address" class="form-control" rows="2">{{ quotation.delivery_address }}</textarea>
+                            <label class="form-label small">Delivery Address</label>
+                            <textarea name="delivery_address" class="form-control form-control-sm" rows="2">{{ quotation.delivery_address }}</textarea>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Special Instruction</label>
-                            <textarea name="special_instruction" class="form-control" rows="2">{{ quotation.special_instruction }}</textarea>
+                            <label class="form-label small">Special Instruction</label>
+                            <textarea name="special_instruction" class="form-control form-control-sm" rows="2">{{ quotation.special_instruction }}</textarea>
                         </div>
 
                         <div class="col-md-12">
-                            <label class="form-label">Note</label>
-                            <textarea name="note" class="form-control" rows="2">{{ quotation.note }}</textarea>
+                            <label class="form-label small">Note</label>
+                            <textarea name="note" class="form-control form-control-sm" rows="2">{{ quotation.note }}</textarea>
                         </div>
                     </div>
 
                 </div>
 
-                <!-- Modal Footer -->
-                <div class="modal-footer">
-                    <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Reset</button>
-                    <button type="submit" class="btn btn-primary px-4   ">Update Quotation</button>
+                <!-- Footer -->
+                <div class="modal-footer py-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="reset" class="btn btn-sm btn-secondary">Reset</button>
+                    <button type="submit" class="btn btn-sm btn-primary px-4">Update</button>
                 </div>
+
             </form>
         </div>
     </div>

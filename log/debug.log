@@ -10854,3 +10854,8 @@ HINT:  You will need to rewrite or cast the expression.
 
 ERROR 2025-12-12 15:04:54,892 myapp login_page Invalid Username or Password views.py
 ERROR 2025-12-15 10:16:37,673 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-22 11:42:16,623 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-22 11:42:20,260 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-22 11:53:54,169 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-22 16:10:13,301 myapp login_page Invalid Username or Password views.py
+ERROR 2025-12-22 17:22:05,041 myapp login_page Invalid Username or Password views.py
