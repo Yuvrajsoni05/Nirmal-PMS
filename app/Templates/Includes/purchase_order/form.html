@@ -21,7 +21,7 @@
                                 <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="delivery_date"
                                 name="delivery_date"
-                                value="{{ quotation.delivery_date|date:'Y-m-d' }}"
+                                value="{{ quotation.delivery_date }}"
                                 required />
                         </div>
 
@@ -137,8 +137,8 @@
                                 <input type="number" class="form-control"
                                     id="purchase_rate_per_kg" name="purchase_rate_per_kg"
                                     required />
-                                <select class="form-select form-control" id="purchase_unit"
-                                    name="purchase_unit" required>
+                                <select class="form-select form-control" id="purchase_rate_unit"
+                                    name="purchase_rate_unit" required>
                                     <option value="">Select</option>
                                     {% for value, label in polyester_unit %}
                                         <option value="{{ value }}">{{ label }}</option>

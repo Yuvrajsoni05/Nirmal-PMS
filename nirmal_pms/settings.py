@@ -47,7 +47,7 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
   
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://957b6503b8f2.ngrok-free.app"
+    "https://4c93b5447e13.ngrok-free.app"
 ]
 
 

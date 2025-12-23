@@ -15,6 +15,7 @@ from django.contrib.auth.views import (PasswordResetConfirmView,PasswordResetDon
 
 from django.contrib.sessions.models import Session
 # mail
+
 from django.core.mail import EmailMultiAlternatives
 from django.core.paginator import Paginator
 from django.db import utils
@@ -363,8 +364,8 @@ def dashboard_page(request):
         page_obj = paginator.get_page(page_number)
         
         total_job = job_details.count()
-        for i in job_details:
-            print(i)
+        # for i in job_details:
+        #     print(i)
         party_names = Party.objects.values("party_name").distinct()
         job_names = Job_detail.objects.values("job_name").distinct()
         count_of_company = Party.objects.all().order_by("party_name").count()
@@ -1546,7 +1547,9 @@ def ProformaInvoiceCreate(request):
         party_name = request.POST.get("party_name", "").strip()
         party_contact = request.POST.get("party_contact", "").strip()
         party_email = request.POST.get("party_email", "").strip()
-        billing_address = request.POST.get("billing_address", "").strip()
+        billing_address = request.POST.get("billing_address_select", "").strip()
+        new_billing_address = request.POST.get("new_billing_address", "").strip()
+   
         billing_state_name = request.POST.get("billing_state_name", "").strip()
         billing_gstin_no = request.POST.get("billing_gstin_no", "").strip()
         terms = request.POST.get("terms", "").strip()
@@ -1566,7 +1569,8 @@ def ProformaInvoiceCreate(request):
         taxable_value = request.POST.get("taxable_value")
         invoice_status = request.POST.get("invoice_status")
 
-        
+        if billing_address == "" or new_billing_address != "":
+            billing_address = new_billing_address.strip()
         required_fields = {
             "invoice no": invoice_no,
             "invoice date": invoice_date,
@@ -1642,7 +1646,11 @@ def ProformaInvoiceCreate(request):
                 email=party_email
             ) 
 
-           
+            billing_address_obj, _ = PartyBillingAddress.objects.get_or_create(
+                party=party_details,
+                billing_address=billing_address
+                )
+                
             contact_obj, _ = PartyContact.objects.get_or_create(
                 party=party_details,
                 party_number=party_contact
@@ -1655,7 +1663,7 @@ def ProformaInvoiceCreate(request):
                 party_details=party_details,
                 party_email_used=email_obj,
                 party_contact_used=contact_obj,    
-                billing_address=billing_address,
+                
                 billing_state_name=billing_state_name,
                 billing_gstin_no=billing_gstin_no,  
                 terms_note=terms,
@@ -1665,6 +1673,7 @@ def ProformaInvoiceCreate(request):
                 gst_value=gst_value,
                 total_taxable_value=taxable_value,
                 invoice_status=invoice_status,
+                party_billing_address_used=billing_address_obj,
             )
 
            
@@ -1682,12 +1691,13 @@ def ProformaInvoiceCreate(request):
             return redirect("proforma_invoice_page")
         except Exception as e:
             messages.warning(request, "Something went Wrong")
+            print(e)
             return redirect("proforma_invoice_page")
 
     return redirect("proforma_invoice_page")
 
 
-@require_GET
+
 def ProformaInvoicePageAJAX(request):
     def safe_int(value, default=0):
         try:
@@ -1721,20 +1731,20 @@ def ProformaInvoicePageAJAX(request):
         taxable_value = sum(q * p for q, p in zip(quantities, prpc_prices))
         gst_amount = taxable_value * (gst / 100) if gst else 0
         total_amount = round(taxable_value + gst_amount, 2)
+        
         job = []  
-    
         billing_address = []
         party_contact_qs = []
         party_email_qs = []
         
         
-        
+        print(party_name)
     
         if party_name:
             
             jobs = utils.all_job_name_list(party_name)
             job = list(jobs)
-            
+            print(job)
             
             party_email_qs = list(Party.objects.filter(
                 party_name=party_name
@@ -1744,21 +1754,21 @@ def ProformaInvoicePageAJAX(request):
             party_contact_qs = list(Party.objects.filter(
                 party_name__iexact=party_name
             ).values("party_contacts__party_number").distinct())
-                    
-            billing_address_qs = ProformaInvoice.objects.filter(
-                party_details__party_name__iexact=party_name
-            ).values("billing_address").distinct()
+            print(party_contact_qs)
+      
+            billing_address = list(Party.objects.filter(
+                party_name__iexact=party_name,
+            ).values("party_billing_addresses__billing_address").distinct())
             
-            billing_address = (
-                billing_address_qs[0]["billing_address"] if billing_address_qs else ""
-            )
-            
+          
+        
+        print(billing_address)
         context = {
             "total_amount": total_amount,
             "job": job, 
             "contacts": party_contact_qs,
             "emails": party_email_qs,
-            "billing_address": billing_address,
+            "billing_addresses": billing_address,
             "taxable_value": taxable_value,
             "gst_amount": gst_amount,
         }
@@ -1960,7 +1970,7 @@ def view_quotations(request):
                         selected_values[field] = value
                         
             if 'send_quotation_mail' in request.POST:
-                print(selected_values)
+                # print(selected_values)
                 receiver_email = 'soniyuvraj9499@gmail.com'
                 template_name = "Mail/quotation_mail.html"
                 convert_to_html_content = render_to_string(
@@ -1979,7 +1989,7 @@ def view_quotations(request):
             elif "create_purchase_order" in request.POST:
                 quotation_id = request.POST.get("quotation_id")
                 quotation = PouchQuotation.objects.get(id=quotation_id)
-                print(selected_values)
+                # print(selected_values)
                 context = {
                     "selected_values": selected_values,  
                     "quotation": selected_values,
@@ -2007,7 +2017,7 @@ def quotation_page_ajax(request):
         party_name = request.GET.get('party_name')
         
         purchase_rate_per_kg = float(request.GET.get("purchase_rate_per_kg") or 0)
-        no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 1)
+        no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 0)
         unit = request.GET.get("purchase_rate_unit")
         per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
         zipper_cost =float(request.GET.get("zipper_cost") or 0)
@@ -2067,7 +2077,7 @@ def purchase_order(request):
             note = request.POST.get('note')
             pouch_charge = request.POST.get('pouch_charge')
             
-            
+            polyester_unit = request.POST.get('purchase_rate_unit')
             
             
             party_details, _ = Party.objects.get_or_create(
@@ -2088,6 +2098,7 @@ def purchase_order(request):
                 final_rare=final_rare,
                 minimum_quantity=minimum_quantity,
                 pouch_type=pouch_type,
+                polyester_unit=polyester_unit,
                 special_instruction=special_instruction,
                 delivery_address=delivery_address,
                 quantity_variate=quantity_variation,

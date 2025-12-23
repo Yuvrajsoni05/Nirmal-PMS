@@ -67,7 +67,7 @@
                         <!-- Address -->
                         <div class="col-md-12">
                             <label class="form-label fw-semibold">Billing Address</label>
-                            <textarea class="form-control" name="billing_address" rows="2">{{ proforma.billing_address }}</textarea>
+                            <textarea class="form-control" name="billing_address" rows="2">{{ proforma.party_billing_address_used.billing_address  }}</textarea>
                         </div>
 
                         <!-- Payment Mode -->
@@ -201,7 +201,7 @@
                             data-party_contact="{{ proforma.party_contact_used.party_number }}"
                             data-billing_gstin_no="{{ proforma.billing_gstin_no }}"
                             data-billing_state_name="{{ proforma.billing_state_name }}"
-                            data-billing_address="{{ proforma.billing_address|escapejs }}"
+                            data-billing_address="{{ proforma.party_billing_address_used.billing_address|escapejs }}"
                             data-mode_payment="{{ proforma.mode_payment }}"
                             data-total_taxable_value="{{ proforma.total_taxable_value }}"
                             data-gst="{{ proforma.gst|join:', ' }}"

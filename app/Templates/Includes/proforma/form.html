@@ -54,11 +54,7 @@
                                 <label for="party_email" class="form-label fw-semibold">Party Email</label>
                                 <select class="form-control form-select" id="party_email" name="party_email">
                                     <option value="" selected disabled>Select Party Email</option>
-                                    {% for company in company_list %}
-                                        {% if company.party_email %}
-                                            <option value="{{ company.party_email }}">{{ company.party_email }}</option>
-                                        {% endif %}
-                                    {% endfor %}
+                                    
                                     <option value="others">Other</option>
                                 </select>
                                 <input type="email" id="new_party_email" name="new_party_email" class="form-control mt-2" placeholder="Enter Party email" style="display: none;">
@@ -66,10 +62,36 @@
                             </div>
 
                             <div class="col-12">
-                                <label for="billing_address" class="form-label fw-semibold">Billing Address</label>
-                                <textarea class="form-control" id="billing_address" name="billing_address" rows="2" placeholder="Street, City, State, ZIP"></textarea>
-                                <span class="invalid-feedback" id="billing_address_error">This field is required</span>
+                                <label class="form-label fw-semibold">Billing Address</label>
+
+                                <select
+                                    class="form-select"
+                                    id="billing_address_select"
+                                    name="billing_address_select"
+                                >
+                                    <option value="" selected disabled>
+                                        Select Party Billing Address
+                                    </option>
+
+                                        
+                                    <option value="others">Other</option>
+                                </select>
+
+                                <!-- New Billing Address -->
+                                <textarea
+                                    class="form-control mt-2"
+                                    id="new_billing_address"
+                                    name="new_billing_address"
+                                    rows="2"
+                                    placeholder="Enter new billing address"
+                                    style="display:none;"
+                                ></textarea>
+
+                                <span class="invalid-feedback" id="billing_address_error">
+                                    This field is required
+                                </span>
                             </div>
+
 
                             <div class="col-md-4">
                                 <label for="billing_state_name" class="form-label fw-semibold">Billing State Name</label>

@@ -167,7 +167,8 @@
                                             <td>{{ proforma.party_details.party_name }}</td>
                                             <td>{{ proforma.party_contact_used.party_number  }}</td>
                                             <td>{{ proforma.party_email_used.email }}</td>
-                                            <td data-bs-toggle="modal" data-bs-target="#billing_addressModel{{proforma.id}}" title="{{proforma.id}}"  class="text-truncate">{{ proforma.billing_address|truncatechars:30 }}</td>
+                                            <td data-bs-toggle="modal" data-bs-target="#billing_addressModel{{proforma.id}}" title="{{proforma.id}}"  class="text-truncate">{{  proforma.party_billing_address_used.billing_address |truncatechars:30 }}</td>
+                                            <td>{{ proforma.billing_gstin_no }}</td>
                                             <td>{{ proforma.billing_gstin_no }}</td>
                                             <td>{{ proforma.billing_state_name }}</td>
                                             <td>

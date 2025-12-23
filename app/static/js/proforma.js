@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const PartyEmailInput = document.getElementById("party_email");
     const PartyEmailError = document.getElementById("party_email_error");
 
-    const billingAddressInput = document.getElementById("billing_address");
+    const billingAddressInput = document.getElementById("billing_address_select");
     const billingAddressError = document.getElementById(
         "billing_address_error"
     );

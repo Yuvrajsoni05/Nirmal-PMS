@@ -161,6 +161,41 @@ $(document).ready(function () {
                     }
 
                     if (
+                        console.log(response.billing_addresses),
+                        (response.billing_addresses && response.billing_addresses.length) ||
+                            changedField === "party_name"
+                        ) {
+                            var $select = $("#billing_address_select");
+                            var previous = $select.val();
+
+                            $select
+                                .empty()
+                                .append(
+                                    '<option value="" selected disabled>Select Billing Address</option>'
+                                );
+
+                            if (response.billing_addresses && response.billing_addresses.length) {
+                                $.each(response.billing_addresses, function (index, billing) {
+                                    var isSelected =
+                                        previous == billing.id ? "selected" : "";
+
+                                    $select.append(
+                                        '<option value="' +
+                                            billing.id +
+                                            '" ' +
+                                            isSelected +
+                                            ">" +
+                                            billing.party_billing_addresses__billing_address +
+                                            "</option>"
+                                    );
+                                });
+                            }
+
+                            $select.append('<option value="others">Other</option>');
+                        }
+
+
+                    if (
                         (response.job && response.job.length) ||
                         changedField === "party_name"
                     ) {
@@ -186,6 +221,8 @@ $(document).ready(function () {
                             $select.append(
                                 '<option value="others">Other</option>'
                             );
+                            
+
 
                             if (previous) {
                                 if (
@@ -274,6 +311,19 @@ $(document).ready(function () {
             $("#party_email option.custom-email").remove();
         }
     });
+
+
+
+    $(document).on("change", "#billing_address_select", function () {
+        const val = $(this).val();
+
+        if (val === "others") {
+            $("#new_billing_address").show().focus();
+        } else {
+            $("#new_billing_address").hide().val("");
+    }
+    });
+
 
     $(document).on("input", "#new_party_email", function () {
         const email = $(this).val().trim();
