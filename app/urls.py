@@ -3,6 +3,13 @@ from django.contrib.auth import views as auth_views
 from django.urls import include, path
 
 from .views import *
+from .Views.cdr import *
+from .Views.quotation import *
+from .Views.proforma import *
+from .Views.job_data import *
+from .Views.purchase_order import *
+
+
 
 urlpatterns = [
     path("", login_page, name="login_page"),
@@ -10,7 +17,6 @@ urlpatterns = [
     path("logout", user_logout, name="logout"),
     path("edit_user", edit_user_page, name="edit_user_page"),
     path("dashboard/", dashboard_page, name="dashboard_page"),
-    
     path("job_entry/", job_entry, name="job_entry"),
     path("delete_data/<uuid:delete_id>/", delete_data, name="delete_data"),
     path("update_data/<uuid:update_id>/", update_job, name="update_job"),
@@ -20,7 +26,7 @@ urlpatterns = [
     path("update_password", user_password, name="update_password"),
     path("delete_user/<uuid:user_id>/", delete_user, name="delete_user"),
     path("update_user/<uuid:user_id>/", update_user, name="update_user"),
-    path("cdr_page", cdr_page, name="company_add_page"),
+    path("cdr_page", cdr_page, name="cdr_page"),
     path("cdr_upload", cdr_add, name="new_cdr_upload"),
     path("delete_cdr/<int:delete_id>/", cdr_delete, name="delete_cdr"),
     path("update_cdr/<int:update_id>/", cdr_update, name="update_cdr"),
@@ -65,9 +71,4 @@ urlpatterns = [
     path('view_purchase_order',view_purchase_order,name='view_purchase_order'),
     path('purchase_order_ajax',purchase_order_ajax,name='purchase_order_ajax'),
     
-
-    
-    
-    
-
 ]
