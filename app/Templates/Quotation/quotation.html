@@ -20,6 +20,46 @@
     const pouchRateAjaxUrl = "{% url 'quotation_page_ajax' %}";
 </script>
 
+<script>
+document.addEventListener("DOMContentLoaded", function(){
 
+    const container = document.getElementById("jobs-container");
+    const addBtn = document.getElementById("add-job");
+
+    // add job
+    addBtn.addEventListener("click", () => {
+        let job = document.querySelector(".job-block");
+        let clone = job.cloneNode(true);
+
+        clone.querySelectorAll("input, textarea, select").forEach(el => el.value = "");
+        container.appendChild(clone);
+    });
+
+    // remove job
+    document.addEventListener("click", e => {
+        if(e.target.classList.contains("remove-job")){
+            let jobs = document.querySelectorAll(".job-block");
+            if(jobs.length === 1){
+                alert("At least one job is required");
+                return;
+            }
+            e.target.closest(".job-block").remove();
+        }
+    });
+
+    // auto calc per pouch rate
+    document.addEventListener("input", e => {
+        let block = e.target.closest(".job-block");
+        if(!block) return;
+
+        let rate = block.querySelector(".prkg").value || 0;
+        let nopkg = block.querySelector(".nopkg").value || 0;
+        let output = block.querySelector(".per_pouch_basic");
+
+        output.value = (rate && nopkg) ? (rate / nopkg).toFixed(2) : "";
+    });
+
+});
+</script>
 
 {% endblock script %}

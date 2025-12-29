@@ -24,7 +24,8 @@ from ..models import (
     PurchaseOrder,
     ProformaJob,
     ProformaInvoice,
-    PartyBillingAddress
+    PartyBillingAddress,
+    PouchQuotationJob,
 )
 
 from ..decorators import custom_login_required

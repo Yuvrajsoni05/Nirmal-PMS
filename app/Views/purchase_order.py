@@ -99,17 +99,18 @@ def purchase_order_ajax(request):
         pouch_charge = float(request.GET.get("pouch_charge") or 0)
         jobs = list(utils.all_job_name_list(party_name))
         total_ppb = 0
+       
         if purchase_rate_per_kg:   
-            if unit == "polyester_printed_bug":
+            if unit == "polyester_printed_bag":
                 total_ppb = purchase_rate_per_kg / no_of_pouch_kg
             elif unit == "polyester_printed_roll":
                 total_ppb = purchase_rate_per_kg
 
         total_ppb = round(total_ppb, 2)
-    
-    
+
+
         final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
-    
+        
         minimum_quantity  = no_of_pouch_kg * 500
         return JsonResponse({
             "per_pouch_rate_basic": total_ppb,

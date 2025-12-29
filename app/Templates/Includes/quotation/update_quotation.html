@@ -1,170 +1,369 @@
-<div class="modal fade" id="editQuotationModal{{ quotation.id }}" data-bs-backdrop="static" tabindex="-1">
-    <div class="modal-dialog modal-xl  modal-dialog-scrollable">
+<div
+    class="modal fade"
+    id="editQuotationModal{{ quotation.id }}"
+    data-bs-backdrop="static"
+    tabindex="-1"
+>
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content border-0 shadow-sm">
-
             <form method="POST">
                 {% csrf_token %}
-                <input type="hidden" name="edit_quotation" value="{{ quotation.id }}">
+                <input
+                    type="hidden"
+                    name="quotation_id"
+                    value="{{ quotation.id }}"
+                />
+                <input
+                    type="hidden"
+                    name="job_count"
+                    value="{{ quotation.pouch_quotation_jobs.count }}"
+                />
 
-                <!-- Header -->
-                <div class="modal-header py-2">
-                    <h5 class="modal-title fw-semibold">Update Quotation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
+                <div class="modal-body">
+                    <!-- ===================== MAIN DETAILS (COMMON) ===================== -->
+                    <h6 class="fw-bold text-primary">Purchase Order Details</h6>
 
-                <!-- Body -->
-                <div class="modal-body p-4" style="max-height:70vh; overflow-y:auto;">
+                    <div class="border rounded p-3 mb-3">
+                        <div class="row g-3">
+                            <!-- Delivery Date -->
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Delivery Date</label
+                                    >
+                                </div>
+                                <input
+                                    type="date"
+                                    class="form-control"
+                                    name="delivery_date"
+                                    value="{{ quotation.delivery_date|date:'Y-m-d' }}"
+                                />
+                            </div>
 
-                    <!-- Section: Basic Details -->
-                    <h6 class="fw-bold border-bottom pb-2 mb-3">Basic Details</h6>
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label small">Delivery Date</label>
-                            <input type="date" name="delivery_date" class="form-control form-control-sm"
-                                   value="{{ quotation.delivery_date|date:'Y-m-d' }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label small">Party Name</label>
-                            <input type="text" class="form-control form-control-sm" readonly
-                                   value="{{ quotation.party_details.party_name }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label small">Job Name</label>
-                            <input type="text" name="job_name" class="form-control form-control-sm"
-                                   value="{{ quotation.job_name }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label small">Pouch Type</label>
-                            <input type="text" name="pouch_type" class="form-control form-control-sm"
-                                   value="{{ quotation.pouch_type }}">
-                        </div>
-                    </div>
-
-                    <!-- Section: Pouch Details -->
-                    <h6 class="fw-bold border-bottom pb-2 mt-4 mb-3">Pouch Details</h6>
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label small">Open Size</label>
-                            <input type="text" name="pouch_open_size" class="form-control form-control-sm"
-                                   value="{{ quotation.pouch_open_size }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label small">Combination</label>
-                            <input type="text" name="pouch_combination" class="form-control form-control-sm"
-                                   value="{{ quotation.pouch_combination }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label small">Minimum Quantity</label>
-                            <input type="number" name="minimum_quantity" class="form-control form-control-sm"
-                                   value="{{ quotation.minimum_quantity }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label small">Quantity Variate</label>
-                            <input type="text" name="quantity_variate" class="form-control form-control-sm"
-                                   value="{{ quotation.quantity_variate }}">
+                            <!-- Party -->
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Party</label
+                                    >
+                                </div>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    value="{{ quotation.party_details.party_name }}"
+                                    disabled
+                                />
+                                <input
+                                    type="hidden"
+                                    name="party_details"
+                                    value="{{ quotation.party_details.id }}"
+                                />
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Section: Quantity & Rate -->
-                    <h6 class="fw-bold border-bottom pb-2 mt-4 mb-3">Quantity & Rate</h6>
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label small">Quantity</label>
-                            <input type="number" name="quantity" class="form-control form-control-sm"
-                                   value="{{ quotation.quantity }}">
+                    <!-- ===================== JOB DETAILS (MULTIPLE) ===================== -->
+                    <h6 class="fw-bold text-primary">Job Details</h6>
+
+                    {% for job in quotation.pouch_quotation_jobs.all %}
+                    <div class="border rounded p-3 mb-3">
+                        <h6 class="fw-bold text-secondary">
+                            Job {{ forloop.counter }}
+                        </h6>
+
+                        <input
+                            type="hidden"
+                            name="job_id"
+                            value="{{ job.id }}"
+                        />
+
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Job Name</label
+                                    >
+                                </div>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="job_name"
+                                    value="{{ job.job_name }}"readonly
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Pouch Size (Open)</label
+                                    >
+                                </div>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="pouch_open_size"
+                                    value="{{ job.pouch_open_size }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Pouch Combination</label
+                                    >
+                                </div>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="pouch_combination"
+                                    value="{{ job.pouch_combination }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Quantity</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="quantity"
+                                    value="{{ job.quantity }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Purchase Rate / KG (₹)</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="purchase_rate_per_kg"
+                                    value="{{ job.purchase_rate_per_kg }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >No. of Pouch / KG</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="no_of_pouch_kg"
+                                    value="{{ job.no_of_pouch_kg }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Per Pouch Rate</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="per_pouch_rate_basic"
+                                    value="{{ job.per_pouch_rate_basic }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Zipper Cost</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="zipper_cost"
+                                    value="{{ job.zipper_cost }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Pouch Charge</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="pouch_charge"
+                                    value="{{ job.pouch_charge }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Final Rate</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="final_rare"
+                                    value="{{ job.final_rare }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Minimum Quantity</label
+                                    >
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        class="form-control"
+                                        name="minimum_quantity"
+                                        value="{{ job.minimum_quantity }}"
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Pouch Type</label
+                                    >
+                                </div>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="pouch_type"
+                                    value="{{ job.pouch_type }}"
+                                />
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Delivery Address</label
+                                    >
+                                </div>
+                                <textarea class="form-control text-start"
+                                    rows="5"
+                                    name="delivery_address">{{ job.delivery_address }}</textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Special Instruction</label
+                                    >
+                                </div>
+                                <div class="col-12">
+                                    <textarea
+                                        class="form-control text-start"
+                                        rows="5"
+                                        name="special_instruction"
+                                    >
+                                    {{ job.special_instruction }}</textarea>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <label class="form-label small">Purchase Rate / Kg</label>
-                            <input type="number" step="0.01" name="purchase_rate_per_kg" class="form-control form-control-sm"
-                                   value="{{ quotation.purchase_rate_per_kg }}">
-                        </div>
+                    </div>
+                    {% endfor %}
 
-                        <div class="col-md-3">
-                            <label class="form-label small">No. of Pouch / Kg</label>
-                            <input type="number" name="no_of_pouch_kg" class="form-control form-control-sm"
-                                   value="{{ quotation.no_of_pouch_kg }}">
-                        </div>
+                  
+                    <h6 class="fw-bold text-primary">Other Terms</h6>
 
-                        <div class="col-md-3">
-                            <label class="form-label small">Per Pouch Rate</label>
-                            <input type="number" step="0.01" name="per_pouch_rate_basic" class="form-control form-control-sm"
-                                   value="{{ quotation.per_pouch_rate_basic }}">
+                    <div class="border rounded p-3 mb-3">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Quantity Variation (%)</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="quantity_variate"
+                                    value="{{ quotation.quantity_variate }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Freight (₹)</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    step="0.01"
+                                    class="form-control"
+                                    name="freight"
+                                    value="{{ quotation.freight }}"
+                                />
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >GST (%)</label
+                                    >
+                                </div>
+                                <input
+                                    type="number"
+                                    class="form-control"
+                                    name="gst"
+                                    value="{{ quotation.gst }}"
+                                />
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="form-check">
+                                    <label class="form-check-label fw-semibold"
+                                        >Note</label
+                                    >
+                                </div>
+                                <textarea class="form-control" name="note">
+                                    {{ quotation.note }}</textarea
+                                >
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Section: Charges -->
-                    <h6 class="fw-bold border-bottom pb-2 mt-4 mb-3">Charges</h6>
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <label class="form-label small">Zipper Cost</label>
-                            <input type="number" step="0.01" name="zipper_cost" class="form-control form-control-sm"
-                                   value="{{ quotation.zipper_cost }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label small">Pouch Charge</label>
-                            <input type="number" step="0.01" name="pouch_charge" class="form-control form-control-sm"
-                                   value="{{ quotation.pouch_charge }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label small">Freight</label>
-                            <input type="number" step="0.01" name="freight" class="form-control form-control-sm"
-                                   value="{{ quotation.freight }}">
-                        </div>
-
-                        <div class="col-md-3">
-                            <label class="form-label small">GST (%)</label>
-                            <input type="number" name="gst" class="form-control form-control-sm"
-                                   value="{{ quotation.gst }}">
-                        </div>
-                    </div>
-
-                    <!-- Section: Final Rate -->
-                    <div class="row g-3 mt-3">
-                        <div class="col-md-4">
-                            <label class="form-label fw-semibold small">Final Rate</label>
-                            <input type="number" step="0.01" name="final_rare"
-                                   class="form-control form-control-sm fw-semibold"
-                                   value="{{ quotation.final_rare }}">
-                        </div>
-                    </div>
-
-                    <!-- Section: Notes -->
-                    <h6 class="fw-bold border-bottom pb-2 mt-4 mb-3">Additional Info</h6>
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label class="form-label small">Delivery Address</label>
-                            <textarea name="delivery_address" class="form-control form-control-sm" rows="2">{{ quotation.delivery_address }}</textarea>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label small">Special Instruction</label>
-                            <textarea name="special_instruction" class="form-control form-control-sm" rows="2">{{ quotation.special_instruction }}</textarea>
-                        </div>
-
-                        <div class="col-md-12">
-                            <label class="form-label small">Note</label>
-                            <textarea name="note" class="form-control form-control-sm" rows="2">{{ quotation.note }}</textarea>
-                        </div>
-                    </div>
-
                 </div>
 
                 <!-- Footer -->
                 <div class="modal-footer py-2">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="reset" class="btn btn-sm btn-secondary">Reset</button>
-                    <button type="submit" class="btn btn-sm btn-primary px-4">Update</button>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-secondary"
+                        data-bs-dismiss="modal"
+                    >
+                        Close
+                    </button>
+                    <button type="reset" class="btn btn-sm btn-secondary">
+                        Reset
+                    </button>
+                    <button type="submit" name="edit_quotation" class="btn btn-sm btn-primary px-4">
+                        Update
+                    </button>
                 </div>
-
             </form>
         </div>
     </div>

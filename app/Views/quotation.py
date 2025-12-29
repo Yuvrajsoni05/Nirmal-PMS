@@ -8,57 +8,61 @@ def quotation_page(request):
     
     if request.method == 'POST':
         if 'save_quotation' in request.POST:
-            delivery_date =  request.POST.get('delivery_date')
+            delivery_date = request.POST.get('delivery_date')
             party_name = request.POST.get('party_name')
-            job_name = request.POST.get('job_name')
-            pouch_open_size = request.POST.get('pouch_size')
-            pouch_combination = request.POST.get('pouch_combination')
-            quantity = request.POST.get('quantity')
-            purchase_rate_per_kg = request.POST.get('purchase_rate_per_kg')
-            no_of_pouch_kg = request.POST.get('no_of_pouch_kg')
-            per_pouch_rate_basic = request.POST.get('per_pouch_rate_basic')
-            zipper_cost = request.POST.get('zipper_cost')
-            final_rare = request.POST.get('final_rare')
-            minimum_quantity = request.POST.get('minimum_quantity')
-            pouch_type = request.POST.get('pouch_type')
-            special_instruction = request.POST.get('special_instruction')
-            delivery_address = request.POST.get('delivery_address')
+            new_party_name = request.POST.get('new_party_name') or None
             quantity_variation = request.POST.get('quantity_variation')
             freight = request.POST.get('freight')
             gst = request.POST.get('gst')
             note = request.POST.get('note')
-            pouch_charge = request.POST.get('pouch_charge')
-            new_party_name = request.POST.get('new_party_name')
-            new_job_name = request.POST.get('new_job_name')
+            job_names = request.POST.getlist('job_name[]')
+
+            pouch_open_size = request.POST.getlist('pouch_size[]')
+            pouch_combination = request.POST.getlist('pouch_combination[]')
+
+            quantities = request.POST.getlist('quantity[]')
+            purchase_rate_per_kg = request.POST.getlist('purchase_rate_per_kg[]')
+            no_of_pouch_kg = request.POST.getlist('no_of_pouch_kg[]')
+            per_pouch_rate_basic = request.POST.getlist('per_pouch_rate_basic[]')
+            zipper_costs = request.POST.getlist('zipper_cost[]')
+            final_rates = request.POST.getlist('final_rare[]')
+            min_quantities = request.POST.getlist('minimum_quantity[]')
+            pouch_types = request.POST.getlist('pouch_type[]')
+            special_instructions = request.POST.getlist('special_instruction[]')
+            delivery_addresses = request.POST.getlist('delivery_address[]')
+            pouch_charges = request.POST.getlist('pouch_charge[]')
+           
+            
+            
+           
             
             
             if new_party_name:
                 party_details = new_party_name
                 
-            if new_job_name:
-                job_name = new_job_name
+          
             
             
             party_details, _ = Party.objects.get_or_create(
                     party_name=party_name.strip() if party_name else None
                 )
-
+            
             required_fields = {
                 "delivery_date":delivery_date,
                     "party_name":party_name,
-                    "job_name":job_name,
+                    "job_name":job_names,
                     "pouch_open_size":pouch_open_size,
                     "pouch_combination":pouch_combination,
-                    "quantity":quantity,
+                    "quantity":quantities,
                     "purchase_rate_per_kg":purchase_rate_per_kg,
                     "no_of_pouch_kg":no_of_pouch_kg,
                     "per_pouch_rate_basic":per_pouch_rate_basic,
-                    "zipper_cost":zipper_cost,
-                    "final_rare":final_rare,
-                    "minimum_quantity":minimum_quantity,
-                    "pouch_type":pouch_type,
-                    "special_instruction":special_instruction,
-                    "delivery_address":delivery_address,
+                    "zipper_cost":zipper_costs,
+                    "final_rare":final_rates,
+                    "minimum_quantity":min_quantities,
+                    "pouch_type":pouch_types,
+                    "special_instruction":special_instructions,
+                    "delivery_address":delivery_addresses,
                     "quantity_variation":quantity_variation,
                     
                                 
@@ -70,32 +74,33 @@ def quotation_page(request):
                     )
                     return redirect("quotation_page")
             
-            
-            
-
-            pq = PouchQuotation.objects.create(
+            quotation = PouchQuotation.objects.create(
                 delivery_date=delivery_date,
                 party_details=party_details,
-                job_name=job_name,
-                pouch_open_size=pouch_open_size,
-                pouch_combination=pouch_combination,
-                quantity=quantity,
-                pouch_charge=pouch_charge,
-                purchase_rate_per_kg=purchase_rate_per_kg,
-                no_of_pouch_kg=no_of_pouch_kg,
-                per_pouch_rate_basic=per_pouch_rate_basic,
-                zipper_cost=zipper_cost,
-                final_rare=final_rare,
-                minimum_quantity=minimum_quantity,
-                pouch_type=pouch_type,
-                special_instruction=special_instruction,
-                delivery_address=delivery_address,
                 quantity_variate=quantity_variation,
                 freight=freight,
                 gst=gst,
-                note=note,    
+                note=note,
             )
-            pq.save()
+            for i in range(len(job_names)):
+                PouchQuotationJob.objects.create(
+                    quotation=quotation,
+                    job_name=job_names[i],
+                    pouch_open_size=pouch_open_size[i],
+                    pouch_combination=pouch_combination[i],
+                    quantity=quantities[i],
+                    purchase_rate_per_kg=purchase_rate_per_kg[i],
+                    no_of_pouch_kg=no_of_pouch_kg[i],
+                    per_pouch_rate_basic=per_pouch_rate_basic[i],
+                    zipper_cost=zipper_costs[i],
+                    pouch_charge=pouch_charges[i],
+                    final_rare=final_rates[i],
+                    minimum_quantity=min_quantities[i],
+                    pouch_type=pouch_types[i],
+                    special_instruction=special_instructions[i],
+                    delivery_address=delivery_addresses[i],
+                )
+            
             messages.success(request,"Quotation created successfully ")
             return redirect('quotation_page')
             
@@ -119,73 +124,105 @@ def view_quotations(request):
             return redirect('view_quotations')
 
         elif 'edit_quotation' in request.POST:
-            
-            q_id = request.POST.get('edit_quotation')
 
+            q_id = request.POST.get('quotation_id')
             edit_quotation = get_object_or_404(PouchQuotation, id=q_id)
 
+            # ---- Update Parent Quotation ----
             edit_quotation.delivery_date = request.POST.get("delivery_date")
-            edit_quotation.job_name = request.POST.get("job_name")
-            edit_quotation.pouch_open_size = request.POST.get("pouch_open_size")
-            edit_quotation.pouch_combination = request.POST.get("pouch_combination")
-            edit_quotation.quantity = request.POST.get("quantity")
-            edit_quotation.purchase_rate_per_kg = request.POST.get("purchase_rate_per_kg")
-            edit_quotation.no_of_pouch_kg = request.POST.get("no_of_pouch_kg")
-            edit_quotation.per_pouch_rate_basic = request.POST.get("per_pouch_rate_basic")
-            edit_quotation.zipper_cost = request.POST.get("zipper_cost")
-            edit_quotation.pouch_charge = request.POST.get("pouch_charge")
-            edit_quotation.final_rare = request.POST.get("final_rare")
-            edit_quotation.minimum_quantity = request.POST.get("minimum_quantity")
-            edit_quotation.pouch_type = request.POST.get("pouch_type")
             edit_quotation.quantity_variate = request.POST.get("quantity_variate")
             edit_quotation.freight = request.POST.get("freight")
             edit_quotation.gst = request.POST.get("gst")
-            edit_quotation.delivery_address = request.POST.get("delivery_address")
-            edit_quotation.special_instruction = request.POST.get("special_instruction")
-            edit_quotation.note = request.POST.get("note")
             edit_quotation.save()
-            messages.success(request,'Quotation Updated Successfully')
-            return redirect('view_quotations')           
+
+            # ---- Get Lists of Job Fields ----
+            job_ids = request.POST.getlist("job_id")
+
+            pouch_open_sizes = request.POST.getlist("pouch_open_size")
+            pouch_combinations = request.POST.getlist("pouch_combination")
+            quantities = request.POST.getlist("quantity")
+            purchase_rates = request.POST.getlist("purchase_rate_per_kg")
+            no_of_pouch_kgs = request.POST.getlist("no_of_pouch_kg")
+            per_pouch_rates = request.POST.getlist("per_pouch_rate_basic")
+            zipper_costs = request.POST.getlist("zipper_cost")
+            pouch_charges = request.POST.getlist("pouch_charge")
+            final_rates = request.POST.getlist("final_rare")
+            minimum_quantities = request.POST.getlist("minimum_quantity")
+            pouch_types = request.POST.getlist("pouch_type")
+            special_instructions = request.POST.getlist("special_instruction")
+            delivery_addresses = request.POST.getlist("delivery_address")
+
+     
+            for i in range(len(job_ids)):
+
+                job = get_object_or_404(
+                    PouchQuotationJob,
+                    id=job_ids[i],
+                    quotation=edit_quotation
+                )
+
+                job.pouch_open_size = pouch_open_sizes[i]
+                job.pouch_combination = pouch_combinations[i]
+                job.quantity = quantities[i]
+                job.purchase_rate_per_kg = purchase_rates[i]
+                job.no_of_pouch_kg = no_of_pouch_kgs[i]
+                job.per_pouch_rate_basic = per_pouch_rates[i]
+                job.zipper_cost = zipper_costs[i]
+                job.pouch_charge = pouch_charges[i]
+                job.final_rare = final_rates[i]
+                job.minimum_quantity = minimum_quantities[i]
+                job.pouch_type = pouch_types[i]
+                job.special_instruction = special_instructions[i]
+                job.delivery_address = delivery_addresses[i]
+
+                job.save()
+
+            messages.success(request, 'Quotation Updated Successfully')
+            return redirect('view_quotations')
             
         elif 'send_quotation_mail' in request.POST or 'create_purchase_order' in request.POST:
             if request.method == 'POST':
                 selected_values = {}
                 update_map = {
-                    "chk_delivery_date": "delivery_date",
-                    "chk_party_details": "party_details",
-                    "chk_job_name": "job_name",
-                    "chk_pouch_open_size": "pouch_open_size",
-                    "chk_pouch_combination": "pouch_combination",
-                    "chk_quantity": "quantity",
-                    "chk_purchase_rate_per_kg": "purchase_rate_per_kg",
-                    "chk_no_of_pouch_kg": "no_of_pouch_kg",
-                    "chk_per_pouch_rate_basic": "per_pouch_rate_basic",
-                    "chk_zipper_cost": "zipper_cost",
-                    "chk_pouch_charge": "pouch_charge",
-                    "chk_final_rare": "final_rare",
-                    "chk_minimum_quantity": "minimum_quantity",
-                    "chk_pouch_type": "pouch_type",
-                    "chk_quantity_variate": "quantity_variate",
-                    "chk_freight": "freight",
-                    "chk_gst": "gst",
-                    "chk_delivery_address": "delivery_address",
-                    "chk_special_instruction": "special_instruction",
-                    "chk_note": "note",
+                    "check_delivery_date": "delivery_date",
+                    "check_party_details": "party_details",
+                    "check_job_name": "job_name",
+                    "check_pouch_open_size": "pouch_open_size",
+                    "check_pouch_combination": "pouch_combination",
+                    "check_quantity": "quantity",
+                    "check_purchase_rate_per_kg": "purchase_rate_per_kg",
+                    "check_no_of_pouch_kg": "no_of_pouch_kg",
+                    "check_per_pouch_rate_basic": "per_pouch_rate_basic",
+                    "check_zipper_cost": "zipper_cost",
+                    "check_pouch_charge": "pouch_charge",
+                    "check_final_rate": "final_rate",
+                    "check_minimum_quantity": "minimum_quantity",
+                    "check_pouch_type": "pouch_type",
+                    "check_quantity_variate": "quantity_variate",
+                    "check_freight": "freight",
+                    "check_gst": "gst",
+                    "check_delivery_address": "delivery_address",
+                    "check_special_instruction": "special_instruction",
+                    "check_note": "note",
                 }
+
               
+                selected_values = {}
+
                 for checkbox, field in update_map.items():
-                   
                     if request.POST.get(checkbox):
-                        
                         value = request.POST.get(field)
-                      
+
                         if value in [None, "", "null"]:
                             continue
-                        
+
                         if field == "party_details":
                             value = Party.objects.get(id=value)
 
                         selected_values[field] = value
+
+                print(selected_values)
+
                         
             if 'send_quotation_mail' in request.POST:
                 # print(selected_values)
@@ -247,7 +284,7 @@ def quotation_page_ajax(request):
         total_ppb = 0
         
         if purchase_rate_per_kg:   
-            if unit == "polyester_printed_bug":
+            if unit == "polyester_printed_bag":
                 total_ppb = purchase_rate_per_kg / no_of_pouch_kg
             elif unit == "polyester_printed_roll":
                 total_ppb = purchase_rate_per_kg
@@ -258,6 +295,7 @@ def quotation_page_ajax(request):
         final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
         
         minimum_quantity  = no_of_pouch_kg * 500
+        print(jobs)
         return JsonResponse({
             "per_pouch_rate_basic": total_ppb,
             "final_rare": final_rare,

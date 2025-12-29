@@ -310,9 +310,9 @@ class PouchQuotation(models.Model):
         blank=True,
         related_name="quotations_party_name"
     )
-    job_name = models.CharField(max_length=200)
-    pouch_open_size = models.CharField(max_length=200)
-    pouch_combination = models.CharField(max_length=200)
+    job_name = models.CharField(max_length=200,blank=True, null=True)
+    pouch_open_size = models.CharField(max_length=200 ,blank=True, null=True)
+    pouch_combination = models.CharField(max_length=200 ,blank=True, null=True)
     purchase_rate_per_kg = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
     no_of_pouch_kg = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
     per_pouch_rate_basic = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
@@ -336,9 +336,22 @@ class PouchQuotation(models.Model):
         return f"{self.job_name} - {self.party_details}"
     
     
-    
-
-
+class PouchQuotationJob(models.Model):
+    quotation = models.ForeignKey(PouchQuotation,on_delete=models.CASCADE,related_name="pouch_quotation_jobs")
+    job_name = models.CharField(max_length=200)
+    quantity = models.CharField(max_length=200)
+    purchase_rate_per_kg = models.CharField(max_length=200)
+    no_of_pouch_kg = models.CharField(max_length=200)
+    pouch_open_size = models.CharField(max_length=200)
+    delivery_address = models.TextField()
+    minimum_quantity = models.CharField(max_length=200)
+    final_rare = models.CharField(max_length=200)
+    per_pouch_rate_basic = models.CharField(max_length=200)
+    zipper_cost = models.CharField(max_length=200)
+    pouch_combination = models.CharField(max_length=200)
+    pouch_type = models.CharField(max_length=200)
+    special_instruction = models.TextField()
+    pouch_charge = models.CharField(max_length=200)
 class PurchaseOrder(models.Model):
     POUCH_TYPE = [
         ('Center Seal Pouch' , 'Center Seal Pouch'),
