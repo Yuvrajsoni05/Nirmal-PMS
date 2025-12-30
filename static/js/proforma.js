@@ -1,270 +1,428 @@
-function printProforma(button) {
-    const data = button.dataset;
-    const jobs = JSON.parse(data.jobs || "[]");
-    const currentDate = new Date();
-    const jobRows = jobs
-    
-    .map((job, index) => `
-        <tr> 
-            <td style="vertical-align: top; padding: 6px 4px; font-weight: bold;">${index + 1}</td> 
-            <td colspan="2" style="padding: 6px 4px">
-                <b>${job.title}</b><br />
-                <span style="font-style: italic; font-size: 12px">
-                    ${job.job_name}<br />
-                    Pouch Open Size : ${job.pouch_open_size}<br />
-                    Cylinder Size : ${job.cylinder_size}<br /><br />
-                </span>
-            </td>
-            <td class="text-right" style="padding: 6px 4px">-</td> 
-            <td class="text-right" style="padding: 6px 4px">${job.quantity} Nos.</td>
-            <td style="padding: 6px 4px" class="text-right">${job.prpc_rate}</td>
-            <td style="padding: 6px 4px">Nos.</td>
-            <td class="text-right" style="padding: 6px 4px">${job.taxable_value}</td>
-        </tr>`)
-    .join('');
+document.addEventListener("DOMContentLoaded", function () {
+    const invoiceNoInput = document.getElementById("invoice_no");
+    const invoiceNoError = document.getElementById("invoice_no_error");
 
+    const QuantityInput = document.getElementById("quantity");
+    const QuantityError = document.getElementById("quantity_error");
 
-    const printWindow = window.open("", "_blank");
-    printWindow.document.write(`
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=A4, initial-scale=1" />
-<title>Proforma Invoice</title>
-<style>
-    @page { size: A4; margin: 15mm 10mm; }
-    body { font-family: Arial, sans-serif; font-size: 10px; margin: 0; padding: 0; color: #000; }
-    .container { width: 210mm; margin: 0 auto; padding: 10px; }
-    .header { font-weight: bold; text-align: center; margin-bottom: 5px; font-size: 12px; }
-    table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
-    td, th { border: 1px solid black; padding: 4px 6px; vertical-align: top; font-size: 12px; }
-    td.noborder { border: none; }
-    .no-padding { padding: 0; }
-    .bold { font-weight: bold; }
-    .text-right { text-align: right; }
-    .text-center { text-align: center; }
-    .underline { text-decoration: underline; }
-    .small-text { font-size: 9px; }
-    .signature-line { margin-top: 10px; border-top: 1px solid black; width: 140px; margin-left: auto; margin-right: auto; }
-    .products-section td { border: 1px solid black; vertical-align: top; }
-</style>
-</head>
-<body>
-<div class="container">
-    <div class="header">PROFORMA INVOICE</div>
+    const PRPCInput = document.getElementById("prpc_price");
+    const PRPCError = document.getElementById("prpc_price_error");
 
-    <table>
-        <tr>
-            <td style="width: 45%">
+    const invoiceDateInput = document.getElementById("invoice_date");
+    const invoiceDateError = document.getElementById("invoice_date_error");
 
-                 <div style="margin-bottom:5%;">
-                                <img src="http://localhost:8000/static/assets/img/logo_icon.png" alt="logo"
-                            height="70px" />
-                            </div>
-                <b>Shrri Nirmal Ventures Private Limited</b><br />
-                Unit. 1601, 16th Floor, B Block,<br />
-                Navratna Corporate Park, Nr. Jayantilal Park<br />
-                Ambli Bopal Road, Ambli, Ahmedabad - 380058<br />
-                GSTIN/UIN: 24AABCN6372N1Z4<br />
-                State Name : Gujarat, Code : 24<br />
-                CIN: U25200GJ1995PTC027623
-            </td>
-            <td style="width: 55%; font-size: 8px">
-                <table style="width: 100%; border: 1px solid black; border-collapse: collapse; font-size: 8px;">
-                    <tr>
-                        <td>Invoice No.: <b>${data.invoice_no}</b></td>
-                        <td><b>PROFORMA INVOICE</b><br />PROFORMA INVOICE date. ${data.invoice_date}</td>
-                        <td>Invoice Date<br /><b>${data.invoice_date}</b></td>
-                    </tr>
-                    <tr>
-                        <td>Delivery Note</td>
-                        <td>Mode/Terms of Payment<br /><b>${data.mode_payment}</b></td>
-                        <td>Other References</td>
-                    </tr>
-                    <tr>
-                        <td>Reference No. & Date.</td><td></td><td>Buyer's Order No.<br />Dated</td>
-                    </tr>
-                    <tr><td>Dispatch Doc No.</td><td>Delivery Note Date</td><td></td></tr>
-                    <tr><td>Dispatched through</td><td>Destination</td><td></td></tr>
-                    <tr><td>Terms of Delivery</td><td colspan="2">${data.term_note}</td></tr>
-                </table>
-            </td>
-        </tr>
-    </table>
+    const modePaymentInput = document.getElementById("mode_payment");
+    const modePaymentError = document.getElementById("mode_payment_error");
 
-    <table>
-        <tr>
-            <td style="width: 50%">
-                <b>Consignee (Ship to)</b><br />
-                <b>${data.party_name}</b><br />
-                ${data.billing_address}<br />
-                GSTIN/UIN : ${data.billing_gstin_no}<br />
-                State Name : ${data.billing_state_name}
-            </td>
-            <td style="width: 50%">
-                <b>Buyer (Bill to)</b><br />
-                <b>${data.party_name}</b><br />
-                ${data.billing_address}<br />
-                GSTIN/UIN : ${data.billing_gstin_no}<br />
-                State Name : ${data.billing_state_name}<br />
-                Place of Supply : ${data.billing_state_name}
-            </td>
-        </tr>
-    </table>
+    const PartyNameInput = document.getElementById("party_name");
+    const PartyNameError = document.getElementById("party_name_error");
 
-    <table>
-        <thead>
-            <tr>
-                <th>Sl No.</th>
-                <th colspan="2">Description of Services</th>
-             
-                <th>HSN Code</th>
-                <th>Quantity</th>
-                <th>Rate</th>
-                <th>per</th>
-                <th>Amount</th>
-            </tr>
-        </thead>
-        <tbody class="products-section">
-            ${jobRows}
-      
-            <tr>
-                <td colspan="7" style="padding:6px 4px; font-weight:bold">
-                    <i>${data.gst}</i><br />Less : <b>Rounding off Sale</b>
-                </td>
-                <td class="text-right bold" style="padding:6px 4px;">${data.gst_value}</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="4" class="text-left bold">Total</td>
-                <td colspan="3"></td>
-                <td class="text-right bold" style="font-size:14px">₹ ${data.total}</td>
-            </tr>
-        </tfoot>
-    </table>
+    const PartyContactInput = document.getElementById("party_contact");
+    const PartyContactError = document.getElementById("party_contact_error");
 
-    <table>
-        <tr>
-            <td class="bold">Amount Chargeable (in words)</td>
-            <td class="text-center bold" style="border-left:none; border-right:none;">
-                INR ${data.total_in_worlds} Only
-            </td>
-            <td class="bold text-right" style="border-left:none">E. & O.E</td>
-        </tr>
-    </table>
+    const PartyEmailInput = document.getElementById("party_email");
+    const PartyEmailError = document.getElementById("party_email_error");
 
-    <table>
-        <thead>
-            <tr>
-                <th style="width:50%"></th>
-                <th style="width:12%">Taxable Value</th>
-                <th style="width:8%">IGST<br/>Rate</th>
-                <th style="width:15%">IGST Amount</th>
-                <th style="width:18%">Total Tax Amount</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td></td>
-                <td class="text-right">${data.total_taxable_value}</td>
-                <td class="text-center">${data.gst}</td>
-                <td class="text-right">${data.gst_value}</td>
-                <td class="text-right">${data.gst_value}</td>
-            </tr>
-        </tbody>
-        <tfoot>
-            <tr>
-                <td class="bold">Total</td>
-                <td class="text-right bold">${data.total_taxable_value}</td>
-                <td></td>
-                <td class="text-right bold">${data.gst_value}</td>
-                <td class="text-right bold">${data.gst_value}</td>
-            </tr>
-        </tfoot>
-    </table>
+    const billingAddressInput = document.getElementById("billing_address_select");
+    const billingAddressError = document.getElementById(
+        "billing_address_error"
+    );
 
-    <!-- Bank Details Section in Footer -->
-            <table style="margin-top: 15px">
-                <tr>
-                    <td
-                        colspan="2"
-                        style="
-                            text-align: center;
-                            font-weight: bold;
-                            font-size: 12px;
-                        "
-                    >
-                        BANK DETAILS
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: 52%; font-size: 10px">
-                        <b>Bank Name:</b> ${data.bank_name}<br />
+    const billingStateNameInput = document.getElementById("billing_state_name");
+    const billingStateNameError = document.getElementById(
+        "billing_state_name_error"
+    );
 
-                        <b>Account Name:</b> ${data.bank_account_name}.<br />
-                        <b>Account Number:</b> ${data.bank_account_number}<br />
-                        <b>IFSC Code:</b> ${data.bank_ifsc_code}
-                    </td>
-                    <td style="width: 50%; font-size: 10px; text-align: center">
-                        <b>Bank Address:</b><br />
-                        ${data.bank_brnach_address}
-                    </td>
-                </tr>
-            </table>
+    const billingGstinNoInput = document.getElementById("billing_gstin_no");
+    const billingGstinNoError = document.getElementById(
+        "billing_gstin_no_error"
+    );
 
-    <table style="margin-top:8px">
-        <tr>
-            <td style="width:52%; padding:5px; vertical-align:top">
-                <b>Tax Amount (in words):</b><br/>
-                INR ${data.total_in_worlds} Only<br/><br/>
-                <b>Company's PAN:</b> AABCN6372N<br/><br/>
-                <b>Declaration:</b><br/>
-                We declare that this Proforma invoice shows the actual price of the goods described and that all particulars are true and correct.
-            </td>
-            <td style="width:48%; text-align:center; vertical-align:middle; font-size:12px;">
-                for Shrri Nirmal Ventures  Private  Limited <br/><br/><br/><br/>
-                <div class="signature-line"> 
-                <img src="https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png" alt="Signature" style="width: 100%; max-width: 180px;" /></div>
-                Authorized Signatory
-            </td>
-        </tr>
-    </table>
-    <!--Terms & Notes  -->
-            <table style="margin-top: 15px">
-                <tr>
-                    <td
-                        colspan="2"
-                        style="
-                            text-align: center;
-                            font-weight: bold;
-                            font-size: 12px;
-                        "
-                    >
-                        Terms & Notes
-                    </td>
-                </tr>
-                <tr>
-                 
-                    <td style="width: 50%; font-size: 10px; text-align: center">
-                        
-                        ${data.terms_note}
-                    </td>
-                </tr>
-            </table>
+    const termsInput = document.getElementById("terms");
+    const termsError = document.getElementById("terms_error");
 
- 
-</div>
+    const taxableValueInput = document.getElementById("taxable_value");
+    const taxableValueError = document.getElementById("taxable_value_error");
 
-<script>
-    window.onload = function() {
-        window.print();
-        window.close();
-    };
-<\/script>
-</body>
-</html>
-`);
-    printWindow.document.close();
-}
+    const totalAmountInput = document.getElementById("total_amount");
+    const totalAmountError = document.getElementById("total_amount_error");
+
+    const bankDetailsInput = document.getElementById("bank_details");
+    const bankDetailsError = document.getElementById("bank_details_error");
+
+    const InvoiceStatusInput = document.getElementById("invoice_status");
+    const InvoiceStatusError = document.getElementById("order_status_error");
+
+    const TitleInput = document.getElementById("title");
+    const TitleError = document.getElementById("title_input_error");
+
+    const jobNameInput = document.getElementById("job_name");
+    const newJobInput = document.querySelector(".new-job");
+    const jobNameError = document.querySelector(".job-name-error");
+
+    const cylinder_diameter_Input =
+        document.getElementById("cylinder_diameter");
+    const cylinder_diameter_Error = document.getElementById(
+        "cylinder_diameter_error"
+    );
+
+    const cylinder_height_Input = document.getElementById("cylinder_height");
+    const cylinder_height_Error = document.getElementById(
+        "cylinder_height_error"
+    );
+
+    const pouch_open_diameter_Input = document.getElementById(
+        "pouch_open_size_diameter"
+    );
+    const pouch_open_diameter_Error = document.getElementById(
+        "pouch_open_diameter_error"
+    );
+
+    const pouch_open_height_Input = document.getElementById(
+        "pouch_open_size_height"
+    );
+    const pouch_open_height_Error = document.getElementById(
+        "pouch_open_height_error"
+    );
+
+    const proformaForm = document.getElementById("proformaInvoiceForm");
+
+    // Validation Functions
+    function validateInvoiceNo() {
+        if (invoiceNoInput.value.trim() === "") {
+            invoiceNoError.style.display = "block";
+            return false;
+        } else {
+            invoiceNoError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateJobName() {
+        if (
+            jobNameInput.value === "" ||
+            (jobNameInput.value === "others" && newJobInput.value.trim() === "")
+        ) {
+            jobNameError.style.display = "block";
+            return false;
+        } else {
+            jobNameError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validatePRPCPrice() {
+        if (PRPCInput.value.trim() === "") {
+            PRPCError.style.display = "block";
+            return false;
+        } else {
+            PRPCError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateQuantity() {
+        if (QuantityInput.value.trim() === "") {
+            QuantityError.style.display = "block";
+            return false;
+        } else {
+            QuantityError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateInvoiceDate() {
+        if (invoiceDateInput.value.trim() === "") {
+            invoiceDateError.style.display = "block";
+            return false;
+        } else {
+            invoiceDateError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateModePayment() {
+        if (modePaymentInput.value.trim() === "") {
+            modePaymentError.style.display = "block";
+            return false;
+        } else {
+            modePaymentError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validatePartyName() {
+        if (PartyNameInput.value.trim() === "") {
+            PartyNameError.style.display = "block";
+            return false;
+        } else {
+            PartyNameError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateTitle() {
+        if (TitleInput.value.trim() === "") {
+            TitleError.style.display = "block";
+            return false;
+        } else {
+            TitleError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validatePartyContact() {
+        const contact = PartyContactInput.value.trim();
+        const contactPattern = /^\d{10}$/;
+        if (contact === "" || !contactPattern.test(contact)) {
+            PartyContactError.style.display = "block";
+            return false;
+        } else {
+            PartyContactError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validatePartyEmail() {
+        const email = PartyEmailInput.value.trim();
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (email === "" || !emailPattern.test(email)) {
+            PartyEmailError.style.display = "block";
+            return false;
+        } else {
+            PartyEmailError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateBillingAddress() {
+        if (billingAddressInput.value.trim() === "") {
+            billingAddressError.style.display = "block";
+            return false;
+        } else {
+            billingAddressError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateBillingStateName() {
+        if (billingStateNameInput.value.trim() === "") {
+            billingStateNameError.style.display = "block";
+            return false;
+        } else {
+            billingStateNameError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateBillingGstinNo() {
+        if (billingGstinNoInput.value.trim() === "") {
+            billingGstinNoError.style.display = "block";
+            return false;
+        } else {
+            billingGstinNoError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateInvoiceStatus() {
+        if (InvoiceStatusInput.value.trim() === "") {
+            InvoiceStatusError.style.display = "block";
+            return false;
+        } else {
+            InvoiceStatusError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateTerms() {
+        if (termsInput.value.trim() === "") {
+            termsError.style.display = "block";
+            return false;
+        } else {
+            termsError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateTaxableValue() {
+        if (taxableValueInput.value.trim() === "") {
+            taxableValueError.style.display = "block";
+            return false;
+        } else {
+            taxableValueError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateTotalAmount() {
+        if (totalAmountInput.value.trim() === "") {
+            totalAmountError.style.display = "block";
+            return false;
+        } else {
+            totalAmountError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateBankDetails() {
+        if (bankDetailsInput.value.trim() === "") {
+            bankDetailsError.style.display = "block";
+            return false;
+        } else {
+            bankDetailsError.style.display = "none";
+            return true;
+        }
+    }
+
+    function validateCylinderDiameter() {
+        if (cylinder_diameter_Input && cylinder_diameter_Error) {
+            if (cylinder_diameter_Input.value.trim() === "") {
+                cylinder_diameter_Error.style.display = "block";
+                return false;
+            } else {
+                cylinder_diameter_Error.style.display = "none";
+                return true;
+            }
+        }
+        return true;
+    }
+
+    function validateCylinderHeight() {
+        if (cylinder_height_Input && cylinder_height_Error) {
+            if (cylinder_height_Input.value.trim() === "") {
+                cylinder_height_Error.style.display = "block";
+                return false;
+            } else {
+                cylinder_height_Error.style.display = "none";
+                return true;
+            }
+        }
+        return true;
+    }
+
+    function validatePouchOpenDiameter() {
+        if (pouch_open_diameter_Input && pouch_open_diameter_Error) {
+            if (pouch_open_diameter_Input.value.trim() === "") {
+                pouch_open_diameter_Error.style.display = "block";
+                return false;
+            } else {
+                pouch_open_diameter_Error.style.display = "none";
+                return true;
+            }
+        }
+        return true;
+    }
+
+    function validatePouchOpenHeight() {
+        if (pouch_open_height_Input && pouch_open_height_Error) {
+            if (pouch_open_height_Input.value.trim() === "") {
+                pouch_open_height_Error.style.display = "block";
+                return false;
+            } else {
+                pouch_open_height_Error.style.display = "none";
+                return true;
+            }
+        }
+        return true;
+    }
+
+    function validateForm() {
+        const isInvoiceStatus = validateInvoiceStatus();
+        const isTitleValid = validateTitle();
+        const isJobNameValid = validateJobName();
+        const isPRPCValid = validatePRPCPrice();
+        const isInvoiceNoValid = validateInvoiceNo();
+        const isInvoiceDateValid = validateInvoiceDate();
+        const isModePaymentValid = validateModePayment();
+        const isPartyNameValid = validatePartyName();
+        const isPartyContactValid = validatePartyContact();
+        const isPartyEmailValid = validatePartyEmail();
+        const isBillingAddressValid = validateBillingAddress();
+        const isBillingStateNameValid = validateBillingStateName();
+        const isBillingGstinNoValid = validateBillingGstinNo();
+        const isTermsValid = validateTerms();
+        const isQuantityValid = validateQuantity();
+        const isTaxableValueValid = validateTaxableValue();
+        const isTotalAmountValid = validateTotalAmount();
+        const isBankDetailsValid = validateBankDetails();
+        const isvalidateCylinderDiameter = validateCylinderDiameter();
+        const isvalidateCylinderHeigh = validateCylinderHeight();
+
+        const isvalidatePouchOpenDiameter = validatePouchOpenDiameter();
+        const isvalidatePouchOpenHeight = validatePouchOpenHeight();
+
+        return (
+            isInvoiceNoValid &&
+            isInvoiceDateValid &&
+            isModePaymentValid &&
+            isPartyNameValid &&
+            isPartyContactValid &&
+            isPartyEmailValid &&
+            isBillingAddressValid &&
+            isBillingStateNameValid &&
+            isBillingGstinNoValid &&
+            isTermsValid &&
+            isTaxableValueValid &&
+            isTotalAmountValid &&
+            isBankDetailsValid &&
+            isQuantityValid &&
+            isPRPCValid &&
+            isJobNameValid &&
+            isvalidateCylinderDiameter &&
+            isvalidateCylinderHeigh &&
+            isvalidatePouchOpenHeight &&
+            isvalidatePouchOpenDiameter &&
+            isTitleValid &&
+            isInvoiceStatus
+        );
+    }
+
+    jobNameInput.addEventListener("change", validateJobName);
+    newJobInput.addEventListener("input", validateJobName);
+    invoiceNoInput.addEventListener("input", validateInvoiceNo);
+    invoiceDateInput.addEventListener("input", validateInvoiceDate);
+    modePaymentInput.addEventListener("input", validateModePayment);
+    PartyNameInput.addEventListener("input", validatePartyName);
+    PartyContactInput.addEventListener("input", validatePartyContact);
+    PartyEmailInput.addEventListener("input", validatePartyEmail);
+    billingAddressInput.addEventListener("input", validateBillingAddress);
+    billingStateNameInput.addEventListener("input", validateBillingStateName);
+    billingGstinNoInput.addEventListener("input", validateBillingGstinNo);
+    termsInput.addEventListener("input", validateTerms);
+    taxableValueInput.addEventListener("input", validateTaxableValue);
+    totalAmountInput.addEventListener("input", validateTotalAmount);
+    QuantityInput.addEventListener("input", validateQuantity);
+    bankDetailsInput.addEventListener("input", validateBankDetails);
+    PRPCInput.addEventListener("input", validatePRPCPrice);
+    cylinder_diameter_Input.addEventListener("input", validateCylinderDiameter);
+    cylinder_height_Input.addEventListener("input", validateCylinderHeight);
+    TitleInput.addEventListener("input", validateTitle);
+    pouch_open_diameter_Input.addEventListener(
+        "input",
+        validatePouchOpenDiameter
+    );
+    pouch_open_height_Input.addEventListener("input", validatePouchOpenHeight);
+    InvoiceStatusInput.addEventListener("input", validateInvoiceStatus);
+
+    const loaderOverlay = document.getElementById("loader-overlay");
+    proformaForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+
+        if (validateForm()) {
+            if (loaderOverlay) {
+                loaderOverlay.style.display = "flex";
+            }
+            requestAnimationFrame(() => {
+                proformaForm.submit();
+            });
+        } else {
+            const firstError = document.querySelector(
+                '[style*="display: block"]'
+            );
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: "smooth" });
+            }
+        }
+    });
+});

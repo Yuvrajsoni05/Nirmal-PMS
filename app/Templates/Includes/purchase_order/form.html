@@ -2,7 +2,7 @@
     <div class="col-xl-12 col-lg-1">
         <div class="card shadow-sm border-0">
             <div class="card-header py-3">
-                <h5 class="mb-0">Create Purchase Order</h5>
+                <h5 class="mb-0">Create Purchase Order </h5>
             </div>
 
             <div class="card-body p-4">
@@ -21,35 +21,172 @@
                                 <span class="text-danger">*</span></label>
                             <input type="date" class="form-control" id="delivery_date"
                                 name="delivery_date"
-                                value="{{ quotation.delivery_date }}"
+                                value="{{ quotation.delivery_date|date:'Y-m-d' }}"
                                 required />
                         </div>
 
                         <!-- Party Name -->
-                        <div class="col-md-4">
+
+                        <div class="col-md-6">
                             <label class="form-label fw-semibold">Party Name
                                 <span class="text-danger">*</span></label>
                             <select class="form-select form-control" id="party_name"
                                 name="party_name" required>
                                 <option value="">Select Party Name</option>
-                                {% for party in party_names %}
+                                {% for party in party_name %}
                                     <option value="{{ party.party_name }}">
                                         {{ party.party_name }}
                                     </option>
                                 {% endfor %}
                             </select>
                         </div>
-
+                        
+                        
                         <!-- Job Name -->
-                        {% if quotation.job_name %}
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Job Name
+                        {% if jobs %}
+                            {% for i  in jobs %}
+                
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Job Name
+                                        <span class="text-danger">*</span></label>
+                                    <input type="text" value="{{ i.job_name }}"
+                                        class="form-control" name="job_name" id="job_name" readonly>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Pouch Size (Open)
+                                        <span class="text-danger">*</span></label>
+                                    <input type="text" value="{{ i.pouch_open_size }}"
+                                        class="form-control" name="pouch_size" id="pouch_size"
+                                        readonly>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                <label class="form-label fw-semibold">Pouch Combination
                                     <span class="text-danger">*</span></label>
-                                <input type="text" value="{{ quotation.job_name }}"
-                                    class="form-control" name="job_name" id="job_name" readonly>
+                                <input type="text" value="{{ i.pouch_combination }}"
+                                    class="form-control" name="pouch_combination"
+                                    id="pouch_combination" readonly>
                             </div>
+
+
+                            <!-- Quantity -->
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Quantity
+                                <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="quantity"
+                                name="quantity"value="{{ i.quantity }}" required />
+                        </div>
+
+                        <!-- Purchase Rate -->
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold">Purchase Rate
+                                <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="number" class="form-control"
+                                    id="purchase_rate_per_kg" name="purchase_rate_per_kg"
+                                    required />
+                                <select class="form-select form-control" id="purchase_rate_unit"
+                                    name="purchase_rate_unit" required>
+                                    <option value="">Select</option>
+                                    {% for value, label in polyester_unit %}
+                                        <option value="{{ value }}">{{ label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- No of Pouch / Kg -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">No. of Pouch / Kg
+                                <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="no_of_pouch_kg"
+                                name="no_of_pouch_kg" required />
+                        </div>
+
+                        <!-- Per Pouch Rate Basic -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Per Pouch Rate Basic</label>
+                            <input type="number" class="form-control"
+                                id="per_pouch_rate_basic" name="per_pouch_rate_basic"
+                                 />
+                        </div>
+
+                        <!-- Pouch Charge -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Pouch Charge
+                                <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="pouch_charge"
+                                name="pouch_charge" required />
+                        </div>
+
+                        <!-- Zipper Cost -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Zipper Cost
+                                <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="zipper_cost"
+                                name="zipper_cost" required />
+                        </div>
+
+                        <!-- Final Rate -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Final Rate
+                                <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control" id="final_rare"
+                                name="final_rare" required />
+                        </div>
+
+                        <!-- Minimum Quantity -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Minimum Quantity
+                                <span class="text-danger">*</span></label>
+                            <input type="number" class="form-control"
+                                id="minimum_quantity" name="minimum_quantity"
+                                required />
+                        </div>
+
+                        <!-- Pouch Type -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Pouch Type
+                                <span class="text-danger">*</span></label>
+                            <select class="form-select form-control" id="pouch_type"
+                                name="pouch_type" required>
+                                <option value="">Select</option>
+                                {% for value, label in pouch_types %}
+                                    <option value="{{ value }}"
+                                        {% if value == i.pouch_type %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- Special Instruction -->
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Special Instruction</label>
+                            <textarea class="form-control" name="special_instruction"
+                                rows="2">{{ i.special_instruction }}</textarea>
+                        </div>
+
+                        <!-- Delivery Address -->
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Delivery Address
+                                <span class="text-danger">*</span></label>
+                           <textarea class="form-control border-1"
+                                    id="delivery_address"
+                                    name="delivery_address"
+                                    rows="4"
+                                    style="text-align:left"
+                                    required>{{ i.delivery_address }}</textarea>
+
+                        </div>
+
+
+
+                            {% endfor %}
+
                         {% else %}
-                            <div class="col-md-4">
+                        <div class="col-md-4">
                                 <label class="form-label fw-semibold">Job Name
                                     <span class="text-danger">*</span></label>
                                 <select class="form-select form-control" id="job_name"
@@ -58,18 +195,13 @@
                                     <option value="others">Others</option>
                                 </select>
                             </div>
-                        {% endif %}
+                        
+                        
 
                         <!-- Pouch Size -->
-                        {% if quotation.pouch_open_size %}
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Pouch Size (Open)
-                                    <span class="text-danger">*</span></label>
-                                <input type="text" value="{{ quotation.pouch_open_size }}"
-                                    class="form-control" name="pouch_size" id="pouch_size"
-                                    readonly>
-                            </div>
-                        {% else %}
+               
+                          
+                        
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Pouch Size (Open)
                                     <span class="text-danger">*</span></label>
@@ -82,18 +214,15 @@
                                 </div>
                                 <input type="hidden" id="pouch_size" name="pouch_size" />
                             </div>
-                        {% endif %}
 
+
+
+
+                            
+                   
                         <!-- Pouch Combination -->
-                        {% if quotation.pouch_combination %}
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Pouch Combination
-                                    <span class="text-danger">*</span></label>
-                                <input type="text" value="{{ quotation.pouch_combination }}"
-                                    class="form-control" name="pouch_combination"
-                                    id="pouch_combination" readonly>
-                            </div>
-                        {% else %}
+                       
+                            
                             <div class="col-md-8">
                                 <label class="form-label fw-semibold">
                                     Pouch Combination (Thickness)
@@ -119,7 +248,8 @@
                                 <input type="hidden" id="pouch_combination"
                                     name="pouch_combination" />
                             </div>
-                        {% endif %}
+                         
+
 
                         <!-- Quantity -->
                         <div class="col-md-3">
@@ -227,7 +357,7 @@
                                 name="delivery_address" rows="2"
                                 required>{{ quotation.delivery_address }}</textarea>
                         </div>
-
+                    {% endif %}
                         <!-- Other Terms -->
                         <div class="col-12">
                             <label class="form-label fw-semibold">Other Terms</label>

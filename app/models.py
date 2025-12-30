@@ -288,6 +288,31 @@ class ProformaJob(models.Model):
     
     
 class PouchQuotation(models.Model):
+    
+    
+
+    delivery_date  = models.DateField()
+    party_details = models.ForeignKey(
+        Party,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="quotations_party_name"
+    )
+
+    # the  Term 
+    quantity_variate = models.CharField(max_length=200)
+    freight = models.CharField(max_length=200)
+    gst = models.CharField(max_length=200)
+    note = models.TextField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
+    
+    
+    def __str__(self):
+        return f" - {self.party_details}"
+    
+    
+class PouchQuotationJob(models.Model):
     POUCH_TYPE = [
         ('Center Seal Pouch' , 'Center Seal Pouch'),
         ('3 Side Seal Pouch' , '3 Side Seal Pouch'),
@@ -300,43 +325,6 @@ class PouchQuotation(models.Model):
         ('Printed Roll' , 'Printed Roll'),
         ('Flat Bottom Pouch With Zipper' ,'Flat Bottom Pouch With Zipper'),
     ]
-    
-
-    delivery_date  = models.DateField()
-    party_details = models.ForeignKey(
-        Party,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="quotations_party_name"
-    )
-    job_name = models.CharField(max_length=200,blank=True, null=True)
-    pouch_open_size = models.CharField(max_length=200 ,blank=True, null=True)
-    pouch_combination = models.CharField(max_length=200 ,blank=True, null=True)
-    purchase_rate_per_kg = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
-    no_of_pouch_kg = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
-    per_pouch_rate_basic = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
-    zipper_cost = models.DecimalField(max_digits=10, decimal_places=2,blank=True, null=True)
-    final_rare = models.CharField(max_length=200)
-    minimum_quantity = models.CharField(max_length=200)
-    pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE,blank=True, null=True)
-    special_instruction = models.TextField()
-    quantity =  models.CharField(max_length=200,blank=True, null=True)
-    delivery_address = models.TextField()
-    pouch_charge = models.CharField(max_length=200,blank=True, null=True)
-    # the  Term 
-    quantity_variate = models.CharField(max_length=200)
-    freight = models.CharField(max_length=200)
-    gst = models.CharField(max_length=200)
-    note = models.TextField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
-    
-    
-    def __str__(self):
-        return f"{self.job_name} - {self.party_details}"
-    
-    
-class PouchQuotationJob(models.Model):
     quotation = models.ForeignKey(PouchQuotation,on_delete=models.CASCADE,related_name="pouch_quotation_jobs")
     job_name = models.CharField(max_length=200)
     quantity = models.CharField(max_length=200)
@@ -349,9 +337,13 @@ class PouchQuotationJob(models.Model):
     per_pouch_rate_basic = models.CharField(max_length=200)
     zipper_cost = models.CharField(max_length=200)
     pouch_combination = models.CharField(max_length=200)
-    pouch_type = models.CharField(max_length=200)
+    pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE)
     special_instruction = models.TextField()
     pouch_charge = models.CharField(max_length=200)
+    
+    
+    
+    
 class PurchaseOrder(models.Model):
     POUCH_TYPE = [
         ('Center Seal Pouch' , 'Center Seal Pouch'),
@@ -404,3 +396,19 @@ class PurchaseOrder(models.Model):
     def __str__(self):
         return f"{self.job_name} - {self.party_details}"
     
+class PurchaseOrderJob(models.Model):
+    purchase_order = models.ForeignKey(PurchaseOrder,on_delete=models.CASCADE,related_name="purchase_order_jobs")
+    job_name = models.CharField(max_length=200)
+    quantity = models.CharField(max_length=200)
+    purchase_rate_per_kg = models.CharField(max_length=200)
+    no_of_pouch_kg = models.CharField(max_length=200)
+    pouch_open_size = models.CharField(max_length=200)
+    delivery_address = models.TextField()
+    minimum_quantity = models.CharField(max_length=200)
+    final_rare = models.CharField(max_length=200)
+    per_pouch_rate_basic = models.CharField(max_length=200)
+    zipper_cost = models.CharField(max_length=200)
+    pouch_combination = models.CharField(max_length=200)
+    pouch_type = models.CharField(max_length=200)
+    special_instruction = models.TextField()
+    pouch_charge = models.CharField(max_length=200)

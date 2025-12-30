@@ -249,9 +249,9 @@
                                         </tr>
                                     </thead>
                                 <tbody>
-                                    {% if jobrecords %}
-                                        {% for i in jobrecords %}
-                                            <tr class="text-start">
+                                    {% if jobrecoreds %}
+                                        {% for i in jobrecoreds %}
+                                            <tr class="text-start text-nowrap">
 
                                                 <!-- Sr No (no unwanted modal trigger here) -->
                                                 <td class="text-truncate sticky-left">
@@ -303,28 +303,83 @@
                                                             </div>
 
                                                             {% if i.image.count > 1 %}
-                                                                <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ i.id }}" data-bs-slide="prev">
-                                                                    <span class="carousel-control-prev-icon"></span>
-                                                                </button>
-                                                                <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ i.id }}" data-bs-slide="next">
-                                                                    <span class="carousel-control-next-icon"></span>
-                                                                </button>
+                                                                  <button class="carousel-control-prev" type="button"
+                                                                            data-bs-target="#carousel-{{ i.id }}" data-bs-slide="prev">
+                                                                        <span class="previcon" aria-hidden="false">
+                                                                            <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                                                        </span>
+                                                                    </button>
+
+                                                                    <button class="carousel-control-next" type="button"
+                                                                            data-bs-target="#carousel-{{ i.id }}" data-bs-slide="next">
+                                                                        <span class="nexticon" aria-hidden="true">
+                                                                            <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                                        </span>
+                                                                    </button>
                                                             {% endif %}
                                                         </div>
                                                     {% else %}
                                                         -
                                                     {% endif %}
                                                 </td>
-
                                                 <!-- Job Status -->
                                                 <td class="sticky-right">
                                                     <span class="badge {% if i.job_status == 'In Progress' %}bg-success{% else %}bg-danger{% endif %}">
                                                         {{ i.job_status }}
                                                     </span>
                                                 </td>
+                                               <td class="text-truncate">
+                                                        {% if i.cdr_file_url %}
+                                                            <a class="icon-link" href="{{ i.cdr_file_url }}" target="_blank">CDR</a>
+                                                        {% else %}
+                                                            {% if i.cdr_images_urls %}
+                                                                <div id="cdr-carousel-{{ i.id }}" class="carousel slide" data-bs-ride="carousel">
+                                                                    <div class="carousel-inner">
+                                                                        {% for cdr_img in i.cdr_images_urls %}
+                                                                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                                                <div class="d-flex justify-content-center align-items-center" style="height: 50px;">
+                                                                                    <a class="icon-link text-decoration-none "
+                                                                                    href="{{ cdr_img }}" target="_blank">
+                                                                                        {% comment %} {{ cdr_img|filename }} {% endcomment %} CDR
+                                                                                    </a>
+                                                                                </div>
+                                                                            </div>
+                                                                        {% endfor %}
+                                                                    </div>
+
+                                                                    <button class="carousel-control-prev" type="button"
+                                                                            data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="prev">
+                                                                        <span class="previcon" aria-hidden="false">
+                                                                            <i class="fa fa-caret-left" aria-hidden="true"></i>
+                                                                        </span>
+                                                                    </button>
+
+                                                                    <button class="carousel-control-next" type="button"
+                                                                            data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="next">
+                                                                        <span class="nexticon" aria-hidden="true">
+                                                                            <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                                        </span>
+                                                                    </button>
+                                                                </div>
+                                                            {% else %}
+                                                                <p>-</p>
+                                                            {% endif %}
+
+
+                                                        {% endif %}
+                                                    </td>
+
+                                                   
+                                                    <td class="text-truncate"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#OldBackdrop{{ i.id }}"
+                                                        title="{{ i.id }}">
+                                                        {{ i.job_history.count }} Records
+                                                    </td>
+                                                
 
                                                 <!-- Delete / Edit Buttons -->
-                                                <td class="sticky-right">
+                                                <td class="sticky-right text-nowrap">
                                                     <form method="post" action="{% url 'delete_data' delete_id=i.id %}" id="delete-form-{{ i.id }}" class="d-inline">
                                                         {% csrf_token %}
                                                         <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
@@ -335,7 +390,13 @@
 
                                                     <button class="btn btn-outline-primary" data-bs-toggle="modal"
                                                             data-bs-target="#exampleModal{{ i.id }}">
-                                                        Edit
+                                                        <i class="fa fa-edit"></i>
+                                                    </button>
+
+
+                                                    <button class="btn btn-outline-success" data-bs-toggle="modal"
+                                                            data-bs-target="#emailModal{{ i.id }}">
+                                                        <i class="fa fa-envelope"></i>
                                                     </button>
                                                 </td>
 

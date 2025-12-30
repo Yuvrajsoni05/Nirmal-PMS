@@ -20,7 +20,7 @@
                 />
 
                 <div class="modal-body">
-                    <!-- ===================== MAIN DETAILS (COMMON) ===================== -->
+           
                     <h6 class="fw-bold text-primary">Purchase Order Details</h6>
 
                     <div class="border rounded p-3 mb-3">
@@ -62,7 +62,6 @@
                         </div>
                     </div>
 
-                    <!-- ===================== JOB DETAILS (MULTIPLE) ===================== -->
                     <h6 class="fw-bold text-primary">Job Details</h6>
 
                     {% for job in quotation.pouch_quotation_jobs.all %}
@@ -246,12 +245,16 @@
                                         >Pouch Type</label
                                     >
                                 </div>
-                                <input
-                                    type="text"
-                                    class="form-control"
-                                    name="pouch_type"
-                                    value="{{ job.pouch_type }}"
-                                />
+
+                                <select class="form-control form-select" name="pouch_type" >
+                                    <option>Select Pouch Type</option>
+                                    {% for value,label in pouch_types  %}
+                                          <option value="{{ value }}" 
+                                          {% if job.pouch_type == value %} selected {% endif %}>
+                                            {{ label }}
+                                          </option>
+                                    {% endfor %}
+                                </select>
                             </div>
 
                             <div class="col-md-6">

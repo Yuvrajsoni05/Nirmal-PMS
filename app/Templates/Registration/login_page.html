@@ -427,7 +427,7 @@
                     <h2>Welcome Back</h2>
                     <p class="subtitle">Sign in to continue to your account</p>
 
-                    <form method="POST" action="{% url 'login_page' %}">
+                    <form method="POST" action="{% url 'login_page' %}" autocomplete="off">
                         {% csrf_token %}
 
                         <div class="mb-3">

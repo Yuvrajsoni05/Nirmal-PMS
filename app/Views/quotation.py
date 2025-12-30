@@ -4,7 +4,7 @@ def quotation_page(request):
     
     
     party_names = Party.objects.values('party_name')
-    pouch_types =  PouchQuotation.POUCH_TYPE
+    pouch_types =  PouchQuotationJob.POUCH_TYPE
     
     if request.method == 'POST':
         if 'save_quotation' in request.POST:
@@ -115,7 +115,7 @@ def quotation_page(request):
 @custom_login_required
 def view_quotations(request):
     quotations = PouchQuotation.objects.all().order_by('-id')
-
+    pouch_types =  PouchQuotationJob.POUCH_TYPE
     if request.method == "POST":
         if 'delete_quotation' in request.POST:
             q_id = request.POST.get('delete_quotation')
@@ -128,7 +128,7 @@ def view_quotations(request):
             q_id = request.POST.get('quotation_id')
             edit_quotation = get_object_or_404(PouchQuotation, id=q_id)
 
-            # ---- Update Parent Quotation ----
+            print(q_id)
             edit_quotation.delivery_date = request.POST.get("delivery_date")
             edit_quotation.quantity_variate = request.POST.get("quantity_variate")
             edit_quotation.freight = request.POST.get("freight")
@@ -152,7 +152,7 @@ def view_quotations(request):
             special_instructions = request.POST.getlist("special_instruction")
             delivery_addresses = request.POST.getlist("delivery_address")
 
-     
+            print(pouch_types)
             for i in range(len(job_ids)):
 
                 job = get_object_or_404(
@@ -174,62 +174,104 @@ def view_quotations(request):
                 job.pouch_type = pouch_types[i]
                 job.special_instruction = special_instructions[i]
                 job.delivery_address = delivery_addresses[i]
-
+               
                 job.save()
 
             messages.success(request, 'Quotation Updated Successfully')
             return redirect('view_quotations')
             
-        elif 'send_quotation_mail' in request.POST or 'create_purchase_order' in request.POST:
+        elif 'send_quotation_mail' in request.POST or 'create_purchase_order' in request.POST or 'print_quotation' in request.POST:
+            job_ids = request.POST.getlist("job_id[]")
             if request.method == 'POST':
-                selected_values = {}
-                update_map = {
-                    "check_delivery_date": "delivery_date",
-                    "check_party_details": "party_details",
-                    "check_job_name": "job_name",
-                    "check_pouch_open_size": "pouch_open_size",
-                    "check_pouch_combination": "pouch_combination",
-                    "check_quantity": "quantity",
-                    "check_purchase_rate_per_kg": "purchase_rate_per_kg",
-                    "check_no_of_pouch_kg": "no_of_pouch_kg",
-                    "check_per_pouch_rate_basic": "per_pouch_rate_basic",
-                    "check_zipper_cost": "zipper_cost",
-                    "check_pouch_charge": "pouch_charge",
-                    "check_final_rate": "final_rate",
-                    "check_minimum_quantity": "minimum_quantity",
-                    "check_pouch_type": "pouch_type",
-                    "check_quantity_variate": "quantity_variate",
-                    "check_freight": "freight",
-                    "check_gst": "gst",
-                    "check_delivery_address": "delivery_address",
-                    "check_special_instruction": "special_instruction",
-                    "check_note": "note",
+                
+                
+                common_filed = {
+                "check_delivery_date": "delivery_date",
+                "check_party_details": "party_details",
+                "check_note": "note",
+                "check_gst": "gst",
+                "check_quantity_variate": "quantity_variate",
+                "check_freight": "freight",    
                 }
+                
+               
 
-              
+               
+                update_map = {            
+                "check_job_name": "job_name",
+                "check_pouch_open_size": "pouch_open_size",
+                "check_pouch_combination": "pouch_combination",
+                "check_quantity": "quantity",
+                "check_purchase_rate_per_kg": "purchase_rate_per_kg",
+                "check_no_of_pouch_kg": "no_of_pouch_kg",
+                "check_per_pouch_rate_basic": "per_pouch_rate_basic",
+                "check_zipper_cost": "zipper_cost",
+                "check_pouch_charge": "pouch_charge",
+                "check_final_rare": "final_rare",
+                "check_minimum_quantity": "minimum_quantity",
+                "check_pouch_type": "pouch_type",
+                
+                "check_delivery_address": "delivery_address",
+                "check_special_instruction": "special_instruction",
+               
+            }
+
+            common_values = {}
+
+            for checkbox, field in common_filed.items():
+                if request.POST.get(checkbox):
+                    value = request.POST.get(field)
+
+                    if value in [None, "", "null"]:
+                        continue
+
+                    if field == "party_details":
+                        value = Party.objects.get(id=value)
+
+                    common_values[field] = value
+  
+     
+            all_selected_jobs = []
+            for i in range(len(job_ids)):
                 selected_values = {}
 
                 for checkbox, field in update_map.items():
-                    if request.POST.get(checkbox):
-                        value = request.POST.get(field)
+                    cb_list = request.POST.getlist(f"{checkbox}[]")
+                    field_list = request.POST.getlist(f"{field}[]")
 
-                        if value in [None, "", "null"]:
-                            continue
 
-                        if field == "party_details":
-                            value = Party.objects.get(id=value)
+                    if not cb_list or len(cb_list) <= i:
+                        continue
 
-                        selected_values[field] = value
+        
+                    if not cb_list[i]:
+                        continue
 
-                print(selected_values)
+               
+                    if not field_list or len(field_list) <= i:
+                        continue
 
+                    value = field_list[i]
+
+                    if value in (None, "", "null"):
+                        continue
+
+                    if field == "party_details":
+                        value = Party.objects.get(id=value)
+
+                    selected_values[field] = value
+
+                PouchQuotationJob.objects.filter(id=job_ids[i]).update(**selected_values)
+                all_selected_jobs.append(selected_values)
+            
                         
             if 'send_quotation_mail' in request.POST:
-                # print(selected_values)
+         
                 receiver_email = 'soniyuvraj9499@gmail.com'
                 template_name = "Mail/quotation_mail.html"
                 convert_to_html_content = render_to_string(
-                    template_name=template_name, context=selected_values
+                    template_name=template_name,
+                    context={"jobs": all_selected_jobs , "common_values": common_values}   
                 )
                 email = EmailMultiAlternatives(
                     subject='Quotation',
@@ -242,18 +284,32 @@ def view_quotations(request):
                 messages.success(request, "Mail Send successfully")
                 return redirect("view_quotations")
             
+            
+            elif "print_quotation" in request.POST:
+                print("print quotation")
+                messages.success(request, "Data Print")
+                return redirect("view_quotations")
+            
             elif "create_purchase_order" in request.POST:
                 quotation_id = request.POST.get("quotation_id")
+                job_ids = request.POST.getlist("job_id[]")
+                
                 quotation = PouchQuotation.objects.get(id=quotation_id)
-                # print(selected_values)
+                jobs = PouchQuotationJob.objects.filter(id__in=job_ids, quotation=quotation).all()
+      
+                                
+                party_name = Party.objects.all()
+                print(party_name)
+              
                 context = {
-                    "selected_values": selected_values,  
-                    "quotation": selected_values,
-                    "party_names": Party.objects.values("party_name"),
+                    "jobs": jobs,
+                    "quotation": quotation,
+                    "party_name": party_name,
                     "pouch_types": PurchaseOrder.POUCH_TYPE,
                     "polyester_unit": PurchaseOrder.POLYESTER_UNIT,
                 }
                 return render(request, "Purchase Order/purchase_order.html", context)
+            
                 
             
     paginator =  Paginator(quotations,10)
@@ -263,7 +319,8 @@ def view_quotations(request):
     
     context  = {
         "page_range":page_range_placeholder,
-        "quotations" : page_obj
+        "quotations" : page_obj,
+        "pouch_types":pouch_types
     }
     return render(request,"Quotation/view_quotation.html",context)
 

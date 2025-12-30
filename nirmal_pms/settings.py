@@ -48,8 +48,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*.ngrok-free.app"
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
 ]
-
 
 
 
@@ -81,6 +82,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -89,6 +91,7 @@ MIDDLEWARE = [
     
 
 ]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'nirmal_pms.urls'
 AUTH_USER_MODEL = 'app.Registration'
