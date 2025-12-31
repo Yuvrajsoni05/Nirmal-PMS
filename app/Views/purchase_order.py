@@ -1,61 +1,102 @@
 from .common_imports import *
 
+
 @custom_login_required
 def purchase_order(request):
-    party_names = Party.objects.values('party_name')
-    pouch_types =  PurchaseOrder.POUCH_TYPE
-    polyester_unit = PurchaseOrder.POLYESTER_UNIT
+    party_names = Party.objects.values('party_name').all()
+    pouch_types =  PurchaseOrderJob.POUCH_TYPE
+    polyester_unit = PurchaseOrderJob.POLYESTER_UNIT
     
     if request.method == 'POST':
         if 'create_purchase_order' in request.POST:
             delivery_date =  request.POST.get('delivery_date')
             party_name = request.POST.get('party_name')
-            job_name = request.POST.get('job_name')
-            pouch_open_size = request.POST.get('pouch_size')
-            pouch_combination = request.POST.get('pouch_combination')
-            quantity = request.POST.get('quantity')
-            purchase_rate_per_kg = request.POST.get('purchase_rate_per_kg')
-            no_of_pouch_kg = request.POST.get('no_of_pouch_kg')
-            per_pouch_rate_basic = request.POST.get('per_pouch_rate_basic')
-            zipper_cost = request.POST.get('zipper_cost')
-            final_rare = request.POST.get('final_rare')
-            minimum_quantity = request.POST.get('minimum_quantity')
-            pouch_type = request.POST.get('pouch_type')
-            special_instruction = request.POST.get('special_instruction')
-            delivery_address = request.POST.get('delivery_address')
+            
+            job_name = request.POST.getlist('job_name')
+            pouch_open_size = request.POST.getlist('pouch_size')
+            pouch_combination = request.POST.getlist('pouch_combination')
+            quantity = request.POST.getlist('quantity')
+            purchase_rate_per_kg = request.POST.getlist('purchase_rate_per_kg')
+            no_of_pouch_kg = request.POST.getlist('no_of_pouch_kg')
+            per_pouch_rate_basic = request.POST.getlist('per_pouch_rate_basic')
+            pouch_charge = request.POST.getlist('pouch_charge')
+            zipper_cost = request.POST.getlist('zipper_cost')
+            final_rare = request.POST.getlist('final_rare')
+            minimum_quantity = request.POST.getlist('minimum_quantity')
+            pouch_type = request.POST.getlist('pouch_type')
+            special_instruction = request.POST.getlist('special_instruction')
+            delivery_address = request.POST.getlist('delivery_address')
+          
+            polyester_unit = request.POST.getlist('purchase_rate_unit')
+            
             quantity_variation = request.POST.get('quantity_variation')
             freight = request.POST.get('freight')
             gst = request.POST.get('gst')
             note = request.POST.get('note')
-            pouch_charge = request.POST.get('pouch_charge')
-            polyester_unit = request.POST.get('purchase_rate_unit')
+
+            
             party_details, _ = Party.objects.get_or_create(
                     party_name=party_name.strip() if party_name else None
                 )
-            pq = PurchaseOrder.objects.create(
+            
+            
+            required_fields = {
+                "delivery_date":delivery_date,
+                    "party_name":party_name,
+                    "job_name":job_name,
+                    "pouch_open_size":pouch_open_size,
+                    "pouch_combination":pouch_combination,
+                    "quantity":quantity,
+                    "purchase_rate_per_kg":purchase_rate_per_kg,
+                    "no_of_pouch_kg":no_of_pouch_kg,
+                    "per_pouch_rate_basic":per_pouch_rate_basic,
+                    "zipper_cost":zipper_cost,
+                    "final_rare":final_rare,
+                    "minimum_quantity":minimum_quantity,
+                    "pouch_type":pouch_types,
+                    "special_instruction":special_instruction,
+                    "delivery_address":delivery_address,
+                    "quantity_variation":quantity_variation,
+                    
+                                
+            }
+            for field, required in required_fields.items():
+                if not required:
+                    messages.error(
+                        request, f"{field} is Required", extra_tags="custom-danger-style"
+                    )
+                    return redirect("quotation_page")
+                
+                
+            purchase_order   = PurchaseOrder.objects.create(
                 delivery_date=delivery_date,
                 party_details=party_details,
-                job_name=job_name,
-                pouch_open_size=pouch_open_size,
-                pouch_combination=pouch_combination,
-                quantity=quantity,
-                pouch_charge=pouch_charge,
-                purchase_rate_per_kg=purchase_rate_per_kg,
-                no_of_pouch_kg=no_of_pouch_kg,
-                per_pouch_rate_basic=per_pouch_rate_basic,
-                zipper_cost=zipper_cost,
-                final_rare=final_rare,
-                minimum_quantity=minimum_quantity,
-                pouch_type=pouch_type,
-                polyester_unit=polyester_unit,
-                special_instruction=special_instruction,
-                delivery_address=delivery_address,
                 quantity_variate=quantity_variation,
                 freight=freight,
                 gst=gst,
-                note=note,    
+                note=note,
             )
-            pq.save()
+            
+            for i in range(len(job_name)):
+                PurchaseOrderJob.objects.create(
+                    purchase_order=purchase_order,
+                    job_name= job_name[i],
+                    pouch_open_size=pouch_open_size[i],
+                    pouch_combination=pouch_combination[i],
+                    quantity=quantity[i],
+                    purchase_rate_per_kg=purchase_rate_per_kg[i],
+                    no_of_pouch_kg=no_of_pouch_kg[i],
+                    per_pouch_rate_basic=per_pouch_rate_basic[i],
+                    zipper_cost=zipper_cost[i],
+                    pouch_charge=pouch_charge[i],
+                    final_rare=final_rare[i],
+                    minimum_quantity=minimum_quantity[i],
+                    pouch_type=pouch_types[i],
+                    special_instruction=special_instruction[i],
+                    delivery_address=delivery_address[i],
+                    
+                    )
+            purchase_order.save()
             messages.success(request,"Purchase Order created successfully ")
             return redirect('quotation_page')
              

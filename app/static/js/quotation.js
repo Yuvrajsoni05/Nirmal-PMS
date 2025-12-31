@@ -77,7 +77,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// ---------- JOB NAME → OTHERS (PER JOB BLOCK) ----------
 
 $(document).on("change", ".job-block select.job_name", function () {
 

@@ -160,7 +160,6 @@ def view_quotations(request):
                     id=job_ids[i],
                     quotation=edit_quotation
                 )
-
                 job.pouch_open_size = pouch_open_sizes[i]
                 job.pouch_combination = pouch_combinations[i]
                 job.quantity = quantities[i]
@@ -305,8 +304,8 @@ def view_quotations(request):
                     "jobs": jobs,
                     "quotation": quotation,
                     "party_name": party_name,
-                    "pouch_types": PurchaseOrder.POUCH_TYPE,
-                    "polyester_unit": PurchaseOrder.POLYESTER_UNIT,
+                    "pouch_types": PurchaseOrderJob.POUCH_TYPE,
+                    "polyester_unit": PurchaseOrderJob.POLYESTER_UNIT,
                 }
                 return render(request, "Purchase Order/purchase_order.html", context)
             

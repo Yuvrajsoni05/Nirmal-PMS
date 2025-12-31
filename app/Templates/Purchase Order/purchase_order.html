@@ -21,4 +21,59 @@
 </script>
     <script src="{% static 'js/ajax/purchase_order.js' %}"></script>
     <script src="{% static 'js/purchase_order.js' %}"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    const container = document.getElementById("jobs-container");
+    const addBtn = document.getElementById("add-job");
+
+    // ADD JOB
+    addBtn?.addEventListener("click", () => {
+
+        const job = container?.querySelector(".job-block");
+
+        if (!job) {
+            alert("No job template found");
+            return;
+        }
+
+        const clone = job.cloneNode(true);
+
+        // clear all inputs
+        clone.querySelectorAll("input, textarea, select").forEach(el => {
+            el.value = "";
+        });
+
+        container.appendChild(clone);
+    });
+
+    // REMOVE JOB
+    document.addEventListener("click", e => {
+        if(e.target.classList.contains("remove-job")){
+            let jobs = document.querySelectorAll(".job-block");
+            if(jobs.length === 1){
+                alert("At least one job is required");
+                return;
+            }
+            e.target.closest(".job-block").remove();
+        }
+    });
+
+    // AUTO-CALCULATE
+    document.addEventListener("input", e => {
+
+        const block = e.target.closest(".job-block");
+        if (!block) return;
+
+        const rate = parseFloat(block.querySelector(".purchase_rate_per_kg")?.value) || 0;
+        const nopkg = parseFloat(block.querySelector(".no_of_pouch_kg")?.value) || 0;
+
+        const output = block.querySelector(".per_pouch_rate_basic");
+
+        output.value = (rate && nopkg) ? (rate / nopkg).toFixed(2) : "";
+    });
+
+});
+</script>
+
 {% endblock %}

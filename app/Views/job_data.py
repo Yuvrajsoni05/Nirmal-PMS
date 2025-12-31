@@ -273,7 +273,8 @@ def delete_data(request, delete_id):
             return redirect("dashboard_page")
     except Exception as e:
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
-        messages.warning(request, "Something went Wrong", e)
+        messages.warning(request, f"Something went wrong: {str(e)}")
+
         return redirect("dashboard_page")
     
     
