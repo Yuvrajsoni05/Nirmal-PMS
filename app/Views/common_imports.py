@@ -27,6 +27,8 @@ from ..models import (
     PartyBillingAddress,
     PouchQuotationJob,
     PurchaseOrderJob,
+    PouchParty,
+    
 )
 
 from ..decorators import custom_login_required

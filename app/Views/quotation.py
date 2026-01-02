@@ -1,5 +1,6 @@
 from .common_imports import *
 
+
 def quotation_page(request):
     
     
@@ -43,7 +44,7 @@ def quotation_page(request):
           
             
             
-            party_details, _ = Party.objects.get_or_create(
+            party_details, _ = PouchParty.objects.get_or_create(
                     party_name=party_name.strip() if party_name else None
                 )
             
@@ -326,37 +327,43 @@ def view_quotations(request):
 
 @custom_login_required
 def quotation_page_ajax(request):
-    if request.method == "GET":
-        party_name = request.GET.get('party_name')
-        
-        purchase_rate_per_kg = float(request.GET.get("purchase_rate_per_kg") or 0)
-        no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 0)
-        unit = request.GET.get("purchase_rate_unit")
-        per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
-        zipper_cost =float(request.GET.get("zipper_cost") or 0)
-        pouch_charge = float(request.GET.get("pouch_charge") or 0)
-        jobs = list(utils.all_job_name_list(party_name))
-        
-        total_ppb = 0
-        
-        if purchase_rate_per_kg:   
-            if unit == "polyester_printed_bag":
-                total_ppb = purchase_rate_per_kg / no_of_pouch_kg
-            elif unit == "polyester_printed_roll":
-                total_ppb = purchase_rate_per_kg
+    try:
+        if request.method == "GET":
+            party_name = request.GET.get('party_name')
+            
+            purchase_rate_per_kg = float(request.GET.get("purchase_rate_per_kg") or 0)
+            no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 0)
+            unit = request.GET.get("purchase_rate_unit")
+            per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
+            zipper_cost =float(request.GET.get("zipper_cost") or 0)
+            pouch_charge = float(request.GET.get("pouch_charge") or 0)
+            jobs = list(utils.all_job_name_list(party_name))
+            
+            total_ppb = 0
+            
+            if purchase_rate_per_kg:   
+                if unit == "polyester_printed_bag":
+                    total_ppb = purchase_rate_per_kg / no_of_pouch_kg
+                elif unit == "polyester_printed_roll":
+                    total_ppb = purchase_rate_per_kg
 
-        total_ppb = round(total_ppb, 2)
+            total_ppb = round(total_ppb, 2)
+            
+            
+            final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
+            
+            minimum_quantity  = no_of_pouch_kg * 500
+            print(total_ppb)
+            print(jobs)
+            return JsonResponse({
+                "per_pouch_rate_basic": total_ppb,
+                "final_rare": final_rare,
+                "jobs":jobs,
+                "minimum_quantity":minimum_quantity
+            })
+    except Exception as e:
+        messages.error(request,"Something went wrong ")
+        print(e)
         
-        
-        final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
-        
-        minimum_quantity  = no_of_pouch_kg * 500
-        print(jobs)
-        return JsonResponse({
-            "per_pouch_rate_basic": total_ppb,
-            "final_rare": final_rare,
-            "jobs":jobs,
-            "minimum_quantity":minimum_quantity
-        })
 
     return HttpResponse("")

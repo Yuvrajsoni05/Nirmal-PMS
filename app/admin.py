@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import * 
 from app.models import ProformaInvoice
+
 # Register your models here.
 
 
@@ -66,4 +67,9 @@ admin.site.register(ProformaJob , ProformaJobAdmin)
 
 
 admin.site.register(CDRImage)
-    
+
+
+
+class PouchQuotationAdmin(admin.ModelAdmin):
+    list_display = ["id" ,"delivery_date" ,"quantity_variate"]
+admin.site.register(PouchQuotation,PouchQuotationAdmin)

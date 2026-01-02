@@ -11,6 +11,7 @@ from rest_framework.fields import DateField
 from num2words import num2words
 
 
+
 # Create your models here.  
 class Registration(AbstractUser):
     
@@ -285,12 +286,40 @@ class ProformaJob(models.Model):
     def __str__(self):
         return f"{self.title} {self.taxable_value}"
     
+
+
+
+
+
+# Pouch Party Details Models 
+class PouchParty(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
+    party_name = models.CharField(max_length=200, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.party_name}"
     
+class PouchPartyEmail(models.Model):
+    party = models.ForeignKey(PouchParty, on_delete=models.CASCADE, related_name='pouch_party_emails')
+    email = models.EmailField(max_length=200)
+    def __str__(self):
+        
+        return f"{self.party} - {self.email}"
+
+    
+class PouchPartyContact(models.Model):
+    party = models.ForeignKey(PouchParty, on_delete=models.CASCADE, related_name='pouch_party_contacts')
+    party_number = models.CharField(max_length=20)
+    
+    def __str__(self):
+        return f"{self.party} - {self.party_number}"
+
+
     
 class PouchQuotation(models.Model):
     delivery_date  = models.DateField()
     party_details = models.ForeignKey(
-        Party,
+        PouchParty,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -345,7 +374,7 @@ class PurchaseOrder(models.Model):
     
     delivery_date  = models.DateField()
     party_details = models.ForeignKey(
-        Party,
+        PouchParty,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -360,7 +389,7 @@ class PurchaseOrder(models.Model):
     
     
     def __str__(self):
-        return f"{self.job_name} - {self.party_details}"
+        return f"PO #{self.id} - {self.party_details}"
 
 
 
