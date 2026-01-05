@@ -27,27 +27,16 @@ document.addEventListener("DOMContentLoaded", function(){
     const container = document.getElementById("jobs-container");
     const addBtn = document.getElementById("add-job");
 
-    // ADD JOB
-    addBtn?.addEventListener("click", () => {
+    // add job
+    addBtn.addEventListener("click", () => {
+        let job = document.querySelector(".job-block");
+        let clone = job.cloneNode(true);
 
-        const job = container?.querySelector(".job-block");
-
-        if (!job) {
-            alert("No job template found");
-            return;
-        }
-
-        const clone = job.cloneNode(true);
-
-        // clear all inputs
-        clone.querySelectorAll("input, textarea, select").forEach(el => {
-            el.value = "";
-        });
-
+        clone.querySelectorAll("input, textarea, select").forEach(el => el.value = "");
         container.appendChild(clone);
     });
 
-    // REMOVE JOB
+    // remove job
     document.addEventListener("click", e => {
         if(e.target.classList.contains("remove-job")){
             let jobs = document.querySelectorAll(".job-block");
@@ -59,21 +48,10 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     });
 
-    // AUTO-CALCULATE
-    document.addEventListener("input", e => {
-
-        const block = e.target.closest(".job-block");
-        if (!block) return;
-
-        const rate = parseFloat(block.querySelector(".purchase_rate_per_kg")?.value) || 0;
-        const nopkg = parseFloat(block.querySelector(".no_of_pouch_kg")?.value) || 0;
-
-        const output = block.querySelector(".per_pouch_rate_basic");
-
-        output.value = (rate && nopkg) ? (rate / nopkg).toFixed(2) : "";
-    });
+    
 
 });
 </script>
+
 
 {% endblock %}

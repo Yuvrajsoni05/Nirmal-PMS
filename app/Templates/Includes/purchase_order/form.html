@@ -2,7 +2,7 @@
     <div class="col-xl-12 col-lg-1">
         <div class="card shadow-sm border-0">
             <div class="card-header py-3">
-                <h5 class="mb-0">Create Purchase Order </h5>
+                <h5 class="mb-0">Create Purchase Order    </h5>
             </div>
 
             <div class="card-body p-4">
@@ -25,20 +25,38 @@
                                 required
                             />
                         </div>
-
+                         
                         <!-- Party Name -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">
                                 Party Name <span class="text-danger">*</span>
                             </label>
-                            <select class="form-select form-control" id="party_name" name="party_name" required>
+
+                            <select class="form-select" id="party_name" name="party_name" required>
                                 <option value="">Select Party Name</option>
+
                                 {% for party in party_names %}
                                     <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                                 {% endfor %}
+
                                 <option value="others">Other</option>
                             </select>
                         </div>
+
+                        <!-- Hidden Text Box -->
+                        <div class="col-md-6 d-none" id="new_party_wrapper">
+                            <label class="form-label fw-semibold">
+                                Enter New Party Name <span class="text-danger">*</span>
+                            </label>
+
+                            <input type="text" id="new_party_name" name="new_party_name"
+                                class="form-control">
+
+                            <small id="new_party_error" class="text-danger d-none">
+                                Party name is required
+                            </small>
+                        </div>
+
 
                         <!-- Job Data -->
                         {% if jobs %}

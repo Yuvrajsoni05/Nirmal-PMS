@@ -303,19 +303,16 @@ class PouchPartyEmail(models.Model):
     party = models.ForeignKey(PouchParty, on_delete=models.CASCADE, related_name='pouch_party_emails')
     email = models.EmailField(max_length=200)
     def __str__(self):
-        
         return f"{self.party} - {self.email}"
 
-    
+
 class PouchPartyContact(models.Model):
     party = models.ForeignKey(PouchParty, on_delete=models.CASCADE, related_name='pouch_party_contacts')
     party_number = models.CharField(max_length=20)
-    
     def __str__(self):
         return f"{self.party} - {self.party_number}"
 
 
-    
 class PouchQuotation(models.Model):
     delivery_date  = models.DateField()
     party_details = models.ForeignKey(
@@ -325,7 +322,6 @@ class PouchQuotation(models.Model):
         blank=True,
         related_name="quotations_party_name"
     )
-
     # the  Term 
     quantity_variate = models.CharField(max_length=200)
     freight = models.CharField(max_length=200)

@@ -47,17 +47,7 @@ document.addEventListener("DOMContentLoaded", function(){
         }
     });
 
-    // auto calc per pouch rate
-    document.addEventListener("input", e => {
-        let block = e.target.closest(".job-block");
-        if(!block) return;
-
-        let rate = block.querySelector(".prkg").value || 0;
-        let nopkg = block.querySelector(".nopkg").value || 0;
-        let output = block.querySelector(".per_pouch_basic");
-
-        output.value = (rate && nopkg) ? (rate / nopkg).toFixed(2) : "";
-    });
+    
 
 });
 </script>

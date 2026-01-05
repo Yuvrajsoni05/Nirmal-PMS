@@ -130,7 +130,7 @@
 
                                     <td>
                                         {% for job in purchase_order.purchase_order_jobs.all %}
-                                            <div>{{ job.pouch_type }}</div>
+                                            <div>{{ job.get_pouch_type_display }}</div>
                                         {% endfor %}
                                     </td>
 

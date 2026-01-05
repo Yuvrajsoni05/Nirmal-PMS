@@ -3,7 +3,7 @@ from .common_imports import *
 
 @custom_login_required
 def purchase_order(request):
-    party_names = Party.objects.values('party_name').all()
+    party_names = PouchParty.objects.values('party_name')
     pouch_types =  PurchaseOrderJob.POUCH_TYPE
     polyester_unit = PurchaseOrderJob.POLYESTER_UNIT
     
@@ -11,7 +11,7 @@ def purchase_order(request):
         if 'create_purchase_order' in request.POST:
             delivery_date =  request.POST.get('delivery_date')
             party_name = request.POST.get('party_name')
-            
+          
             job_name = request.POST.getlist('job_name')
             pouch_open_size = request.POST.getlist('pouch_size')
             pouch_combination = request.POST.getlist('pouch_combination')
@@ -34,8 +34,9 @@ def purchase_order(request):
             gst = request.POST.get('gst')
             note = request.POST.get('note')
 
-            
-            party_details, _ = Party.objects.get_or_create(
+            if party_name == "others":
+                party_name = request.POST.get("new_party_name")
+            party_details, _ = PouchParty.objects.get_or_create(
                     party_name=party_name.strip() if party_name else None
                 )
             
@@ -53,7 +54,7 @@ def purchase_order(request):
                     "zipper_cost":zipper_cost,
                     "final_rare":final_rare,
                     "minimum_quantity":minimum_quantity,
-                    "pouch_type":pouch_types,
+                    "pouch_type":pouch_type,
                     "special_instruction":special_instruction,
                     "delivery_address":delivery_address,
                     "quantity_variation":quantity_variation,
@@ -91,7 +92,7 @@ def purchase_order(request):
                     pouch_charge=pouch_charge[i],
                     final_rare=final_rare[i],
                     minimum_quantity=minimum_quantity[i],
-                    pouch_type=pouch_types[i],
+                    pouch_type=pouch_type[i],
                     special_instruction=special_instruction[i],
                     delivery_address=delivery_address[i],
                     
@@ -99,7 +100,7 @@ def purchase_order(request):
             purchase_order.save()
             messages.success(request,"Purchase Order created successfully ")
             return redirect('quotation_page')
-             
+              
     context ={
         'party_names':party_names,
         'pouch_types':pouch_types,
@@ -129,35 +130,43 @@ def view_purchase_order(request):
           
 @custom_login_required       
 def purchase_order_ajax(request):
-    
-    if request.method == "GET":
-        party_name = request.GET.get('party_name')
-        purchase_rate_per_kg = float(request.GET.get("purchase_rate_per_kg") or 0)
-        no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 1)
-        unit = request.GET.get("purchase_rate_unit")
-        per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
-        zipper_cost =float(request.GET.get("zipper_cost") or 0)
-        pouch_charge = float(request.GET.get("pouch_charge") or 0)
-        jobs = list(utils.all_job_name_list(party_name))
-        total_ppb = 0
-       
-        if purchase_rate_per_kg:   
-            if unit == "polyester_printed_bag":
-                total_ppb = purchase_rate_per_kg / no_of_pouch_kg
-            elif unit == "polyester_printed_roll":
-                total_ppb = purchase_rate_per_kg
+    try:
+        if request.method == "GET":
+            party_name = request.GET.get('party_name')
+            
+            purchase_rate_per_kg = float(request.GET.get("purchase_rate_per_kg") or 0)
+            no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 0)
+            unit = request.GET.get("purchase_rate_unit")
+            per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
+            zipper_cost =float(request.GET.get("zipper_cost") or 0)
+            pouch_charge = float(request.GET.get("pouch_charge") or 0)
+            
+            print(party_name)
+            total_ppb = 0
+            jobs  = list(PurchaseOrderJob.objects.filter(purchase_order__party_details__party_name=party_name).values('job_name'))
+            print(jobs)
+            if purchase_rate_per_kg:   
+                if unit == "polyester_printed_bag":
+                    total_ppb = purchase_rate_per_kg / no_of_pouch_kg
+                elif unit == "polyester_printed_roll":
+                    total_ppb = purchase_rate_per_kg
 
-        total_ppb = round(total_ppb, 2)
-
-
-        final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
+            total_ppb = round(total_ppb, 2)
+            
+            
+            final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
+            
+            minimum_quantity  = no_of_pouch_kg * 500
+          
+            return JsonResponse({
+                "per_pouch_rate_basic": total_ppb,
+                "final_rare": final_rare,
+                "jobs":jobs,
+                "minimum_quantity":minimum_quantity
+            })
+    except Exception as e:
+        messages.error(request,"Something went wrong ")
+        print(e)
         
-        minimum_quantity  = no_of_pouch_kg * 500
-        return JsonResponse({
-            "per_pouch_rate_basic": total_ppb,
-            "final_rare": final_rare,
-            "jobs":jobs,
-            "minimum_quantity":minimum_quantity
-        })
+
     return HttpResponse("")
- 

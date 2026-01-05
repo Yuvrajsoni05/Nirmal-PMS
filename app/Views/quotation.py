@@ -4,7 +4,7 @@ from .common_imports import *
 def quotation_page(request):
     
     
-    party_names = Party.objects.values('party_name')
+    party_names = PouchParty.objects.values('party_name')
     pouch_types =  PouchQuotationJob.POUCH_TYPE
     
     if request.method == 'POST':
@@ -187,7 +187,7 @@ def view_quotations(request):
                 
                 common_filed = {
                 "check_delivery_date": "delivery_date",
-                "check_party_details": "party_details",
+          
                 "check_note": "note",
                 "check_gst": "gst",
                 "check_quantity_variate": "quantity_variate",
@@ -210,7 +210,6 @@ def view_quotations(request):
                 "check_final_rare": "final_rare",
                 "check_minimum_quantity": "minimum_quantity",
                 "check_pouch_type": "pouch_type",
-                
                 "check_delivery_address": "delivery_address",
                 "check_special_instruction": "special_instruction",
                
@@ -298,13 +297,13 @@ def view_quotations(request):
                 jobs = PouchQuotationJob.objects.filter(id__in=job_ids, quotation=quotation).all()
       
                                 
-                party_name = Party.objects.all()
-                print(party_name)
+                party_names = PouchParty.objects.all()
+                print(party_names)
               
                 context = {
                     "jobs": jobs,
                     "quotation": quotation,
-                    "party_name": party_name,
+                    "party_names": party_names,
                     "pouch_types": PurchaseOrderJob.POUCH_TYPE,
                     "polyester_unit": PurchaseOrderJob.POLYESTER_UNIT,
                 }

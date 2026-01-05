@@ -22,10 +22,10 @@ $(document).on(
         const block = $(this).closest(".job-block");
 
         const values = [
-            block.find("[name='pouch_combination1']").val() || "",
-            block.find("[name='pouch_combination2']").val() || "",
-            block.find("[name='pouch_combination3']").val() || "",
-            block.find("[name='pouch_combination4']").val() || "",
+            block.find("[name='pouch_combination1']").val() || "0",
+            block.find("[name='pouch_combination2']").val() || "0",
+            block.find("[name='pouch_combination3']").val() || "0",
+            block.find("[name='pouch_combination4']").val() || "0",
         ]
             .map((v) => v.trim())
             .filter((v) => v !== "");
@@ -38,20 +38,22 @@ $(document).on(
     }
 );
 
-// ---------- PARTY NAME → OTHERS (GLOBAL) ----------
 document.addEventListener("DOMContentLoaded", function () {
     const partySelect = document.getElementById("party_name");
+    const newPartyWrapper = document.getElementById("new_party_wrapper");
     const newParty = document.getElementById("new_party_name");
     const newPartyError = document.getElementById("new_party_error");
 
     partySelect.addEventListener("change", function () {
+
         if (this.value === "others") {
-            newParty.classList.remove("d-none");
+            newPartyWrapper.classList.remove("d-none");
             newParty.required = true;
         } else {
-            newParty.classList.add("d-none");
+            newPartyWrapper.classList.add("d-none");
             newParty.required = false;
             newParty.value = "";
+            newParty.classList.remove("is-invalid");
             newPartyError.classList.add("d-none");
         }
     });
@@ -66,6 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
 
 // ---------- JOB NAME → OTHERS (PER JOB BLOCK) ----------
 
