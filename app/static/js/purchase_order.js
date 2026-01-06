@@ -11,6 +11,7 @@ $(document).on(
         const d = block.find("[name='pouch_diameter']").val() || "";
 
         block.find("[name='pouch_size']").val(h && d ? `${h} x ${d}` : "");
+       
     }
 );
 
@@ -39,21 +40,19 @@ $(document).on(
 );
 
 document.addEventListener("DOMContentLoaded", function () {
+
     const partySelect = document.getElementById("party_name");
-    const newPartyWrapper = document.getElementById("new_party_wrapper");
     const newParty = document.getElementById("new_party_name");
     const newPartyError = document.getElementById("new_party_error");
 
     partySelect.addEventListener("change", function () {
-
         if (this.value === "others") {
-            newPartyWrapper.classList.remove("d-none");
+            newParty.classList.remove("d-none");
             newParty.required = true;
         } else {
-            newPartyWrapper.classList.add("d-none");
+            newParty.classList.add("d-none");
             newParty.required = false;
             newParty.value = "";
-            newParty.classList.remove("is-invalid");
             newPartyError.classList.add("d-none");
         }
     });
@@ -67,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
             newParty.classList.remove("is-invalid");
         }
     });
+
 });
 
 

@@ -2,15 +2,18 @@
     <div class="col-xl-12 col-lg-1">
         <div class="card shadow-sm border-0">
             <div class="card-header py-3">
-                <h5 class="mb-0">Create Purchase Order    </h5>
+                <h5 class="mb-0">Create Purchase Order</h5>
             </div>
 
             <div class="card-body p-4">
-                <form action="{% url 'purchase_order' %}" method="POST" autocomplete="off">
+                <form
+                    action="{% url 'purchase_order' %}"
+                    method="POST"
+                    autocomplete="off"
+                >
                     {% csrf_token %}
 
                     <div class="row g-4">
-
                         <!-- Delivery Date -->
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">
@@ -19,275 +22,237 @@
                             <input
                                 type="date"
                                 class="form-control"
-                                id="delivery_date"
                                 name="delivery_date"
                                 value="{{ quotation.delivery_date|date:'Y-m-d' }}"
                                 required
                             />
                         </div>
-                         
+
                         <!-- Party Name -->
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                Party Name <span class="text-danger">*</span>
-                            </label>
+                            <label class="form-label fw-semibold"
+                                >Party Name<span class="text-danger"
+                                    >*</span
+                                ></label
+                            >
 
-                            <select class="form-select" id="party_name" name="party_name" required>
+                            <select
+                                class="form-select form-control"
+                                id="party_name"
+                                name="party_name"
+                                required
+                            >
                                 <option value="">Select Party Name</option>
 
                                 {% for party in party_names %}
-                                    <option value="{{ party.party_name }}">{{ party.party_name }}</option>
+                                <option value="{{ party.party_name }}">
+                                    {{ party.party_name }}
+                                </option>
                                 {% endfor %}
-
                                 <option value="others">Other</option>
                             </select>
-                        </div>
+                            <input
+                                type="text"
+                                class="form-control mt-2 d-none"
+                                placeholder="Enter New Party Name"
+                                name="new_party_name"
+                                id="new_party_name"
+                            />
 
-                        <!-- Hidden Text Box -->
-                        <div class="col-md-6 d-none" id="new_party_wrapper">
-                            <label class="form-label fw-semibold">
-                                Enter New Party Name <span class="text-danger">*</span>
-                            </label>
-
-                            <input type="text" id="new_party_name" name="new_party_name"
-                                class="form-control">
-
-                            <small id="new_party_error" class="text-danger d-none">
+                            <div class="invalid-feedback">
                                 Party name is required
-                            </small>
+                            </div>
                         </div>
 
+                        <!-- JOB DATA -->
+                        {% if jobs %} {% for i in jobs %}
 
-                        <!-- Job Data -->
-                        {% if jobs %}
-                            {% for i in jobs %}
-
+                        <div class="job-block card p-3 mb-3 border">
+                            <div class="row g-3">
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        Job Name <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >Job Name</label
+                                    >
                                     <input
                                         type="text"
                                         value="{{ i.job_name }}"
-                                        class="form-control"
-                                        name="job_name"
-                                        id="job_name"
+                                        class="form-control job_name"
                                         readonly
                                     />
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        Pouch Size (Open) <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >Pouch Size</label
+                                    >
                                     <input
                                         type="text"
                                         value="{{ i.pouch_open_size }}"
                                         class="form-control"
-                                        name="pouch_size"
-                                        id="pouch_size"
                                         readonly
                                     />
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        Pouch Combination <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >Pouch Combination</label
+                                    >
                                     <input
                                         type="text"
                                         value="{{ i.pouch_combination }}"
                                         class="form-control"
-                                        name="pouch_combination"
-                                        id="pouch_combination"
                                         readonly
                                     />
                                 </div>
 
-                                <!-- Quantity -->
                                 <div class="col-md-3">
-                                    <label class="form-label fw-semibold">
-                                        Quantity <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >Quantity</label
+                                    >
                                     <input
                                         type="number"
                                         class="form-control"
-                                        id="quantity"
                                         name="quantity"
                                         value="{{ i.quantity }}"
                                         required
                                     />
                                 </div>
 
-                                <!-- Purchase Rate -->
                                 <div class="col-md-5">
-                                    <label class="form-label fw-semibold">
-                                        Purchase Rate Per KG <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >Purchase Rate Per KG</label
+                                    >
                                     <div class="input-group">
                                         <input
                                             type="number"
-                                            class="form-control"
-                                            id="purchase_rate_per_kg"
+                                            class="form-control purchase_rate_per_kg"
                                             name="purchase_rate_per_kg"
                                             required
                                         />
                                         <select
-                                            class="form-select form-control"
-                                            id="purchase_rate_unit"
+                                            class="form-select purchase_rate_unit"
                                             name="purchase_rate_unit"
                                             required
                                         >
                                             <option value="">Select</option>
-                                            {% for value, label in polyester_unit %}
-                                                <option value="{{ value }}">{{ label }}</option>
+                                            {% for v,l in polyester_unit %}
+                                            <option value="{{ v }}">
+                                                {{ l }}
+                                            </option>
                                             {% endfor %}
                                         </select>
                                     </div>
                                 </div>
 
-                                <!-- No of Pouch / Kg -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        No. of Pouch / Kg <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >No. of Pouch / Kg</label
+                                    >
                                     <input
                                         type="number"
-                                        class="form-control"
-                                        id="no_of_pouch_kg"
+                                        class="form-control no_of_pouch_kg"
                                         name="no_of_pouch_kg"
                                         required
                                     />
                                 </div>
 
-                                <!-- Per Pouch Rate Basic -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">Per Pouch Rate Basic</label>
+                                    <label class="form-label fw-semibold"
+                                        >Per Pouch Rate Basic</label
+                                    >
                                     <input
                                         type="text"
-                                        class="form-control"
-                                        id="per_pouch_rate_basic"
+                                        class="form-control per_pouch_rate_basic"
                                         name="per_pouch_rate_basic"
+                                        readonly
                                     />
                                 </div>
 
-                                <!-- Pouch Charge -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        Pouch Charge <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >Pouch Charge</label
+                                    >
                                     <input
                                         type="number"
-                                        class="form-control"
-                                        id="pouch_charge"
+                                        class="form-control pouch_charge"
                                         name="pouch_charge"
                                         required
                                     />
                                 </div>
 
-                                <!-- Zipper Cost -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        Zipper Cost <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >Zipper Cost</label
+                                    >
                                     <input
                                         type="number"
-                                        class="form-control"
-                                        id="zipper_cost"
+                                        class="form-control zipper_cost"
                                         name="zipper_cost"
                                         required
                                     />
                                 </div>
 
-                                <!-- Final Rate -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        Final Rare <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >Final Rate</label
+                                    >
                                     <input
                                         type="number"
-                                        class="form-control"
-                                        id="final_rare"
+                                        class="form-control final_rare"
                                         name="final_rare"
                                         required
                                     />
                                 </div>
 
-                                <!-- Minimum Quantity -->
                                 <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        Minimum Quantity <span class="text-danger">*</span>
-                                    </label>
+                                    <label class="form-label fw-semibold"
+                                        >Minimum Quantity</label
+                                    >
                                     <input
                                         type="number"
-                                        class="form-control"
-                                        id="minimum_quantity"
+                                        class="form-control minimum_quantity"
                                         name="minimum_quantity"
                                         required
                                     />
                                 </div>
+                            </div>
+                        </div>
 
-                                <!-- Pouch Type -->
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        Pouch Type <span class="text-danger">*</span>
-                                    </label>
-                                    <select class="form-select form-control" id="pouch_type" name="pouch_type" required>
-                                        <option value="">Select</option>
-                                        {% for value, label in pouch_types %}
-                                            <option value="{{ value }}" {% if value == i.pouch_type %}selected{% endif %}>
-                                                {{ label }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-
-                                <!-- Special Instruction -->
-                                <div class="col-12">
-                                    <label class="form-label fw-semibold">Special Instruction</label>
-                                    <textarea class="form-control" name="special_instruction" rows="2">
-                                    {{ i.special_instruction }}</textarea>
-                                </div>
-
-                                <!-- Delivery Address -->
-                                <div class="col-12">
-                                    <label class="form-label fw-semibold">
-                                        Delivery Address <span class="text-danger">*</span>
-                                    </label>
-                                    <textarea
-                                        class="form-control border-1"
-                                        id="delivery_address"
-                                        name="delivery_address"
-                                        rows="4"
-                                        required
-                                    >{{ i.delivery_address }}</textarea>
-                                </div>
-
-                            {% endfor %}
-                        {% else %}
+                        {% endfor %} {% else %}
 
                         <div id="jobs-container">
                             <div class="job-block card p-3 mb-3 border">
                                 <div class="row g-3">
-                                <!-- Job Name -->
-                                <div class="col-md-4">
-                                    <label class="form-label fw-semibold">
-                                        Job Name <span class="text-danger">*</span>
-                                    </label>
+                                    <!-- Job Name -->
+                                    <div class="col-md-4">
+                                        <label class="form-label fw-semibold">
+                                            Job Name
+                                            <span class="text-danger">*</span>
+                                        </label>
 
-                                    <select class="form-select job_name" name="job_name">
-                                        <option value="">Select Job Name</option>
-                                        {% for job in job_names %}
-                                        <option value="{{ job }}">{{ job }}</option>
-                                        {% endfor %}
-                                        <option value="others">Others</option>
-                                    </select>
+                                        <select
+                                            class="form-select job_name"
+                                            name="job_name"
+                                        >
+                                            <option value="">
+                                                Select Job Name
+                                            </option>
+                                            {% for job in job_names %}
+                                            <option value="{{ job }}">
+                                                {{ job }}
+                                            </option>
+                                            {% endfor %}
+                                            <option value="others">
+                                                Others
+                                            </option>
+                                        </select>
 
-                                    <input type="text"
-                                        class="form-control mt-2 new_job_name d-none"
-                                        placeholder="Enter New Job Name">
-                                </div>
-
+                                        <input
+                                            type="text"
+                                            class="form-control mt-2 new_job_name d-none"
+                                            placeholder="Enter New Job Name"
+                                        />
+                                    </div>
 
                                     <!-- Pouch Size -->
                                     <div class="col-md-4">
@@ -335,7 +300,6 @@
                                         <div class="input-group">
                                             <input
                                                 type="text"
-                                                
                                                 class="form-control pc1"
                                                 name="pouch_combination1"
                                             />
@@ -344,7 +308,6 @@
                                             >
                                             <input
                                                 type="text"
-                                                
                                                 class="form-control pc2"
                                                 name="pouch_combination2"
                                             />
@@ -353,7 +316,6 @@
                                             >
                                             <input
                                                 type="text"
-                                                
                                                 class="form-control pc3"
                                                 name="pouch_combination3"
                                             />
@@ -362,7 +324,6 @@
                                             >
                                             <input
                                                 type="text"
-                                                
                                                 class="form-control pc4"
                                                 name="pouch_combination4"
                                             />
@@ -567,7 +528,11 @@
                         </div>
 
                         <div class="d-flex justify-content-start">
-                            <button type="button" id="add-job" class="btn btn-primary ">
+                            <button
+                                type="button"
+                                id="add-job"
+                                class="btn btn-primary"
+                            >
                                 + Add Job
                             </button>
                         </div>
@@ -576,11 +541,14 @@
 
                         <!-- Other Terms -->
                         <div class="col-12">
-                            <label class="form-label fw-semibold">Other Terms</label>
+                            <label class="form-label fw-semibold"
+                                >Other Terms</label
+                            >
                             <div class="p-3 bg-light rounded border small">
-
                                 <div class="row g-2 mb-2">
-                                    <div class="col-md-3 fw-semibold">Quantity Variation:</div>
+                                    <div class="col-md-3 fw-semibold">
+                                        Quantity Variation:
+                                    </div>
                                     <div class="col-md-9">
                                         <input
                                             class="form-control"
@@ -593,7 +561,9 @@
                                 </div>
 
                                 <div class="row g-2 mb-2">
-                                    <div class="col-md-3 fw-semibold">Freight:</div>
+                                    <div class="col-md-3 fw-semibold">
+                                        Freight:
+                                    </div>
                                     <div class="col-md-9">
                                         <input
                                             class="form-control"
@@ -619,7 +589,9 @@
                                 </div>
 
                                 <div class="row g-2">
-                                    <div class="col-md-3 fw-semibold">Note:</div>
+                                    <div class="col-md-3 fw-semibold">
+                                        Note:
+                                    </div>
                                     <div class="col-md-9">
                                         <input
                                             class="form-control"
@@ -630,11 +602,10 @@
                                         />
                                     </div>
                                 </div>
-
                             </div>
                         </div>
 
-                        <!-- Button -->
+                        <!-- Submit Buttons -->
                         <div class="col-12 text-end pt-3">
                             <button
                                 type="submit"
@@ -643,12 +614,13 @@
                             >
                                 Create Pouch Order
                             </button>
-
-                            <button type="reset" class="btn btn-secondary px-4 ms-2">
+                            <button
+                                type="reset"
+                                class="btn btn-secondary px-4 ms-2"
+                            >
                                 Reset
                             </button>
                         </div>
-
                     </div>
                 </form>
             </div>

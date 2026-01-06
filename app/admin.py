@@ -73,3 +73,5 @@ admin.site.register(CDRImage)
 class PouchQuotationAdmin(admin.ModelAdmin):
     list_display = ["id" ,"delivery_date" ,"quantity_variate"]
 admin.site.register(PouchQuotation,PouchQuotationAdmin)
+
+admin.site.register(PouchParty)

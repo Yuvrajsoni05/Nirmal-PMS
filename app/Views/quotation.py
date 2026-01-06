@@ -35,11 +35,9 @@ def quotation_page(request):
            
             
             
-           
-            
-            
+
             if new_party_name:
-                party_details = new_party_name
+                party_name = new_party_name
                 
           
             
@@ -136,7 +134,7 @@ def view_quotations(request):
             edit_quotation.gst = request.POST.get("gst")
             edit_quotation.save()
 
-            # ---- Get Lists of Job Fields ----
+       
             job_ids = request.POST.getlist("job_id")
 
             pouch_open_sizes = request.POST.getlist("pouch_open_size")
@@ -336,7 +334,7 @@ def quotation_page_ajax(request):
             per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
             zipper_cost =float(request.GET.get("zipper_cost") or 0)
             pouch_charge = float(request.GET.get("pouch_charge") or 0)
-            jobs = list(utils.all_job_name_list(party_name))
+            jobs  = list(PurchaseOrderJob.objects.filter(purchase_order__party_details__party_name=party_name).values('job_name').distinct())
             
             total_ppb = 0
             
@@ -352,7 +350,6 @@ def quotation_page_ajax(request):
             final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
             
             minimum_quantity  = no_of_pouch_kg * 500
-            print(total_ppb)
             print(jobs)
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,
