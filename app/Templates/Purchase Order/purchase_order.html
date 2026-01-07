@@ -29,32 +29,62 @@ document.addEventListener("DOMContentLoaded", function(){
     const container = document.getElementById("jobs-container");
     const addBtn = document.getElementById("add-job");
 
-    // add job
-    addBtn.addEventListener("click", () => {
-        let job = document.querySelector(".job-block");
-        let clone = job.cloneNode(true);
+    if(container && addBtn){
 
-        clone.querySelectorAll("input, textarea, select").forEach(el => el.value = "");
-        container.appendChild(clone);
-    });
+        addBtn.addEventListener("click", () => {
 
-    // remove job
-    document.addEventListener("click", e => {
-        if(e.target.classList.contains("remove-job")){
-            let jobs = document.querySelectorAll(".job-block");
-            if(jobs.length === 1){
-                alert("At least one job is required");
-                return;
-            }
-            e.target.closest(".job-block").remove();
+            let job = container.querySelector(".job-block:last-of-type");
+            let clone = job.cloneNode(true);
+
+            clone.querySelectorAll("input, textarea, select").forEach(el => {
+                if(el.type === "hidden") return;
+                el.value = "";
+            });
+
+            container.appendChild(clone);
+        });
+    }
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+    const container = document.getElementById("job_data_container");
+    const addBtn = document.getElementById("add-jobs");
+
+    if(container && addBtn){
+
+        addBtn.addEventListener("click", () => {
+
+            let job = container.querySelector(".job-block_data:last-of-type");
+            let clone = job.cloneNode(true);
+
+            clone.querySelectorAll("input, textarea, select").forEach(el => {
+                if(el.type === "hidden") return;
+                el.value = "";
+            });
+
+            container.appendChild(clone);
+        });
+    }
+});
+</script>
+<script>
+document.addEventListener("click", e => {
+
+    if(e.target.classList.contains("remove-job")){
+
+        let jobs = document.querySelectorAll(".job-block, .job-block_data");
+
+        if(jobs.length === 1){
+            alert("At least one job is required");
+            return;
         }
-    });
 
-    
+        e.target.closest(".job-block, .job-block_data").remove();
+    }
 
 });
 </script>
-
-
 
 {% endblock %}

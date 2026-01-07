@@ -1,163 +1,291 @@
-{% extends "Mail/base_email.html" %}
+{% extends "Mail/base_email.html" %} {% block mail_content %}
 
-{% block mail_content %}
-
-<table width="100%" cellspacing="0" cellpadding="8" style="border-collapse:collapse; font-size:13px;">
-
-  {% if common_values.delivery_date %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Delivery Date</td>
-    <td style="border:1px solid #ddd;">{{ common_values.delivery_date }}</td>
-  </tr>
-  {% endif %}
-
-  {% if common_values.party_details %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Party</td>
-    <td style="border:1px solid #ddd;">
-      {{ common_values.party_details }}
-     
-    </td>
-  </tr>
-  {% endif %}
-
+<table
+    width="100%"
+    cellspacing="0"
+    cellpadding="8"
+    style="border-collapse: collapse; font-size: 13px"
+>
+    {% if common_values.delivery_date %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Delivery Date
+        </td>
+        <td style="border: 1px solid #ddd">
+            {{ common_values.delivery_date }}
+        </td>
+    </tr>
+    {% endif %} {% if common_values.party_details %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Party
+        </td>
+        <td style="border: 1px solid #ddd">
+            {{ common_values.party_details }}
+        </td>
+    </tr>
+    {% endif %}
 </table>
 
-
 {% for job in jobs %}
-<table width="100%" cellspacing="0" cellpadding="8" style="border-collapse:collapse; font-size:13px; margin-top:14px;">
+<table
+    width="100%"
+    cellspacing="0"
+    cellpadding="8"
+    style="border-collapse: collapse; font-size: 13px; margin-top: 14px"
+>
+    <tr>
+        <td colspan="2" style="background: #e9e9e9; font-weight: bold">
+            Job {{ forloop.counter }}
+        </td>
+    </tr>
 
-  <tr>
-    <td colspan="2" style="background:#e9e9e9; font-weight:bold;">
-      Job {{ forloop.counter }}
-    </td>
-  </tr>
-
-  {% if job.job_name %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Job Name</td>
-    <td style="border:1px solid #ddd;">{{ job.job_name }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.pouch_open_size %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Pouch Size</td>
-    <td style="border:1px solid #ddd;">{{ job.pouch_open_size }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.pouch_combination %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Pouch Combination</td>
-    <td style="border:1px solid #ddd;">{{ job.pouch_combination }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.quantity %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Quantity</td>
-    <td style="border:1px solid #ddd;">{{ job.quantity }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.purchase_rate_per_kg %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Purchase Rate / Kg</td>
-    <td style="border:1px solid #ddd;">{{ job.purchase_rate_per_kg }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.no_of_pouch_kg %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">No. Pouch / Kg</td>
-    <td style="border:1px solid #ddd;">{{ job.no_of_pouch_kg }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.per_pouch_rate_basic %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Basic Per-Pouch Rate</td>
-    <td style="border:1px solid #ddd;">{{ job.per_pouch_rate_basic }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.zipper_cost %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Zipper Cost</td>
-    <td style="border:1px solid #ddd;">{{ job.zipper_cost }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.pouch_charge %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Pouch Charge</td>
-    <td style="border:1px solid #ddd;">{{ job.pouch_charge }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.final_rate %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Final Rate</td>
-    <td style="border:1px solid #ddd;">{{ job.final_rate }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.minimum_quantity %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Minimum Qty</td>
-    <td style="border:1px solid #ddd;">{{ job.minimum_quantity }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.delivery_address %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Delivery Address</td>
-    <td style="border:1px solid #ddd;">{{ job.delivery_address }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.special_instruction %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Special Instruction</td>
-    <td style="border:1px solid #ddd;">{{ job.special_instruction }}</td>
-  </tr>
-  {% endif %}
-
-  {% if job.pouch_type %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Pouch Type</td>
-    <td style="border:1px solid #ddd;">{{ job.pouch_type }}</td>
-  </tr>
-  {% endif %}
-
+    {% if job.job_name %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Job Name
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.job_name }}</td>
+    </tr>
+    {% endif %} {% if job.pouch_open_size %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Pouch Size
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.pouch_open_size }}</td>
+    </tr>
+    {% endif %} {% if job.pouch_combination %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Pouch Combination
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.pouch_combination }}</td>
+    </tr>
+    {% endif %} {% if job.quantity %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Quantity
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.quantity }}</td>
+    </tr>
+    {% endif %} {% if job.purchase_rate_per_kg %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Purchase Rate / Kg
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.purchase_rate_per_kg }}</td>
+    </tr>
+    {% endif %} {% if job.no_of_pouch_kg %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            No. Pouch / Kg
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.no_of_pouch_kg }}</td>
+    </tr>
+    {% endif %} {% if job.per_pouch_rate_basic %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Basic Per-Pouch Rate
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.per_pouch_rate_basic }}</td>
+    </tr>
+    {% endif %} {% if job.zipper_cost %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Zipper Cost
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.zipper_cost }}</td>
+    </tr>
+    {% endif %} {% if job.pouch_charge %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Pouch Charge
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.pouch_charge }}</td>
+    </tr>
+    {% endif %} {% if job.final_rate %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Final Rare
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.final_rate }}</td>
+    </tr>
+    {% endif %} {% if job.minimum_quantity %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Minimum Qty
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.minimum_quantity }}</td>
+    </tr>
+    {% endif %} {% if job.delivery_address %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Delivery Address
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.delivery_address }}</td>
+    </tr>
+    {% endif %} {% if job.special_instruction %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Special Instruction
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.special_instruction }}</td>
+    </tr>
+    {% endif %} {% if job.pouch_type %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Pouch Type
+        </td>
+        <td style="border: 1px solid #ddd">{{ job.pouch_type }}</td>
+    </tr>
+    {% endif %}
 </table>
 {% endfor %}
 
-
-<table width="100%" cellspacing="0" cellpadding="8" style="border-collapse:collapse; font-size:13px; margin-top:14px;">
-
-  {% if common_values.quantity_variate %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Qty Variation</td>
-    <td style="border:1px solid #ddd;">{{ common_values.quantity_variate }}</td>
-  </tr>
-  {% endif %}
-
-  {% if common_values.freight %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">Freight</td>
-    <td style="border:1px solid #ddd;">{{ common_values.freight }}</td>
-  </tr>
-  {% endif %}
-
-  {% if common_values.gst %}
-  <tr>
-    <td style="background:#f8f8f8;font-weight:bold;border:1px solid #ddd;">GST %</td>
-    <td style="border:1px solid #ddd;">{{ common_values.gst }}%</td>
-  </tr>
-  {% endif %}
-
+<table
+    width="100%"
+    cellspacing="0"
+    cellpadding="8"
+    style="border-collapse: collapse; font-size: 13px; margin-top: 14px"
+>
+    {% if common_values.quantity_variate %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Qty Variation
+        </td>
+        <td style="border: 1px solid #ddd">
+            {{ common_values.quantity_variate }}
+        </td>
+    </tr>
+    {% endif %} {% if common_values.freight %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            Freight
+        </td>
+        <td style="border: 1px solid #ddd">{{ common_values.freight }}</td>
+    </tr>
+    {% endif %} {% if common_values.gst %}
+    <tr>
+        <td
+            style="
+                background: #f8f8f8;
+                font-weight: bold;
+                border: 1px solid #ddd;
+            "
+        >
+            GST %
+        </td>
+        <td style="border: 1px solid #ddd">{{ common_values.gst }}%</td>
+    </tr>
+    {% endif %}
 </table>
 
 {% endblock %}

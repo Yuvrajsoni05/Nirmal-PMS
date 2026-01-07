@@ -67,7 +67,7 @@
                                         name="check_party_details"
                                     />
                                     <label class="form-check-label fw-semibold"
-                                        >Party</label
+                                        >Party Name</label
                                     >
                                 </div>
                                 <input
@@ -80,6 +80,20 @@
                                     type="hidden"
                                     name="party_details"
                                     value="{{ purchase_order.party_details.id }}"
+                                />
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-check">
+                            
+                                    <label class="form-check-label fw-semibold"
+                                        >Party Email</label
+                                    >
+                                </div>
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    name="party_email"
+                                    
                                 />
                             </div>
                         </div>
@@ -303,7 +317,7 @@
                                         name="check_final_rare[]"
                                     />
                                     <label class="form-check-label fw-semibold"
-                                        >Final Rate</label
+                                        >Final Rare</label
                                     >
                                 </div>
                                 <input

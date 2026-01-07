@@ -70,25 +70,36 @@
                         <div id="jobs-container">
                             <div class="job-block card p-3 mb-3 border">
                                 <div class="row g-3">
-                                <!-- Job Name -->
-                                <div class="col-md-4 job-block">
-                                    <label class="form-label fw-semibold">
-                                        Job Name <span class="text-danger">*</span>
-                                    </label>
+                                    <!-- Job Name -->
+                                    <div class="col-md-4 job-block">
+                                        <label class="form-label fw-semibold">
+                                            Job Name
+                                            <span class="text-danger">*</span>
+                                        </label>
 
-                                    <select class="form-select job_name" name="job_name[]">
-                                        <option value="">Select Job Name</option>
-                                        {% for job in job_names %}
-                                        <option value="{{ job }}">{{ job }}</option>
-                                        {% endfor %}
-                                        <option value="others">Others</option>
-                                    </select>
+                                        <select
+                                            class="form-select job_name"
+                                            name="job_name[]"
+                                        >
+                                            <option value="">
+                                                Select Job Name
+                                            </option>
+                                            {% for job in job_names %}
+                                            <option value="{{ job }}">
+                                                {{ job }}
+                                            </option>
+                                            {% endfor %}
+                                            <option value="others">
+                                                Others
+                                            </option>
+                                        </select>
 
-                                    <input type="text"
-                                        class="form-control mt-2 new_job_name d-none"
-                                        placeholder="Enter New Job Name">
-                                </div>
-
+                                        <input
+                                            type="text"
+                                            class="form-control mt-2 new_job_name d-none"
+                                            placeholder="Enter New Job Name"
+                                        />
+                                    </div>
 
                                     <!-- Pouch Size -->
                                     <div class="col-md-4">
@@ -136,7 +147,6 @@
                                         <div class="input-group">
                                             <input
                                                 type="text"
-                                                
                                                 class="form-control pc1"
                                                 name="pouch_combination1[]"
                                             />
@@ -145,7 +155,6 @@
                                             >
                                             <input
                                                 type="text"
-                                                
                                                 class="form-control pc2"
                                                 name="pouch_combination2[]"
                                             />
@@ -154,7 +163,6 @@
                                             >
                                             <input
                                                 type="text"
-                                                
                                                 class="form-control pc3"
                                                 name="pouch_combination3[]"
                                             />
@@ -163,7 +171,6 @@
                                             >
                                             <input
                                                 type="text"
-                                                
                                                 class="form-control pc4"
                                                 name="pouch_combination4[]"
                                             />
@@ -235,7 +242,8 @@
                                             type="number"
                                             class="form-control no_of_pouch_kg"
                                             name="no_of_pouch_kg[]"
-                                            required
+                                            value="0.0"
+                                   
                                         />
                                     </div>
 
@@ -280,10 +288,10 @@
                                         />
                                     </div>
 
-                                    <!-- Final rate -->
+                                    <!-- Final Rare -->
                                     <div class="col-md-4">
                                         <label class="form-label fw-semibold">
-                                            Final Rate
+                                            Final Rare
                                             <span class="text-danger">*</span>
                                         </label>
                                         <input
@@ -368,11 +376,14 @@
                         </div>
 
                         <div class="d-flex justify-content-start">
-                            <button type="button" id="add-job" class="btn btn-primary ">
+                            <button
+                                type="button"
+                                id="add-job"
+                                class="btn btn-primary"
+                            >
                                 + Add Job
                             </button>
                         </div>
-
 
                         <!-- Other Terms -->
                         <div class="col-12">
@@ -390,6 +401,7 @@
                                             id="quantity_variation"
                                             name="quantity_variation"
                                             placeholder="Quantity variation"
+                                            required
                                         />
                                     </div>
                                 </div>

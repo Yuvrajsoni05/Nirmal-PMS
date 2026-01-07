@@ -167,6 +167,7 @@ def view_purchase_order(request):
                 
         elif 'send_purchase_order_mail' in request.POST:
             job_ids = request.POST.getlist("job_id[]")
+            party_email = request.POST.get("party_email")
             if request.method == 'POST':
                 common_filed = {
                 "check_delivery_date": "delivery_date",
@@ -237,9 +238,15 @@ def view_purchase_order(request):
 
                 PurchaseOrderJob.objects.filter(id=job_ids[i]).update(**selected_values)
                 all_selected_jobs.append(selected_values)
+                
             if 'send_purchase_order_mail' in request.POST:
-         
-                receiver_email = 'soniyuvraj9499@gmail.com'
+                
+                email_error = utils.email_validator(party_email)
+                if email_error:
+                    messages.error(request, email_error, extra_tags="custom-danger-style")
+                    return redirect("view_purchase_order")
+                
+                receiver_email = party_email
                 template_name = "Mail/purchase_order_mail.html"
                 convert_to_html_content = render_to_string(
                     template_name=template_name,

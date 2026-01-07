@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <title>Quotation — A4 Layout</title>
+
+        <style>
+            /* A4 page setup for print */
+            @page {
+                size: A4;
+                margin: 20mm;
+            }
+
+            body {
+                margin: 0;
+                background: #f2f2f2;
+                font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+                font-size: 13px;
+                line-height: 1.5;
+            }
+
+            .page {
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0 auto;
+                background: #ffffff;
+                padding: 8mm;
+                box-sizing: border-box;
+            }
+
+            h1,
+            h2,
+            h3 {
+                margin-top: 0;
+            }
+
+            .header-line {
+                display: flex;
+                justify-content: space-between;
+                font-weight: 600;
+                margin-bottom: 12px;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 10px;
+            }
+
+            .section-title {
+                margin-top: 18px;
+                font-weight: 700;
+                text-decoration: underline;
+            }
+
+            .block {
+                margin-top: 10px;
+                padding: 10px 0;
+                border-top: 1px solid #ccc;
+            }
+
+            .label {
+                font-weight: 600;
+            }
+
+            .terms {
+                margin-top: 8px;
+            }
+
+            .signature {
+                margin-top: 8px;
+                font-weight: 700;
+                display: flex;
+                justify-content: end;
+                border-top: 1px solid #ccc;
+                padding-top: 10px;
+            }
+
+            /* Screen preview layout */
+            @media screen {
+                .page {
+                    box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+                }
+            }
+
+            /* Print mode cleanup */
+            @media print {
+                body {
+                    background: #fff;
+                }
+                .page {
+                    box-shadow: none;
+                    margin: 0;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="page">
+            <div class="header-line">
+                <div class="w-20 h-fit">
+                    <img src="http://localhost:8000/static/assets/img/logo_icon.png" alt="logo"/>
+                </div>
+                <div
+                    style="
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                    "
+                >
+                    <div><strong>DATE:</strong> {% now "d m Y" %}</div>
+                    <div><strong>ORDER NO.:</strong> SNVL/2/25-26 (KAL)</div>
+                </div>
+            </div>
+            <div class="header-line">
+                <p>
+                    <strong>TO,</strong><br />
+                    {% if common_values.party_details %} {{ common_values.party_details }}<br />
+                    {% endif %}
+                    <strong>KIND ATTN:</strong>{% if common_values.party_details %}{{ common_values.party_details }} {% endif %}
+                </p>
+            </div>
+            {% for job in jobs %}
+                <div style="text-align: center">
+                    <p><strong>ORDER FROM NIRMAL VENTURES</strong></p>
+                    <p style="color: red">
+                        <strong
+                            >{{ job.special_instruction }}</strong
+                        >
+                    </p>
+                </div>
+ 
+                <!-- Product Blocks -->
+                <div class="block">
+                    <div>
+                        <strong>PRODUCT:</strong> {{ job.job_name }}
+                    </div>
+                    <div><strong>SIZE:</strong> {{ job.pouch_open_size }}</div>
+                    <div><strong>COMBINATION:</strong>{{ job.pouch_combination }}</div>
+                    <div><strong>QUANTITY:</strong> {{ job.quantity }}</div>
+                    <div><strong>POUCH COST:</strong> {{ job.purchase_rate_per_kg }}</div>
+                    <div><strong>ZIPPER COST:</strong>{{ job.zipper_cost }}</div>
+                    <div><strong>POUCH CHARGE:</strong> 0.07/-</div>
+                    <div><strong>RATE:</strong> {{ job.per_pouch_rate_basic }}- BASIC</div>
+                </div>
+                <div class="text-nowrap">
+                    {{ job.delivery_address }}
+                </div>
+
+                
+            {% endfor %}
+                <div class="terms block">
+                    <strong>OTHER TERMS</strong><br />
+                    <strong>Quantity Variate:</strong> {{ common_values.quantity_variate }}
+                    <strong>Freight.:</strong> {{ common_values.freight }}
+                    <strong>G.S.T.:</strong> {{ common_values.gst }}
+                    
+                </div>
+
+            <div class="signature">
+                THANK YOU,<br />
+                FOR SHREE NIRMAL VENTURES PVT. LTD. (KAL)<br />
+                MR. BHAVIK SHAH
+            </div>
+        </div>
+    </body>
+
+    <script>
+        window.onload = function () {
+            window.print();
+
+            window.onafterprint = function () {
+                window.close();
+            };
+        };
+    </script>
+</html>

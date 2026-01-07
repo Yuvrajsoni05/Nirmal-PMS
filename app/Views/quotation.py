@@ -185,7 +185,7 @@ def view_quotations(request):
                 
                 common_filed = {
                 "check_delivery_date": "delivery_date",
-          
+                "check_party_details":"party_details",
                 "check_note": "note",
                 "check_gst": "gst",
                 "check_quantity_variate": "quantity_variate",
@@ -223,7 +223,7 @@ def view_quotations(request):
                         continue
 
                     if field == "party_details":
-                        value = Party.objects.get(id=value)
+                        value = PouchParty.objects.get(id=value)
 
                     common_values[field] = value
   
@@ -283,9 +283,10 @@ def view_quotations(request):
             
             
             elif "print_quotation" in request.POST:
-                print("print quotation")
-                messages.success(request, "Data Print")
-                return redirect("view_quotations")
+                print(all_selected_jobs)
+                context={"jobs": all_selected_jobs , "common_values": common_values}  
+                return render(request, "Includes/quotation/print.html", context)
+
             
             elif "create_purchase_order" in request.POST:
                 quotation_id = request.POST.get("quotation_id")
@@ -350,6 +351,7 @@ def quotation_page_ajax(request):
             final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
             
             minimum_quantity  = no_of_pouch_kg * 500
+            print("This No of KG ",no_of_pouch_kg)
             print(jobs)
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,
@@ -358,7 +360,7 @@ def quotation_page_ajax(request):
                 "minimum_quantity":minimum_quantity
             })
     except Exception as e:
-        messages.error(request,"Something went wrong ")
+        # messages.error(request,"Something went wrong ")
         print(e)
         
 

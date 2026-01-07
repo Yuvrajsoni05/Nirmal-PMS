@@ -5,18 +5,19 @@ $(document).on(
 
         const isPartyChange = $(this).attr("id") === "party_name";
 
-        // 🔹 If PARTY changed → update ALL job blocks
+        // If PARTY changed → update ALL JOB TYPES
         if (isPartyChange) {
 
-            $(".job-block").each(function () {
+            $(".job-block, .job-block_data").each(function () {
                 runAjax($(this));
             });
 
             return;
         }
 
-        // 🔹 Otherwise update ONLY current block
-        const block = $(this).closest(".job-block");
+        // Otherwise update ONLY current block
+        const block = $(this).closest(".job-block, .job-block_data");
+
         if (block.length) runAjax(block);
     }
 );
@@ -51,7 +52,7 @@ function runAjax(block) {
                  .val(response.minimum_quantity || 0);
 
 
-            // ------- JOB DROPDOWN UPDATE -------
+            // -------- JOB NAME DROPDOWN --------
             let jobSelect = block.find(".job_name");
 
             if (jobSelect.length && jobSelect.is("select")) {
