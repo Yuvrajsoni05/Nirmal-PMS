@@ -14,7 +14,48 @@
 
     <div class="card card-round">
         <div class="card-header">
-            <h5 class="card-title mb-0">Purchase Order</h5>
+            <div class="d-flex align-items-center justify-content-between flex-wrap">
+                <h5 class="card-title mb-0">Purchase Order</h5>
+                <form method="GET" class="row g-2 align-items-center">
+                    <div class="col-auto">
+                        <select name="party_id" id="party_filter" class="form-select" >
+                            <option value="">Select Parties</option>
+                            {% for party in party_names %}
+                            <option value="{{ party.id }}" {% if request.GET.party_id == party.id|slugify %}selected{% endif %}>
+                                {{ party.party_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-auto">
+                        <select name="job_id" id="job_filter" class="form-select" >
+                            <option value="">Select Job Name</option>
+                            {% for job in job_names %}
+                            <option value="{{ job.id }}" {% if request.GET.job_id == job.id|slugify %}selected{% endif %}>
+                                {{ job.job_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <div class="input-group ">
+                            <span class="input-group-text">Start Date</span>
+                            <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="input-group ">
+                            <span class="input-group-text">End Date</span>
+                            <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request.GET.end_date }}">
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit" class="btn btn-primary btn-sm">Search</button>
+                        <a href="{{ request.path }}" class="btn btn-secondary btn-sm">Reset</a>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div class="card-body p-0">

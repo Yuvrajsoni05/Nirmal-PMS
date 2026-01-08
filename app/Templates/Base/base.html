@@ -194,19 +194,6 @@
                 });
             });
         </script>
-        <script type="module">
-  import { createChat } from "https://cdn.jsdelivr.net/npm/genui-widget/dist/genui-widget.es.js";
-
-  createChat({
-    n8n: {
-      webhookUrl: "https://meerazala.app.n8n.cloud/webhook/1f6bf75b-0ee5-4921-9cc2-a28ba0fda0f8/chat",
-      enableStreaming: true,
-    },
-    storageType: "localstorage",
-    agentName: "Assistant",
-    formFactor: "bottom-tray",
-  });
-</script>
 
         {% block script %} {% endblock script %}
     </body>

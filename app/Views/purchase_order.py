@@ -112,6 +112,34 @@ def purchase_order(request):
 @custom_login_required
 def view_purchase_order(request):
     purchase_orders = PurchaseOrder.objects.all().order_by('-id')
+    party_names = PouchParty.objects.all()
+    job_names = PurchaseOrderJob.objects.all().distinct()
+
+    if request.method == "GET":
+
+        party_id = request.GET.get('party_id')
+        job_id = request.GET.get('job_id')
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
+
+        if party_id:
+            purchase_orders = purchase_orders.filter(party_details_id=party_id)
+        if job_id:
+            purchase_orders = purchase_orders.filter(purchase_order_jobs__id=job_id)
+
+
+        if start_date:
+            purchase_orders = purchase_orders.filter(delivery_date__gte=start_date)
+        if end_date:
+            purchase_orders = purchase_orders.filter(delivery_date__lte=end_date)
+        if start_date and end_date:
+            purchase_orders = purchase_orders.filter(delivery_date__range=[start_date, end_date])
+
+
+    
+        
+
+
     if request.method == "POST":
         if 'delete_purchase_order' in request.POST:
             po_id = request.POST.get('delete_purchase_order')
@@ -272,7 +300,9 @@ def view_purchase_order(request):
         "pouch_types": PurchaseOrderJob.POUCH_TYPE,
         "polyester_unit": PurchaseOrderJob.POLYESTER_UNIT,
         "page_range":page_range_placeholder,
-        "purchase_orders" : page_obj  }
+        "purchase_orders" : page_obj,
+        "party_names":party_names,
+    "job_names":job_names,  }
     return render(request,"Purchase Order/view_purchase_order.html",context)
           
 @custom_login_required       
@@ -309,6 +339,7 @@ def purchase_order_ajax(request):
                 "per_pouch_rate_basic": total_ppb,
                 "final_rare": final_rare,
                 "jobs":jobs,
+      
                 "minimum_quantity":minimum_quantity
             })
     except Exception as e:

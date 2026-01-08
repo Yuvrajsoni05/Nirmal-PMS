@@ -14565,3 +14565,46 @@ ERROR 2025-12-24 16:03:57,468 myapp login_page Invalid Username or Password view
 ERROR 2025-12-27 12:09:08,026 myapp login_page Invalid Username or Password views.py
 ERROR 2025-12-27 12:09:19,930 myapp login_page Invalid Username or Password views.py
 ERROR 2025-12-31 10:37:21,952 myapp login_page Invalid Username or Password views.py
+ERROR 2026-01-08 11:14:12,812 myapp login_page Something went wrong: name 're' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 71, in login_page
+    valid = re.fullmatch(
+            ^^
+NameError: name 're' is not defined. Did you forget to import 're'?
+ERROR 2026-01-08 11:14:47,149 myapp login_page Something went wrong: name 're' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 71, in login_page
+    valid = re.fullmatch(
+            ^^
+NameError: name 're' is not defined. Did you forget to import 're'?
+ERROR 2026-01-08 11:14:51,171 myapp login_page Something went wrong: name 'authenticate' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 88, in login_page
+    user = authenticate(request, username=username_email, password=password)
+           ^^^^^^^^^^^^
+NameError: name 'authenticate' is not defined
+ERROR 2026-01-08 11:14:58,779 myapp login_page Something went wrong: name 'authenticate' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 88, in login_page
+    user = authenticate(request, username=username_email, password=password)
+           ^^^^^^^^^^^^
+NameError: name 'authenticate' is not defined
+ERROR 2026-01-08 11:15:06,197 myapp login_page Something went wrong: name 'authenticate' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 88, in login_page
+    user = authenticate(request, username=username_email, password=password)
+           ^^^^^^^^^^^^
+NameError: name 'authenticate' is not defined
+ERROR 2026-01-08 11:15:16,480 myapp login_page Something went wrong: name 'authenticate' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 88, in login_page
+    user = authenticate(request, username=username_email, password=password)
+           ^^^^^^^^^^^^
+NameError: name 'authenticate' is not defined
+ERROR 2026-01-08 11:15:55,679 myapp login_page Something went wrong: name 'authenticate' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 88, in login_page
+    user = authenticate(request, username=username_email, password=password)
+           ^^^^^^^^^^^^
+NameError: name 'authenticate' is not defined
+ERROR 2026-01-08 13:45:59,485 myapp login_page Invalid Username or Password views.py

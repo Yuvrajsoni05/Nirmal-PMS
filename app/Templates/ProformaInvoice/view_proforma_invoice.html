@@ -38,7 +38,7 @@
 {% block main_block %}
     <div class="container-fluid py-4">
         <div class="row justify-content-center">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-6">
                 <h3 class="fw-bold mb-0">View Proforma Invoices</h3>
             </div>
         </div>
@@ -47,65 +47,52 @@
                 <div class="card card-round">
                     <div class="card-header">
                         <div class="card-head-row card-tools-still-right">
-                            <div class="card-title mb-3 mb-md-0">
+                            <div class="card-title mb-6 mb-md-0">
                                 View Proforma Invoices
                             </div>
 
-                            <div class="card-tools w-100 w-md-auto">
-                                <form method="get" action="">
+                            <div class="card-tools">
+                                <form method="get" action="" class="filter-form">
                                     <div class="row g-2 align-items-end">
-                                    <!-- Start Date -->
-                                        <div class="col-12 col-sm-6 col-md-3">
-                                            <label for="start_date" class="form-label fw-bold mb-1">Start Date</label>
-                                            <input type="date"
-                                                   class="form-control"
-                                                   id="start_date"
-                                                   name="start_date"
-                                                   value="{{ request.GET.start_date }}">
+
+                                        <div class="col-auto">
+                                            <div class="input-group ">
+                                                <span class="input-group-text">Start Date</span>
+                                                <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
+                                            </div>
+                                        </div>
+                                            <div class="col-auto">
+                                                <div class="input-group ">
+                                                    <span class="input-group-text">End Date</span>
+                                                    <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request.GET.end_date }}">
+                                                </div>
+                                            </div>
+
+                                        <!-- Party Name -->
+                                        <div class="col-12 col-md-3">
+                                            <div class="col-auto">
+                                                <select name="party_id" id="party_filter" class="form-select form-control" >
+                                                    <option value="">Select Parties</option>
+                                                    {% for party in party_name %}
+                                                        <option value="{{ party.party_name }}"
+                                                            {% if request.GET.select_company == party.party_name %}selected{% endif %}>
+                                                            {{ party.party_name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
                                         </div>
 
-                                    <!-- End Date -->
-                                        <div class="col-12 col-sm-6 col-md-3">
-                                            <label for="end_date" class="form-label fw-bold mb-1">End Date</label>
-                                            <input type="date"
-                                                   class="form-control"
-                                                   id="end_date"
-                                                   name="end_date"
-                                                   value="{{ request.GET.end_date }}">
-                                        </div>
-
-                                    <!-- Company Select -->
-                                        <div class="col-12 col-md-4">
-                                            <label for="select_company" class="form-label mb-1 fw-bold">Party Name</label>
-                                            <select class="form-select form-control form-select-sm"
-                                                    id="select_company"
-                                                    name="select_company">
-                                                <option value="" {% if not request.GET.select_company %}selected{% endif %}>
-                                                    Select Party Name
-                                                </option>
-                                                {% for party in party_name %}
-                                                    <option value="{{ party.party_name }}"
-                                                            {% if request.GET.select_company == party.party_name %}selected{% endif %}
-                                                    >
-                                                        {{ party.party_name }}
-                                                    </option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-
-                                    <!-- Action Buttons -->
-                                        <div class="col-12 col-md-2 d-flex gap-2 mt-2 mt-md-0">
-                                            <button type="submit"
-                                                    class="btn btn-primary flex-fill"
-                                                    title="Search">
+                                        <!-- Buttons -->
+                                        <div class="col-12 col-md-2 d-flex gap-2">
+                                            <button type="submit" class="btn btn-primary w-100">
                                                 <i class="fa fa-search"></i>
                                             </button>
-                                            <a href="{% url 'view_proforma_invoice' %}"
-                                               class="btn btn-secondary flex-fill"
-                                               title="Reset">
+                                            <a href="{{ request.path }}" class="btn btn-secondary w-100">
                                                 Reset
                                             </a>
                                         </div>
+
                                     </div>
                                 </form>
                             </div>
@@ -146,7 +133,7 @@
                                         <th scope="col">Gst Value</th>
                                         <th scope="col">Total Amount</th>
                                         <th scope="col">Proforma Statues</th>
-                                        <th scope="col" class="sticky-right" colspan="3">Actions</th>
+                                        <th scope="col"  class="sticky-right" colspan="2">Actions</th>
                                     </tr>
                                 </thead>
                                 
@@ -169,7 +156,7 @@
                                             <td>{{ proforma.party_email_used.email }}</td>
                                             <td data-bs-toggle="modal" data-bs-target="#billing_addressModel{{proforma.id}}" title="{{proforma.id}}"  class="text-truncate">{{  proforma.party_billing_address_used.billing_address |truncatechars:30 }}</td>
                                             <td>{{ proforma.billing_gstin_no }}</td>
-                                            <td>{{ proforma.billing_gstin_no }}</td>
+                                
                                             <td>{{ proforma.billing_state_name }}</td>
                                             <td>
                                                 {% for job in proforma.job_details.all %}

@@ -549,7 +549,3 @@ def offline_page(request):
 
 
         
-
-
-
-

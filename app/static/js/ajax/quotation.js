@@ -13,7 +13,7 @@ $(document).on("input change",
                 type: "GET",
                 data: {
                     party_name: party,
-
+                    per_pouch_rate_basic:block.find(".per_pouch_rate_basic").val(),
                     purchase_rate_per_kg: block.find(".purchase_rate_per_kg").val(),
                     no_of_pouch_kg: block.find(".no_of_pouch_kg").val(),
                     purchase_rate_unit: block.find(".purchase_rate_unit").val(),

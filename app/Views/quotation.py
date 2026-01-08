@@ -178,24 +178,25 @@ def view_quotations(request):
             messages.success(request, 'Quotation Updated Successfully')
             return redirect('view_quotations')
             
-        elif 'send_quotation_mail' in request.POST or 'create_purchase_order' in request.POST or 'print_quotation' in request.POST:
+        elif (
+            "send_quotation_mail" in request.POST
+            or "print_quotation" in request.POST
+            or "create_purchase_order" in request.POST
+        ):
+
             job_ids = request.POST.getlist("job_id[]")
-            if request.method == 'POST':
-                
-                
-                common_filed = {
+
+            # ---------- COMMON FIELDS ----------
+            common_filed = {
                 "check_delivery_date": "delivery_date",
-                "check_party_details":"party_details",
+                "check_party_details": "party_details",
                 "check_note": "note",
                 "check_gst": "gst",
                 "check_quantity_variate": "quantity_variate",
-                "check_freight": "freight",    
-                }
-                
-               
+                "check_freight": "freight",
+            }
 
-               
-                update_map = {            
+            update_map = {
                 "check_job_name": "job_name",
                 "check_pouch_open_size": "pouch_open_size",
                 "check_pouch_combination": "pouch_combination",
@@ -210,56 +211,47 @@ def view_quotations(request):
                 "check_pouch_type": "pouch_type",
                 "check_delivery_address": "delivery_address",
                 "check_special_instruction": "special_instruction",
-               
             }
 
+            # ---------- COMMON VALUES ----------
             common_values = {}
 
             for checkbox, field in common_filed.items():
                 if request.POST.get(checkbox):
                     value = request.POST.get(field)
 
-                    if value in [None, "", "null"]:
+                    if value in (None, "", "null"):
                         continue
 
                     if field == "party_details":
                         value = PouchParty.objects.get(id=value)
 
                     common_values[field] = value
-  
-     
+
+            # ---------- JOB WISE VALUES ----------
             all_selected_jobs = []
-            for i in range(len(job_ids)):
+
+            for job_id in job_ids:
                 selected_values = {}
 
                 for checkbox, field in update_map.items():
-                    cb_list = request.POST.getlist(f"{checkbox}[]")
-                    field_list = request.POST.getlist(f"{field}[]")
+                    checkbox_name = f"{checkbox}_{job_id}"
+                    field_name = f"{field}_{job_id}"
 
-
-                    if not cb_list or len(cb_list) <= i:
+                    if checkbox_name not in request.POST:
                         continue
 
-        
-                    if not cb_list[i]:
-                        continue
-
-               
-                    if not field_list or len(field_list) <= i:
-                        continue
-
-                    value = field_list[i]
+                    value = request.POST.get(field_name)
 
                     if value in (None, "", "null"):
                         continue
 
-                    if field == "party_details":
-                        value = Party.objects.get(id=value)
-
                     selected_values[field] = value
 
-                PouchQuotationJob.objects.filter(id=job_ids[i]).update(**selected_values)
-                all_selected_jobs.append(selected_values)
+                if selected_values:
+                    PouchQuotationJob.objects.filter(id=job_id).update(**selected_values)
+                    selected_values["job_id"] = job_id
+                    all_selected_jobs.append(selected_values)
             
                         
             if 'send_quotation_mail' in request.POST:
@@ -347,12 +339,12 @@ def quotation_page_ajax(request):
 
             total_ppb = round(total_ppb, 2)
             
-            
+            print(per_pouch_rate_basic)
             final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
-            
+            print(final_rare)
             minimum_quantity  = no_of_pouch_kg * 500
-            print("This No of KG ",no_of_pouch_kg)
-            print(jobs)
+            # print("This No of KG ",no_of_pouch_kg)
+            # print(jobs)
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,
                 "final_rare": final_rare,
