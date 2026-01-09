@@ -29,15 +29,18 @@
                     </div>
 
                     <div class="col-auto">
-                        <select name="job_id" id="job_filter" class="form-select" >
+                        <select name="job_id" id="job_filter" class="form-select">
                             <option value="">Select Job Name</option>
                             {% for job in job_names %}
-                            <option value="{{ job.id }}" {% if request.GET.job_id == job.id|slugify %}selected{% endif %}>
+                            <option value="{{ job.id }}"
+                                {% if request.GET.job_id == job.id|stringformat:"s" %}selected{% endif %}
+                            >
                                 {{ job.job_name }}
                             </option>
                             {% endfor %}
                         </select>
                     </div>
+
                     <div class="col-auto">
                         <div class="input-group ">
                             <span class="input-group-text">Start Date</span>
@@ -83,7 +86,7 @@
                             <th>Quantity Variate</th>
                             <th>Freight ₹</th>
                             <th>GST</th>
-                            <th>Address</th>
+                            <th>Delivery Address</th>
                             <th>Special Instruction</th>
                             <th>Note</th>
                             <th class="sticky-right">Actions</th>
@@ -184,14 +187,30 @@
                             <td>{{ purchase_order.gst }}%</td>
 
                             <td class="text-start">
-                                {% for job in purchase_order.purchase_order_jobs.all %}
-                                <div>{{ job.delivery_address }}</div>
+                                {% for delivery_address in purchase_order.purchase_order_jobs.all %}
+                                    <div
+                                        class="text-truncate"
+                                        style="cursor:pointer;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#delivery_addressModel{{ delivery_address.id }}"
+                                        title="{{ delivery_address.delivery_address }}"
+                                    >
+                                        {{ delivery_address.delivery_address|truncatechars:20 }}
+                                    </div>
                                 {% endfor %}
                             </td>
 
                             <td class="text-start">
-                                {% for job in purchase_order.purchase_order_jobs.all %}
-                                <div>{{ job.special_instruction }}</div>
+                                {% for special_instruction in purchase_order.purchase_order_jobs.all %}
+                                    <div
+                                        class="text-truncate"
+                                        style="cursor:pointer;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#special_instructionModel{{ special_instruction.id }}"
+                                        title="{{ special_instruction.special_instruction }}"
+                                    >
+                                        {{ special_instruction.special_instruction|truncatechars:20 }}
+                                    </div>
                                 {% endfor %}
                             </td>
 
@@ -248,6 +267,49 @@
 
                             <!-- Email Modal Include -->
                             {% include 'Includes/purchase_order/send_mail.html' %}
+
+                            <!-- Delivery Address Modal -->
+                            {% for delivery_address in purchase_order.purchase_order_jobs.all %}
+                                <div
+                                    class="modal fade"
+                                    id="delivery_addressModel{{ delivery_address.id }}"
+                                    tabindex="-1"
+                                    aria-hidden="true"
+                                >
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delivery Address</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {{ delivery_address.delivery_address }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <!-- Spacial Instruction Modal -->
+                            {% for special_instruction in purchase_order.purchase_order_jobs.all %}
+                                <div
+                                    class="modal fade"
+                                    id="special_instructionModel{{ special_instruction.id }}"
+                                    tabindex="-1"
+                                    aria-hidden="true"
+                                >
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Special Instruction</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {{ special_instruction.special_instruction }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </tr>
 
                         {% endfor %} 

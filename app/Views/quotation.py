@@ -29,13 +29,13 @@ def quotation_page(request):
             final_rates = request.POST.getlist('final_rare[]')
             min_quantities = request.POST.getlist('minimum_quantity[]')
             pouch_types = request.POST.getlist('pouch_type[]')
-            special_instructions = request.POST.getlist('special_instruction[]')
-            delivery_addresses = request.POST.getlist('delivery_address[]')
+            special_instructions = [s.strip() for s in request.POST.getlist('special_instruction[]')]
+            delivery_addresses = [s.strip() for s in request.POST.getlist('delivery_address[]')]
             pouch_charges = request.POST.getlist('pouch_charge[]')
            
             
             
-
+            
             if new_party_name:
                 party_name = new_party_name
                 
@@ -113,8 +113,33 @@ def quotation_page(request):
 
 @custom_login_required
 def view_quotations(request):
+
+
+    party_names = PouchParty.objects.all().distinct()
+    job_names = PouchQuotationJob.objects.values('job_name').distinct()
     quotations = PouchQuotation.objects.all().order_by('-id')
+ 
     pouch_types =  PouchQuotationJob.POUCH_TYPE
+
+
+    if request.method == "GET":
+
+        party_id = request.GET.get('party_id')
+        job_id = request.GET.get('job_id')
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
+      
+        if party_id:
+            quotations = quotations.filter(party_details_id=party_id)
+        if job_id:
+            quotations = quotations.filter(pouch_quotation_jobs__job_name=job_id)
+
+
+        if start_date:
+            quotations = quotations.filter(delivery_date=start_date)
+
+        if start_date and end_date:
+            quotations = quotations.filter(delivery_date__range=[start_date, end_date])
     if request.method == "POST":
         if 'delete_quotation' in request.POST:
             q_id = request.POST.get('delete_quotation')
@@ -126,17 +151,12 @@ def view_quotations(request):
 
             q_id = request.POST.get('quotation_id')
             edit_quotation = get_object_or_404(PouchQuotation, id=q_id)
-
-            print(q_id)
             edit_quotation.delivery_date = request.POST.get("delivery_date")
             edit_quotation.quantity_variate = request.POST.get("quantity_variate")
             edit_quotation.freight = request.POST.get("freight")
             edit_quotation.gst = request.POST.get("gst")
             edit_quotation.save()
-
-       
             job_ids = request.POST.getlist("job_id")
-
             pouch_open_sizes = request.POST.getlist("pouch_open_size")
             pouch_combinations = request.POST.getlist("pouch_combination")
             quantities = request.POST.getlist("quantity")
@@ -151,7 +171,7 @@ def view_quotations(request):
             special_instructions = request.POST.getlist("special_instruction")
             delivery_addresses = request.POST.getlist("delivery_address")
 
-            print(pouch_types)
+     
             for i in range(len(job_ids)):
 
                 job = get_object_or_404(
@@ -185,16 +205,18 @@ def view_quotations(request):
         ):
 
             job_ids = request.POST.getlist("job_id[]")
-
+            party_email = request.POST.get("party_email")
             # ---------- COMMON FIELDS ----------
             common_filed = {
+                "check_party_email": "party_email",
+                "check_kind_attention": "kind_attention",
                 "check_delivery_date": "delivery_date",
                 "check_party_details": "party_details",
                 "check_note": "note",
                 "check_gst": "gst",
                 "check_quantity_variate": "quantity_variate",
                 "check_freight": "freight",
-            }
+            }   
 
             update_map = {
                 "check_job_name": "job_name",
@@ -255,9 +277,13 @@ def view_quotations(request):
             
                         
             if 'send_quotation_mail' in request.POST:
-         
-                receiver_email = 'soniyuvraj9499@gmail.com'
-                template_name = "Mail/quotation_mail.html"
+                email_error = utils.email_validator(party_email)
+                if email_error:
+                    messages.error(request, email_error, extra_tags="custom-danger-style")
+                    return redirect("view_quotations")
+                receiver_email = party_email
+                template_name = "Mail/quotation_mail.html"  
+
                 convert_to_html_content = render_to_string(
                     template_name=template_name,
                     context={"jobs": all_selected_jobs , "common_values": common_values}   
@@ -306,11 +332,13 @@ def view_quotations(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     page_range_placeholder = "a" * page_obj.paginator.num_pages
-    
+
     context  = {
         "page_range":page_range_placeholder,
         "quotations" : page_obj,
-        "pouch_types":pouch_types
+        "pouch_types":pouch_types,
+        "party_names":party_names,
+        "job_names":job_names
     }
     return render(request,"Quotation/view_quotation.html",context)
 

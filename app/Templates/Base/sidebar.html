@@ -103,9 +103,15 @@
                     </div>
                 </li>
 
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">Sales & Purchase</h4>
+                </li>
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#quotation_page">
-                       <i class="fa fa-lock" aria-hidden="true"></i>
+                       <i class="fas fa-file-invoice"></i>
                         <p>Quotation</p>
                         <span class="caret"></span>
                     </a>
@@ -113,21 +119,20 @@
                         <ul class="nav nav-collapse">
                             <li>
                                 <a href="{% url "quotation_page" %}">
-                                    <span class="sub-item">Quotation</span>
+                                    <span class="sub-item">Add Quotation</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{% url "view_quotations" %}">
-                                    <span class="sub-item">View Quotation</span>
+                                    <span class="sub-item">View Quotations</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
-
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#purchase_order_page">
-                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        <i class="fas fa-shopping-cart"></i>
                         <p>Purchase Order</p>
                         <span class="caret"></span>
                     </a>
@@ -135,12 +140,12 @@
                         <ul class="nav nav-collapse">
                             <li>
                                 <a href="{% url "purchase_order" %}">
-                                    <span class="sub-item">Purchase Order</span>
+                                    <span class="sub-item">Add Purchase Order</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="{% url "view_purchase_order" %}">
-                                    <span class="sub-item">View Purchase Order Page</span>
+                                    <span class="sub-item">View Purchase Orders</span>
                                 </a>
                             </li>
                         </ul>

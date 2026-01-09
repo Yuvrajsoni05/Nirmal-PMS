@@ -24,11 +24,9 @@ def purchase_order(request):
             final_rare = request.POST.getlist('final_rare')
             minimum_quantity = request.POST.getlist('minimum_quantity')
             pouch_type = request.POST.getlist('pouch_type')
-            special_instruction = request.POST.getlist('special_instruction')
-            delivery_address = request.POST.getlist('delivery_address')
-          
+            special_instruction = [s.strip() for s in request.POST.getlist('special_instruction')]
+            delivery_address = [s.strip() for s in request.POST.getlist('delivery_address')]
             polyester_unit = request.POST.getlist('purchase_rate_unit')
-            
             quantity_variation = request.POST.get('quantity_variation')
             freight = request.POST.get('freight')
             gst = request.POST.get('gst')
@@ -40,7 +38,7 @@ def purchase_order(request):
                     party_name=party_name.strip() if party_name else None
                 )
             
-
+            
             required_fields = {
                 "delivery_date":delivery_date,
                     "party_name":party_name,
@@ -58,8 +56,7 @@ def purchase_order(request):
                     "special_instruction":special_instruction,
                     "delivery_address":delivery_address,
                     "quantity_variation":quantity_variation,
-                    
-                                
+            
             }
             for field, required in required_fields.items():
                 if not required:
@@ -113,32 +110,24 @@ def purchase_order(request):
 def view_purchase_order(request):
     purchase_orders = PurchaseOrder.objects.all().order_by('-id')
     party_names = PouchParty.objects.all()
-    job_names = PurchaseOrderJob.objects.all().distinct()
+    job_names = PurchaseOrderJob.objects.all().distinct('job_name')
 
-    if request.method == "GET":
+    party_id = request.GET.get('party_id')
+    job_id = request.GET.get('job_id')
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+  
+    if party_id:
+        purchase_orders = purchase_orders.filter(party_details_id=party_id)
 
-        party_id = request.GET.get('party_id')
-        job_id = request.GET.get('job_id')
-        start_date = request.GET.get('start_date')
-        end_date = request.GET.get('end_date')
+    if job_id:
+        purchase_orders = purchase_orders.filter(purchase_order_jobs__id=job_id)
 
-        if party_id:
-            purchase_orders = purchase_orders.filter(party_details_id=party_id)
-        if job_id:
-            purchase_orders = purchase_orders.filter(purchase_order_jobs__id=job_id)
-
-
-        if start_date:
-            purchase_orders = purchase_orders.filter(delivery_date__gte=start_date)
-        if end_date:
-            purchase_orders = purchase_orders.filter(delivery_date__lte=end_date)
-        if start_date and end_date:
-            purchase_orders = purchase_orders.filter(delivery_date__range=[start_date, end_date])
-
-
-    
-        
-
+    if start_date and end_date:
+        purchase_orders = purchase_orders.filter(delivery_date__range=[start_date, end_date])
+    elif start_date:
+        purchase_orders = purchase_orders.filter(delivery_date=start_date)
+ 
 
     if request.method == "POST":
         if 'delete_purchase_order' in request.POST:
@@ -146,6 +135,7 @@ def view_purchase_order(request):
             PurchaseOrder.objects.filter(id=po_id).delete()
             messages.success(request,'Purchase Order Delete successfully')
             return redirect('view_purchase_order')
+
         elif 'update_purchase_order' in request.POST:
             purchase_order_id = request.POST.get('edit_purchase_order')
             edit_purchase_order = get_object_or_404(PurchaseOrder,id=purchase_order_id)
@@ -187,25 +177,33 @@ def view_purchase_order(request):
                 job.pouch_type = pouch_types[i]
                 job.special_instruction = special_instructions[i]
                 job.delivery_address = delivery_addresses[i]
-               
                 job.save()
 
             messages.success(request, 'Purchase Order Updated Successfully')
             return redirect('view_purchase_order')
                 
-        elif 'send_purchase_order_mail' in request.POST:
+        elif (
+            "send_purchase_order_mail" in request.POST
+            or "print_purchase_order" in request.POST
+           
+            ):
+            
+
             job_ids = request.POST.getlist("job_id[]")
             party_email = request.POST.get("party_email")
-            if request.method == 'POST':
-                common_filed = {
+            # ---------- COMMON FIELDS ----------
+            common_filed = {
+                "check_party_email": "party_email",
+                "check_kind_attention": "kind_attention",
                 "check_delivery_date": "delivery_date",
-          
+                "check_party_details": "party_details",
                 "check_note": "note",
                 "check_gst": "gst",
                 "check_quantity_variate": "quantity_variate",
-                "check_freight": "freight",    
-                }
-                update_map = {            
+                "check_freight": "freight",
+            }
+
+            update_map = {
                 "check_job_name": "job_name",
                 "check_pouch_open_size": "pouch_open_size",
                 "check_pouch_combination": "pouch_combination",
@@ -221,51 +219,46 @@ def view_purchase_order(request):
                 "check_delivery_address": "delivery_address",
                 "check_special_instruction": "special_instruction",
             }
+
+            # ---------- COMMON VALUES ----------
             common_values = {}
 
             for checkbox, field in common_filed.items():
                 if request.POST.get(checkbox):
                     value = request.POST.get(field)
 
-                    if value in [None, "", "null"]:
-                        continue
-
-                    if field == "party_details":
-                        value = Party.objects.get(id=value)
-
-                    common_values[field] = value
-            all_selected_jobs = []
-            for i in range(len(job_ids)):
-                selected_values = {}
-
-                for checkbox, field in update_map.items():
-                    cb_list = request.POST.getlist(f"{checkbox}[]")
-                    field_list = request.POST.getlist(f"{field}[]")
-
-
-                    if not cb_list or len(cb_list) <= i:
-                        continue
-
-        
-                    if not cb_list[i]:
-                        continue
-
-               
-                    if not field_list or len(field_list) <= i:
-                        continue
-
-                    value = field_list[i]
-
                     if value in (None, "", "null"):
                         continue
 
                     if field == "party_details":
-                        value = Party.objects.get(id=value)
+                        value = PouchParty.objects.get(id=value)
+
+                    common_values[field] = value
+
+            # ---------- JOB WISE VALUES ----------
+            all_selected_jobs = []
+
+            for job_id in job_ids:
+                selected_values = {}
+
+                for checkbox, field in update_map.items():
+                    checkbox_name = f"{checkbox}_{job_id}"
+                    field_name = f"{field}_{job_id}"
+
+                    if checkbox_name not in request.POST:
+                        continue
+
+                    value = request.POST.get(field_name)
+
+                    if value in (None, "", "null"):
+                        continue
 
                     selected_values[field] = value
 
-                PurchaseOrderJob.objects.filter(id=job_ids[i]).update(**selected_values)
-                all_selected_jobs.append(selected_values)
+                if selected_values:
+                    PouchQuotationJob.objects.filter(id=job_id).update(**selected_values)
+                    selected_values["job_id"] = job_id
+                    all_selected_jobs.append(selected_values)
                 
             if 'send_purchase_order_mail' in request.POST:
                 
@@ -290,6 +283,13 @@ def view_purchase_order(request):
                 email.send()
                 messages.success(request, "Mail Send successfully")
                 return redirect("view_purchase_order")
+            if 'print_purchase_order' in request.POST:
+                print(all_selected_jobs)
+                print(common_values)
+                context={"jobs": all_selected_jobs , "common_values": common_values}  
+                return render(request, "Includes/purchase_order/print.html", context)
+
+                
 
     paginator =  Paginator(purchase_orders,10)
     page_number = request.GET.get("page")
@@ -343,7 +343,7 @@ def purchase_order_ajax(request):
                 "minimum_quantity":minimum_quantity
             })
     except Exception as e:
-        messages.error(request,"Something went wrong ")
+        # messages.error(request,"Something went wrong ")
         print(e)
         
 
