@@ -75,7 +75,7 @@ def cdr_add(request):
         party_name = request.POST.get("party_name","").strip()
         party_email = request.POST.get("party_email","").strip()
         cdr_upload_date = request.POST.get("cdr_upload_date","").strip()
-        cdr_files = request.FILES.getlist("cdr_files","")
+        cdr_files = request.FILES.getlist("cdr_files")
         job_name = request.POST.get("job_name","").strip()
         cdr_corrections_data = request.POST.get("cdr_corrections")
         new_party_name = request.POST.get("new_party_name","").strip()
@@ -195,7 +195,7 @@ def cdr_update(request, update_id):
         party_email = request.POST.get("party_email", "").strip()
         party_number = request.POST.get("party_number", "").strip()
         cdr_files = request.FILES.getlist("files")
-        job_names = request.POST.get("job_name").strip()
+        job_names = request.POST.get("job_name", "").strip()
         
         cdr_corrections = request.POST.get("cdr_corrections")
 
@@ -210,7 +210,7 @@ def cdr_update(request, update_id):
         file_error = utils.file_validation(cdr_files)
         if file_error:
             messages.error(request, file_error, extra_tags="custom-danger-style")
-            return redirect("job_entry")
+            return redirect("cdr_page")
         file_dic = utils.file_name_convert(cdr_files)
         party_email = str(party_email).strip()
         update_details = get_object_or_404(CDRDetail, id=id)
