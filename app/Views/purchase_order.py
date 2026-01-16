@@ -9,6 +9,7 @@ def purchase_order(request):
     
     if request.method == 'POST':
         if 'create_purchase_order' in request.POST:
+            pouch_purchase_number = request.POST.get('pouch_purchase_number')
             delivery_date =  request.POST.get('delivery_date')
             party_name = request.POST.get('party_name')
           
@@ -31,17 +32,26 @@ def purchase_order(request):
             freight = request.POST.get('freight')
             gst = request.POST.get('gst')
             note = request.POST.get('note')
+            party_email = request.POST.get('party_email')
+            new_party_email = request.POST.get('new_party_email') 
+            
 
+           
             if party_name == "others":
                 party_name = request.POST.get("new_party_name")
-            party_details, _ = PouchParty.objects.get_or_create(
-                    party_name=party_name.strip() if party_name else None
-                )
-            
-            
+
+            if new_party_email:
+                party_email = new_party_email
+
+            email_error = utils.email_validator(party_email)
+            if email_error:
+                messages.error(request, email_error, extra_tags="custom-danger-style")
+                return redirect("view_purchase_order")   
+
             required_fields = {
                 "delivery_date":delivery_date,
                     "party_name":party_name,
+                    "party_email":party_email,
                     "job_name":job_name,
                     "pouch_open_size":pouch_open_size,
                     "pouch_combination":pouch_combination,
@@ -65,14 +75,22 @@ def purchase_order(request):
                     )
                     return redirect("quotation_page")
                 
-                
+          
+            party_details, _ = PouchParty.objects.get_or_create(
+                    party_name=party_name.strip() if party_name else None
+                )
+            party_email_obj,_ = PouchPartyEmail.objects.get_or_create(
+                    party=party_details ,email=party_email  )
+                    
             purchase_order   = PurchaseOrder.objects.create(
+                pouch_purchase_number=pouch_purchase_number ,
                 delivery_date=delivery_date,
                 party_details=party_details,
                 quantity_variate=quantity_variation,
                 freight=freight,
                 gst=gst,
                 note=note,
+                party_email=party_email_obj,
             )
             
             for i in range(len(job_name)):
@@ -138,7 +156,17 @@ def view_purchase_order(request):
 
         elif 'update_purchase_order' in request.POST:
             purchase_order_id = request.POST.get('edit_purchase_order')
+            party_email_id = request.POST.get('party_email_id')
+            party_email = request.POST.get('party_email')
+            if party_email:
+                email_error = utils.email_validator(party_email)
+                if email_error:
+                    messages.error(request, email_error, extra_tags="custom-danger-style")
+                    return redirect("view_purchase_order")
+                if party_email_id:
+                    PouchPartyEmail.objects.filter(id=party_email_id).update(email=party_email)
             edit_purchase_order = get_object_or_404(PurchaseOrder,id=purchase_order_id)
+            edit_purchase_order.pouch_purchase_number = request.POST.get("pouch_purchase_number") 
             edit_purchase_order.delivery_date = request.POST.get("delivery_date")
             edit_purchase_order.quantity_variate = request.POST.get("quantity_variate")
             edit_purchase_order.freight = request.POST.get("freight")
@@ -193,6 +221,7 @@ def view_purchase_order(request):
             party_email = request.POST.get("party_email")
             # ---------- COMMON FIELDS ----------
             common_filed = {
+                "check_pouch_purchase_number": "pouch_purchase_number",
                 "check_party_email": "party_email",
                 "check_kind_attention": "kind_attention",
                 "check_delivery_date": "delivery_date",
@@ -320,7 +349,7 @@ def purchase_order_ajax(request):
             
       
             total_ppb = 0
-            jobs  = list(PurchaseOrderJob.objects.filter(purchase_order__party_details__party_name=party_name).values('job_name').distinct())
+            jobs  = list(PurchaseOrderJob.objects.filter(purchase_order__party_details__party_name=party_name).values_list('job_name', flat=True).distinct())
           
             if purchase_rate_per_kg:   
                 if unit == "polyester_printed_bag":
@@ -330,20 +359,21 @@ def purchase_order_ajax(request):
 
             total_ppb = round(total_ppb, 2)
             
-            
+            party_emails = list(PouchPartyEmail.objects.filter(party__party_name=party_name).values('email'))
+
             final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
             
             minimum_quantity  = no_of_pouch_kg * 500
-          
+            print(party_emails)
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,
                 "final_rare": final_rare,
                 "jobs":jobs,
-      
+                "party_emails":party_emails,
                 "minimum_quantity":minimum_quantity
             })
     except Exception as e:
-        # messages.error(request,"Something went wrong ")
+        
         print(e)
         
 

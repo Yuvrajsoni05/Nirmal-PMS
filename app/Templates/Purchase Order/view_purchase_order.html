@@ -69,6 +69,7 @@
                     <thead class="table-light text-center">
                         <tr>
                             <th>Sr</th>
+                            <th>Pouch Purchase Number</th>
                             <th>Delivery Date</th>
                             <th>Party Name</th>
                             <th>Job Name</th>
@@ -95,10 +96,13 @@
 
                     <tbody>
                         {% if purchase_orders %} 
-                        {% for purchase_order in purchase_orders %}
+                            {% for purchase_order in purchase_orders %}
 
                         <tr class="text-center">
                             <td>{{ forloop.counter }}</td>
+                            <td>
+                                {{ purchase_order.pouch_purchase_number }}
+                            </td>
 
                             <td>
                                 {{ purchase_order.delivery_date|date:"d-m-Y" }}

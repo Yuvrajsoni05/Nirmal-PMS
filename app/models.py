@@ -314,6 +314,7 @@ class PouchPartyContact(models.Model):
 
 
 class PouchQuotation(models.Model):
+    pouch_quotation_number = models.CharField(max_length=200 ,default="234KG@$S" ,blank=True, null=True)
     delivery_date  = models.DateField()
     party_details = models.ForeignKey(
         PouchParty,
@@ -322,6 +323,7 @@ class PouchQuotation(models.Model):
         blank=True,
         related_name="quotations_party_name"
     )
+    party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.SET_NULL, null=True, blank=True,related_name='pouch_quotation_party_email')
     # the  Term 
     quantity_variate = models.CharField(max_length=200)
     freight = models.CharField(max_length=200)
@@ -367,8 +369,9 @@ class PouchQuotationJob(models.Model):
     
     
 class PurchaseOrder(models.Model):
-    
+    pouch_purchase_number = models.CharField(max_length=200 ,default="234KG@$S",blank=True, null=True)
     delivery_date  = models.DateField()
+    party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.SET_NULL, null=True, blank=True,related_name='pouch_purchase_party_email')
     party_details = models.ForeignKey(
         PouchParty,
         on_delete=models.SET_NULL,

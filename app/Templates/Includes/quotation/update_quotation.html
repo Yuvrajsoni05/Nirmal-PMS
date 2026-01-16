@@ -21,13 +21,20 @@
 
           <div class="border rounded-3 p-3 mb-4 bg-light">
             <div class="row g-3">
-
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Quotation Number</label>
+                <input type="text" class="form-control" name="pouch_quotation_number" value="{{ quotation.pouch_quotation_number }}">
+              </div>
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Delivery Date</label>
                 <input type="date" class="form-control" name="delivery_date"
                   value="{{ quotation.delivery_date|date:'Y-m-d' }}">
               </div>
-
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Party Email</label>
+                <input type="text" class="form-control" name="party_email" value="{{ quotation.party_email.email }}">
+                <input type="hidden" name="party_email_id" value="{{ quotation.party_email.id }}">
+              </div>
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Party</label>
                 <input type="text" class="form-control bg-secondary-subtle" value="{{ quotation.party_details.party_name }}" disabled>

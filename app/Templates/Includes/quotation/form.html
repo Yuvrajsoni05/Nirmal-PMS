@@ -14,6 +14,19 @@
                     {% csrf_token %}
 
                     <div class="row g-4">
+                        <!-- Quotation Number -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">
+                                Quotation Number
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                name="pouch_quotation_number"
+                                placeholder="Enter Quotation Number"
+                            />
+                        </div>
+
                         <!-- Delivery Date -->
                         <div class="col-md-4">
                             <label class="form-label fw-semibold"
@@ -65,7 +78,31 @@
                                 Party name is required
                             </div>
                         </div>
+                        
+                        <!-- Party Email -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">
+                                Party Email
+                            </label>
+                            <select class="form-select form-control" name="party_email" id="party_email">
+                                <option value="">Select Party Email</option>
+                                
+                                <option value="others">Others</option>
+                            </select>
+                            <input
+                                type="text"
+                                class="form-control mt-2 d-none"
+                                placeholder="Enter New Party Email"
+                                name="new_party_email"
+                                id="new_party_email"
+                            />
+                            <div class="invalid-feedback">
+                                Party email is required
+                            </div>  
+                        </div>
 
+                   
+                        
                         <!-- Job Name -->
                         <div id="jobs-container">
                             <div class="job-block card p-3 mb-3 border">

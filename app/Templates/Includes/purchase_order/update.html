@@ -20,10 +20,24 @@
 
           <div class="row g-3">
             <div class="col-md-3">
+              <label class="form-label fw-semibold">Purchase Order Number</label>
+              <input type="text" name="pouch_purchase_number" class="form-control"
+                     value="{{ purchase_order.pouch_purchase_number|default:'' }}"
+                     placeholder="Enter Purchase Order Number">
+            </div>
+
+            <div class="col-md-3">
               <label class="form-label fw-semibold">Delivery Date</label>
               <input type="date" name="delivery_date" class="form-control"
                      value="{{ purchase_order.delivery_date|date:'Y-m-d' }}">
             </div>
+
+            <!-- Party Email -->
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Party Email</label>
+                <input type="text" class="form-control" name="party_email" value="{{ purchase_order.party_email.email }}">
+                <input type="hidden" name="party_email_id" value="{{ purchase_order.party_email.id }}">
+              </div>
 
             <div class="col-md-3">
               <label class="form-label fw-semibold">Party Name</label>

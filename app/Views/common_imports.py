@@ -28,6 +28,7 @@ from ..models import (
     PouchQuotationJob,
     PurchaseOrderJob,
     PouchParty,
+    PouchPartyEmail,
     
 )
 

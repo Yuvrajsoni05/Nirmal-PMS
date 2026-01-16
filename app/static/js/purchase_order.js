@@ -69,6 +69,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+// ---------- PARTY EMAIL → OTHERS ----------
+$(document).on("change", "#party_email", function () {
+    const newPartyEmail = $("#new_party_email");
+
+    if ($(this).val() === "others") {
+        newPartyEmail.removeClass("d-none").prop("required", true).focus();
+    } else {
+        newPartyEmail
+            .addClass("d-none")
+            .prop("required", false)
+            .val("")
+            .removeClass("is-invalid");
+    }
+});
+
+$(document).on("input", "#new_party_email", function () {
+    if ($("#party_email").val() === "others" && $(this).val().trim() === "") {
+        $(this).addClass("is-invalid");
+    } else {
+        $(this).removeClass("is-invalid");
+    }
+});
 
 // ---------- JOB NAME → OTHERS (PER JOB BLOCK) ----------
 

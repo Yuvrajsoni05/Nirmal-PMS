@@ -35,6 +35,28 @@
 
                     <div class="border rounded p-3 mb-3">
                         <div class="row g-3">
+                            <!-- Purchase Order Number -->
+                            <div class="col-md-4">
+                                <div class="form-check">
+                                    <input
+                                        type="checkbox"
+                                        class="form-check-input"
+                                        id="check_pouch_quotation_number"
+                                        name="check_pouch_quotation_number"
+                                        
+                                        checked
+                                    />
+                                    <label class="form-check-label fw-semibold"
+                                        >Quotation Number</label
+                                    >
+                                </div>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    name="pouch_quotation_number"
+                                    value="{{ quotation.pouch_quotation_number }}"
+                                />
+                            </div>
                             <!-- Delivery Date -->
                             <div class="col-md-4">
                                 <div class="form-check">

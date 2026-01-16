@@ -89,6 +89,7 @@
                             <td>{{ forloop.counter }}</td>
                             <td>{{ quotation.delivery_date|date:"d-m-Y" }}</td>
                             <td>{{ quotation.party_details.party_name }}</td>
+                            
                             <td>{% for job in quotation.pouch_quotation_jobs.all  %}
                                 <div>{{ job.job_name }}</div>
                             {% endfor %}</td>

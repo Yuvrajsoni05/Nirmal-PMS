@@ -1,13 +1,11 @@
 $(document).on(
     "input change",
-    "#party_name, .purchase_rate_per_kg, .no_of_pouch_kg, .purchase_rate_unit, .pouch_charge, .zipper_cost",
+    "#party_name, .party_email, .purchase_rate_per_kg, .no_of_pouch_kg, .purchase_rate_unit, .pouch_charge, .zipper_cost",
     function () {
-
         const isPartyChange = $(this).attr("id") === "party_name";
 
         // If PARTY changed → update ALL JOB TYPES
         if (isPartyChange) {
-
             $(".job-block, .job-block_data").each(function () {
                 runAjax($(this));
             });
@@ -22,9 +20,7 @@ $(document).on(
     }
 );
 
-
 function runAjax(block) {
-
     $.ajax({
         url: pouchRateAjaxUrl,
         type: "GET",
@@ -41,32 +37,52 @@ function runAjax(block) {
         },
 
         success: function (response) {
+            block
+                .find(".per_pouch_rate_basic")
+                .val(response.per_pouch_rate_basic || 0);
 
-            block.find(".per_pouch_rate_basic")
-                 .val(response.per_pouch_rate_basic || 0);
+            block
+                .find(".final_rare, .final_rate")
+                .val(response.final_rare || 0);
 
-            block.find(".final_rare, .final_rate")
-                 .val(response.final_rare || 0);
+            block.find(".minimum_quantity").val(response.minimum_quantity || 0);
 
-            block.find(".minimum_quantity")
-                 .val(response.minimum_quantity || 0);
+            // Preserve party_email selection
+            const $partyEmail = $("#party_email");
+            const prevEmailValue = $partyEmail.val();
+
+            $partyEmail.empty().append('<option value="">Select Party Email</option>');
+
+            if (response.party_emails && response.party_emails.length) {
+                $.each(response.party_emails, function (i, email) {
+                    $partyEmail.append(
+                        $('<option></option>').val(email.email).text(email.email)
+                    );
+                });
+            }
+
+            $partyEmail.append('<option value="others">Others</option>');
+
+            // Restore previous selection if it still exists
+            if (prevEmailValue && $partyEmail.find("option[value='" + prevEmailValue + "']").length) {
+                $partyEmail.val(prevEmailValue);
+            }
+    
 
 
             // -------- JOB NAME DROPDOWN --------
             let jobSelect = block.find(".job_name");
 
             if (jobSelect.length && jobSelect.is("select")) {
-
                 let prev = jobSelect.val();
 
-                jobSelect.empty()
+                jobSelect
+                    .empty()
                     .append('<option value="">Select Job Name</option>');
 
                 $.each(response.jobs || [], function (i, job) {
                     jobSelect.append(
-                        '<option value="' + job.job_name + '">' +
-                        job.job_name +
-                        '</option>'
+                        '<option value="' + job + '">' + job + "</option>"
                     );
                 });
 
@@ -79,6 +95,6 @@ function runAjax(block) {
 
         error: function (xhr) {
             console.log("AJAX ERROR:", xhr.responseText);
-        }
+        },
     });
 }

@@ -1,3 +1,4 @@
+import email
 from .common_imports import *
 
 
@@ -9,6 +10,7 @@ def quotation_page(request):
     
     if request.method == 'POST':
         if 'save_quotation' in request.POST:
+            pouch_quotation_number = request.POST.get('pouch_quotation_number')
             delivery_date = request.POST.get('delivery_date')
             party_name = request.POST.get('party_name')
             new_party_name = request.POST.get('new_party_name') or None
@@ -32,22 +34,36 @@ def quotation_page(request):
             special_instructions = [s.strip() for s in request.POST.getlist('special_instruction[]')]
             delivery_addresses = [s.strip() for s in request.POST.getlist('delivery_address[]')]
             pouch_charges = request.POST.getlist('pouch_charge[]')
-           
+            party_email = request.POST.get('party_email')
+            new_party_email = request.POST.get('new_party_email') 
             
             
             
             if new_party_name:
                 party_name = new_party_name
                 
-          
             
+            if new_party_email:
+                party_email = new_party_email
+       
+            email_error = utils.email_validator(party_email)
+            if email_error:
+                messages.error(request, email_error, extra_tags="custom-danger-style")
+                return redirect("view_quotations")
             
             party_details, _ = PouchParty.objects.get_or_create(
                     party_name=party_name.strip() if party_name else None
                 )
             
+            party_email_obj, _ = PouchPartyEmail.objects.get_or_create(
+                    party=party_details ,email=party_email  )
+            
+            
+            
             required_fields = {
+                "pouch_quotation_number":pouch_quotation_number,
                 "delivery_date":delivery_date,
+                "party_email":party_email,
                     "party_name":party_name,
                     "job_name":job_names,
                     "pouch_open_size":pouch_open_size,
@@ -74,8 +90,10 @@ def quotation_page(request):
                     return redirect("quotation_page")
             
             quotation = PouchQuotation.objects.create(
-                delivery_date=delivery_date,
+                pouch_quotation_number=pouch_quotation_number,
+                    delivery_date=delivery_date,
                 party_details=party_details,
+                party_email=party_email_obj,
                 quantity_variate=quantity_variation,
                 freight=freight,
                 gst=gst,
@@ -150,7 +168,18 @@ def view_quotations(request):
         elif 'edit_quotation' in request.POST:
 
             q_id = request.POST.get('quotation_id')
+            party_email_id = request.POST.get('party_email_id')
+            party_email = request.POST.get('party_email')
+            if party_email:
+                email_error = utils.email_validator(party_email)
+                if email_error:
+                    messages.error(request, email_error, extra_tags="custom-danger-style")
+                    return redirect("view_quotations")
+                if party_email_id:
+                    PouchPartyEmail.objects.filter(id=party_email_id).update(email=party_email)
+
             edit_quotation = get_object_or_404(PouchQuotation, id=q_id)
+            edit_quotation.pouch_quotation_number = request.POST.get("pouch_quotation_number")
             edit_quotation.delivery_date = request.POST.get("delivery_date")
             edit_quotation.quantity_variate = request.POST.get("quantity_variate")
             edit_quotation.freight = request.POST.get("freight")
@@ -210,6 +239,7 @@ def view_quotations(request):
             common_filed = {
                 "check_party_email": "party_email",
                 "check_kind_attention": "kind_attention",
+                "check_pouch_quotation_number": "pouch_quotation_number",
                 "check_delivery_date": "delivery_date",
                 "check_party_details": "party_details",
                 "check_note": "note",
@@ -315,7 +345,7 @@ def view_quotations(request):
       
                                 
                 party_names = PouchParty.objects.all()
-                print(party_names)
+           
               
                 context = {
                     "jobs": jobs,
@@ -347,7 +377,7 @@ def view_quotations(request):
 def quotation_page_ajax(request):
     try:
         if request.method == "GET":
-            party_name = request.GET.get('party_name')
+            party_name = request.GET.get('party_name').strip()
             
             purchase_rate_per_kg = float(request.GET.get("purchase_rate_per_kg") or 0)
             no_of_pouch_kg = float(request.GET.get("no_of_pouch_kg") or 0)
@@ -355,8 +385,9 @@ def quotation_page_ajax(request):
             per_pouch_rate_basic = float(request.GET.get("per_pouch_rate_basic") or 0)
             zipper_cost =float(request.GET.get("zipper_cost") or 0)
             pouch_charge = float(request.GET.get("pouch_charge") or 0)
-            jobs  = list(PurchaseOrderJob.objects.filter(purchase_order__party_details__party_name=party_name).values('job_name').distinct())
             
+            jobs  = list(PouchQuotationJob.objects.filter(quotation__party_details__party_name=party_name).values('job_name').distinct())
+            party_emails = list(PouchPartyEmail.objects.filter(party__party_name=party_name).values('email'))
             total_ppb = 0
             
             if purchase_rate_per_kg:   
@@ -367,17 +398,19 @@ def quotation_page_ajax(request):
 
             total_ppb = round(total_ppb, 2)
             
-            print(per_pouch_rate_basic)
+       
             final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
-            print(final_rare)
+            
             minimum_quantity  = no_of_pouch_kg * 500
             # print("This No of KG ",no_of_pouch_kg)
             # print(jobs)
+            print(jobs)
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,
                 "final_rare": final_rare,
                 "jobs":jobs,
-                "minimum_quantity":minimum_quantity
+                "minimum_quantity":minimum_quantity,
+                "party_emails":party_emails
             })
     except Exception as e:
         # messages.error(request,"Something went wrong ")

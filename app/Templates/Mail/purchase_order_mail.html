@@ -1,195 +1,312 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<style>
-    body {
-        font-family: "Segoe UI", Roboto, Arial, sans-serif;
-        font-size: 14px;
-        line-height: 1.5;
-        color: #333;
-        margin: 0;
-        padding: 0;
-        background-color: #f9f9f9;
-    }
-    .email-wrapper {
-        width: 100%;
-        max-width: 800px;
-        margin: 20px auto;
-        background: #ffffff;
-        border: 1px solid #ddd;
-        padding: 20px;
-    }
-    .header-table {
-        width: 100%;
-        border-bottom: 2px solid #333;
-        padding-bottom: 15px;
-        margin-bottom: 20px;
-    }
-    .company-logo {
-        height: 50px;
-        vertical-align: middle;
-        margin-right: 10px;
-    }
-    .bold { font-weight: bold; }
-    .section { margin-bottom: 20px; }
-    .job-header {
-        
-        color: #020000;
-        padding: 8px 12px;
-        font-weight: bold;
-        margin-top: 20px;
-    }
-    .special-box {
-        border: 1px solid #ff0000;
-        padding: 10px;
-        margin: 10px 0;
-        background-color: #fffafa;
-    }
-    .job-block {
-        border: 1px solid #ccc;
-        border-top: none;
-        margin-bottom: 20px;
-    }
-    .job-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-    .job-table td {
-        padding: 10px;
-        border: 1px solid #eee;
-        vertical-align: top;
-    }
-    .label {
-        width: 20%;
-        font-weight: 600;
-        color: #555;
-        background-color: #f8f8f8;
-    }
-    .value { width: 30%; }
-    .full-row {
-        padding: 10px;
-        background-color: #fdfdfd;
-        border-top: 1px solid #ccc;
-    }
-    .signature {
-        margin-top: 30px;
-        border-top: 1px solid #ddd;
-        padding-top: 15px;
-        text-align: right;
-    }
-</style>
-</head>
-<body>
-<div class="email-wrapper">
-    <!-- HEADER -->
-    <table class="header-table">
-        <tr>
-            <td>
-                <img src="{% static 'assets/img/logo_icon.png' %}" class="company-logo">
-                <div style="display:inline-block; vertical-align: middle;">
-                    <strong class="bold">Shrri Nirmal Ventures Private Limited</strong><br>
-                    Unit 1601, 16th Floor, B Block, Navratna Corporate Park,<br>
-                    Ambli Bopal Road, Ahmedabad - 380058<br>
-                    <span class="bold">GSTIN/UIN:</span> 24AABCN6372N1Z4
+    <head>
+        <meta charset="UTF-8" />
+        <style>
+            body {
+                font-family: "Segoe UI", Roboto, Arial, sans-serif;
+                font-size: 14px;
+                line-height: 1.5;
+                color: #333;
+                margin: 0;
+                padding: 0;
+                background-color: #f9f9f9;
+            }
+            .email-wrapper {
+                width: 100%;
+                max-width: 800px;
+                margin: 20px auto;
+                background: #ffffff;
+                border: 1px solid #ddd;
+                padding: 20px;
+            }
+            .header-table {
+                width: 100%;
+                border-bottom: 2px solid #333;
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+            }
+            .company-logo {
+                height: 50px;
+                vertical-align: middle;
+                margin-right: 10px;
+            }
+            .bold {
+                font-weight: bold;
+            }
+            .section {
+                margin-bottom: 20px;
+            }
+            .job-header {
+                color: #020000;
+                padding: 8px 12px;
+                font-weight: bold;
+                margin-top: 20px;
+            }
+            .special-box {
+                border: 1px solid #ff0000;
+                padding: 10px;
+                margin: 10px 0;
+                background-color: #fffafa;
+            }
+            .job-block {
+                border: 1px solid #ccc;
+                border-top: none;
+                margin-bottom: 20px;
+            }
+            .job-table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            .job-table td {
+                padding: 10px;
+                border: 1px solid #eee;
+                vertical-align: top;
+            }
+            .label {
+                width: 20%;
+                font-weight: 600;
+                color: #555;
+                background-color: #f8f8f8;
+            }
+            .value {
+                width: 30%;
+            }
+            .full-row {
+                padding: 10px;
+                background-color: #fdfdfd;
+                border-top: 1px solid #ccc;
+            }
+            .signature {
+                margin-top: 30px;
+                border-top: 1px solid #ddd;
+                padding-top: 15px;
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="email-wrapper">
+            <!-- HEADER -->
+            <table class="header-table">
+                <tr>
+                    <td>
+                        <img
+                            src="{% static 'assets/img/logo_icon.png' %}"
+                            class="company-logo"
+                        />
+                        <div
+                            style="
+                                display: inline-block;
+                                vertical-align: middle;
+                            "
+                        >
+                            <strong class="bold"
+                                >Shrri Nirmal Ventures Private Limited</strong
+                            ><br />
+                            Unit 1601, 16th Floor, B Block, Navratna Corporate
+                            Park,<br />
+                            Ambli Bopal Road, Ahmedabad - 380058<br />
+                            <span class="bold">GSTIN/UIN:</span> 24AABCN6372N1Z4
+                        </div>
+                    </td>
+                    <td style="text-align: right; vertical-align: top">
+                        <div class="bold">DATE: {% now "d-m-Y" %}</div>
+                        <div class="bold">Purchase Order Number: {{ common_values.pouch_purchase_number }}</div>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- PARTY DETAILS -->
+            <div class="section">
+                <span class="bold">TO:</span><br />
+                {{ common_values.party_details }}<br />
+                <span class="bold">Purchase Order Number:</span> {{common_values.pouch_purchase_number }}<br />
+                <span class="bold">Party Email:</span> {{common_values.party_email }}<br /><br />
+                <span class="bold">Kind Attention:</span> {{common_values.kind_attention }}
+            </div>
+
+            <div
+                class="section bold"
+                style="
+                    color: #444;
+                    border-left: 4px solid #333;
+                    padding-left: 10px;
+                "
+            >
+                Order From: Shrri Nirmal Ventures Private Limited
+            </div>
+
+            {% for job in jobs %}
+            <div class="job-header">Product {{ forloop.counter }}</div>
+            
+            {% if job.special_instruction %}
+            <div class="special-box">
+                <div class="bold" style="color: red">Note:</div>
+                <div style="color: red">{{ job.special_instruction }}</div>
+            </div>
+            {% endif %}
+            
+            <div class="job-block">
+                <table class="job-table">
+            
+                    <!-- Product Name & Size -->
+                    {% if job.job_name or job.pouch_open_size %}
+                    <tr>
+                        {% if job.job_name and job.pouch_open_size %}
+                            <td class="label">Product Name</td>
+                            <td class="value">{{ job.job_name }}</td>
+                            <td class="label">Size</td>
+                            <td class="value">{{ job.pouch_open_size }}</td>
+                        {% elif job.job_name %}
+                            <td class="label">Product Name</td>
+                            <td class="value" colspan="3">{{ job.job_name }}</td>
+                        {% else %}
+                            <td class="label">Size</td>
+                            <td class="value" colspan="3">{{ job.pouch_open_size }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+            
+                    <!-- Combination & Quantity -->
+                    {% if job.pouch_combination or job.quantity %}
+                    <tr>
+                        {% if job.pouch_combination and job.quantity %}
+                            <td class="label">Combination</td>
+                            <td class="value">{{ job.pouch_combination }}</td>
+                            <td class="label">Quantity</td>
+                            <td class="value">{{ job.quantity }}</td>
+                        {% elif job.pouch_combination %}
+                            <td class="label">Combination</td>
+                            <td class="value" colspan="3">{{ job.pouch_combination }}</td>
+                        {% else %}
+                            <td class="label">Quantity</td>
+                            <td class="value" colspan="3">{{ job.quantity }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+            
+                    <!-- Min Quantity & Pouch Cost -->
+                    {% if job.minimum_quantity or job.per_pouch_rate_basic %}
+                    <tr>
+                        {% if job.minimum_quantity and job.per_pouch_rate_basic %}
+                            <td class="label">Min. Quantity</td>
+                            <td class="value">{{ job.minimum_quantity }}</td>
+                            <td class="label">Pouch Cost</td>
+                            <td class="value">{{ job.per_pouch_rate_basic }}</td>
+                        {% elif job.minimum_quantity %}
+                            <td class="label">Min. Quantity</td>
+                            <td class="value" colspan="3">{{ job.minimum_quantity }}</td>
+                        {% else %}
+                            <td class="label">Pouch Cost</td>
+                            <td class="value" colspan="3">{{ job.per_pouch_rate_basic }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+            
+                    <!-- Pouch/Kg & Zipper Cost -->
+                    {% if job.no_of_pouch_kg or job.zipper_cost %}
+                    <tr>
+                        {% if job.no_of_pouch_kg and job.zipper_cost %}
+                            <td class="label">Pouch / Kg</td>
+                            <td class="value">{{ job.no_of_pouch_kg }}</td>
+                            <td class="label">Zipper Cost</td>
+                            <td class="value">{{ job.zipper_cost }}</td>
+                        {% elif job.no_of_pouch_kg %}
+                            <td class="label">Pouch / Kg</td>
+                            <td class="value" colspan="3">{{ job.no_of_pouch_kg }}</td>
+                        {% else %}
+                            <td class="label">Zipper Cost</td>
+                            <td class="value" colspan="3">{{ job.zipper_cost }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+            
+                    <!-- Pouch Charge & Purchase Rate -->
+                    {% if job.pouch_charge or job.purchase_rate_per_kg %}
+                    <tr>
+                        {% if job.pouch_charge and job.purchase_rate_per_kg %}
+                            <td class="label">Pouch Charge</td>
+                            <td class="value">{{ job.pouch_charge }}</td>
+                            <td class="label">Purchase Rate / Kg</td>
+                            <td class="value">{{ job.purchase_rate_per_kg }}</td>
+                        {% elif job.pouch_charge %}
+                            <td class="label">Pouch Charge</td>
+                            <td class="value" colspan="3">{{ job.pouch_charge }}</td>
+                        {% else %}
+                            <td class="label">Purchase Rate / Kg</td>
+                            <td class="value" colspan="3">{{ job.purchase_rate_per_kg }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+            
+                    <!-- Final Rate & Pouch Type -->
+                    {% if job.final_rare or job.pouch_type %}
+                    <tr>
+                        {% if job.final_rare and job.pouch_type %}
+                            <td class="label">Final Rate</td>
+                            <td class="value">{{ job.final_rare }}</td>
+                            <td class="label">Pouch Type</td>
+                            <td class="value">{{ job.pouch_type }}</td>
+                        {% elif job.final_rare %}
+                            <td class="label">Final Rate</td>
+                            <td class="value" colspan="3">{{ job.final_rare }}</td>
+                        {% else %}
+                            <td class="label">Pouch Type</td>
+                            <td class="value" colspan="3">{{ job.pouch_type }}</td>
+                        {% endif %}
+                    </tr>
+                    {% endif %}
+            
+                </table>
+            
+                <!-- Delivery Address -->
+                {% if job.delivery_address %}
+                <div class="full-row">
+                    <span class="bold">Delivery Address:</span><br />
+                    {{ job.delivery_address }}
                 </div>
-            </td>
-            <td style="text-align: right; vertical-align: top;">
-                <div class="bold">DATE: {% now "d-m-Y" %}</div>
-                <div class="bold">ORDER NO: SNVL/2/25-26 (KAL)</div>
-            </td>
-        </tr>
-    </table>
+                {% endif %}
+            </div>
+            {% endfor %}
+            
+            <!-- TERMS -->
+            <div
+                class="section"
+                style="
+                    background: #f4f4f4;
+                    padding: 15px;
+                    border: 1px solid #ddd;
+                "
+            >
+                <span class="bold">OTHER TERMS:</span><br />
+                <table style="width: 100%; margin-top: 10px">
+                    <tr>
+                        <td width="30%" class="bold">Quantity Variate:</td>
+                        <td>{{ common_values.quantity_variate }}</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">Freight:</td>
+                        <td>{{ common_values.freight }}</td>
+                    </tr>
+                    <tr>
+                        <td class="bold">G.S.T.:</td>
+                        <td>{{ common_values.gst }}</td>
+                    </tr>
+                </table>
+            </div>
 
-    <!-- PARTY DETAILS -->
-    <div class="section">
-        <span class="bold">TO:</span><br>
-        {{ common_values.party_details }}<br>
-        <span class="bold">Party Email:</span> {{ common_values.party_email }}<br><br>
-        <span class="bold">Kind Attention:</span> {{ common_values.kind_attention }}
-    </div>
-
-    <div class="section bold" style="color: #444; border-left: 4px solid #333; padding-left: 10px;">
-        Order From: Shrri Nirmal Ventures Private Limited
-    </div>
-
-    <!-- JOBS LOOP -->
-    {% for job in jobs %}
-    <div class="job-header">Product {{ forloop.counter }}</div>
-
-    {% if job.special_instruction %}
-    <div class="special-box">
-        <div class="bold" style="color: red;">Note:</div>
-        <div style="color: red;">{{ job.special_instruction }}</div>
-    </div>
-    {% endif %}
-
-    <div class="job-block">
-        <table class="job-table">
-            <tr>
-                <td class="label">Product Name</td>
-                <td class="value">{{ job.job_name|default:"-" }}</td>
-                <td class="label">Size</td>
-                <td class="value">{{ job.pouch_open_size|default:"-" }}</td>
-            </tr>
-            <tr>
-                <td class="label">Combination</td>
-                <td class="value">{{ job.pouch_combination|default:"-" }}</td>
-                <td class="label">Quantity</td>
-                <td class="value">{{ job.quantity|default:"-" }}</td>
-            </tr>
-            <tr>
-                <td class="label">Min. Quantity</td>
-                <td class="value">{{ job.minimum_quantity|default:"-" }}</td>
-                <td class="label">Pouch Cost</td>
-                <td class="value">{{ job.per_pouch_rate_basic|default:"-" }}</td>
-            </tr>
-            <tr>
-                <td class="label">Pouch / Kg</td>
-                <td class="value">{{ job.no_of_pouch_kg|default:"-" }}</td>
-                <td class="label">Zipper Cost</td>
-                <td class="value">{{ job.zipper_cost|default:"-" }}</td>
-            </tr>
-            <tr>
-                <td class="label">Pouch Charge</td>
-                <td class="value">{{ job.pouch_charge|default:"-" }}</td>
-                <td class="label">Purchase Rate / Kg</td>
-                <td class="value">{{ job.purchase_rate_per_kg|default:"-" }}</td>
-            </tr>
-            <tr>
-                <td class="label">Final Rate</td>
-                <td class="value">{{ job.final_rare|default:"-" }}</td>
-                <td class="label">Pouch Type</td>
-                <td class="value">{{ job.pouch_type|default:"-" }}</td>
-            </tr>
-        </table>
-
-        {% if job.delivery_address %}
-        <div class="full-row">
-            <span class="bold">Delivery Address:</span><br>
-            {{ job.delivery_address }}
+            <!-- SIGNATURE -->
+            <div class="signature">
+                <p>
+                    THANK YOU,<br />
+                    <strong class="bold"
+                        >Shrri Nirmal Ventures Private Limited</strong
+                    ><br />
+                    MR. BHAVIK SHAH
+                </p>
+            </div>
         </div>
-        {% endif %}
-    </div>
-    {% endfor %}
-
-    <!-- TERMS -->
-    <div class="section" style="background: #f4f4f4; padding: 15px; border: 1px solid #ddd;">
-        <span class="bold">OTHER TERMS:</span><br>
-        <table style="width: 100%; margin-top: 10px;">
-            <tr><td width="30%" class="bold">Quantity Variate:</td><td>{{ common_values.quantity_variate }}</td></tr>
-            <tr><td class="bold">Freight:</td><td>{{ common_values.freight }}</td></tr>
-            <tr><td class="bold">G.S.T.:</td><td>{{ common_values.gst }}</td></tr>
-        </table>
-    </div>
-
-    <!-- SIGNATURE -->
-    <div class="signature">
-        <p>THANK YOU,<br>
-        <strong class="bold">Shrri Nirmal Ventures Private Limited</strong><br>
-        MR. BHAVIK SHAH</p>
-    </div>
-</div>
-</body>
+    </body>
 </html>
