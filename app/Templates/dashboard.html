@@ -2,258 +2,444 @@
 {% load custom_tags %}
 {% load humanize %}
 {% load static %}
+
 {% block styles %}
-    <style>
-        .nexticon {
-            position: absolute;
-            right: -20px;
-
-            width: 20px;
-            border-radius: 20px;
-            color: #000000ff;
-        }
-        .previcon {
-            position: absolute;
-            left: -20px;
-
-            width: 20px;
-            border-radius: 20px;
-            color: #000000ff;
-        }
-
-    </style>
+<style>
+    /* Custom Carousel Navigation Styles */
+    .nexticon {
+        position: absolute;
+        right: -20px;
+        width: 20px;
+        border-radius: 20px;
+        color: #000000;
+    }
+    
+    .previcon {
+        position: absolute;
+        left: -20px;
+        width: 20px;
+        border-radius: 20px;
+        color: #000000;
+    }
+    
+    /* Card Statistics Styling */
+    .card-stats {
+        border-left: 4px solid #007bff;
+        transition: all 0.3s ease;
+    }
+    
+    .card-stats:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    
+    .card-stats .card-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #2c3e50;
+    }
+    
+    .card-stats .card-category {
+        color: #7f8c8d;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+    }
+    
+    /* Page Header Styling */
+    .page-title h2 {
+        color: #2c3e50;
+        font-size: 1.75rem;
+    }
+    
+    /* Table Sticky Columns */
+    .sticky-left {
+        position: sticky;
+        left: 0;
+        background-color: #fff;
+        z-index: 10;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    }
+    
+    .sticky-right {
+        position: sticky;
+        right: 0;
+        background-color: #fff;
+        z-index: 10;
+        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    }
+    
+    /* Table Header Styling */
+    .thead-light th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        color: #495057;
+        border-bottom: 2px solid #dee2e6;
+    }
+    
+    .thead-light th a {
+        color: #495057;
+        text-decoration: none;
+    }
+    
+    .thead-light th a:hover {
+        color: #007bff;
+    }
+    
+    /* Table Row Hover Effect */
+    .table-striped tbody tr:hover {
+        background-color: #f1f3f5;
+        cursor: pointer;
+    }
+    
+    /* Badge Styling */
+    .badge {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+    
+    /* Carousel in Table */
+    .carousel {
+        min-height: 40px;
+    }
+    
+    .carousel-item a {
+        color: #007bff;
+        text-decoration: none;
+    }
+    
+    .carousel-item a:hover {
+        text-decoration: underline;
+    }
+    
+    /* Icon Link Styling */
+    .icon-link {
+        color: #007bff;
+        font-weight: 500;
+        text-decoration: none;
+    }
+    
+    .icon-link:hover {
+        color: #0056b3;
+        text-decoration: underline;
+    }
+    
+    /* Button Group Styling */
+    .btn-group-actions .btn {
+        margin-right: 0.25rem;
+    }
+    
+    /* Card Header Tools */
+    .card-tools {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: flex-end;
+    }
+    
+    /* Form Control Spacing */
+    .form-label {
+        font-size: 0.875rem;
+        color: #495057;
+    }
+    
+    /* Modal Styling */
+    .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+    
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
+    
+    /* Responsive Table Wrapper */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Stats Section Spacing */
+    .stats-section {
+        margin-bottom: 2rem;
+    }
+    
+    /* Job Details Section */
+    .job-details-section {
+        margin-top: 1rem;
+    }
+    
+    /* Card Round Corners */
+    .card-round {
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    /* Text Truncate with Tooltip */
+    .text-truncate {
+        max-width: 150px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    /* Correction Modal Trigger */
+    [data-bs-toggle="modal"] {
+        cursor: pointer;
+        color: #007bff;
+    }
+    
+    [data-bs-toggle="modal"]:hover {
+        text-decoration: underline;
+    }
+</style>
 {% endblock styles %}
-{% block title %}Dashboard{% endblock %}
-{% block main_block %}
-    <div class="page-inner">
-        <!-- Header Section -->
-        <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
-            <div class="page-title">
-                <h2 class="fw-bold mb-3">
-                    Welcome Back  {{ user.first_name }} {{ user.last_name }} !
 
-                </h2>
+{% block title %}Dashboard{% endblock %}
+
+{% block main_block %}
+<div class="page-inner">
+    <!-- Header Section -->
+    <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+        <div class="page-title">
+            <h2 class="fw-bold mb-3">
+                Welcome Back {{ user.first_name }} {{ user.last_name }}!
+            </h2>
+        </div>
+        <div class="page-actions ms-md-auto py-2 py-md-0">
+            <a href="{% url 'job_entry' %}" class="btn btn-primary btn-round">
+                <i class="fa fa-plus me-2"></i>Add New Job
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics Cards Section -->
+    <section class="stats-section">
+        <div class="row g-3">
+            <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round shadow-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="icon-big text-center text-primary">
+                                    <i class="fa fa-briefcase fa-3x"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="numbers">
+                                    <p class="card-category">Total Active Job</p>
+                                    <h2 class="card-title">{{ total_active_job }}</h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="page-actions ms-md-auto py-2 py-md-0">
-                <a href="{% url "job_entry" %}" class="btn btn-primary btn-round">Add New Job</a>
+
+            <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round shadow-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="icon-big text-center text-success">
+                                    <i class="fa fa-building fa-3x"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="numbers">
+                                    <p class="card-category">Total Party</p>
+                                    <h4 class="card-title">{{ count_of_company }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round shadow-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="icon-big text-center text-warning">
+                                    <i class="fa fa-industry fa-3x"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="numbers">
+                                    <p class="card-category">Total Cylinder Company</p>
+                                    <h4 class="card-title">{{ count_of_cylinder_company }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                <div class="card card-stats card-round shadow-sm">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="icon-big text-center text-info">
+                                    <i class="fa fa-tasks fa-3x"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="numbers">
+                                    <p class="card-category">Total Job</p>
+                                    <h4 class="card-title">{{ total_job }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- Statistics Cards Section -->
-        <section class="stats-section">
-            <div class="row">
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Total Active Job</p>
-                                        <h2 class="card-title">{{ total_active_job }}</h2>
-                                    </div>
-                                </div>
+    </section>
+
+    <!-- Job Details Table Section -->
+    <section class="job-details-section">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-round shadow-sm">
+                    <div class="card-header bg-white border-bottom">
+                        <div class="card-head-row card-tools-still-right">
+                            <div class="card-title">
+                                <h4 class="fw-bold mb-0">Job Details</h4>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Total Party</p>
-                                        <h4 class="card-title">{{ count_of_company }}</h4>
+
+                            <div class="card-tools">
+                                <form method="get" action="{% url 'dashboard_page' %}" class="d-flex flex-wrap align-items-end gap-2">
+                                    <!-- Start Date -->
+                                    <div class="col-12 col-md-auto">
+                                        <label for="start_date" class="form-label mb-1 fw-bold">Start Date</label>
+                                        <input type="date" class="form-control" id="start_date" name="start_date" 
+                                               value="{{ request.GET.start_date|default_if_none:'' }}">
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Total Cylinder Company</p>
-                                        <h4 class="card-title">{{ count_of_cylinder_company }}</h4>
+
+                                    <!-- End Date -->
+                                    <div class="col-12 col-md-auto">
+                                        <label for="end_date" class="form-label mb-1 fw-bold">End Date</label>
+                                        <input type="date" class="form-control" id="end_date" name="end_date" 
+                                               value="{{ request.GET.end_date|default_if_none:'' }}">
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-3">
-                    <div class="card card-stats card-round">
-                        <div class="card-body">
-                            <div class="row align-items-center">
-                                <div class="col col-stats ms-3 ms-sm-0">
-                                    <div class="numbers">
-                                        <p class="card-category">Total Job</p>
-                                        <h4 class="card-title">{{ total_job }}</h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Job Details Table Section -->
-        <section class="job-details-section">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-round">
-                        <div class="card-header">
-                            <div class="card-head-row card-tools-still-right">
-                                <div class="card-title">Job Details</div>
 
-                                <div class="card-tools">
-                                    <form method="get"
-                                          action="{% url 'dashboard_page' %}"
-                                          class="d-flex flex-wrap align-items-end gap-2">
-
-                                        <!-- Start Date -->
-                                        <div class="col-12 col-md-auto">
-                                            <label for="date" class="form-label mb-1 fw-bold">Start Date</label>
-                                            <input type="date"
-                                                   class="form-control"
-                                                   id="start_date"
-                                                   name="start_date"
-                                                   placeholder="Start Date"
-                                                   value="{{ request.GET.start_date|default_if_none:'' }}">
-                                        </div>
-
-                                        <!-- End Date -->
-                                        <div class="col-12 col-md-auto">
-                                            <label for="end_date" class="form-label mb-1 fw-bold">End Date</label>
-                                            <input type="date"
-                                                   class="form-control"
-                                                   id="end_date"
-                                                   name="end_date"
-                                                   placeholder="End Date"
-                                                   value="{{ request.GET.end_date|default_if_none:'' }}">
-                                        </div>
-
-                                        <!-- Company Name -->
-                                        <div class="col-12 col-md-auto" style="min-width: 220px;">
-                                            <label for="party_name" class="form-label mb-1 fw-bold">Party name Search</label>
-                                            <select class="form-select form-control"
-                                                    name="party_name"
-                                                    id="party_name">
-                                                {% if request.GET.party_name %}
-                                                    <!-- Show the selected value as first option -->
-                                                    <option value="{{ request.GET.party_name }}">{{ request.GET.party_name }}</option>
-
-                                                {% else %}
-                                                    <option value="">Select Party Name</option>
+                                    <!-- Party Name -->
+                                    <div class="col-12 col-md-auto" style="min-width: 220px;">
+                                        <label for="party_name" class="form-label mb-1 fw-bold">Party Name</label>
+                                        <select class="form-select form-control" name="party_name" id="party_name">
+                                            {% if request.GET.party_name %}
+                                                <option value="{{ request.GET.party_name }}">{{ request.GET.party_name }}</option>
+                                            {% else %}
+                                                <option value="">Select Party Name</option>
+                                            {% endif %}
+                                            {% for party in party_names %}
+                                                {% if party.party_name != request.GET.party_name %}
+                                                    <option value="{{ party.party_name }}">{{ party.party_name }}</option>
                                                 {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                                                {% for party in party_names %}
-                                                    {% if party.party_name != request.GET.party_name %}
-                                                        <option value="{{ party.party_name }}">
-                                                            {{ party.party_name }}
-                                                        </option>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-
-                                        <!-- Job Name -->
-                                        <div class="col-12 col-md-auto" style="min-width: 220px;">
-                                            <label for="job_name_search" class="form-label mb-1 fw-bold">Job Name</label>
-                                            <select class="form-select form-control"
-                                                    name="job_name_search"
-                                                    id="job_name_search">
-                                                {% if request.GET.job_name_search %}
-                                                    <!-- Show the selected value as first option -->
-                                                    <option value="{{ request.GET.job_name_search }}">
-                                                        {{ request.GET.job_name_search }}
-                                                    </option>
-
-                                                {% else %}
-                                                    <option value="">Select Job Name</option>
+                                    <!-- Job Name -->
+                                    <div class="col-12 col-md-auto" style="min-width: 220px;">
+                                        <label for="job_name_search" class="form-label mb-1 fw-bold">Job Name</label>
+                                        <select class="form-select form-control" name="job_name_search" id="job_name_search">
+                                            {% if request.GET.job_name_search %}
+                                                <option value="{{ request.GET.job_name_search }}">{{ request.GET.job_name_search }}</option>
+                                            {% else %}
+                                                <option value="">Select Job Name</option>
+                                            {% endif %}
+                                            {% for job in job_names %}
+                                                {% if job.job_name != request.GET.job_name_search %}
+                                                    <option value="{{ job.job_name }}">{{ job.job_name }}</option>
                                                 {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
 
-                                                {% for job in job_names %}
-                                                    {% if job.job_name != request.GET.job_name_search %}
-                                                        <option value="{{ job.job_name }}">
-                                                            {{ job.job_name }}
-                                                        </option>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            </select>
-                                        </div>
+                                    <!-- Search Button -->
+                                    <div class="col-12 col-md-auto">
+                                        <button type="submit" class="btn btn-primary w-100 w-md-auto">
+                                            <i class="fa fa-search me-1"></i> Search
+                                        </button>
+                                    </div>
 
-                                        <!-- Search Button -->
-                                        <div class="col-12 col-md-auto">
-                                            <button type="submit"
-                                                    class="btn btn-primary w-100 w-md-auto"
-                                                    data-mdb-ripple-init>
-                                                <i class="fa fa-search me-1"></i> Search
-                                            </button>
-                                        </div>
+                                    <!-- Reset Button -->
+                                    <div class="col-12 col-md-auto">
+                                        <a href="{% url 'dashboard_page' %}" class="btn btn-secondary w-100 w-md-auto">
+                                            <i class="fa fa-sync me-1"></i> Reset
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
 
-                                        <!-- Reset Button -->
-                                        <div class="col-12 col-md-auto">
-                                            <a href="{% url 'dashboard_page' %}" class="btn btn-secondary w-100 w-md-auto">
-                                                Reset
+                    <!-- Table Content -->
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table align-items-center table-striped mb-0">
+                                <thead class="thead-light">
+                                    <tr class="text-nowrap text-start">
+                                        <th scope="col" class="sticky-left">
+                                            <a href="?sorting={% if request.GET.sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                Sr No <i class="fa fa-sort"></i>
                                             </a>
-
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Table Content -->
-                        <div class="card-body p-0">
-                            <div class="table-responsive">
-                                <table class="table align-items-center table-striped">
-                                    <thead class="thead-light">
-                                        <tr class="text-nowrap text-start">
-                                            <th scope="col" class="sticky-left">
-                                                <a href="?sorting={% if request.GET.sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Sr No</a>
-                                            </th>
-                                            <th scope="col">
-                                                <a href="?date_sorting={% if request.GET.date_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Date</a>
-                                            </th>
-                                            <th scope="col">Bill No</th>
-                                            <th scope="col">
-                                                <a href="?job_name_sorting={% if request.GET.job_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Job Name</a>
-                                            </th>
-                                            <th scope="col">Job Type</th>
-                                            <th scope="col">
-                                                <a href="?party_name_sorting={% if request.GET.party_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Party Name</a>
-                                            </th>
-                                            <th scope="col">Noc(No of Colors)</th>
-                                            <th scope="col">Rate/Cylinder Purchase</th>
-                                            <th scope="col">Rate/Cylinder sales</th>
-                                            <th scope="col">Cylinder Size</th>
-                                            <th scope="col">
-                                                <a href="?cylinder_made_in_sorting={% if request.GET.cylinder_made_in_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Cylinder Made In</a>
-                                            </th>
-                                            <th scope="col">Cylinder Bill No</th>
-                                            <th scope="col">
-                                                <a href="?cylinder_date_sorting={% if request.GET.cylinder_date_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">Cylinder Date</a>
-                                            </th>
-                                            <th scope="col">Pouch Size</th>
-                                            <th scope="col">Open Size</th>
-                                            <th scope="col">Combination</th>
-                                            <th scope="col">Correction</th>
-                                            <th scope="col">Images </th>
-                                            <th scope="col" class="sticky-right">Job Status</th>
-                                            <th scope="col">CDR Links</th>
-                                            <th scope="col"> Job History </th>
-                                            <th scope="col" class="sticky-right" colspan="3">Actions</th>
-                                        </tr>
-                                    </thead>
+                                        </th>
+                                        <th scope="col">
+                                            <a href="?date_sorting={% if request.GET.date_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                Date <i class="fa fa-sort"></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">Bill No</th>
+                                        <th scope="col">
+                                            <a href="?job_name_sorting={% if request.GET.job_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                Job Name <i class="fa fa-sort"></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">Job Type</th>
+                                        <th scope="col">
+                                            <a href="?party_name_sorting={% if request.GET.party_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                Party Name <i class="fa fa-sort"></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">NOC (No of Colors)</th>
+                                        <th scope="col">Rate/Cylinder Purchase</th>
+                                        <th scope="col">Rate/Cylinder Sales</th>
+                                        <th scope="col">Cylinder Size</th>
+                                        <th scope="col">
+                                            <a href="?cylinder_made_in_sorting={% if request.GET.cylinder_made_in_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                Cylinder Made In <i class="fa fa-sort"></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">Cylinder Bill No</th>
+                                        <th scope="col">
+                                            <a href="?cylinder_date_sorting={% if request.GET.cylinder_date_sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
+                                                Cylinder Date <i class="fa fa-sort"></i>
+                                            </a>
+                                        </th>
+                                        <th scope="col">Pouch Size</th>
+                                        <th scope="col">Open Size</th>
+                                        <th scope="col">Combination</th>
+                                        <th scope="col">Correction</th>
+                                        <th scope="col">Images</th>
+                                        <th scope="col" class="sticky-right">Job Status</th>
+                                        <th scope="col">CDR Links</th>
+                                        <th scope="col">Job History</th>
+                                        <th scope="col" class="sticky-right">Actions</th>
+                                    </tr>
+                                </thead>
                                 <tbody>
                                     {% if jobrecoreds %}
                                         {% for i in jobrecoreds %}
                                             <tr class="text-start text-nowrap">
-
-                                                <!-- Sr No (no unwanted modal trigger here) -->
+                                                <!-- Sr No -->
                                                 <td class="text-truncate sticky-left">
                                                     {{ forloop.counter }}
                                                 </td>
@@ -277,8 +463,7 @@
                                                 <!-- Correction -->
                                                 <td>
                                                     {% if i.correction %}
-                                                        <span data-bs-toggle="modal"
-                                                            data-bs-target="#staticBackdrop{{ i.id }}">
+                                                        <span data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ i.id }}">
                                                             {{ i.correction|truncatechars:20 }}
                                                         </span>
                                                     {% else %}
@@ -286,12 +471,11 @@
                                                     {% endif %}
                                                 </td>
 
-                                                <!-- IMAGES (with safe arrows only if >1) -->
+                                                <!-- Images -->
                                                 <td>
                                                     {% if i.image.all %}
                                                         <div id="carousel-{{ i.id }}" class="carousel slide" data-bs-ride="carousel">
                                                             <div class="carousel-inner">
-
                                                                 {% for job_image in i.image.all %}
                                                                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
                                                                         <a href="{{ job_image.image.url }}" target="_blank">
@@ -299,107 +483,104 @@
                                                                         </a>
                                                                     </div>
                                                                 {% endfor %}
-
                                                             </div>
 
                                                             {% if i.image.count > 1 %}
-                                                                  <button class="carousel-control-prev" type="button"
-                                                                            data-bs-target="#carousel-{{ i.id }}" data-bs-slide="prev">
-                                                                        <span class="previcon" aria-hidden="false">
-                                                                            <i class="fa fa-caret-left" aria-hidden="true"></i>
-                                                                        </span>
-                                                                    </button>
+                                                                <button class="carousel-control-prev" type="button" 
+                                                                        data-bs-target="#carousel-{{ i.id }}" data-bs-slide="prev">
+                                                                    <span class="previcon" aria-hidden="false">
+                                                                        <i class="fa fa-caret-left"></i>
+                                                                    </span>
+                                                                </button>
 
-                                                                    <button class="carousel-control-next" type="button"
-                                                                            data-bs-target="#carousel-{{ i.id }}" data-bs-slide="next">
-                                                                        <span class="nexticon" aria-hidden="true">
-                                                                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                                                                        </span>
-                                                                    </button>
+                                                                <button class="carousel-control-next" type="button" 
+                                                                        data-bs-target="#carousel-{{ i.id }}" data-bs-slide="next">
+                                                                    <span class="nexticon" aria-hidden="true">
+                                                                        <i class="fa fa-caret-right"></i>
+                                                                    </span>
+                                                                </button>
                                                             {% endif %}
                                                         </div>
                                                     {% else %}
                                                         -
                                                     {% endif %}
                                                 </td>
+
                                                 <!-- Job Status -->
                                                 <td class="sticky-right">
                                                     <span class="badge {% if i.job_status == 'In Progress' %}bg-success{% else %}bg-danger{% endif %}">
                                                         {{ i.job_status }}
                                                     </span>
                                                 </td>
-                                               <td class="text-truncate">
-                                                        {% if i.cdr_file_url %}
-                                                            <a class="icon-link" href="{{ i.cdr_file_url }}" target="_blank">CDR</a>
-                                                        {% else %}
-                                                            {% if i.cdr_images_urls %}
-                                                                <div id="cdr-carousel-{{ i.id }}" class="carousel slide" data-bs-ride="carousel">
-                                                                    <div class="carousel-inner">
-                                                                        {% for cdr_img in i.cdr_images_urls %}
-                                                                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                                                                <div class="d-flex justify-content-center align-items-center" style="height: 50px;">
-                                                                                    <a class="icon-link text-decoration-none "
-                                                                                    href="{{ cdr_img }}" target="_blank">
-                                                                                        {% comment %} {{ cdr_img|filename }} {% endcomment %} CDR
-                                                                                    </a>
-                                                                                </div>
+
+                                                <!-- CDR Links -->
+                                                <td class="text-truncate">
+                                                    {% if i.cdr_file_url %}
+                                                        <a class="icon-link" href="{{ i.cdr_file_url }}" target="_blank">
+                                                            <i class="fa fa-file me-1"></i>CDR
+                                                        </a>
+                                                    {% else %}
+                                                        {% if i.cdr_images_urls %}
+                                                            <div id="cdr-carousel-{{ i.id }}" class="carousel slide" data-bs-ride="carousel">
+                                                                <div class="carousel-inner">
+                                                                    {% for cdr_img in i.cdr_images_urls %}
+                                                                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                                            <div class="d-flex justify-content-center align-items-center" style="height: 50px;">
+                                                                                <a class="icon-link text-decoration-none" href="{{ cdr_img }}" target="_blank">
+                                                                                    <i class="fa fa-file me-1"></i>CDR
+                                                                                </a>
                                                                             </div>
-                                                                        {% endfor %}
-                                                                    </div>
-
-                                                                    <button class="carousel-control-prev" type="button"
-                                                                            data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="prev">
-                                                                        <span class="previcon" aria-hidden="false">
-                                                                            <i class="fa fa-caret-left" aria-hidden="true"></i>
-                                                                        </span>
-                                                                    </button>
-
-                                                                    <button class="carousel-control-next" type="button"
-                                                                            data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="next">
-                                                                        <span class="nexticon" aria-hidden="true">
-                                                                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                                                                        </span>
-                                                                    </button>
+                                                                        </div>
+                                                                    {% endfor %}
                                                                 </div>
-                                                            {% else %}
-                                                                <p>-</p>
-                                                            {% endif %}
 
+                                                                <button class="carousel-control-prev" type="button" 
+                                                                        data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="prev">
+                                                                    <span class="previcon" aria-hidden="false">
+                                                                        <i class="fa fa-caret-left"></i>
+                                                                    </span>
+                                                                </button>
 
+                                                                <button class="carousel-control-next" type="button" 
+                                                                        data-bs-target="#cdr-carousel-{{ i.id }}" data-bs-slide="next">
+                                                                    <span class="nexticon" aria-hidden="true">
+                                                                        <i class="fa fa-caret-right"></i>
+                                                                    </span>
+                                                                </button>
+                                                            </div>
+                                                        {% else %}
+                                                            -
                                                         {% endif %}
-                                                    </td>
-
-                                                   
-                                                    <td class="text-truncate"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#OldBackdrop{{ i.id }}"
-                                                        title="{{ i.id }}">
-                                                        {{ i.job_history.count }} Records
-                                                    </td>
-                                                
-
-                                                <!-- Delete / Edit Buttons -->
-                                                <td class="sticky-right text-nowrap">
-                                                    <form method="post" action="{% url 'delete_data' delete_id=i.id %}" id="delete-form-{{ i.id }}" class="d-inline">
-                                                        {% csrf_token %}
-                                                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal"
-                                                                data-bs-target="#confirmationModal" onclick="setFormId('{{ i.id }}')">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-
-                                                    <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#exampleModal{{ i.id }}">
-                                                        <i class="fa fa-edit"></i>
-                                                    </button>
-
-
-                                                    <button class="btn btn-outline-success" data-bs-toggle="modal"
-                                                            data-bs-target="#emailModal{{ i.id }}">
-                                                        <i class="fa fa-envelope"></i>
-                                                    </button>
+                                                    {% endif %}
                                                 </td>
 
+                                                <!-- Job History -->
+                                                <td class="text-truncate" data-bs-toggle="modal" data-bs-target="#OldBackdrop{{ i.id }}" title="{{ i.id }}">
+                                                    <i class="fa fa-history me-1"></i>{{ i.job_history.count }} Records
+                                                </td>
+
+                                                <!-- Actions -->
+                                                <td class="sticky-right text-nowrap">
+                                                    <div class="btn-group-actions">
+                                                        <form method="post" action="{% url 'delete_data' delete_id=i.id %}" id="delete-form-{{ i.id }}" class="d-inline">
+                                                            {% csrf_token %}
+                                                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" 
+                                                                    data-bs-target="#confirmationModal" onclick="setFormId('{{ i.id }}')">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </form>
+
+                                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" 
+                                                                data-bs-target="#exampleModal{{ i.id }}">
+                                                            <i class="fa fa-edit"></i>
+                                                        </button>
+
+                                                        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" 
+                                                                data-bs-target="#emailModal{{ i.id }}">
+                                                            <i class="fa fa-envelope"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
 
                                             {% include 'Includes/dashboard_page/view.html' %}
@@ -407,47 +588,53 @@
                                             {% include 'Includes/dashboard_page/correction.html' %}
                                             {% include 'Includes/dashboard_page/edit_job.html' %}
                                             {% include 'Includes/dashboard_page/job_history.html' %}
-
                                         {% endfor %}
                                     {% else %}
-                                        <tr><td colspan="20" class="text-center">No data available</td></tr>
+                                        <tr>
+                                            <td colspan="22" class="text-center py-5">
+                                                <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
+                                                <p class="text-muted">No data available</p>
+                                            </td>
+                                        </tr>
                                     {% endif %}
-                                    </tbody>
-
-                                </table>
-                            </div>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                {% include 'Includes/dashboard_page/navbar.html' %}
-
             </div>
+
+            {% include 'Includes/dashboard_page/navbar.html' %}
         </div>
-        
     </section>
-        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                                <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="confirmationModalLabel">Confirm Deletion</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                                <!-- Modal Body -->
-                    <div class="modal-body">
-                        Are you sure you want to delete this item?
-                    </div>
-                                <!-- Modal Footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" onclick="submitForm()">Yes</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-                    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmationModalLabel">
+                        <i class="fa fa-exclamation-triangle me-2"></i>Confirm Deletion
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-0">Are you sure you want to delete this item? This action cannot be undone.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fa fa-times me-1"></i>Cancel
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="submitForm()">
+                        <i class="fa fa-trash me-1"></i>Yes, Delete
+                    </button>
                 </div>
             </div>
         </div>
-
+    </div>
 </div>
 {% endblock main_block %}
+
 {% block script %}
 <script>
     let formIdToSubmit = null;
@@ -461,13 +648,17 @@
             alert("Something went wrong. Please try again.");
             return;
         }
-
-        document
-            .getElementById("delete-form-" + formIdToSubmit)
-            .submit();
+        document.getElementById("delete-form-" + formIdToSubmit).submit();
     }
+
+    // Initialize tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
 </script>
 
-
-    <script src="{% static 'js/dashboard.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock script %}
