@@ -35,11 +35,14 @@ def purchase_order(request):
             party_email = request.POST.get('party_email')
             new_party_email = request.POST.get('new_party_email') 
             
+            
 
            
             if party_name == "others":
                 party_name = request.POST.get("new_party_name")
-
+    
+            print(job_name)
+                
             if new_party_email:
                 party_email = new_party_email
 
@@ -73,7 +76,7 @@ def purchase_order(request):
                     messages.error(
                         request, f"{field} is Required", extra_tags="custom-danger-style"
                     )
-                    return redirect("quotation_page")
+                    return redirect("purchase_order")
                 
           
             party_details, _ = PouchParty.objects.get_or_create(
@@ -110,11 +113,12 @@ def purchase_order(request):
                     pouch_type=pouch_type[i],
                     special_instruction=special_instruction[i],
                     delivery_address=delivery_address[i],
+                    polyester_unit=polyester_unit[i],
                     
                     )
             purchase_order.save()
             messages.success(request,"Purchase Order created successfully ")
-            return redirect('quotation_page')
+            return redirect('purchase_order')
               
     context ={
         'party_names':party_names,

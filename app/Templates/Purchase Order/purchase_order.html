@@ -23,68 +23,80 @@
 </script>
     <script src="{% static 'js/ajax/purchase_order.js' %}"></script>
     <script src="{% static 'js/purchase_order.js' %}"></script>
+
+
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+    let deleteId = null;
 
-    const container = document.getElementById("jobs-container");
-    const addBtn = document.getElementById("add-job");
-
-    if(container && addBtn){
-
-        addBtn.addEventListener("click", () => {
-
-            let job = container.querySelector(".job-block:last-of-type");
-            let clone = job.cloneNode(true);
-
-            clone.querySelectorAll("input, textarea, select").forEach(el => {
-                if(el.type === "hidden") return;
-                el.value = "";
+    document.addEventListener("DOMContentLoaded", function () {
+        // Attach click handlers to delete buttons
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+                deleteId = this.dataset.id;
             });
-
-            container.appendChild(clone);
         });
-    }
-});
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function(){
 
-    const container = document.getElementById("job_data_container");
-    const addBtn = document.getElementById("add-jobs");
-
-    if(container && addBtn){
-
-        addBtn.addEventListener("click", () => {
-
-            let job = container.querySelector(".job-block_data:last-of-type");
-            let clone = job.cloneNode(true);
-
-            clone.querySelectorAll("input, textarea, select").forEach(el => {
-                if(el.type === "hidden") return;
-                el.value = "";
-            });
-
-            container.appendChild(clone);
+        // Confirm delete action
+        document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+            if (deleteId) {
+                document.getElementById("delete-form-" + deleteId).submit();
+            }
         });
-    }
-});
+    });
 </script>
+
 <script>
-document.addEventListener("click", e => {
+function setupJobNameHandlers() {
+    document.querySelectorAll(".job_name").forEach((select, idx) => {
+        select.addEventListener("change", function () {
+            const block = this.closest(".job-block, .job-block_data");
+            const input = block?.querySelector(".new_job_name");
+            if (!input) return;
 
-    if(e.target.classList.contains("remove-job")){
+            console.log(`🔄 [Block ${idx + 1}] job_name changed →`, this.value);
 
-        let jobs = document.querySelectorAll(".job-block, .job-block_data");
+            const isOther = this.value === "others";
+            input.classList.toggle("d-none", !isOther);
+            input.required = isOther;
 
-        if(jobs.length === 1){
-            alert("At least one job is required");
-            return;
-        }
+            if (!isOther) {
+                input.value = "";
+                console.log(`🧹 [Block ${idx + 1}] cleared new_job_name`);
+            }
+        });
+    });
+}
 
-        e.target.closest(".job-block, .job-block_data").remove();
+/* LIVE typing log */
+document.addEventListener("input", function (e) {
+    if (e.target.classList.contains("new_job_name")) {
+        console.log("⌨️ Typing new job:", e.target.value);
     }
-
 });
+
+/* 🔥 IMPORTANT PART FOR getlist() */
+document.querySelectorAll("form").forEach(form => {
+    form.addEventListener("submit", function () {
+        console.log("📤 Form submitting...");
+
+        form.querySelectorAll(".job-block, .job-block_data").forEach((block, i) => {
+            const select = block.querySelector(".job_name");
+            const input = block.querySelector(".new_job_name");
+
+            if (select && input && select.value === "others") {
+                console.log(`⚠️ [Block ${i + 1}] replacing 'others' with →`, input.value);
+                select.value = input.value.trim();
+            }
+        });
+
+        /* FINAL CHECK */
+        const finalValues = [...form.querySelectorAll(".job_name")].map(el => el.value);
+        console.log("✅ FINAL job_name list (sent to backend):", finalValues);
+    });
+});
+
+document.addEventListener("DOMContentLoaded", setupJobNameHandlers);
 </script>
+
 
 {% endblock %}

@@ -141,7 +141,7 @@
                                     <!-- Pouch Size -->
                                     <div class="col-md-4">
                                         <label class="form-label fw-semibold">
-                                            Pouch Size (Open)
+                                            Pouch Open Size
                                             <span class="text-danger">*</span>
                                         </label>
 
@@ -255,16 +255,9 @@
                                                 required
                                             >
                                                 <option value="">Unit</option>
-                                                <option
-                                                    value="polyester_printed_roll"
-                                                >
-                                                    Polyester Printed Roll
-                                                </option>
-                                                <option
-                                                    value="polyester_printed_bag"
-                                                >
-                                                    Polyester Printed Bag
-                                                </option>
+                                                {% for v,l in polyester_units %}
+                                                <option value="{{ v }}">{{ l }}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                     </div>

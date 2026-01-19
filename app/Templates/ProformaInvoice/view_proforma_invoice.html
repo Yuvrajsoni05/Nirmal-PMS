@@ -238,6 +238,18 @@
                                                 >
                                                     <i class="fa fa-envelope" aria-hidden="true"></i>
                                                 </button>
+                                                <form action="{% url 'view_proforma_invoice' %}" method="POST" class="d-inline">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="proforma_id" value="{{ proforma.id }}">
+                                                <button
+                                                    type="submit"
+                                                    class="btn  btn-outline-success mx-2"
+                                                    name="print_proforma_invoice"
+                                                    formtarget="_blank"
+                                                >
+                                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                                </button>
+                                            </form>
                                             </td>
 
 
@@ -355,7 +367,7 @@
         }
     </script>
 
-    <script src="{% static 'js/proforma_view.js' %}"></script>
+    {% comment %} <script src="{% static 'js/proforma_view.js' %}"></script> {% endcomment %}
 
     <script>
         let formIdToSubmit;

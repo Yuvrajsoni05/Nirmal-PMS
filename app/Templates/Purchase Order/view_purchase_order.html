@@ -84,6 +84,7 @@
                             <th>Final Rare</th>
                             <th>Min Qty</th>
                             <th>Pouch Type</th>
+                            <th>Polyester Unit</th>
                             <th>Quantity Variate</th>
                             <th>Freight ₹</th>
                             <th>GST</th>
@@ -181,6 +182,12 @@
                             <td>
                                 {% for job in purchase_order.purchase_order_jobs.all %}
                                 <div>{{ job.get_pouch_type_display }}</div>
+                                {% endfor %}
+                            </td>
+
+                            <td>
+                                {% for job in purchase_order.purchase_order_jobs.all %}
+                                <div>{{ job.polyester_unit }}</div>
                                 {% endfor %}
                             </td>
 

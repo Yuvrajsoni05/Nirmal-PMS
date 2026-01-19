@@ -103,19 +103,19 @@
                                         <th scope="col">
                                             <a href="?party_name_sorting={% if request.GET.party_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
                                                 Party Name
-                                            </a>
+                                            </a><i class="fa fa-sort"></i> 
                                         </th>
                                         <th scope="col">
                                             <a href="?job_name_sorting={% if request.GET.job_name_sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
                                                 Job Name
-                                            </a>
+                                            </a><i class="fa fa-sort"></i> 
                                         </th>
                                         <th scope="col">Party Email Address</th>
                                         <th scope="col">Party Contact Details</th>
                                         <th scope="col">
                                             <a href="?date_sorting={% if request.GET.date_sorting == 'asc' %}desc{% else %}asc{% endif %}&search={{ request.GET.search }}&end_date={{ request.GET.end_date }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
                                                 CDR Upload Date
-                                            </a>
+                                            </a><i class="fa fa-sort"></i> 
                                         </th>
                                         <th scope="col">CDR Image</th>
                                         <th scope="col">CDR Corrections</th>

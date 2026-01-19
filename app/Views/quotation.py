@@ -1,4 +1,4 @@
-import email
+
 from .common_imports import *
 
 
@@ -22,7 +22,7 @@ def quotation_page(request):
 
             pouch_open_size = request.POST.getlist('pouch_size[]')
             pouch_combination = request.POST.getlist('pouch_combination[]')
-
+            polyester_unit = request.POST.getlist('purchase_rate_unit[]')
             quantities = request.POST.getlist('quantity[]')
             purchase_rate_per_kg = request.POST.getlist('purchase_rate_per_kg[]')
             no_of_pouch_kg = request.POST.getlist('no_of_pouch_kg[]')
@@ -36,7 +36,7 @@ def quotation_page(request):
             pouch_charges = request.POST.getlist('pouch_charge[]')
             party_email = request.POST.get('party_email')
             new_party_email = request.POST.get('new_party_email') 
-            
+            polyester_units = request.POST.getlist('purchase_rate_unit[]')
             
             
             if new_party_name:
@@ -50,16 +50,7 @@ def quotation_page(request):
             if email_error:
                 messages.error(request, email_error, extra_tags="custom-danger-style")
                 return redirect("view_quotations")
-            
-            party_details, _ = PouchParty.objects.get_or_create(
-                    party_name=party_name.strip() if party_name else None
-                )
-            
-            party_email_obj, _ = PouchPartyEmail.objects.get_or_create(
-                    party=party_details ,email=party_email  )
-            
-            
-            
+                
             required_fields = {
                 "pouch_quotation_number":pouch_quotation_number,
                 "delivery_date":delivery_date,
@@ -88,6 +79,18 @@ def quotation_page(request):
                         request, f"{field} is Required", extra_tags="custom-danger-style"
                     )
                     return redirect("quotation_page")
+
+
+            party_details, _ = PouchParty.objects.get_or_create(
+                    party_name=party_name.strip() if party_name else None
+                )
+            
+            party_email_obj, _ = PouchPartyEmail.objects.get_or_create(
+                    party=party_details ,email=party_email  )
+            
+            
+            
+            
             
             quotation = PouchQuotation.objects.create(
                 pouch_quotation_number=pouch_quotation_number,
@@ -116,6 +119,7 @@ def quotation_page(request):
                     pouch_type=pouch_types[i],
                     special_instruction=special_instructions[i],
                     delivery_address=delivery_addresses[i],
+                    polyester_unit=polyester_units[i],
                 )
             
             messages.success(request,"Quotation created successfully ")
@@ -124,7 +128,8 @@ def quotation_page(request):
         
     context = {
         'pouch_types':pouch_types,
-        'party_names':party_names
+        'party_names':party_names,
+        'polyester_units':PouchQuotationJob.POLYESTER_UNIT,
     }
     
     return render(request, "Quotation/quotation.html",context)
@@ -263,6 +268,7 @@ def view_quotations(request):
                 "check_pouch_type": "pouch_type",
                 "check_delivery_address": "delivery_address",
                 "check_special_instruction": "special_instruction",
+                
             }
 
             # ---------- COMMON VALUES ----------
@@ -351,8 +357,8 @@ def view_quotations(request):
                     "jobs": jobs,
                     "quotation": quotation,
                     "party_names": party_names,
-                    "pouch_types": PurchaseOrderJob.POUCH_TYPE,
-                    "polyester_unit": PurchaseOrderJob.POLYESTER_UNIT,
+                    "pouch_types": PouchQuotationJob.POUCH_TYPE,
+                    "polyester_unit": PouchQuotationJob.POLYESTER_UNIT,
                 }
                 return render(request, "Purchase Order/purchase_order.html", context)
             

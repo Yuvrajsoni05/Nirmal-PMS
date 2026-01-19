@@ -63,6 +63,10 @@ def split_text(value):
     return value.split('+')
 
 @register.filter
+def split_text_with_multiplications(value):
+    return value.split('x')
+
+@register.filter
 def remove_white(value):
     return value.split(' ')
 

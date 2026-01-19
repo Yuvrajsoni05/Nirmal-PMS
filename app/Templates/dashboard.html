@@ -226,7 +226,7 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="icon-big text-center text-primary">
-                                    <i class="fa fa-briefcase fa-3x"></i>
+                                    
                                 </div>
                             </div>
                             <div class="col">
@@ -246,7 +246,7 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="icon-big text-center text-success">
-                                    <i class="fa fa-building fa-3x"></i>
+                                    
                                 </div>
                             </div>
                             <div class="col">
@@ -266,7 +266,7 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="icon-big text-center text-warning">
-                                    <i class="fa fa-industry fa-3x"></i>
+                                    
                                 </div>
                             </div>
                             <div class="col">
@@ -286,7 +286,7 @@
                         <div class="row align-items-center">
                             <div class="col-auto">
                                 <div class="icon-big text-center text-info">
-                                    <i class="fa fa-tasks fa-3x"></i>
+                                    
                                 </div>
                             </div>
                             <div class="col">
@@ -389,7 +389,7 @@
                                     <tr class="text-nowrap text-start">
                                         <th scope="col" class="sticky-left">
                                             <a href="?sorting={% if request.GET.sorting == 'asc' %}desc{% else %}asc{% endif %}&q={{ request.GET.party_name }}&date={{ request.GET.date }}&page={{ request.GET.page }}">
-                                                Sr No <i class="fa fa-sort"></i>
+                                                Sr No <i class="fa fa-sort"></i> 
                                             </a>
                                         </th>
                                         <th scope="col">
@@ -440,7 +440,8 @@
                                         {% for i in jobrecoreds %}
                                             <tr class="text-start text-nowrap">
                                                 <!-- Sr No -->
-                                                <td class="text-truncate sticky-left">
+                                                <td  class="text-truncate sticky-left" data-bs-toggle="modal" 
+                                                                data-bs-target="#viewModal{{ i.id }}">
                                                     {{ forloop.counter }}
                                                 </td>
 

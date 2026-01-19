@@ -90,7 +90,7 @@
                                         checked
                                     />
                                     <label class="form-check-label fw-semibold"
-                                        >Party</label
+                                        >Party Name</label
                                     >
                                 </div>
                                 <input
@@ -125,7 +125,7 @@
                                     type="email"
                                     class="form-control"
                                     name="party_email"
-                                    value="{{ purchase_order.party_details.email }}"
+                                    value="{{ quotation.party_email.email }}"
                                 />
                             </div>
                             <div class="col-md-4">
@@ -352,10 +352,15 @@
                                             Pouch Type
                                         </label>
                                     </div>
-                                    <input type="text"
-                                        class="form-control"
-                                        name="pouch_type_{{ job.id }}"
-                                        value="{{ job.pouch_type }}">
+                                    <select class="form-select" name="pouch_type_{{ job.id }}">
+                                        <option value="">Select Pouch Type</option>
+                                        {% for value,label in pouch_types %}
+                                            <option value="{{ value }}"
+                                                {% if job.pouch_type == value %}selected{% endif %}>
+                                                {{ label }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
 
                                 <!-- Delivery Address -->

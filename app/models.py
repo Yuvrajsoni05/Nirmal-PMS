@@ -349,6 +349,10 @@ class PouchQuotationJob(models.Model):
         ('Printed Roll' , 'Printed Roll'),
         ('Flat Bottom Pouch With Zipper' ,'Flat Bottom Pouch With Zipper'),
     ]
+    POLYESTER_UNIT =[
+        ('polyester_printed_roll' , 'Polyester Printed Roll'),
+        ('polyester_printed_bag' ,'Polyester Printed Bag')
+    ]
     quotation = models.ForeignKey(PouchQuotation,on_delete=models.CASCADE,related_name="pouch_quotation_jobs")
     job_name = models.CharField(max_length=200)
     quantity = models.CharField(max_length=200)
@@ -364,6 +368,7 @@ class PouchQuotationJob(models.Model):
     pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE)
     special_instruction = models.TextField()
     pouch_charge = models.CharField(max_length=200)
+    polyester_unit = models.CharField(max_length=200,choices=POLYESTER_UNIT,blank=True, null=True)
     
     
     

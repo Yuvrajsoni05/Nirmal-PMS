@@ -268,6 +268,21 @@ def ViewProformaInvoice(request):
         .order_by("invoice_status", "invoice_date")
     )
     
+
+    if request.method == "POST":
+
+        if 'print_proforma_invoice' in request.POST:
+            proforma_id = request.POST.get("proforma_id")
+            prforma_detail = ProformaInvoice.objects.get(id=proforma_id)
+            jobs = prforma_detail.job_details.all()
+            
+            return render(
+                request,
+                "includes/proforma/print.html",
+                context={"data": prforma_detail, "jobs": jobs},
+            )
+        
+
     date_sorting = request.GET.get("invoice_date_sorting", "")
     start_date = request.GET.get("start_date", "")
     end_date = request.GET.get("end_date", "")
