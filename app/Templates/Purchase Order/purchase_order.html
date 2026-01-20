@@ -23,80 +23,134 @@
 </script>
     <script src="{% static 'js/ajax/purchase_order.js' %}"></script>
     <script src="{% static 'js/purchase_order.js' %}"></script>
-
-
 <script>
-    let deleteId = null;
+document.addEventListener("DOMContentLoaded", function () {
 
-    document.addEventListener("DOMContentLoaded", function () {
-        // Attach click handlers to delete buttons
-        document.querySelectorAll(".delete-btn").forEach((btn) => {
-            btn.addEventListener("click", function () {
-                deleteId = this.dataset.id;
+    document.addEventListener("click", function (e) {
+
+        /* ===============================
+           ADD JOB
+        =============================== */
+        const addBtn = e.target.closest("#add-job, #add-jobs");
+        if (addBtn) {
+
+            // CASE 1: EXISTING DATA
+            const dataBlocks = document.querySelectorAll(".job-block_data");
+            if (dataBlocks.length) {
+                const container = document.getElementById("job_data_container");
+                const clone = dataBlocks[dataBlocks.length - 1].cloneNode(true);
+                resetJobBlock(clone);
+                container.appendChild(clone);
+                return;
+            }
+
+            // CASE 2: NORMAL
+            const normalBlocks = document.querySelectorAll(".job-block");
+            if (!normalBlocks.length) return;
+
+            const container = document.getElementById("jobs-container");
+            const clone = normalBlocks[normalBlocks.length - 1].cloneNode(true);
+            resetJobBlock(clone);
+            container.appendChild(clone);
+            return;
+        }
+
+        /* ===============================
+           REMOVE JOB
+        =============================== */
+        const removeBtn = e.target.closest(".remove-job");
+        if (removeBtn) {
+            const blocks = document.querySelectorAll(".job-block, .job-block_data");
+            if (blocks.length === 1) {
+                alert("At least one job is required");
+                return;
+            }
+            removeBtn.closest(".job-block, .job-block_data").remove();
+        }
+    });
+
+    /* ===============================
+       JOB NAME → OTHERS
+    =============================== */
+    document.addEventListener("change", function (e) {
+        if (!e.target.classList.contains("job_name")) return;
+
+        const block = e.target.closest(".job-block, .job-block_data");
+        const newInput = block.querySelector(".new_job_name");
+        if (!newInput) return;
+
+        if (e.target.value === "others") {
+            newInput.classList.remove("d-none");
+            newInput.required = true;
+            newInput.focus();
+        } else {
+            newInput.classList.add("d-none");
+            newInput.required = false;
+            newInput.value = "";
+        }
+    });
+
+    /* ===============================
+       FORM SUBMIT
+    =============================== */
+    const form = document.querySelector("form");
+    if (form) {
+        form.addEventListener("submit", function (e) {
+
+            let valid = true;
+            const jobsToProcess = [];
+
+            document.querySelectorAll(".job-block").forEach(block => {
+                const select = block.querySelector(".job_name");
+                const input = block.querySelector(".new_job_name");
+
+                if (select && select.value === "others") {
+                    const val = input.value.trim();
+                    if (!val) {
+                        alert("Please enter Job Name for Others");
+                        input.focus();
+                        valid = false;
+                        return;
+                    }
+                    jobsToProcess.push({ select, input, val });
+                }
+            });
+
+            if (!valid) {
+                e.preventDefault();
+                return;
+            }
+
+            jobsToProcess.forEach(({ select, input, val }) => {
+                const option = new Option(val, val, true, true);
+                select.appendChild(option);
+                select.value = val;
+                input.disabled = true;
             });
         });
-
-        // Confirm delete action
-        document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
-            if (deleteId) {
-                document.getElementById("delete-form-" + deleteId).submit();
-            }
-        });
-    });
-</script>
-
-<script>
-function setupJobNameHandlers() {
-    document.querySelectorAll(".job_name").forEach((select, idx) => {
-        select.addEventListener("change", function () {
-            const block = this.closest(".job-block, .job-block_data");
-            const input = block?.querySelector(".new_job_name");
-            if (!input) return;
-
-            console.log(`🔄 [Block ${idx + 1}] job_name changed →`, this.value);
-
-            const isOther = this.value === "others";
-            input.classList.toggle("d-none", !isOther);
-            input.required = isOther;
-
-            if (!isOther) {
-                input.value = "";
-                console.log(`🧹 [Block ${idx + 1}] cleared new_job_name`);
-            }
-        });
-    });
-}
-
-/* LIVE typing log */
-document.addEventListener("input", function (e) {
-    if (e.target.classList.contains("new_job_name")) {
-        console.log("⌨️ Typing new job:", e.target.value);
     }
-});
 
-/* 🔥 IMPORTANT PART FOR getlist() */
-document.querySelectorAll("form").forEach(form => {
-    form.addEventListener("submit", function () {
-        console.log("📤 Form submitting...");
-
-        form.querySelectorAll(".job-block, .job-block_data").forEach((block, i) => {
-            const select = block.querySelector(".job_name");
-            const input = block.querySelector(".new_job_name");
-
-            if (select && input && select.value === "others") {
-                console.log(`⚠️ [Block ${i + 1}] replacing 'others' with →`, input.value);
-                select.value = input.value.trim();
-            }
+    /* ===============================
+       RESET FUNCTION
+    =============================== */
+    function resetJobBlock(block) {
+        block.querySelectorAll("input, textarea, select").forEach(el => {
+            if (el.type !== "hidden") el.value = "";
+            el.disabled = false;
+            el.readOnly = false;
+            el.required = false;
+            if (el.tagName === "SELECT") el.selectedIndex = 0;
         });
 
-        /* FINAL CHECK */
-        const finalValues = [...form.querySelectorAll(".job_name")].map(el => el.value);
-        console.log("✅ FINAL job_name list (sent to backend):", finalValues);
-    });
-});
+        const newJob = block.querySelector(".new_job_name");
+        if (newJob) newJob.classList.add("d-none");
+    }
 
-document.addEventListener("DOMContentLoaded", setupJobNameHandlers);
+});
 </script>
+
+
+
 
 
 {% endblock %}

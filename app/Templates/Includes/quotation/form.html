@@ -133,6 +133,7 @@
 
                                         <input
                                             type="text"
+                                            name="new_job_name"
                                             class="form-control mt-2 new_job_name d-none"
                                             placeholder="Enter New Job Name"
                                         />
@@ -237,7 +238,7 @@
                                     <!-- Purchase Rate -->
                                     <div class="col-md-5">
                                         <label class="form-label fw-semibold">
-                                            Purchase Rate
+                                            Purchase Rate per Kg
                                             <span class="text-danger">*</span>
                                         </label>
 
@@ -254,7 +255,7 @@
                                                 name="purchase_rate_unit[]"
                                                 required
                                             >
-                                                <option value="">Unit</option>
+                                                <option value="">Polyester Unit</option>
                                                 {% for v,l in polyester_units %}
                                                 <option value="{{ v }}">{{ l }}</option>
                                                 {% endfor %}
@@ -280,13 +281,14 @@
                                     <!-- Per pouch basic -->
                                     <div class="col-md-4">
                                         <label class="form-label fw-semibold"
-                                            >Per Pouch Basic</label
+                                            >Per Pouch Rate Basic</label
                                         >
                                         <input
                                             type="number"
                                             class="form-control per_pouch_rate_basic"
                                             name="per_pouch_rate_basic[]"
-                                            readonly
+                                            value="0.0"
+                                           
                                         />
                                     </div>
 
@@ -301,6 +303,7 @@
                                             class="form-control pouch_charge"
                                             name="pouch_charge[]"
                                             required
+                                            value="0.0"
                                         />
                                     </div>
 
@@ -315,6 +318,7 @@
                                             class="form-control zipper_cost"
                                             name="zipper_cost[]"
                                             required
+                                            value="0.0"
                                         />
                                     </div>
 
@@ -388,7 +392,7 @@
                                             class="form-control"
                                             name="delivery_address[]"
                                             rows="2"
-                                            required
+                                        
                                         ></textarea>
                                     </div>
 
@@ -414,7 +418,7 @@
                                 + Add Job
                             </button>
                         </div>
-
+                                
                         <!-- Other Terms -->
                         <div class="col-12">
                             <label class="form-label fw-semibold"
@@ -431,7 +435,7 @@
                                             id="quantity_variation"
                                             name="quantity_variation"
                                             placeholder="Quantity variation"
-                                            required
+                                            value="0.0"
                                         />
                                     </div>
                                 </div>
@@ -441,6 +445,8 @@
                                     </div>
                                     <div class="col-md-9">
                                         <input
+                                            type="text"
+                                            value="0.0"
                                             class="form-control"
                                             id="freight"
                                             name="freight"

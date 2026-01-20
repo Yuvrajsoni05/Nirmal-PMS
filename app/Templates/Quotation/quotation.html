@@ -21,35 +21,98 @@
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+    document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("jobs-container");
+        const addBtn = document.getElementById("add-job");
 
-    const container = document.getElementById("jobs-container");
-    const addBtn = document.getElementById("add-job");
+        // ADD JOB
+        addBtn.addEventListener("click", () => {
+            const job = document.querySelector(".job-block");
+            const clone = job.cloneNode(true);
 
-    // add job
-    addBtn.addEventListener("click", () => {
-        let job = document.querySelector(".job-block");
-        let clone = job.cloneNode(true);
+            // Reset all inputs
+            clone.querySelectorAll("input, textarea").forEach((el) => {
+                el.value = "";
+                el.disabled = false;
+                el.required = false;
+            });
 
-        clone.querySelectorAll("input, textarea, select").forEach(el => el.value = "");
-        container.appendChild(clone);
-    });
+            // Reset selects
+            clone.querySelectorAll("select").forEach((sel) => {
+                sel.selectedIndex = 0;
+            });
 
-    // remove job
-    document.addEventListener("click", e => {
-        if(e.target.classList.contains("remove-job")){
-            let jobs = document.querySelectorAll(".job-block");
-            if(jobs.length === 1){
-                alert("At least one job is required");
-                return;
+            // Hide "new job name"
+            const newJobInput = clone.querySelector(".new_job_name");
+            if (newJobInput) {
+                newJobInput.classList.add("d-none");
             }
-            e.target.closest(".job-block").remove();
+
+            container.appendChild(clone);
+        });
+
+        // REMOVE JOB
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains("remove-job")) {
+                const jobs = document.querySelectorAll(".job-block");
+                if (jobs.length === 1) {
+                    alert("At least one job is required");
+                    return;
+                }
+                e.target.closest(".job-block").remove();
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("change", function (e) {
+        if (!e.target.classList.contains("job_name")) return;
+
+        const block = e.target.closest(".job-block");
+        const newInput = block.querySelector(".new_job_name");
+
+        if (e.target.value === "others") {
+            newInput.classList.remove("d-none");
+            newInput.required = true;
+            newInput.focus();
+        } else {
+            newInput.classList.add("d-none");
+            newInput.required = false;
+            newInput.value = "";
         }
     });
+</script>
 
-    
+<script>
+    document.querySelector("form").addEventListener("submit", function (e) {
+        let valid = true;
 
-});
+        document.querySelectorAll(".job-block").forEach((block) => {
+            const select = block.querySelector(".job_name");
+            const input = block.querySelector(".new_job_name");
+
+            if (select.value === "others") {
+                const val = input.value.trim();
+
+                if (!val) {
+                    alert("Please enter Job Name for Others");
+                    input.focus();
+                    valid = false;
+                    return;
+                }
+
+
+                const option = new Option(val, val, true, true);
+                select.appendChild(option);
+                select.value = val;
+
+                input.disabled = true;
+            }
+        });
+
+        if (!valid) e.preventDefault();
+    });
 </script>
 
 {% endblock script %}

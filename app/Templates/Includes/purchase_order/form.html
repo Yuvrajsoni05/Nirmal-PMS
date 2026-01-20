@@ -71,7 +71,7 @@
                                             <input type="text" class="form-control pouch_diameter" value="{{ pc.1 }}" name="pouch_diameter" placeholder="Diameter" required step="0.01"/>
                                         </div>
                                         {% endwith %}
-                                        {% comment %} <input type="text" value="{{ i.pouch_open_size }}" class="form-control" name="pouch_size" {% if i.pouch_open_size %}readonly{% endif %}/> {% endcomment %}
+                                        <input type="hidden" value="{{ i.pouch_open_size }}" class="form-control" name="pouch_size" {% if i.pouch_open_size %}readonly{% endif %}/>
                                     </div>
 
                                     <div class="col-md-4">

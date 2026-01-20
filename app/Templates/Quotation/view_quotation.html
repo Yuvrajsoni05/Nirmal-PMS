@@ -73,6 +73,7 @@
                     <thead class="table-light">
                         <tr class="text-center">
                             <th>Sr</th>
+                            <th>Quotation No</th>
                             <th>Delivery Date</th>
                             <th>Party Name</th>
                             <th>Job Name</th>
@@ -103,6 +104,7 @@
                             {% for quotation in quotations %}
                             <tr class="text-center">
                                 <td>{{ forloop.counter }}</td>
+                                <td>{{ quotation.pouch_quotation_number }}</td>
                                 <td>{{ quotation.delivery_date|date:"d-m-Y" }}</td>
                                 <td>{{ quotation.party_details.party_name }}</td>
                                 
@@ -321,5 +323,24 @@
 {% endblock %}
 
 {% block script %}
+<script>
+    let deleteId = null;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+                deleteId = this.dataset.id;
+            });
+        });
+
+        document
+            .getElementById("confirmDeleteBtn")
+            .addEventListener("click", function () {
+                if (deleteId) {
+                    document.getElementById("delete-form-" + deleteId).submit();
+                }
+            });
+    });
+</script>
 
 {% endblock script %}

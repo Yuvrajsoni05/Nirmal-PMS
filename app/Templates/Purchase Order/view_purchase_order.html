@@ -327,10 +327,11 @@
                         {% else %}
 
                         <tr>
-                            <td colspan="22" class="text-center py-4">
-                                No purchase orders available.
-                            </td>
-                        </tr>
+                                            <td colspan="22" class="text-center py-5">
+                                                <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
+                                                <p class="text-muted">No data available</p>
+                                            </td>
+                                        </tr>
 
                         {% endif %}
                     </tbody>
@@ -339,7 +340,7 @@
         </div>
     </div>
 
-    {% include 'Includes/purchase_order/navbar.html' %}
+    {% include 'Includes/purchase_order/navbar.html' %} 
 </div>
 
 <!-- Delete Confirmation Modal -->

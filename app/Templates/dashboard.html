@@ -22,180 +22,9 @@
         color: #000000;
     }
     
-    /* Card Statistics Styling */
-    .card-stats {
-        border-left: 4px solid #007bff;
-        transition: all 0.3s ease;
-    }
+   
     
-    .card-stats:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    }
     
-    .card-stats .card-title {
-        font-size: 2rem;
-        font-weight: 700;
-        color: #2c3e50;
-    }
-    
-    .card-stats .card-category {
-        color: #7f8c8d;
-        font-size: 0.875rem;
-        font-weight: 500;
-        text-transform: uppercase;
-        margin-bottom: 0.5rem;
-    }
-    
-    /* Page Header Styling */
-    .page-title h2 {
-        color: #2c3e50;
-        font-size: 1.75rem;
-    }
-    
-    /* Table Sticky Columns */
-    .sticky-left {
-        position: sticky;
-        left: 0;
-        background-color: #fff;
-        z-index: 10;
-        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    }
-    
-    .sticky-right {
-        position: sticky;
-        right: 0;
-        background-color: #fff;
-        z-index: 10;
-        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-    }
-    
-    /* Table Header Styling */
-    .thead-light th {
-        background-color: #f8f9fa;
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        color: #495057;
-        border-bottom: 2px solid #dee2e6;
-    }
-    
-    .thead-light th a {
-        color: #495057;
-        text-decoration: none;
-    }
-    
-    .thead-light th a:hover {
-        color: #007bff;
-    }
-    
-    /* Table Row Hover Effect */
-    .table-striped tbody tr:hover {
-        background-color: #f1f3f5;
-        cursor: pointer;
-    }
-    
-    /* Badge Styling */
-    .badge {
-        padding: 0.5rem 1rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-    }
-    
-    /* Carousel in Table */
-    .carousel {
-        min-height: 40px;
-    }
-    
-    .carousel-item a {
-        color: #007bff;
-        text-decoration: none;
-    }
-    
-    .carousel-item a:hover {
-        text-decoration: underline;
-    }
-    
-    /* Icon Link Styling */
-    .icon-link {
-        color: #007bff;
-        font-weight: 500;
-        text-decoration: none;
-    }
-    
-    .icon-link:hover {
-        color: #0056b3;
-        text-decoration: underline;
-    }
-    
-    /* Button Group Styling */
-    .btn-group-actions .btn {
-        margin-right: 0.25rem;
-    }
-    
-    /* Card Header Tools */
-    .card-tools {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-        align-items: flex-end;
-    }
-    
-    /* Form Control Spacing */
-    .form-label {
-        font-size: 0.875rem;
-        color: #495057;
-    }
-    
-    /* Modal Styling */
-    .modal-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-    }
-    
-    .modal-header .btn-close {
-        filter: brightness(0) invert(1);
-    }
-    
-    /* Responsive Table Wrapper */
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    /* Stats Section Spacing */
-    .stats-section {
-        margin-bottom: 2rem;
-    }
-    
-    /* Job Details Section */
-    .job-details-section {
-        margin-top: 1rem;
-    }
-    
-    /* Card Round Corners */
-    .card-round {
-        border-radius: 15px;
-        overflow: hidden;
-    }
-    
-    /* Text Truncate with Tooltip */
-    .text-truncate {
-        max-width: 150px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    /* Correction Modal Trigger */
-    [data-bs-toggle="modal"] {
-        cursor: pointer;
-        color: #007bff;
-    }
-    
-    [data-bs-toggle="modal"]:hover {
-        text-decoration: underline;
-    }
 </style>
 {% endblock styles %}
 
@@ -565,18 +394,18 @@
                                                     <div class="btn-group-actions">
                                                         <form method="post" action="{% url 'delete_data' delete_id=i.id %}" id="delete-form-{{ i.id }}" class="d-inline">
                                                             {% csrf_token %}
-                                                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" 
+                                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" 
                                                                     data-bs-target="#confirmationModal" onclick="setFormId('{{ i.id }}')">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
                                                         </form>
 
-                                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" 
+                                                        <button class="btn btn-outline-primary" data-bs-toggle="modal" 
                                                                 data-bs-target="#exampleModal{{ i.id }}">
                                                             <i class="fa fa-edit"></i>
                                                         </button>
 
-                                                        <button class="btn btn-sm btn-outline-success" data-bs-toggle="modal" 
+                                                        <button class="btn btn-outline-success" data-bs-toggle="modal" 
                                                                 data-bs-target="#emailModal{{ i.id }}">
                                                             <i class="fa fa-envelope"></i>
                                                         </button>

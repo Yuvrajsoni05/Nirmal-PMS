@@ -43,8 +43,14 @@ def quotation_page(request):
                 party_name = new_party_name
                 
             
-            if new_party_email:
-                party_email = new_party_email
+            if party_email == "others":
+
+                if not new_party_email:
+                    messages.error(request, "Party email is required")
+                    return redirect("quotation_page")
+                party_email = new_party_email.strip()
+
+
        
             email_error = utils.email_validator(party_email)
             if email_error:
@@ -192,7 +198,7 @@ def view_quotations(request):
             edit_quotation.save()
             job_ids = request.POST.getlist("job_id")
             pouch_open_sizes = request.POST.getlist("pouch_open_size")
-            pouch_combinations = request.POST.getlist("pouch_combination")
+            pouch_combinations = [pc.strip() for pc in request.POST.getlist("pouch_combination")]
             quantities = request.POST.getlist("quantity")
             purchase_rates = request.POST.getlist("purchase_rate_per_kg")
             no_of_pouch_kgs = request.POST.getlist("no_of_pouch_kg")
@@ -379,7 +385,7 @@ def view_quotations(request):
     return render(request,"Quotation/view_quotation.html",context)
 
 
-@custom_login_required
+
 def quotation_page_ajax(request):
     try:
         if request.method == "GET":
@@ -410,7 +416,7 @@ def quotation_page_ajax(request):
             minimum_quantity  = no_of_pouch_kg * 500
             # print("This No of KG ",no_of_pouch_kg)
             # print(jobs)
-            print(jobs)
+        
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,
                 "final_rare": final_rare,

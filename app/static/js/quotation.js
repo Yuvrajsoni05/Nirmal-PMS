@@ -16,6 +16,12 @@ $(document).on(
     }
 );
 
+
+
+
+
+
+
 // ---------- POUCH COMBINATION (L1+L2+L3+L4) ----------
 $(document).on(
     "input",
