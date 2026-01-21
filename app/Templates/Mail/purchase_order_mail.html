@@ -208,9 +208,8 @@
                     <!-- Pouch/Kg & Zipper Cost -->
                     {% if job.no_of_pouch_kg or job.zipper_cost %}
                     <tr>
-                        {% if job.no_of_pouch_kg and job.zipper_cost %}
-                            <td class="label">Pouch / Kg</td>
-                            <td class="value">{{ job.no_of_pouch_kg }}</td>
+                        {% if job.zipper_cost %}
+                           
                             <td class="label">Zipper Cost</td>
                             <td class="value">{{ job.zipper_cost }}</td>
                         {% elif job.no_of_pouch_kg %}
@@ -242,16 +241,16 @@
                     {% endif %}
             
                     <!-- Final Rate & Pouch Type -->
-                    {% if job.final_rare or job.pouch_type %}
+                    {% if job.final_rate or job.pouch_type %}
                     <tr>
-                        {% if job.final_rare and job.pouch_type %}
+                        {% if job.final_rate and job.pouch_type %}
                             <td class="label">Final Rate</td>
-                            <td class="value">{{ job.final_rare }}</td>
+                            <td class="value">{{ job.final_rate }}</td>
                             <td class="label">Pouch Type</td>
                             <td class="value">{{ job.pouch_type }}</td>
-                        {% elif job.final_rare %}
+                        {% elif job.final_rate %}
                             <td class="label">Final Rate</td>
-                            <td class="value" colspan="3">{{ job.final_rare }}</td>
+                            <td class="value" colspan="3">{{ job.final_rate }}</td>
                         {% else %}
                             <td class="label">Pouch Type</td>
                             <td class="value" colspan="3">{{ job.pouch_type }}</td>

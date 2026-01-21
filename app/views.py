@@ -186,6 +186,7 @@ def register_page(request):
 
 
 @custom_login_required
+
 def edit_user_page(request):
     user_details = (
         Registration.objects.exclude(is_superuser=True)
@@ -206,6 +207,7 @@ def delete_user(request, user_id):
 
 
 @custom_login_required
+@owner_required(Registration)
 def update_user(request, user_id):
     try:
         if request.method == "POST":

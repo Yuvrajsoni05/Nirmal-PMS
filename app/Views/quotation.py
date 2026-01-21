@@ -28,7 +28,7 @@ def quotation_page(request):
             no_of_pouch_kg = request.POST.getlist('no_of_pouch_kg[]')
             per_pouch_rate_basic = request.POST.getlist('per_pouch_rate_basic[]')
             zipper_costs = request.POST.getlist('zipper_cost[]')
-            final_rates = request.POST.getlist('final_rare[]')
+            final_rates = request.POST.getlist('final_rate[]')
             min_quantities = request.POST.getlist('minimum_quantity[]')
             pouch_types = request.POST.getlist('pouch_type[]')
             special_instructions = [s.strip() for s in request.POST.getlist('special_instruction[]')]
@@ -70,7 +70,7 @@ def quotation_page(request):
                     "no_of_pouch_kg":no_of_pouch_kg,
                     "per_pouch_rate_basic":per_pouch_rate_basic,
                     "zipper_cost":zipper_costs,
-                    "final_rare":final_rates,
+                    "final_rate":final_rates,
                     "minimum_quantity":min_quantities,
                     "pouch_type":pouch_types,
                     "special_instruction":special_instructions,
@@ -120,7 +120,7 @@ def quotation_page(request):
                     per_pouch_rate_basic=per_pouch_rate_basic[i],
                     zipper_cost=zipper_costs[i],
                     pouch_charge=pouch_charges[i],
-                    final_rare=final_rates[i],
+                    final_rate=final_rates[i],
                     minimum_quantity=min_quantities[i],
                     pouch_type=pouch_types[i],
                     special_instruction=special_instructions[i],
@@ -164,11 +164,13 @@ def view_quotations(request):
             quotations = quotations.filter(pouch_quotation_jobs__job_name=job_id)
 
 
-        if start_date:
-            quotations = quotations.filter(delivery_date=start_date)
-
+        
+        
         if start_date and end_date:
             quotations = quotations.filter(delivery_date__range=[start_date, end_date])
+
+        elif start_date:
+            quotations = quotations.filter(delivery_date=start_date)
     if request.method == "POST":
         if 'delete_quotation' in request.POST:
             q_id = request.POST.get('delete_quotation')
@@ -205,7 +207,7 @@ def view_quotations(request):
             per_pouch_rates = request.POST.getlist("per_pouch_rate_basic")
             zipper_costs = request.POST.getlist("zipper_cost")
             pouch_charges = request.POST.getlist("pouch_charge")
-            final_rates = request.POST.getlist("final_rare")
+            final_rates = request.POST.getlist("final_rate")
             minimum_quantities = request.POST.getlist("minimum_quantity")
             pouch_types = request.POST.getlist("pouch_type")
             special_instructions = request.POST.getlist("special_instruction")
@@ -227,7 +229,7 @@ def view_quotations(request):
                 job.per_pouch_rate_basic = per_pouch_rates[i]
                 job.zipper_cost = zipper_costs[i]
                 job.pouch_charge = pouch_charges[i]
-                job.final_rare = final_rates[i]
+                job.final_rate = final_rates[i]
                 job.minimum_quantity = minimum_quantities[i]
                 job.pouch_type = pouch_types[i]
                 job.special_instruction = special_instructions[i]
@@ -269,7 +271,7 @@ def view_quotations(request):
                 "check_per_pouch_rate_basic": "per_pouch_rate_basic",
                 "check_zipper_cost": "zipper_cost",
                 "check_pouch_charge": "pouch_charge",
-                "check_final_rare": "final_rare",
+                "check_final_rate": "final_rate",
                 "check_minimum_quantity": "minimum_quantity",
                 "check_pouch_type": "pouch_type",
                 "check_delivery_address": "delivery_address",
@@ -370,7 +372,7 @@ def view_quotations(request):
             
                 
             
-    paginator =  Paginator(quotations,10)
+    paginator =  Paginator(quotations,5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
     page_range_placeholder = "a" * page_obj.paginator.num_pages
@@ -411,7 +413,7 @@ def quotation_page_ajax(request):
             total_ppb = round(total_ppb, 2)
             
        
-            final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
+            final_rate = round(per_pouch_rate_basic + zipper_cost + pouch_charge,3) 
             
             minimum_quantity  = no_of_pouch_kg * 500
             # print("This No of KG ",no_of_pouch_kg)
@@ -419,7 +421,7 @@ def quotation_page_ajax(request):
         
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,
-                "final_rare": final_rare,
+                "final_rate": final_rate,
                 "jobs":jobs,
                 "minimum_quantity":minimum_quantity,
                 "party_emails":party_emails

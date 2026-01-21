@@ -361,7 +361,7 @@ class PouchQuotationJob(models.Model):
     pouch_open_size = models.CharField(max_length=200)
     delivery_address = models.TextField()
     minimum_quantity = models.CharField(max_length=200)
-    final_rare = models.CharField(max_length=200)
+    final_rate = models.CharField(max_length=200)
     per_pouch_rate_basic = models.CharField(max_length=200)
     zipper_cost = models.CharField(max_length=200)
     pouch_combination = models.CharField(max_length=200)
@@ -428,7 +428,7 @@ class PurchaseOrderJob(models.Model):
 
     delivery_address = models.TextField()
     minimum_quantity = models.CharField(max_length=200)
-    final_rare = models.CharField(max_length=200)
+    final_rate = models.CharField(max_length=200)
     per_pouch_rate_basic = models.CharField(max_length=200)
     zipper_cost = models.CharField(max_length=200)
     pouch_combination = models.CharField(max_length=200)

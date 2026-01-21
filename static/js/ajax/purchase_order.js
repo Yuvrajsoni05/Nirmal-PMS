@@ -20,7 +20,7 @@ $(document).on(
                     
                 );
                 
-                $("#final_rare").val(response.final_rare || 0);
+                $("#final_rate").val(response.final_rate || 0);
                 $("#minimum_quantity").val(response.minimum_quantity || 0);
                 console.log("#per_pouch_rate_basic");
 

@@ -406,7 +406,7 @@ body {
             {% if job.special_instruction %}
             <div class="special-note">
                 <div class="special-note-title">Note</div>
-                <div class="special-note-text">{{ job.special_instruction }}</div>
+                <div class="special-note-text" style="color: #e90000ff;">{{ job.special_instruction }}</div>
             </div>
             {% endif %}
             
@@ -474,10 +474,10 @@ body {
                 </tr>
                 {% endif %}
                 
-                {% if job.final_rare %}
+                {% if job.final_rate %}
                 <tr>
                     <td>Final Rate</td>
-                    <td>₹ {{ job.final_rare }}</td>
+                    <td>₹ {{ job.final_rate }}</td>
                 </tr>
                 {% endif %}
                 

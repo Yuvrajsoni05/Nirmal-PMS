@@ -55,7 +55,7 @@ $(document).on(
                 success: function (response) {
 
                     block.find(".per_pouch_rate_basic").val(response.per_pouch_rate_basic || 0);
-                    block.find(".final_rare").val(response.final_rare || 0);
+                    block.find(".final_rate").val(response.final_rate || 0);
                     block.find(".minimum_quantity").val(response.minimum_quantity || 0);
 
                     // ---- JOB SELECT ----

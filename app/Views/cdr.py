@@ -13,6 +13,17 @@ def cdr_page(request):
     date_sorting = request.GET.get("date_sorting", "")
     sorting = request.GET.get("sorting", "")
     
+
+    if request.method == "POST":
+        if "cdr_print" in request.POST:
+            cdr_id = request.POST.get("cdr_id", "").strip()
+            if cdr_id:
+                cdr_data = CDRDetail.objects.get(id=cdr_id)
+            
+            return render(request, "includes/cdr_page/print.html", context={"cdr_details": cdr_data})
+            
+        
+
     
     filters = Q()
 

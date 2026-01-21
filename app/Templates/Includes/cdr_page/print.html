@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 40px; 
+            margin: 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: right;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 20px;
+        }
+        
+        .logo {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+        
+        .logo-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .logo-text span {
+            color: #ff6600;
+        }
+        
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+            margin: 5px 0;
+        }
+        
+        .company-address {
+            font-size: 11px;
+            color: #666;
+            line-height: 1.4;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #007bff;
+            width: 150px;
+        }
+        
+        .info-value {
+            flex: 1;
+            color: #333;
+        }
+        
+        .section-header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            margin: 25px 0 0 0;
+        }
+        
+        .section-content {
+            border: 1px solid #007bff;
+            border-top: none;
+            padding: 0;
+        }
+        
+        .detail-row {
+            display: flex;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+        
+        .detail-label {
+            font-weight: bold;
+            width: 200px;
+            color: #333;
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+        
+        .correction-box {
+            border: 2px dashed #007bff;
+            padding: 15px;
+            margin: 25px 0;
+        }
+        
+        .correction-title {
+            color: #007bff;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .correction-text {
+            color: #333;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #007bff;
+            font-size: 11px;
+            color: #666;
+        }
+        
+        @media print {
+            body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    
+    <div class="header">
+    <div class="col-auto">
+        <img  src="{% static 'assets/img/nirmal_logo.png' %}" 
+                alt="Logo" class="company-logo" style="height: 50px;">
+    </div>
+        <div class="company-name">Shrri Nirmal Ventures Private Limited </div>
+        <div class="company-address">
+            Unit. 1601, 16th Floor, B Block, Navratna Corporate Park<br>
+            Ambli Bopal Road, Ambli, Ahmedabad - 380058
+        </div>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">CDR ID:</span>
+        <span class="info-value">{{cdr_details.id}}</span>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">Job Date:</span>
+        <span class="info-value">{{cdr_details.date}}</span>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">Party Name:</span>
+        <span class="info-value">{{cdr_details.party_details.party_name}}</span>
+    </div>
+
+    <div class="info-row">
+        <span class="info-label">Party Email:</span>
+        <span class="info-value">{{cdr_details.party_email_used.email}}</span>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">Job Name:</span>
+        <span class="info-value">{{cdr_details.job_name}}</span>
+    </div>
+    
+    
+    
+    <div class="correction-box">
+        <div class="correction-title">Correction:</div>
+        <div class="correction-text">{{cdr_details.cdr_corrections}}</div>
+    </div>
+    
+    
+    
+    <div class="footer">
+        © shrri nirmal ventures private limited.
+    </div>
+
+    <script>
+window.onload = function () {
+    window.print();
+    window.onafterprint = function () {
+        window.close();
+    };
+};
+</script>
+</body>
+</html>

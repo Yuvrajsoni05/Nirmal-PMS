@@ -189,7 +189,7 @@
                                             class="form-check-input"
                                             name="check_pouch_open_size_{{ job.id }}"
                                             checked>
-                                        <label class="form-check-label fw-semibold">Pouch Size (Open)</label>
+                                        <label class="form-check-label fw-semibold">Pouch Open Size</label>
                                     </div>
                                     <input type="text"
                                         class="form-control"
@@ -236,7 +236,7 @@
                                             name="check_purchase_rate_per_kg_{{ job.id }}"
                                             checked>
                                         <label class="form-check-label fw-semibold">
-                                            Purchase Rate / KG (₹)
+                                            Purchase Rate Per KG
                                         </label>
                                     </div>
                                     <input type="number"
@@ -311,19 +311,19 @@
                                         value="{{ job.pouch_charge }}">
                                 </div>
 
-                                <!-- Final Rare -->
+                                <!-- Final Rate -->
                                 <div class="col-md-4">
                                     <div class="form-check">
                                         <input type="checkbox"
                                             class="form-check-input"
-                                            name="check_final_rare_{{ job.id }}">
-                                        <label class="form-check-label fw-semibold">Final Rare</label>
+                                            name="check_final_rate_{{ job.id }}">
+                                        <label class="form-check-label fw-semibold">Final Rate</label>
                                     </div>
                                     <input type="number"
                                     
                                         class="form-control"
-                                        name="final_rare_{{ job.id }}"
-                                        value="{{ job.final_rare }}">
+                                        name="final_rate_{{ job.id }}"
+                                        value="{{ job.final_rate }}">
                                 </div>
 
                                 <!-- Minimum Quantity -->

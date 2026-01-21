@@ -2,94 +2,85 @@ $(document).on(
     "input change",
     "#party_name, .party_email, .purchase_rate_per_kg, .no_of_pouch_kg, .purchase_rate_unit, .pouch_charge, .zipper_cost",
     function () {
+
         const isPartyChange = $(this).attr("id") === "party_name";
 
-        // If PARTY changed → update ALL JOB TYPES
         if (isPartyChange) {
             $(".job-block, .job-block_data").each(function () {
-                runAjax($(this));
+                runAjax($(this), true);   // 👈 important
             });
-
             return;
         }
 
-        // Otherwise update ONLY current block
         const block = $(this).closest(".job-block, .job-block_data");
-
-        if (block.length) runAjax(block);
+        if (block.length) runAjax(block, false);
     }
 );
 
-function runAjax(block) {
+
+function runAjax(block, isPartyChange = false) {
     $.ajax({
         url: pouchRateAjaxUrl,
         type: "GET",
-
         data: {
             party_name: $("#party_name").val(),
-
+            per_pouch_rate_basic: block.find(".per_pouch_rate_basic").val(),
             purchase_rate_per_kg: block.find(".purchase_rate_per_kg").val(),
             no_of_pouch_kg: block.find(".no_of_pouch_kg").val(),
             purchase_rate_unit: block.find(".purchase_rate_unit").val(),
-
             pouch_charge: block.find(".pouch_charge").val(),
             zipper_cost: block.find(".zipper_cost").val(),
         },
 
         success: function (response) {
-            block
-                .find(".per_pouch_rate_basic")
-                .val(response.per_pouch_rate_basic || 0);
 
-            block
-                .find(".final_rare, .final_rate")
-                .val(response.final_rare || 0);
-
+            /* ---------- RATE FIELDS ---------- */
+            block.find(".per_pouch_rate_basic").val(response.per_pouch_rate_basic || 0);
+            block.find(".final_rate").val(response.final_rate || 0);
             block.find(".minimum_quantity").val(response.minimum_quantity || 0);
 
-            // Preserve party_email selection
-            const $partyEmail = $("#party_email");
-            const prevEmailValue = $partyEmail.val();
+            /* ---------- PARTY EMAIL (ONLY ON PARTY CHANGE) ---------- */
+            if (isPartyChange) {
+                const $partyEmail = $("#party_email");
+                const prevEmailValue = $partyEmail.val();
 
-            $partyEmail.empty().append('<option value="">Select Party Email</option>');
+                $partyEmail.empty().append('<option value="">Select Party Email</option>');
 
-            if (response.party_emails && response.party_emails.length) {
-                $.each(response.party_emails, function (i, email) {
-                    $partyEmail.append(
-                        $('<option></option>').val(email.email).text(email.email)
-                    );
-                });
+                if (response.party_emails?.length) {
+                    response.party_emails.forEach(email => {
+                        $partyEmail.append(
+                            $('<option></option>').val(email.email).text(email.email)
+                        );
+                    });
+                }
+
+                $partyEmail.append('<option value="others">Others</option>');
+
+                if (
+                    prevEmailValue &&
+                    $partyEmail.find(`option[value="${prevEmailValue}"]`).length
+                ) {
+                    $partyEmail.val(prevEmailValue);
+                }
             }
 
-            $partyEmail.append('<option value="others">Others</option>');
-
-            // Restore previous selection if it still exists
-            if (prevEmailValue && $partyEmail.find("option[value='" + prevEmailValue + "']").length) {
-                $partyEmail.val(prevEmailValue);
-            }
-    
-
-
-            // -------- JOB NAME DROPDOWN --------
+            /* ---------- JOB NAME ---------- */
             let jobSelect = block.find(".job_name");
 
             if (jobSelect.length && jobSelect.is("select")) {
                 let prev = jobSelect.val();
 
-                jobSelect
-                    .empty()
-                    .append('<option value="">Select Job Name</option>');
+                jobSelect.empty().append('<option value="">Select Job Name</option>');
 
-                $.each(response.jobs || [], function (i, job) {
-                    jobSelect.append(
-                        '<option value="' + job + '">' + job + "</option>"
-                    );
+                (response.jobs || []).forEach(job => {
+                    jobSelect.append(`<option value="${job}">${job}</option>`);
                 });
 
                 jobSelect.append('<option value="others">Others</option>');
 
-                if (jobSelect.find("option[value='" + prev + "']").length)
+                if (jobSelect.find(`option[value="${prev}"]`).length) {
                     jobSelect.val(prev);
+                }
             }
         },
 

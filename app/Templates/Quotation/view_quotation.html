@@ -167,14 +167,14 @@
                                 <!-- Pouch Charge -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>₹ {{ prpk.pouch_charge }}</div>
+                                    <div>{{ prpk.pouch_charge }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Final Rate -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>₹ {{ prpk.final_rare }}</div>
+                                    <div>{{ prpk.final_rate }}</div>
                                     {% endfor %}
                                 </td>
 

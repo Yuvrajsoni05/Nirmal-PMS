@@ -22,7 +22,7 @@ def purchase_order(request):
             per_pouch_rate_basic = request.POST.getlist('per_pouch_rate_basic')
             pouch_charge = request.POST.getlist('pouch_charge')
             zipper_cost = request.POST.getlist('zipper_cost')
-            final_rare = request.POST.getlist('final_rare')
+            final_rate = request.POST.getlist('final_rate')
             minimum_quantity = request.POST.getlist('minimum_quantity')
             pouch_type = request.POST.getlist('pouch_type')
             special_instruction = [s.strip() for s in request.POST.getlist('special_instruction')]
@@ -73,7 +73,7 @@ def purchase_order(request):
                     "no_of_pouch_kg":no_of_pouch_kg,
                     "per_pouch_rate_basic":per_pouch_rate_basic,
                     "zipper_cost":zipper_cost,
-                    "final_rare":final_rare,
+                    "final_rate":final_rate,
                     "minimum_quantity":minimum_quantity,
                     "pouch_type":pouch_type,
                     "special_instruction":special_instruction,
@@ -118,7 +118,7 @@ def purchase_order(request):
                     per_pouch_rate_basic=per_pouch_rate_basic[i],
                     zipper_cost=zipper_cost[i],
                     pouch_charge=pouch_charge[i],
-                    final_rare=final_rare[i],
+                    final_rate=final_rate[i],
                     minimum_quantity=minimum_quantity[i],
                     pouch_type=pouch_type[i],
                     special_instruction=special_instruction[i],
@@ -195,7 +195,7 @@ def view_purchase_order(request):
             per_pouch_rates = request.POST.getlist("per_pouch_rate_basic")
             zipper_costs = request.POST.getlist("zipper_cost")
             pouch_charges = request.POST.getlist("pouch_charge")
-            final_rates = request.POST.getlist("final_rare")
+            final_rates = request.POST.getlist("final_rate")
             minimum_quantities = request.POST.getlist("minimum_quantity")
             pouch_types = request.POST.getlist("pouch_type")
             special_instructions = request.POST.getlist("special_instruction")
@@ -214,7 +214,7 @@ def view_purchase_order(request):
                 job.per_pouch_rate_basic = per_pouch_rates[i]
                 job.zipper_cost = zipper_costs[i]
                 job.pouch_charge = pouch_charges[i]
-                job.final_rare = final_rates[i]
+                job.final_rate = final_rates[i]
                 job.minimum_quantity = minimum_quantities[i]
                 job.pouch_type = pouch_types[i]
                 job.special_instruction = special_instructions[i]
@@ -256,7 +256,7 @@ def view_purchase_order(request):
                 "check_per_pouch_rate_basic": "per_pouch_rate_basic",
                 "check_zipper_cost": "zipper_cost",
                 "check_pouch_charge": "pouch_charge",
-                "check_final_rare": "final_rare",
+                "check_final_rate": "final_rate",
                 "check_minimum_quantity": "minimum_quantity",
                 "check_pouch_type": "pouch_type",
                 "check_delivery_address": "delivery_address",
@@ -374,14 +374,14 @@ def purchase_order_ajax(request):
             total_ppb = round(total_ppb, 2)
             
             party_emails = list(PouchPartyEmail.objects.filter(party__party_name=party_name).values('email'))
-
-            final_rare = int(per_pouch_rate_basic + zipper_cost + pouch_charge) 
-            
+       
+            final_rate = round(per_pouch_rate_basic + zipper_cost + pouch_charge,3) 
+            print(final_rate)
             minimum_quantity  = no_of_pouch_kg * 500
 
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,
-                "final_rare": final_rare,
+                "final_rate": final_rate,
                 "jobs":jobs,
                 "party_emails":party_emails,
                 "minimum_quantity":minimum_quantity

@@ -1,62 +1,61 @@
 <div class="modal fade"
-            id="viewModal{{ i.id }}"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="exampleModalCenterTitle"
-            aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-            <div class="modal-content">
-                        <!-- Modal Header -->
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">CDR Details</h5>
-                    <button type="button"
-                            class="btn-close btn-close-white"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                </div>
-                        <!-- Modal Body -->
+     id="viewModal{{ i.id }}"
+     tabindex="-1"
+     role="dialog"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">CDR Details</h5>
+                <button type="button"
+                        class="btn-close btn-close-white"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+
+            <!-- 🔽 FORM START -->
+            <form method="POST" action="{% url 'cdr_page' %}">
+                {% csrf_token %}
+
+                <!-- Hidden ID -->
+                <input type="hidden" name="cdr_id" value="{{ i.id }}">
+
+                <!-- Modal Body -->
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row">
-                                    <!-- Column 1 -->
-                            <div class="col-md-4 mb-3">
-                                <p>
-                                    <strong>Date:</strong> {{ i.date }}
-                                </p>
 
-                            </div>
-                                    <!-- Column 2 -->
                             <div class="col-md-4 mb-3">
-                                <p>
-                                    <strong>Job Name:</strong> {{ i.job_name }}
-                                </p>
-                                <p>
-                                    <strong>Job Corrections:</strong> {{ i.cdr_corrections }}
-                                </p>
+                                <p><strong>Date:</strong> {{ i.date }}</p>
                             </div>
-                                    <!-- Column 3 -->
+
                             <div class="col-md-4 mb-3">
-                                <p>
-                                    <strong>Party Name:</strong> {{ i.party_details.party_name }}
-                                </p>
-                                <p>
-                                    <strong>Party Email:</strong> {{ i.party_email_used.email }}
-                                </p>
+                                <p><strong>Job Name:</strong> {{ i.job_name }}</p>
+                                <p><strong>Job Corrections:</strong> {{ i.cdr_corrections }}</p>
                             </div>
+
+                            <div class="col-md-4 mb-3">
+                                <p><strong>Party Name:</strong> {{ i.party_details.party_name }}</p>
+                                <p><strong>Party Email:</strong> {{ i.party_email_used.email }}</p>
+                            </div>
+
                         </div>
                     </div>
-                    <button class="btn btn-secondary"
-                            onclick="printJobDetails(this)"
-                            data-id="{{ i.id }}"
-                            data-job_name="{{ i.job_name }}"
-                            data-date="{{ i.date }}"
-                            data-company_name="{{ i.party_details.party_name }}"
-                            data-company_email="{{ i.party_email_used.email }}"
-                            data-correction="{{ i.cdr_corrections }}"
-                    >Print</button>
                 </div>
-            </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button formtarget="_blank" type="submit" name="cdr_print" class="btn btn-secondary">
+                        Print
+                    </button>
+                </div>
+
+            </form>
+            <!-- 🔼 FORM END -->
+
         </div>
-    </div>
     </div>
 </div>
