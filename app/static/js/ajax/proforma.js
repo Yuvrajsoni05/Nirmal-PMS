@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $(document).on(
         "input change",
-        '#billing_state_name, #party_name, input[name="gst[]"], .item_check, input[name="quantity[]"], input[name="prpc_price[]"], .pouch-diameter, .pouch-height, .cylinder-diameter, .cylinder-height, .new-job, .job-name',
+         '#billing_address_select, #billing_state_name, #party_name, input[name="gst[]"], .item_check, input[name="quantity[]"], input[name="prpc_price[]"], .pouch-diameter, .pouch-height, .cylinder-diameter, .cylinder-height, .new-job, .job-name',
         function () {
             var changedField = $(this).attr("id") || $(this).attr("name");
             var billing_state_name = $("#billing_state_name").val();
@@ -177,11 +177,11 @@ $(document).ready(function () {
                             if (response.billing_addresses && response.billing_addresses.length) {
                                 $.each(response.billing_addresses, function (index, billing) {
                                     var isSelected =
-                                        previous == billing.id ? "selected" : "";
+                                        previous == billing.party_billing_addresses__billing_address ? "selected" : "";
 
                                     $select.append(
                                         '<option value="' +
-                                            billing.id +
+                                            billing.party_billing_addresses__billing_address +
                                             '" ' +
                                             isSelected +
                                             ">" +
@@ -316,7 +316,7 @@ $(document).ready(function () {
 
     $(document).on("change", "#billing_address_select", function () {
         const val = $(this).val();
-
+        console.log(val);
         if (val === "others") {
             $("#new_billing_address").show().focus();
         } else {

@@ -324,7 +324,7 @@ class PouchQuotation(models.Model):
         related_name="quotations_party_name"
     )
     party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.SET_NULL, null=True, blank=True,related_name='pouch_quotation_party_email')
-    # the  Term 
+
     quantity_variate = models.CharField(max_length=200)
     freight = models.CharField(max_length=200)
     gst = models.CharField(max_length=200)

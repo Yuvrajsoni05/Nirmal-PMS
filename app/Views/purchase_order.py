@@ -163,10 +163,19 @@ def view_purchase_order(request):
 
     if request.method == "POST":
         if 'delete_purchase_order' in request.POST:
-            po_id = request.POST.get('delete_purchase_order')
-            PurchaseOrder.objects.filter(id=po_id).delete()
-            messages.success(request,'Purchase Order Delete successfully')
-            return redirect('view_purchase_order')
+            if request.method == "POST":
+
+                po_id = request.POST.get('delete_purchase_order')
+
+                purchase_order = get_object_or_404(
+                    PurchaseOrder,
+                    id=po_id,
+        
+                )
+
+                purchase_order.delete()
+                messages.success(request, "Purchase Order deleted successfully")
+                return redirect("view_purchase_order")
 
         elif 'update_purchase_order' in request.POST:
             purchase_order_id = request.POST.get('edit_purchase_order')

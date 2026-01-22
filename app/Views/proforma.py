@@ -3,7 +3,7 @@ import re
 from .common_imports import *
 
 
-@custom_login_required
+# @custom_login_required
 def ProformaInvoiceCreate(request):
     if request.method == "POST":
         invoice_no = request.POST.get("invoice_no", "").strip()
@@ -36,6 +36,7 @@ def ProformaInvoiceCreate(request):
 
         if billing_address == "" or new_billing_address != "":
             billing_address = new_billing_address.strip()
+        print(billing_address)
         required_fields = {
             "invoice no": invoice_no,
             "invoice date": invoice_date,
@@ -110,7 +111,7 @@ def ProformaInvoiceCreate(request):
                 party=party_details,
                 email=party_email
             ) 
-
+            print(billing_address)
             billing_address_obj, _ = PartyBillingAddress.objects.get_or_create(
                 party=party_details,
                 billing_address=billing_address
@@ -218,7 +219,7 @@ def ProformaInvoicePageAJAX(request):
             party_contact_qs = list(Party.objects.filter(
                 party_name__iexact=party_name
             ).values("party_contacts__party_number").distinct())
-      
+            
             billing_address = list(Party.objects.filter(
                 party_name__iexact=party_name,
             ).values("party_billing_addresses__billing_address").distinct())
@@ -239,7 +240,7 @@ def ProformaInvoicePageAJAX(request):
         return redirect("dashboard_page") 
     return JsonResponse(context)
 
-@custom_login_required
+# @custom_login_required
 def ProformaInvoicePage(request):
     party_name_list = Party.objects.values("party_name").distinct()
     job_name = list(Job_detail.objects.values("job_name").distinct())
@@ -275,7 +276,7 @@ def ViewProformaInvoice(request):
             proforma_id = request.POST.get("proforma_id")
             prforma_detail = ProformaInvoice.objects.get(id=proforma_id)
             jobs = prforma_detail.job_details.all()
-            
+            print(prforma_detail.terms_note)
             return render(
                 request,
                 "includes/proforma/print.html",
@@ -389,7 +390,7 @@ def ProformaSendMail(request):
         ]
         if party_email == None or party_email == "":
             messages.error(
-                request, "Company email is Required", extra_tags="custom-danger-style"
+                request, "Email is Required", extra_tags="custom-danger-style"
             )
             return redirect("view_proforma_invoice")
 

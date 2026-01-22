@@ -61,7 +61,7 @@ CSRF_COOKIE_HTTPONLY = True
 CSRF_USE_SESSIONS = False
 
 INSTALLED_APPS = [
-    'jazzmin',      
+  
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -237,49 +237,6 @@ LOGGING = {
         },
     },
 }
-
-JAZZMIN_UI_TWEAKS = {
-    "theme": "litera",  # dark, flatly, sketchy, litera, etc.
-    "navbar": "navbar-dark bg-primary",
-    "footer_small_text": False,
-    "body_small_text": False,
-    "sidebar_fixed": True,
-    "sidebar_collapsed": False,
-    "navbar_fixed": True,
-}
-
-JAZZMIN_SETTINGS = {
-    "site_title": "Nirmal Admin Panel",
-    "site_header": "Nirmal Dashboard",
-    "site_brand": "Nirmal",
-    "welcome_sign": "Welcome to the Dashboard",
-    "copyright": "Shrri nirmal ventures ©",
-
-    "order_with_respect_to": [
-        "app.Job_detail",
-        "app.JobHistory",
-        "app.Party",
-        "app.PartyEmail",
-        "app.PartyContact",
-    ],
-
-    "icons": {
-        "auth.user": "fas fa-user",
-        "auth.Group": "fas fa-users",
-        "app.Job_detail": "fas fa-briefcase",
-        "app.CDRDetail": "fas fa-database",
-        "app.BankDetails": "fas fa-university",
-        "app.Party": "fas fa-users",
-        "app.PartyEmail": "fas fa-envelope",
-        "app.PartyContact": "fas fa-phone",
-    },
-
-    "show_ui_builder": True,  # Enables live theme editor! 🔥
-}
-JAZZMIN_SETTINGS["site_logo"] = "assets/img/logo_icon.png"
-
-
-
 
 
 

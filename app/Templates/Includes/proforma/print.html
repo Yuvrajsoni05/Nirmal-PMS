@@ -5,113 +5,8 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=A4, initial-scale=1" />
         <title>Proforma Invoice</title>
-        <style>
-            @page {
-                size: A4;
-                margin: 15mm 10mm;
-            }
-            body {
-                font-family: Arial, sans-serif;
-                font-size: 10px;
-                margin: 0;
-                padding: 0;
-                color: #000;
-            }
-            .container {
-                width: 210mm;
-                margin: 0 auto;
-                padding: 10px;
-            }
-            .header {
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 5px;
-                font-size: 12px;
-            }
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 6px;
-            }
-            td,
-            th {
-                border: 1px solid black;
-                padding: 4px 6px;
-                vertical-align: top;
-                font-size: 12px;
-            }
-            td.noborder {
-                border: none;
-            }
-            .no-padding {
-                padding: 0;
-            }
-            .no-border-top {
-                border-top: none;
-            }
-            .bold {
-                font-weight: bold;
-            }
-            .text-right {
-                text-align: right;
-            }
-            .text-center {
-                text-align: center;
-            }
-            .underline {
-                text-decoration: underline;
-            }
-            .small-text {
-                font-size: 9px;
-            }
-            .border-right-none {
-                border-right: none;
-            }
-            .border-left-none {
-                border-left: none;
-            }
-            .border-bottom-none {
-                border-bottom: none;
-            }
-            .border-top-none {
-                border-top: none;
-            }
-            .bg-grey {
-                background: #f0f0f0;
-            }
-            .signature-section {
-                border-top: none;
-                text-align: center;
-            }
-            .signature-line {
-                margin-top: 10px;
-                border-top: 1px solid black;
-                width: 140px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .products-section td {
-                border: 1px solid black;
-                vertical-align: top;
-            }
-
-            .text-right {
-                text-align: right;
-            }
-
-            .text-center {
-                text-align: center;
-            }
-
-            .bold {
-                font-weight: bold;
-            }
-
-            .products-section tr:nth-last-child(2) td,
-            .products-section tr:last-child td {
-                border-top: none;
-            }
-        </style>
+        <link rel="stylesheet" href="{% static 'css/proforma/print.css' %}" />
+    
     </head>
     <body>
         <div class="container">
@@ -122,8 +17,8 @@
                         <div class="d-flex align-items-center party-row">
                             <!-- party Logo with pure CSS -->
                             <div style="margin-bottom:5%;">
-                                <img src="http://localhost:8000/static/assets/img/logo_icon.png" alt="logo"
-                            height="70px" />
+                                <img src="{% static 'assets/img/nirmal_logo.png' %}" alt="logo"
+                            height="50px" />
                             </div>
 
                             <!-- party Info -->
@@ -398,11 +293,11 @@
                         "
                     >
                         <div>Shrri Nirmal Ventures Private Limited</div>
-                        <br /><br /><br /><br />
-                        <div class="signature-line"></div>
+                        <br /><br />
+                        
 
                         <img
-                            src="https://st.1001fonts.net/img/illustrations/s/i/signaturex-demo-font-2-large.png"
+                            src="{% static 'assets/img/BHAVIKSir_SIGN.jpg' %}"
                             alt="Signature"
                             height="60px"
                         />
@@ -426,7 +321,7 @@
                 </tr>
                 <tr>
                     <td style="width: 52%; font-size: 10px">
-                        {{ data.term_note }}
+                        {{ data.terms_note }}
                     </td>
                 </tr>
             </table>

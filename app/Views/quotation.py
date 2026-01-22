@@ -2,6 +2,7 @@
 from .common_imports import *
 
 
+@custom_login_required
 def quotation_page(request):
     
     
@@ -388,6 +389,7 @@ def view_quotations(request):
 
 
 
+@custom_login_required
 def quotation_page_ajax(request):
     try:
         if request.method == "GET":

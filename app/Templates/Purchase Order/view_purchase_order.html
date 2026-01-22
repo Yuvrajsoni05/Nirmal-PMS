@@ -21,26 +21,31 @@
 
         <!-- RIGHT: FILTERS -->
         <form method="GET" class="d-flex align-items-center gap-2">
-            
-            <select name="party_id" class="form-control form-select">
-                <option value="">Select Parties</option>
-                {% for party in party_names %}
-                <option value="{{ party.id }}"
-                    {% if request.GET.party_id == party.id|stringformat:"s" %}selected{% endif %}>
-                    {{ party.party_name }}
-                </option>
-                {% endfor %}
-            </select>
+            <div class="input-group input-group">
+                <span class="input-group-text">Party Names</span>
+                <select name="party_id" class="form-control form-select">
+                    <option value="">Select Parties</option>
+                    {% for party in party_names %}
+                    <option value="{{ party.id }}"
+                        {% if request.GET.party_id == party.id|stringformat:"s" %}selected{% endif %}>
+                        {{ party.party_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
 
-            <select name="job_id" class="form-control form-select">
-                <option value="">Select Job Name</option>
-                {% for job in job_names %}
-                <option value="{{ job.id }}"
-                    {% if request.GET.job_id == job.id|stringformat:"s" %}selected{% endif %}>
-                    {{ job.job_name }}
-                </option>
-                {% endfor %}
-            </select>
+            <div class="input-group input-group">
+                <span class="input-group-text">Job Name</span>
+                <select name="job_id" class="form-control form-select">
+                    <option value="">Select Job Name</option>
+                    {% for job in job_names %}
+                    <option value="{{ job.id }}"
+                        {% if request.GET.job_id == job.id|stringformat:"s" %}selected{% endif %}>
+                        {{ job.job_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
 
             <div class="input-group input-group">
                 <span class="input-group-text">Start Date</span>
@@ -194,7 +199,7 @@
 
                             <td>{{ purchase_order.quantity_variate }}</td>
 
-                            <td>{{ purchase_order.freight }}</td>
+                            <td>{{ purchase_order.freight|default:"-" }}</td>
 
                             <td>{{ purchase_order.gst }}%</td>
 

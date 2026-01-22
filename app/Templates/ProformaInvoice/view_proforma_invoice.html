@@ -132,6 +132,7 @@
                                         <th scope="col">Total Taxable Value</th>
                                         <th scope="col">Gst Value</th>
                                         <th scope="col">Total Amount</th>
+                                        <th scope="col">Terms Note</th>
                                         <th scope="col">Proforma Statues</th>
                                         <th scope="col"  class="sticky-right" colspan="2">Actions</th>
                                     </tr>
@@ -204,6 +205,7 @@
                                             <td> {{proforma.total_taxable_value|indian_currency_format }} </td>
                                             <td> {{proforma.gst_value|indian_currency_format }} </td>
                                             <td>{{ proforma.total|indian_currency_format }}</td>
+                                             <td>{{ proforma.terms_note }}</td>
 
                                             <td>
                                                 {% if proforma.invoice_status == "Pending" %}
@@ -367,7 +369,6 @@
         }
     </script>
 
-    {% comment %} <script src="{% static 'js/proforma_view.js' %}"></script> {% endcomment %}
 
     <script>
         let formIdToSubmit;

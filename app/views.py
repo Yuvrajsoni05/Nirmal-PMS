@@ -207,7 +207,6 @@ def delete_user(request, user_id):
 
 
 @custom_login_required
-@owner_required(Registration)
 def update_user(request, user_id):
     try:
         if request.method == "POST":
@@ -300,7 +299,15 @@ def update_user(request, user_id):
 
 @custom_login_required
 def dashboard_page(request):
-    try:        
+    try:
+
+
+        if request.method == "POST":
+            if "job_print" in request.POST:
+                job_id = request.POST.get("job_id","").strip()
+                if job_id:
+                    job_data = Job_detail.objects.get(id=job_id)
+                return render(request,"includes/dashboard_page/print.html",context={"job_data":job_data})
         
         party_name_search = request.GET.get("party_name", "").strip()
         job_name_search = request.GET.get("job_name_search", "").strip()
