@@ -71,11 +71,13 @@
 
                                         <div class="col-md-4">
                                             <label class="form-label fw-semibold">Pouch Open Size</label>
-                                            {% with pc=i.pouch_open_size|split_text_with_multiplications %}
+                                            {{ i.pouch_open_size }}
+                                            {% with ac=i.pouch_open_size|split_text_with_multiplications %}
                                             <div class="input-group">
-                                                <input type="number" class="form-control pouch_height" value="{{ pc.0 }}" name="pouch_height" placeholder="Height" step="0.01" required/>
+                                           
+                                                <input type="number" class="form-control pouch_height" value="{{ ac.0 }}" name="pouch_height" placeholder="Height" step="0.01" required/>
                                                 <span class="input-group-text">×</span>
-                                                <input type="number" class="form-control pouch_diameter" value="{{ pc.1 }}" name="pouch_diameter" placeholder="Diameter" step="0.01" required/>
+                                                <input type="number" class="form-control pouch_diameter" value="{{ ac.1 }}" name="pouch_diameter" placeholder="Diameter" step="0.01" required/>
                                             </div>
                                             {% endwith %}
                                             <input type="hidden" value="{{ i.pouch_open_size }}" class="form-control" name="pouch_size" {% if i.pouch_open_size %}readonly{% endif %}/>
@@ -132,7 +134,7 @@
 
                                         <div class="col-md-3">
                                             <label class="form-label fw-semibold">No. of Pouch / Kg <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control no_of_pouch_kg" name="no_of_pouch_kg" step="0.01" required/>
+                                            <input type="number" class="form-control no_of_pouch_kg" name="no_of_pouch_kg" step="0.01" value=0.0 required/>
                                         </div>
 
                                         <div class="col-md-3">
@@ -142,17 +144,17 @@
 
                                         <div class="col-md-3">
                                             <label class="form-label fw-semibold">Pouch Charge <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control pouch_charge" name="pouch_charge" step="0.01" required/>
+                                            <input type="number" class="form-control pouch_charge" name="pouch_charge" step="0.01" value="0.0" required/>
                                         </div>
 
                                         <div class="col-md-3">
                                             <label class="form-label fw-semibold">Zipper Cost <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control zipper_cost" name="zipper_cost" step="0.01" required/>
+                                            <input type="number" class="form-control zipper_cost" name="zipper_cost" step="0.01" value="0.0" required/>
                                         </div>
 
                                         <div class="col-md-3">
                                             <label class="form-label fw-semibold">Final Rate <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control final_rate" name="final_rate" step="0.01" required/>
+                                            <input type="number" class="form-control final_rate" name="final_rate" step="0.01" value="0.0" required/>
                                         </div>
 
                                         <div class="col-12">
@@ -208,13 +210,16 @@
                                             <label class="form-label fw-semibold">
                                                 Pouch Open Size <span class="text-danger">*</span>
                                             </label>
-                                            <div class="input-group">
-                                                <input type="number" class="form-control pouch_height" name="pouch_height" placeholder="Height" step="0.01" required/>
-                                                <span class="input-group-text">×</span>
-                                                <input type="number" class="form-control pouch_diameter" name="pouch_diameter" placeholder="Diameter" step="0.01" required/>
-                                            </div>
+                                           
+                                                <div class="input-group">
+                                                    <input type="number" class="form-control pouch_height" name="pouch_height"  placeholder="Height" step="0.01" required/>
+                                                    <span class="input-group-text">×</span>
+                                                    <input type="number" class="form-control pouch_diameter" name="pouch_diameter" placeholder="Diameter" step="0.01" required/>
+                                                </div>
+                                          
                                             <input type="hidden" class="pouch_size" name="pouch_size"/>
                                         </div>
+
 
                                         <!-- Pouch Type -->
                                         <div class="col-md-4">
@@ -350,8 +355,8 @@
                             <div class="p-3 bg-light rounded border">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label class="form-label fw-semibold">Quantity Variation <span class="text-danger">*</span></label>
-                                        <input type="number" class="form-control" id="quantity_variation" name="quantity_variation" placeholder="0.0" value="{{ quotation.quantity_variate }}" step="0.01" required/>
+                                        <label class="form-label fw-semibold">Quantity Variation </label>
+                                        <input type="text" class="form-control" id="quantity_variation" name="quantity_variation" placeholder="0.0" value="{{ quotation.quantity_variate }}" step="0.01" />
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label fw-semibold">Freight</label>

@@ -344,7 +344,7 @@ body {
 <div class="header-wrapper">
     <div class="header-top">
         <div class="company-logo-section">
-            <img src="{% static 'assets/img/' %}" alt="Logo">
+            <img src="{% static 'assets/img/nirmal_logo.png' %}" alt="Logo">
             <div>
                 <div class="company-title">Shrri Nirmal Ventures</div>
                 <div class="company-subtitle">Private Limited</div>
@@ -442,7 +442,7 @@ body {
                 {% if job.per_pouch_rate_basic %}
                 <tr>
                     <td>Per Pouch Rate (Basic)</td>
-                    <td>₹ {{ job.per_pouch_rate_basic }}</td>
+                    <td>{{ job.per_pouch_rate_basic }}</td>
                 </tr>
                 {% endif %}
                 
@@ -456,28 +456,28 @@ body {
                 {% if job.zipper_cost %}
                 <tr>
                     <td>Zipper Cost</td>
-                    <td>₹ {{ job.zipper_cost }}</td>
+                    <td>{{ job.zipper_cost }}</td>
                 </tr>
                 {% endif %}
                 
                 {% if job.pouch_charge %}
                 <tr>
                     <td>Pouch Charge</td>
-                    <td>₹ {{ job.pouch_charge }}</td>
+                    <td>{{ job.pouch_charge }}</td>
                 </tr>
                 {% endif %}
                 
                 {% if job.purchase_rate_per_kg %}
                 <tr>
                     <td>Purchase Rate per Kg</td>
-                    <td>₹ {{ job.purchase_rate_per_kg }}</td>
+                    <td>{{ job.purchase_rate_per_kg }}</td>
                 </tr>
                 {% endif %}
                 
                 {% if job.final_rate %}
                 <tr>
                     <td>Final Rate</td>
-                    <td>₹ {{ job.final_rate }}</td>
+                    <td>{{ job.final_rate }}</td>
                 </tr>
                 {% endif %}
                 

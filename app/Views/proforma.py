@@ -283,7 +283,8 @@ def ViewProformaInvoice(request):
                 context={"data": prforma_detail, "jobs": jobs},
             )
         
-
+    party_id = request.GET.get("party_name", "")
+    
     date_sorting = request.GET.get("invoice_date_sorting", "")
     start_date = request.GET.get("start_date", "")
     end_date = request.GET.get("end_date", "")
@@ -295,8 +296,9 @@ def ViewProformaInvoice(request):
         proformaInvoice = proformaInvoice.order_by("invoice_date")
     elif date_sorting == "desc":
         proformaInvoice = proformaInvoice.order_by("-invoice_date")
-        
-
+    print(party_id) 
+    if party_id:
+        proformaInvoice = proformaInvoice.filter(party_details__party_name__iexact=party_id)
     if select_company and start_date and end_date:
         proformaInvoice = proformaInvoice.filter(
             Q(invoice_date__range=[start_date, end_date])

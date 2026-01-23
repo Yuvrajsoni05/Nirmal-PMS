@@ -411,10 +411,15 @@
                                                     <div class="btn-group-actions">
                                                         <form method="post" action="{% url 'delete_data' delete_id=i.id %}" id="delete-form-{{ i.id }}" class="d-inline">
                                                             {% csrf_token %}
-                                                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" 
-                                                                    data-bs-target="#confirmationModal" onclick="setFormId('{{ i.id }}')">
+                                                            <button
+                                                                type="button"
+                                                                class="btn btn-outline-danger delete-btn"
+                                                                data-id="{{ i.id }}"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#confirmationModal">
                                                                 <i class="fa fa-trash"></i>
                                                             </button>
+
                                                         </form>
 
                                                         <button class="btn btn-outline-primary" data-bs-toggle="modal" 
@@ -438,7 +443,7 @@
                                         {% endfor %}
                                     {% else %}
                                         <tr>
-                                            <td colspan="22" class="text-center py-5">
+                                            <td colspan="22" class="text-left py-5">
                                                 <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
                                                 <p class="text-muted">No data available</p>
                                             </td>
@@ -468,8 +473,8 @@
                     Are you sure you want to delete this item?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" onclick="submitForm()">Yes</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, Delete</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
@@ -479,26 +484,22 @@
 
 {% block script %}
 <script>
-    let formIdToSubmit = null;
+    let deleteId = null;
 
-    function setFormId(id) {
-        formIdToSubmit = id;
-    }
-
-    function submitForm() {
-        if (!formIdToSubmit) {
-            alert("Something went wrong. Please try again.");
-            return;
-        }
-        document.getElementById("delete-form-" + formIdToSubmit).submit();
-    }
-
-    // Initialize tooltips
-    document.addEventListener('DOMContentLoaded', function() {
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".delete-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+                deleteId = this.dataset.id;
+            });
         });
+
+        document
+            .getElementById("confirmDeleteBtn")
+            .addEventListener("click", function () {
+                if (deleteId) {
+                    document.getElementById("delete-form-" + deleteId).submit();
+                }
+            });
     });
 </script>
 

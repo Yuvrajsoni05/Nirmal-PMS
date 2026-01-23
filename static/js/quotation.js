@@ -1,11 +1,8 @@
-
-
 // ---------- POUCH SIZE (Height x Diameter) ----------
 $(document).on(
     "input",
     "[name='pouch_height[]'], [name='pouch_diameter[]']",
     function () {
-
         const block = $(this).closest(".job-block");
 
         const h = block.find("[name='pouch_height[]']").val();
@@ -20,12 +17,16 @@ $(document).on(
 );
 
 
+
+
+
+
+
 // ---------- POUCH COMBINATION (L1+L2+L3+L4) ----------
 $(document).on(
     "input",
     "[name='pouch_combination1[]'], [name='pouch_combination2[]'], [name='pouch_combination3[]'], [name='pouch_combination4[]']",
     function () {
-
         const block = $(this).closest(".job-block");
 
         const values = [
@@ -33,21 +34,16 @@ $(document).on(
             block.find("[name='pouch_combination2[]']").val()?.trim(),
             block.find("[name='pouch_combination3[]']").val()?.trim(),
             block.find("[name='pouch_combination4[]']").val()?.trim(),
-        ].filter(v => v !== "" && v != null);   // keep 0 but drop empty
+        ].filter((v) => v !== "" && v != null);
 
         const combined = values.length ? values.join(" + ") : "";
 
         block.find("[name='pouch_combination[]']").val(combined);
-
-        console.log("pouch_combination =", combined);
     }
 );
 
-
-
-// ---------- PARTY NAME → OTHERS (GLOBAL) ----------
+// ---------- PARTY NAME → OTHERS ----------
 document.addEventListener("DOMContentLoaded", function () {
-
     const partySelect = document.getElementById("party_name");
     const newParty = document.getElementById("new_party_name");
     const newPartyError = document.getElementById("new_party_error");
@@ -66,61 +62,35 @@ document.addEventListener("DOMContentLoaded", function () {
 
     newParty.addEventListener("input", function () {
         if (partySelect.value === "others" && newParty.value.trim() === "") {
-            newPartyError.classList.remove("d-none");
             newParty.classList.add("is-invalid");
+            newPartyError.classList.remove("d-none");
         } else {
-            newPartyError.classList.add("d-none");
             newParty.classList.remove("is-invalid");
+            newPartyError.classList.add("d-none");
         }
     });
-
 });
 
+// ---------- PARTY EMAIL → OTHERS ----------
+$(document).on("change", "#party_email", function () {
+    const newPartyEmail = $("#new_party_email");
 
-// ---------- JOB NAME → OTHERS (PER JOB BLOCK) ----------
-
-$(document).on("change", ".job-block select.job_name", function () {
-
-    const block = $(this).closest(".job-block");
-    const select = $(this);
-    const newJob = block.find(".new_job_name");
-
-    if (select.val() === "others") {
-        // show input
-        newJob.removeClass("d-none").prop("required", true).focus();
-
-        // move name attr to input so it is submitted
-        select.data("orig-name", select.attr("name"));
-        select.removeAttr("name");
-
-        newJob.attr("name", "job_name[]");
-
+    if ($(this).val() === "others") {
+        newPartyEmail.removeClass("d-none").prop("required", true).focus();
     } else {
-        // hide input
-        newJob.addClass("d-none").prop("required", false).val("").removeClass("is-invalid");
-
-        // give name back to select
-        if (!select.attr("name")) {
-            select.attr("name", select.data("orig-name"));
-        }
-
-        newJob.removeAttr("name");
+        newPartyEmail
+            .addClass("d-none")
+            .prop("required", false)
+            .val("")
+            .removeClass("is-invalid");
     }
 });
 
-
-// live validation
-$(document).on("input", ".job-block .new_job_name", function () {
-
-    const block = $(this).closest(".job-block");
-    const select = block.find(".job_name");
-
-    if (select.val() === "others" && $(this).val().trim() === "") {
+$(document).on("input", "#new_party_email", function () {
+    if ($("#party_email").val() === "others" && $(this).val().trim() === "") {
         $(this).addClass("is-invalid");
     } else {
         $(this).removeClass("is-invalid");
     }
 });
-
-
 

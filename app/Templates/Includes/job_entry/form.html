@@ -38,7 +38,7 @@
                                         </label>
                                         <input type="date" class="form-control
                                         border-1" value="{% now "Y-m-d" %}"
-                                        id="job_date" name="job_date" >
+                                        id="job_date" name="job_date" required>
                                         <div
                                             class="invalid-feedback"
                                             id="job_date_error"
@@ -61,6 +61,7 @@
                                             id="bill_no"
                                             name="bill_no"
                                             placeholder="Enter Bill Number"
+                                            required
                                         />
                                         <div
                                             class="invalid-feedback"
@@ -83,6 +84,7 @@
                                             id="party_name"
                                             name="party_name"
                                             class="form-control form-select border-1"
+                                            required
                                         >
                                             <option value="">
                                                 Select Party Name
@@ -144,6 +146,7 @@
                                                     name="job_name[]"
                                                     class="form-control form-select"
                                                     id="job_name"
+                                                    required
                                                 >
                                                     <option value="">
                                                         Select Job Name
@@ -195,6 +198,7 @@
                                                     id="job_type"
                                                     name="job_type"
                                                     class="form-control form-select border-1"
+                                                    required
                                                 >
                                                     <option value="">
                                                         Select Job Type
@@ -228,6 +232,7 @@
                                                     id="noc"
                                                     name="noc"
                                                     placeholder="Enter Number of Colors"
+                                                    required
                                                 />
                                                 <div
                                                     class="invalid-feedback"
@@ -273,6 +278,7 @@
                                                         onkeyup="formatNumberWithCommas(this)"
                                                         maxlength="10"
                                                         placeholder="00"
+                                                        required
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -310,6 +316,7 @@
                                                         onkeyup="formatNumberWithCommas(this)"
                                                         maxlength="10"
                                                         placeholder="00"
+                                                        required
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -337,6 +344,7 @@
                                                         placeholder="Height"
                                                         step="0.01"
                                                         min="0"
+                                                        required
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -356,6 +364,7 @@
                                                         placeholder="Diameter"
                                                         step="0.01"
                                                         min="0"
+                                                        required
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -387,6 +396,7 @@
                                                 <select
                                                     name="cylinder_made_in_select[]"
                                                     class="form-control form-select border-1 cylinder-made-in-select"
+                                                    required
                                                 >
                                                     <option value="">
                                                         Select Company
@@ -442,7 +452,7 @@
                                                 <input type="date"
                                                 class="form-control border-1"
                                                 id="cylinder_dates" value="{% now "Y-m-d" %}"
-                                                name="cylinder_date">
+                                                name="cylinder_date" required>
                                                 <div
                                                     class="invalid-feedback"
                                                     id="cylinder_date_error"
@@ -470,6 +480,7 @@
                                                     id="cylinder_bill_no"
                                                     name="cylinder_bill_no"
                                                     placeholder="Enter Cylinder Bill Number"
+                                                    required
                                                 />
                                                 <div
                                                     class="invalid-feedback"
@@ -508,6 +519,7 @@
                                                         placeholder="Height"
                                                         step="0.01"
                                                         min="0"
+                                                        required
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -528,6 +540,7 @@
                                                         placeholder="Diameter"
                                                         step="0.01"
                                                         min="0"
+                                                        required
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -562,6 +575,7 @@
                                                         placeholder="Height"
                                                         step="0.01"
                                                         min="0"
+                                                        required
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -582,6 +596,7 @@
                                                         placeholder="Diameter"
                                                         step="0.01"
                                                         min="0"
+                                                        required
                                                     />
                                                     <div
                                                         class="invalid-feedback"
@@ -618,6 +633,7 @@
                                                         placeholder="Combination 1"
                                                         step="0.01"
                                                         min="0"
+                                                        required
                                                     />
                                                     <div
                                                         class="invalid-feedback"

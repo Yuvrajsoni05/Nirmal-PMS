@@ -71,15 +71,18 @@
                                         <!-- Party Name -->
                                         <div class="col-12 col-md-3">
                                             <div class="col-auto">
-                                                <select name="party_id" id="party_filter" class="form-select form-control" >
-                                                    <option value="">Select Parties</option>
-                                                    {% for party in party_name %}
-                                                        <option value="{{ party.party_name }}"
-                                                            {% if request.GET.select_company == party.party_name %}selected{% endif %}>
-                                                            {{ party.party_name }}
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
+                                                <div class="input-group">
+                                                  <span class="input-group-text">Party Name</span>
+                                                    <select name="party_name" id="party_filter" class="form-select form-control" >
+                                                        <option value="">Select Parties</option>
+                                                        {% for party in party_name %}
+                                                            <option value="{{ party.party_name }}"
+                                                                {% if request.GET.party_name == party.party_name %}selected{% endif %}>
+                                                                {{ party.party_name }}
+                                                            </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -310,8 +313,11 @@
                                 {% else %}
                                   
                                   <tr>
-                                    <td colspan="24" class="text-left">No data available</td>
-                                  </tr>
+                                            <td colspan="24" class="text-left py-5">
+                                                <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
+                                                <p class="text-muted">No data available</p>
+                                            </td>
+                                        </tr>
                                 {% endif %}
                                   
                             </table>

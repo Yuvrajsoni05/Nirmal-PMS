@@ -19,10 +19,10 @@ def quotation_page(request):
             freight = request.POST.get('freight')
             gst = request.POST.get('gst')
             note = request.POST.get('note')
-            job_names = request.POST.getlist('job_name[]')
+            job_names = [j.strip() for j in request.POST.getlist('job_name[]')]
 
             pouch_open_size = request.POST.getlist('pouch_size[]')
-            pouch_combination = request.POST.getlist('pouch_combination[]')
+            pouch_combination = [pc.strip() for pc in request.POST.getlist('pouch_combination[]')]
             polyester_unit = request.POST.getlist('purchase_rate_unit[]')
             quantities = request.POST.getlist('quantity[]')
             purchase_rate_per_kg = request.POST.getlist('purchase_rate_per_kg[]')
@@ -346,7 +346,7 @@ def view_quotations(request):
             
             
             elif "print_quotation" in request.POST:
-                print(all_selected_jobs)
+        
                 context={"jobs": all_selected_jobs , "common_values": common_values}  
                 return render(request, "Includes/quotation/print.html", context)
 
@@ -376,7 +376,7 @@ def view_quotations(request):
     paginator =  Paginator(quotations,5)
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
-    page_range_placeholder = "a" * page_obj.paginator.num_pages
+    page_range_placeholder = "x" * page_obj.paginator.num_pages
 
     context  = {
         "page_range":page_range_placeholder,
@@ -415,11 +415,11 @@ def quotation_page_ajax(request):
             total_ppb = round(total_ppb, 2)
             
        
-            final_rate = round(per_pouch_rate_basic + zipper_cost + pouch_charge,3) 
+            final_rate = round(total_ppb + zipper_cost + pouch_charge,3) 
             
             minimum_quantity  = no_of_pouch_kg * 500
             # print("This No of KG ",no_of_pouch_kg)
-            # print(jobs)
+        
         
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,

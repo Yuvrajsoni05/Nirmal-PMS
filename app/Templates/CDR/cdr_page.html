@@ -47,33 +47,38 @@
                                       action="{% url 'cdr_page' %}">
                                 <!-- Start Date -->
                                     <div class="col-auto">
-                                        <label for="date" class="form-label fw-bold mb-0 small">Start Date</label>
-                                        <input type="date" class="form-control" id="date" name="date"
+                                        <div class="input-group">
+                                            <span class="input-group-text">Start Date</span>                                        
+                                            <input type="date" class="form-control" id="date" name="date"
                                                value="{{ request.GET.date }}">
+                                        </div>
                                     </div>
 
                                 <!-- End Date -->
                                     <div class="col-auto">
-                                        <label for="end_date" class="form-label fw-bold mb-0 small">End Date</label>
-                                        <input type="date" class="form-control" id="end_date" name="end_date"
+                                        <div class="input-group">
+                                            <span class="input-group-text">End Date</span>                                        <input type="date" class="form-control" id="end_date" name="end_date"
                                                value="{{ request.GET.end_date }}">
+                                        </div>
                                     </div>
 
                                 <!-- Party Name Filter -->
                                     <div class="col-auto">
-                                        <label for="search" class="form-label mb-0 fw-bold d-block">Party Name</label>
-                                        <select id="search"  
-                                                name="search"
-                                                class="form-select form-control"
-                                               >
-                                            <option value="">Select Party Name</option>
-                                            {% for party in party_names %}
-                                                <option value="{{ party.party_name }}"
-                                                    {% if request.GET.search == party.party_name %} selected {% endif %}>
-                                                    {{ party.party_name }}
-                                                </option>
-                                            {% endfor %}
-                                        </select>
+                                        <div class="input-group">
+                                                <span class="input-group-text">Party Name</span>                                        
+                                                <select id="search"  
+                                                    name="search"
+                                                    class="form-select form-control"
+                                                >
+                                                    <option value="">Select Party Name</option>
+                                                    {% for party in party_names %}
+                                                        <option value="{{ party.party_name }}"
+                                                            {% if request.GET.search == party.party_name %} selected {% endif %}>
+                                                            {{ party.party_name }}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                        </div>
                                     </div>
 
                                 
@@ -241,7 +246,7 @@
                                 </tbody>
                                 {% else %}
                                <tr>
-                                            <td colspan="22" class="text-center py-5">
+                                            <td colspan="22" class="text-left py-5">
                                                 <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
                                                 <p class="text-muted">No data available</p>
                                             </td>

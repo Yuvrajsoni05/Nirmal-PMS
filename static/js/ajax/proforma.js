@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $(document).on(
         "input change",
-        '#billing_state_name, #party_name, input[name="gst[]"], .item_check, input[name="quantity[]"], input[name="prpc_price[]"], .pouch-diameter, .pouch-height, .cylinder-diameter, .cylinder-height, .new-job, .job-name',
+         '#billing_address_select, #billing_state_name, #party_name, input[name="gst[]"], .item_check, input[name="quantity[]"], input[name="prpc_price[]"], .pouch-diameter, .pouch-height, .cylinder-diameter, .cylinder-height, .new-job, .job-name',
         function () {
             var changedField = $(this).attr("id") || $(this).attr("name");
             var billing_state_name = $("#billing_state_name").val();
@@ -160,39 +160,49 @@ $(document).ready(function () {
                         }
                     }
 
-                    if (
-                        console.log(response.billing_addresses),
-                        (response.billing_addresses && response.billing_addresses.length) ||
-                            changedField === "party_name"
-                        ) {
-                            var $select = $("#billing_address_select");
-                            var previous = $select.val();
+                
+                      
+                       if (
+                                response.billing_addresses &&
+                                response.billing_addresses.length &&
+                                changedField !== "billing_address_select"
+                            ) {
+                                var $select = $("#billing_address_select");
+                                var previous = $select.val();
 
-                            $select
-                                .empty()
-                                .append(
-                                    '<option value="" selected disabled>Select Billing Address</option>'
-                                );
+                                $select
+                                    .empty()
+                                    .append('<option value="" disabled>Select Billing Address</option>');
 
-                            if (response.billing_addresses && response.billing_addresses.length) {
+                                let found = false;
+
                                 $.each(response.billing_addresses, function (index, billing) {
-                                    var isSelected =
-                                        previous == billing.id ? "selected" : "";
+                                    const value = billing.party_billing_addresses__billing_address;
+
+                                    if (value === previous) {
+                                        found = true;
+                                    }
 
                                     $select.append(
-                                        '<option value="' +
-                                            billing.id +
-                                            '" ' +
-                                            isSelected +
-                                            ">" +
-                                            billing.party_billing_addresses__billing_address +
-                                            "</option>"
+                                        `<option value="${value}">${value}</option>`
                                     );
                                 });
+
+                                $select.append('<option value="others">Other</option>');
+
+                                // ✅ restore previous value safely
+                                if (previous) {
+                                    if (found || previous === "others") {
+                                        $select.val(previous);
+                                    } else {
+                                        // custom typed address
+                                        $select.append(
+                                            `<option class="custom-billing" value="${previous}" selected>${previous}</option>`
+                                        );
+                                    }
+                                }
                             }
 
-                            $select.append('<option value="others">Other</option>');
-                        }
 
 
                     if (
@@ -316,7 +326,7 @@ $(document).ready(function () {
 
     $(document).on("change", "#billing_address_select", function () {
         const val = $(this).val();
-
+        console.log(val);
         if (val === "others") {
             $("#new_billing_address").show().focus();
         } else {

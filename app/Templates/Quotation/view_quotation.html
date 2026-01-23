@@ -89,14 +89,14 @@
                             <th>Purchase Rate Per/Kg</th>
                             <th>No of Pouch Kg</th>
                             <th>Per Pouch Rate Basic</th>
-                            <th>Zipper ₹</th>
+                            <th>Zipper</th>
                             <th>Pouch Charge</th>
                             <th>Final Rate</th>
                             <th>Min Qty</th>
                             <th>Pouch Type</th>
                             <th>Purchase Rate Unit</th>
                             <th>Quantity Variate</th>
-                            <th>Freight ₹</th>
+                            <th>Freight </th>
                             <th>GST</th>
                             <th>Delivery Address</th>
                             <th>Special Instruction</th>
@@ -145,7 +145,7 @@
                                 <!-- Purchase Rate Per Kg -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>₹ {{ prpk.purchase_rate_per_kg }}</div>
+                                    <div>{{ prpk.purchase_rate_per_kg }}</div>
                                     {% endfor %}
                                 </td>
 
@@ -159,14 +159,14 @@
                                 <!-- Per Pouch Rate Basic -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>₹ {{ prpk.per_pouch_rate_basic }}</div>
+                                    <div> {{ prpk.per_pouch_rate_basic }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Zipper Cost -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>₹ {{ prpk.zipper_cost }}</div>
+                                    <div> {{ prpk.zipper_cost }}</div>
                                     {% endfor %}
                                 </td>
 
@@ -206,7 +206,7 @@
                                 </td>
 
                                 <td>{{ quotation.quantity_variate }}</td>
-                                <td>₹ {{ quotation.freight }}</td>
+                                <td>{{ quotation.freight }}</td>
                                 <td>{{ quotation.gst }}%</td>
 
                                 <!-- Delivery Address -->

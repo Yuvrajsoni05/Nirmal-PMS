@@ -54,7 +54,9 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://f3d7edaa203c.ngrok-free.app",
+]
 
 CSRF_COOKIE_SECURE = False  
 CSRF_COOKIE_HTTPONLY = True
@@ -73,10 +75,10 @@ INSTALLED_APPS = [
    
     
 ]
-INTERNAL_IPS = [
-    "127.0.0.1",
-    "192.168.29.94"
-]
+# INTERNAL_IPS = [
+#     "127.0.0.1",
+#     "192.168.29.94"
+# ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

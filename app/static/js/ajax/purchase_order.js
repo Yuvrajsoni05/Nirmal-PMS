@@ -7,7 +7,7 @@ $(document).on(
 
         if (isPartyChange) {
             $(".job-block, .job-block_data").each(function () {
-                runAjax($(this), true);   // 👈 important
+                runAjax($(this), true);   
             });
             return;
         }

@@ -195,15 +195,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    function validateBillingAddress() {
-        if (billingAddressInput.value.trim() === "") {
-            billingAddressError.style.display = "block";
-            return false;
-        } else {
-            billingAddressError.style.display = "none";
-            return true;
-        }
-    }
+    // function validateBillingAddress() {
+    //     if (billingAddressInput.value.trim() === "") {
+    //         billingAddressError.style.display = "block";
+    //         return false;
+    //     } else {
+    //         billingAddressError.style.display = "none";
+    //         return true;
+    //     }
+    // }
 
     function validateBillingStateName() {
         if (billingStateNameInput.value.trim() === "") {
@@ -338,7 +338,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const isPartyNameValid = validatePartyName();
         const isPartyContactValid = validatePartyContact();
         const isPartyEmailValid = validatePartyEmail();
-        const isBillingAddressValid = validateBillingAddress();
+        // const isBillingAddressValid = validateBillingAddress();
         const isBillingStateNameValid = validateBillingStateName();
         const isBillingGstinNoValid = validateBillingGstinNo();
         const isTermsValid = validateTerms();
@@ -359,7 +359,7 @@ document.addEventListener("DOMContentLoaded", function () {
             isPartyNameValid &&
             isPartyContactValid &&
             isPartyEmailValid &&
-            isBillingAddressValid &&
+            // isBillingAddressValid &&
             isBillingStateNameValid &&
             isBillingGstinNoValid &&
             isTermsValid &&
@@ -386,7 +386,7 @@ document.addEventListener("DOMContentLoaded", function () {
     PartyNameInput.addEventListener("input", validatePartyName);
     PartyContactInput.addEventListener("input", validatePartyContact);
     PartyEmailInput.addEventListener("input", validatePartyEmail);
-    billingAddressInput.addEventListener("input", validateBillingAddress);
+    // billingAddressInput.addEventListener("input", validateBillingAddress);
     billingStateNameInput.addEventListener("input", validateBillingStateName);
     billingGstinNoInput.addEventListener("input", validateBillingGstinNo);
     termsInput.addEventListener("input", validateTerms);

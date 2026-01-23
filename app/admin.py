@@ -41,17 +41,24 @@ class AdminCDRDetail(admin.ModelAdmin):
     list_display = ["id" , 'job_name', 'party_details' , 'party_email_used' , 'party_contact_used']
 admin.site.register(CDRDetail,AdminCDRDetail)
 
-
-
-class PartyEmailAdmin(admin.ModelAdmin):
-    list_display = ["id", "email" ,"party"]
-admin.site.register(PartyEmail, PartyEmailAdmin) 
-class PartyContactAdmin(admin.ModelAdmin):
-    list_display = ["id", "party_number" ,"party"]
-admin.site.register(PartyContact , PartyContactAdmin)
 class PartyAdmin(admin.ModelAdmin):
     list_display = ["party_name" ]
 admin.site.register(Party , PartyAdmin)
+
+class PartyEmailAdmin(admin.ModelAdmin):
+    list_display = ["id", "email" ,"party"]
+admin.site.register(PartyEmail, PartyEmailAdmin)
+
+class PartyContactAdmin(admin.ModelAdmin):
+    list_display = ["id", "party_number" ,"party"]
+admin.site.register(PartyContact , PartyContactAdmin)
+
+class PartyBillingAdmin(admin.ModelAdmin):
+    list_display = ["id", "billing_address" ,"party"]
+admin.site.register(PartyBillingAddress , PartyBillingAdmin)
+
+
+
 
 
 class BankDetailsAdmin(admin.ModelAdmin):
@@ -74,4 +81,3 @@ class PouchQuotationAdmin(admin.ModelAdmin):
     list_display = ["id" ,"delivery_date" ,"quantity_variate"]
 admin.site.register(PouchQuotation,PouchQuotationAdmin)
 
-admin.site.register(PouchParty)

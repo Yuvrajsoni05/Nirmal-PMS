@@ -370,7 +370,7 @@ def purchase_order_ajax(request):
             zipper_cost =float(request.GET.get("zipper_cost") or 0)
             pouch_charge = float(request.GET.get("pouch_charge") or 0)
             
-      
+           
             total_ppb = 0
             jobs  = list(PurchaseOrderJob.objects.filter(purchase_order__party_details__party_name=party_name).values_list('job_name', flat=True).distinct())
           
@@ -384,16 +384,25 @@ def purchase_order_ajax(request):
             
             party_emails = list(PouchPartyEmail.objects.filter(party__party_name=party_name).values('email'))
        
-            final_rate = round(per_pouch_rate_basic + zipper_cost + pouch_charge,3) 
-            print(final_rate)
+            final_rate = round(total_ppb + zipper_cost + pouch_charge,3) 
             minimum_quantity  = no_of_pouch_kg * 500
 
+
+            print("purchase_rate_per_kg",purchase_rate_per_kg)
+            print("no_of_pouch_kg",no_of_pouch_kg)
+            print("unit",unit)
+            print("per_pouch_rate_basic",per_pouch_rate_basic)
+            print("zipper_cost",zipper_cost)
+            print("pouch_charge",pouch_charge)
+            print("minimum_quantity",minimum_quantity)
+            print("final_rate",final_rate)
+            
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,
-                "final_rate": final_rate,
+                "final_rate": round(final_rate or 0, 2),
                 "jobs":jobs,
                 "party_emails":party_emails,
-                "minimum_quantity":minimum_quantity
+                "minimum_quantity":round(minimum_quantity or 0, 2),
             })
     except Exception as e:
         

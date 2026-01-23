@@ -1,4 +1,4 @@
-from ast import mod
+
 from pyexpat import model
 from tkinter import CASCADE
 from django.db import models
@@ -7,6 +7,8 @@ import uuid
 from django.core.validators import validate_email
 from django.forms import CharField
 from rest_framework.fields import DateField
+from decimal import Decimal, InvalidOperation
+from django.core.exceptions import ValidationError
 
 from num2words import num2words
 
@@ -259,7 +261,7 @@ class ProformaInvoice(models.Model):
             return f"{num:,}"
     
     def __str__(self):
-        return f"Proforma Invoice: {self.bank_details}"
+        return f"Proforma Invoice:  {self.invoice_no}" 
 
 
 
@@ -355,23 +357,70 @@ class PouchQuotationJob(models.Model):
     ]
     quotation = models.ForeignKey(PouchQuotation,on_delete=models.CASCADE,related_name="pouch_quotation_jobs")
     job_name = models.CharField(max_length=200)
-    quantity = models.CharField(max_length=200)
-    purchase_rate_per_kg = models.CharField(max_length=200)
-    no_of_pouch_kg = models.CharField(max_length=200)
+    quantity = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )
+    purchase_rate_per_kg = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )
+    no_of_pouch_kg = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )
     pouch_open_size = models.CharField(max_length=200)
     delivery_address = models.TextField()
-    minimum_quantity = models.CharField(max_length=200)
-    final_rate = models.CharField(max_length=200)
-    per_pouch_rate_basic = models.CharField(max_length=200)
-    zipper_cost = models.CharField(max_length=200)
+    minimum_quantity = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        blank=True,
+        null=True
+    )    
+    final_rate = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0 , blank=True, null=True
+    )
+    per_pouch_rate_basic = models.DecimalField(
+        max_digits=12, decimal_places=4, default=0 , blank=True, null=True
+    )
+    zipper_cost = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )
     pouch_combination = models.CharField(max_length=200)
     pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE)
     special_instruction = models.TextField()
-    pouch_charge = models.CharField(max_length=200)
+    pouch_charge = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )
     polyester_unit = models.CharField(max_length=200,choices=POLYESTER_UNIT,blank=True, null=True)
     
-    
-    
+    def clean(self):
+        decimal_fields = {
+            "quantity": self.quantity,
+            "purchase_rate_per_kg": self.purchase_rate_per_kg,
+            "no_of_pouch_kg": self.no_of_pouch_kg,
+            "per_pouch_rate_basic": self.per_pouch_rate_basic,
+            "zipper_cost": self.zipper_cost,
+            "pouch_charge": self.pouch_charge,
+            "final_rate": self.final_rate,
+            "minimum_quantity": self.minimum_quantity,
+        }
+
+        errors = {}
+
+        for field, value in decimal_fields.items():
+            try:
+                if value in ("", None):
+                    setattr(self, field, Decimal("0"))
+                else:
+                    setattr(self, field, Decimal(value))
+            except (InvalidOperation, ValueError):
+                errors[field] = "Please enter numbers only (example: 47.25)"
+
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()  # 🔥 forces validation
+        super().save(*args, **kwargs)
     
 class PurchaseOrder(models.Model):
     pouch_purchase_number = models.CharField(max_length=200 ,default="234KG@$S",blank=True, null=True)

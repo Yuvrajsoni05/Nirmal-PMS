@@ -75,11 +75,11 @@
                         <div class="row g-2">
                             <div class="col-md-6">
                                 <small class="text-muted d-block">Rate/Cylinder (Purchase)</small>
-                                <span class="fw-medium">₹ {{ i.prpc_purchase|indian_currency_format }}</span>
+                                <span class="fw-medium">{{ i.prpc_purchase|indian_currency_format }}</span>
                             </div>
                             <div class="col-md-6">
                                 <small class="text-muted d-block">Rate/Cylinder (Sales)</small>
-                                <span class="fw-medium">₹ {{ i.prpc_sell|indian_currency_format }}</span>
+                                <span class="fw-medium">{{ i.prpc_sell|indian_currency_format }}</span>
                             </div>
                         </div>
                     </div>

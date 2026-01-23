@@ -45,22 +45,30 @@ $(document).on(
 );
 
 // ---------- PARTY NAME → OTHERS ----------
-document.addEventListener("DOMContentLoaded", function () {
-    const partySelect = document.getElementById("party_name");
-    const newParty = document.getElementById("new_party_name");
-    const newPartyError = document.getElementById("new_party_error");
+    document.addEventListener("DOMContentLoaded", function () {
+        const partySelect = document.getElementById("party_name");
+        const newParty = document.getElementById("new_party_name");
+        const newPartyError = document.getElementById("new_party_error");
 
-    partySelect.addEventListener("change", function () {
-        if (this.value === "others") {
-            newParty.classList.remove("d-none");
-            newParty.required = true;
-        } else {
-            newParty.classList.add("d-none");
-            newParty.required = false;
-            newParty.value = "";
-            newPartyError.classList.add("d-none");
-        }
+        // 🚑 Safety check
+        if (!partySelect || !newParty) return;
+
+        partySelect.addEventListener("change", function () {
+            if (this.value === "others") {
+                newParty.classList.remove("d-none");
+                newParty.required = true;
+            } else {
+                newParty.classList.add("d-none");
+                newParty.required = false;
+                newParty.value = "";
+
+                if (newPartyError) {
+                    newPartyError.classList.add("d-none");
+                }
+            }
+        });
     });
+    
 
     newParty.addEventListener("input", function () {
         if (partySelect.value === "others" && newParty.value.trim() === "") {
