@@ -136,7 +136,7 @@
 
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">GST</label>
-                            <input type="text" class="form-control" name="gst" value="{% for gst in proforma.gst %}{{ gst }} {% endfor %}" readonly>
+                            <input type="text" class="form-control" name="gst" value="{% for gst in proforma.gst|gst_value %}{{ gst }} {% endfor %}" readonly>
                         </div>
 
                         <div class="col-md-4">

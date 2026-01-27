@@ -1,3 +1,4 @@
+{% load custom_tags %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -97,20 +98,20 @@
 
             <table>
                 <tr>
-                    <td style="width: 50%">
+                    {% comment %} <td style="width: 50%">
                         <b>Consignee (Ship to)</b><br />
                         <b>{{ data.party_name }}</b><br />
                         {{ data.party_billing_address_used.billing_address }}<br />
 
                         GSTIN/UIN : {{ data.billing_gstin_no }}<br />
                         State Name : {{ data.billing_state_name }},
-                    </td>
+                    </td> {% endcomment %}
                     <td style="width: 50%">
-                        <b>Buyer (Bill to)</b><br />
+                        <b>Billing Address</b><br />
                         <b>{{ data.party_name }}</b><br />
                         {{ data.party_billing_address_used.billing_address}},<br />
 
-                        GSTIN/UIN : {{ data..billing_gstin_no }}<br />
+                        GSTIN/UIN : {{ data.billing_gstin_no }}<br />
                         State Name : {{ data.billing_state_name }}, <br />
                         Place of Supply : {{ data.billing_state_name }}
                     </td>
@@ -169,7 +170,9 @@
                             colspan="7"
                             style="padding: 6px 4px; font-weight: bold"
                         >
-                            <i>{{ data.gst }}</i>
+                            <i>{% for g in data.gst|gst_value %}
+                                {{ g }} 
+                                {% endfor %}</i>
                             <br />
                             Less : <b> Rounding off Sale </b>
                         </td>
@@ -215,8 +218,8 @@
                     <tr>
                         <th style="width: 50%"></th>
                         <th style="width: 12%">Taxable Value</th>
-                        <th style="width: 8%">IGST<br />Rate</th>
-                        <th style="width: 15%">IGST Amount</th>
+                        <th style="width: 8%">GST<br />Rate</th>
+                        <th style="width: 15%">GST Amount</th>
                         <th style="width: 18%">Total Tax Amount</th>
                     </tr>
                 </thead>
@@ -227,7 +230,10 @@
                         <td class="text-right">
                             {{ data.total_taxable_value }}
                         </td>
-                        <td class="text-center">{{ data.gst }}</td>
+                        <td class="text-center">
+                            {% for g in data.gst|gst_value %}
+                                {{ g }} 
+                            {% endfor %}</td>
                         <td class="text-right">{{ data.gst_value }}</td>
                         <td class="text-right">{{ data.gst_value }}</td>
                     </tr>

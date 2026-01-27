@@ -97,6 +97,7 @@
                             <th>Delivery Address</th>
                             <th>Special Instruction</th>
                             <th>Note</th>
+                            <th>Pouch Status</th>
                             <th class="sticky-right">Actions</th>
                         </tr>
                     </thead>
@@ -235,6 +236,22 @@
                                 {{ purchase_order.note|default:"—" }}
                             </td>
 
+                          <td class="text-start">
+                                <span class="
+                                    badge
+                                    {% if purchase_order.pouch_status == 'Pending' %} bg-warning text-dark
+                                    {% elif purchase_order.pouch_status == 'Approved' %} bg-success
+                                    {% elif purchase_order.pouch_status == 'Rejected' %} bg-danger
+                                    {% elif purchase_order.pouch_status == 'Cancelled' %} bg-secondary
+                                    {% elif purchase_order.pouch_status == 'Delivered' %} bg-primary
+                                    {% else %} bg-light text-dark
+                                    {% endif %}
+                                ">
+                                    {{ purchase_order.pouch_status|default:"—" }}
+                                </span>
+                            </td>
+
+
                             <td class="sticky-right text-center">
                                 <!-- Edit -->
                                 <button
@@ -333,11 +350,11 @@
                         {% else %}
 
                         <tr>
-                                            <td colspan="22" class="text-left py-5">
-                                                <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
-                                                <p class="text-muted">No data available</p>
-                                            </td>
-                                        </tr>
+                            <td colspan="22" class="text-left py-5">
+                                <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No data available</p>
+                            </td>
+                        </tr>
 
                         {% endif %}
                     </tbody>

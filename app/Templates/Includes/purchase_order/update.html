@@ -188,6 +188,16 @@
                 <textarea class="form-control" rows="3" name="note">{{ purchase_order.note }}</textarea>
               </div>
 
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Pouch Status</label>
+                <select class="form-select" name="pouch_status">
+                    <option value="">Select Status</option>
+                    {% for l,v in pouch_status %}
+                        <option value="{{v}}" {% if purchase_order.pouch_status == v %}selected{% endif %}>{{ l }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
             </div>
           </div>
 

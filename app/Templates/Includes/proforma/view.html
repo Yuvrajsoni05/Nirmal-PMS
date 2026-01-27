@@ -77,9 +77,9 @@
         <div class="card mb-3 shadow-sm">
           <div class="card-header bg-light fw-bold">GST Details</div>
           <div class="card-body">
-            {% for gst in proforma.gst %}
-              <span class="badge bg-info text-dark me-2">{{ gst }}</span>
-            {% endfor %}
+              {% for gst in proforma.gst|gst_value %}
+                                                    <span>{{ gst }}  &nbsp; </span>
+                                                {% endfor %}
           </div>
         </div>
 

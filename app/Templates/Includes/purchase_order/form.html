@@ -106,7 +106,7 @@
                                                 <input type="text" class="form-control pc4" name="pouch_combination4" value="{{ pc.3 }}" placeholder="Layer 4"/>
                                                 {% endwith %}
                                             </div>
-                                            <input type="hidden" class="pouch_combination" name="pouch_combination"/>
+                                            <input type="hidden" value="{{ i.pouch_combination }}" class="pouch_combination" name="pouch_combination"/>
                                         </div>
 
                                         <div class="col-md-3">
@@ -134,7 +134,7 @@
 
                                         <div class="col-md-3">
                                             <label class="form-label fw-semibold">No. of Pouch / Kg <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control no_of_pouch_kg" name="no_of_pouch_kg" step="0.01" value=0.0 required/>
+                                            <input type="number" class="form-control no_of_pouch_kg" name="no_of_pouch_kg" step="0.01" value="0.0"  required/>
                                         </div>
 
                                         <div class="col-md-3">
@@ -259,13 +259,7 @@
                                             <input type="number" class="form-control" name="quantity" placeholder="0" required/>
                                         </div>
 
-                                        <!-- Min qty -->
-                                        <div class="col-md-3">
-                                            <label class="form-label fw-semibold">
-                                                Minimum Qty <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="number" class="form-control minimum_quantity" name="minimum_quantity" placeholder="0" step="0.01" required/>
-                                        </div>
+                                        
 
                                         <!-- Purchase Rate -->
                                         <div class="col-md-6">
@@ -301,7 +295,7 @@
                                             <label class="form-label fw-semibold">
                                                 Pouch Charge <span class="text-danger">*</span>
                                             </label>
-                                            <input type="number" class="form-control pouch_charge" name="pouch_charge" placeholder="0.00" step="0.01" min="0" required/>
+                                            <input type="number" class="form-control pouch_charge" name="pouch_charge" placeholder="0.00" value="0.0" step="0.01" min="0" required/>
                                         </div>
 
                                         <!-- Zipper -->
@@ -309,7 +303,7 @@
                                             <label class="form-label fw-semibold">
                                                 Zipper Cost <span class="text-danger">*</span>
                                             </label>
-                                            <input type="number" class="form-control zipper_cost" name="zipper_cost" placeholder="0.00" step="0.01" min="0" required/>
+                                            <input type="number" class="form-control zipper_cost" name="zipper_cost" placeholder="0.00" value="0.0" step="0.01" min="0" required/>
                                         </div>
 
                                         <!-- Final Rate -->
@@ -317,7 +311,15 @@
                                             <label class="form-label fw-semibold">
                                                 Final Rate <span class="text-danger">*</span>
                                             </label>
-                                            <input type="number" class="form-control final_rate" name="final_rate" placeholder="0.00" step="0.01" required/>
+                                            <input type="number" class="form-control final_rate" name="final_rate" placeholder="0.00" value="0.0" step="0.01" required/>
+                                        </div>
+
+                                        <!-- Min qty -->
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-semibold">
+                                                Minimum Qty <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="number" class="form-control minimum_quantity" name="minimum_quantity" placeholder="0" value="0.0" step="0.01" required/>
                                         </div>
 
                                         <!-- Special -->
@@ -369,6 +371,15 @@
                                     <div class="col-md-6">
                                         <label class="form-label fw-semibold">Note</label>
                                         <input type="text" class="form-control" id="note" name="note" placeholder="Enter additional notes" value="{{ quotation.note }}"/>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Pouch Status</label><span class="text-danger"> *</span>
+                                        <select class="form-select" name="pouch_status" required>
+                                            <option value="">Select Status</option>
+                                            {% for l,v in pouch_status %}
+                                                <option value="{{v}}">{{ l }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                             </div>

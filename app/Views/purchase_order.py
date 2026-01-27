@@ -34,6 +34,7 @@ def purchase_order(request):
             note = request.POST.get('note')
             party_email = request.POST.get('party_email')
             new_party_email = request.POST.get('new_party_email') 
+            pouch_status = request.POST.get('pouch_status')
             
             
      
@@ -60,7 +61,27 @@ def purchase_order(request):
                 return redirect("view_purchase_order")   
 
 
-
+            print("pouch_open_size",pouch_open_size)
+            print("pouch_combination",pouch_combination)
+            print("quantity",quantity)
+            print("purchase_rate_per_kg",purchase_rate_per_kg)
+            print("no_of_pouch_kg",no_of_pouch_kg)
+            print("per_pouch_rate_basic",per_pouch_rate_basic)
+            print("zipper_cost",zipper_cost)
+            print("pouch_charge",pouch_charge)
+            print("final_rate",final_rate)
+            print("minimum_quantity",minimum_quantity)
+            print("pouch_type",pouch_type)
+            print("special_instruction",special_instruction)
+            print("delivery_address",delivery_address)
+            print("polyester_unit",polyester_unit)
+            print("quantity_variation",quantity_variation)
+            print("freight",freight)
+            print("gst",gst)
+            print("note",note)
+            print("party_email",party_email)
+            print("new_party_email",new_party_email)
+            print("pouch_status",pouch_status)
             required_fields = {
                 "delivery_date":delivery_date,
                     "party_name":party_name,
@@ -76,9 +97,10 @@ def purchase_order(request):
                     "final_rate":final_rate,
                     "minimum_quantity":minimum_quantity,
                     "pouch_type":pouch_type,
-                    "special_instruction":special_instruction,
+                
                     "delivery_address":delivery_address,
-                    "quantity_variation":quantity_variation,
+           
+                    "pouch_status":pouch_status,
             
             }
             for field, required in required_fields.items():
@@ -104,6 +126,7 @@ def purchase_order(request):
                 gst=gst,
                 note=note,
                 party_email=party_email_obj,
+                pouch_status=pouch_status,
             )
             
             for i in range(len(job_name)):
@@ -133,7 +156,8 @@ def purchase_order(request):
     context ={
         'party_names':party_names,
         'pouch_types':pouch_types,
-        'polyester_unit':polyester_unit
+        'polyester_unit':polyester_unit,
+        'pouch_status':PurchaseOrder.POUCH_STATUS
     }
     return render(request,"Purchase Order/purchase_order.html",context)
 
@@ -194,7 +218,10 @@ def view_purchase_order(request):
             edit_purchase_order.quantity_variate = request.POST.get("quantity_variate")
             edit_purchase_order.freight = request.POST.get("freight")
             edit_purchase_order.gst = request.POST.get("gst")
+            edit_purchase_order.note = request.POST.get("note")
+            edit_purchase_order.pouch_status = request.POST.get("pouch_status")
             edit_purchase_order.save()
+
             job_ids = request.POST.getlist("job_id")
             pouch_open_sizes = request.POST.getlist("pouch_open_size")
             pouch_combinations = [s.strip() for s in request.POST.getlist("pouch_combination")]
@@ -209,6 +236,7 @@ def view_purchase_order(request):
             pouch_types = request.POST.getlist("pouch_type")
             special_instructions = request.POST.getlist("special_instruction")
             delivery_addresses = request.POST.getlist("delivery_address")
+
             for i in range(len(job_ids)):
                 job = get_object_or_404(
                     PurchaseOrderJob,
@@ -354,6 +382,7 @@ def view_purchase_order(request):
         "page_range":page_range_placeholder,
         "purchase_orders" : page_obj,
         "party_names":party_names,
+        "pouch_status":PurchaseOrder.POUCH_STATUS,
     "job_names":job_names,  }
     return render(request,"Purchase Order/view_purchase_order.html",context)
           

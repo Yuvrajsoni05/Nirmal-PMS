@@ -238,19 +238,7 @@
                                             />
                                         </div>
 
-                                        <!-- Minimum Qty -->
-                                        <div class="col-md-3">
-                                            <label class="form-label fw-semibold">
-                                                Minimum Qty <span class="text-danger">*</span>
-                                            </label>
-                                            <input
-                                                type="number"
-                                                class="form-control minimum_quantity"
-                                                name="minimum_quantity[]"
-                                                placeholder="0"
-                                                required
-                                            />
-                                        </div>
+                                
 
                                         <!-- Purchase Rate -->
                                         <div class="col-md-6">
@@ -348,6 +336,22 @@
                                                 class="form-control final_rate"
                                                 name="final_rate[]"
                                                 step="0.01"
+                                                value="0.0"
+                                                required
+                                            />
+                                        </div>
+
+
+                                        <!-- Minimum Qty -->
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-semibold">
+                                                Minimum Qty <span class="text-danger">*</span>
+                                            </label>
+                                            <input
+                                                type="number"
+                                                class="form-control minimum_quantity"
+                                                name="minimum_quantity[]"
+                                                placeholder="0"
                                                 required
                                             />
                                         </div>
@@ -361,6 +365,7 @@
                                                 class="form-control"
                                                 name="special_instruction[]"
                                                 rows="2"
+                                                
                                                 placeholder="Enter any special instructions"
                                             ></textarea>
                                         </div>
@@ -449,6 +454,15 @@
                                             name="note"
                                             placeholder="Enter additional notes"
                                         />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold">Pouch Status</label><span class="text-danger"> *</span>
+                                        <select class="form-select" name="pouch_status" required>
+                                            <option value="">Select Status</option>
+                                            {% for l,v in pouch_status %}
+                                                <option value="{{v}}">{{ l }}</option>
+                                            {% endfor %}
+                                        </select>
                                     </div>
                                 </div>
                             </div>

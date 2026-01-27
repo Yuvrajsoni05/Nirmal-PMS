@@ -18,7 +18,7 @@ from num2words import num2words
 class Registration(AbstractUser):
     
     id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False, db_index=True
+        primary_key=True, default=uuid.uuid4, editable=False
     )
     first_name = models.CharField(max_length=200, blank=True,null=True,)
     last_name = models.CharField(max_length=200,blank=True, null=True)
@@ -29,8 +29,8 @@ class Registration(AbstractUser):
 
 
 class Party(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
-    party_name = models.CharField(max_length=200, blank=True, null=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    party_name = models.CharField(max_length=200, blank=True, null=True,db_index=True)
 
     def __str__(self):
         return f"{self.party_name}"
@@ -72,12 +72,12 @@ class Job_detail(models.Model):
         ("Job Work" , "Job Work")
     ]
     id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, editable=False, db_index=True
+        primary_key=True, default=uuid.uuid4, editable=False
     )
     date = models.DateField()
-    bill_no = models.CharField(max_length=200)
+    bill_no = models.CharField(max_length=200 , db_index=True)
     
-    job_name = models.CharField(max_length=200)
+    job_name = models.CharField(max_length=200 ,db_index=True)
     job_type  = models.CharField(max_length=200,choices=JOB_TYPE_CHOICES)
     noc =  models.TextField(blank=True, null=True)
     prpc_purchase = models.CharField(max_length=200)
@@ -142,7 +142,7 @@ class CDRDetail(models.Model):
     party_details =  models.ForeignKey(Party,on_delete=models.SET_NULL,blank=True,null=True,related_name='cdr_party_details')
     party_email_used = models.ForeignKey(PartyEmail,on_delete=models.SET_NULL,null=True, blank=True)
     party_contact_used = models.ForeignKey(PartyContact,on_delete=models.SET_NULL,null=True, blank=True)
-    job_name =  models.CharField(max_length=200,blank=True, null=True)
+    job_name =  models.CharField(max_length=200,blank=True, null=True,db_index=True)
     cdr_corrections = models.TextField(max_length=900,blank=True, null=True)
     
     
@@ -224,7 +224,7 @@ class ProformaInvoice(models.Model):
         ("West Bengal", "West Bengal"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     invoice_no = models.CharField(max_length=200)
     invoice_date = models.DateField()
     mode_payment = models.CharField(max_length=300,default="100%")
@@ -295,7 +295,7 @@ class ProformaJob(models.Model):
 
 # Pouch Party Details Models 
 class PouchParty(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False, db_index=True)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     party_name = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
@@ -316,6 +316,16 @@ class PouchPartyContact(models.Model):
 
 
 class PouchQuotation(models.Model):
+
+    POUCH_STATUS = [
+        ('Pending' , 'Pending'),
+        ('Approved' , 'Approved'),
+        ('Rejected' , 'Rejected'),
+        ('Cancelled' , 'Cancelled'),
+        ('Delivered' , 'Delivered'),
+      
+    ]
+
     pouch_quotation_number = models.CharField(max_length=200 ,default="234KG@$S" ,blank=True, null=True)
     delivery_date  = models.DateField()
     party_details = models.ForeignKey(
@@ -326,13 +336,13 @@ class PouchQuotation(models.Model):
         related_name="quotations_party_name"
     )
     party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.SET_NULL, null=True, blank=True,related_name='pouch_quotation_party_email')
-
+    pouch_status = models.CharField(max_length=200,choices=POUCH_STATUS,blank=True, null=True)
     quantity_variate = models.CharField(max_length=200)
     freight = models.CharField(max_length=200)
     gst = models.CharField(max_length=200)
     note = models.TextField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
-    
+
     
     def __str__(self):
         return f" - {self.party_details}"
@@ -355,6 +365,10 @@ class PouchQuotationJob(models.Model):
         ('polyester_printed_roll' , 'Polyester Printed Roll'),
         ('polyester_printed_bag' ,'Polyester Printed Bag')
     ]
+
+
+
+
     quotation = models.ForeignKey(PouchQuotation,on_delete=models.CASCADE,related_name="pouch_quotation_jobs")
     job_name = models.CharField(max_length=200)
     quantity = models.DecimalField(
@@ -392,37 +406,17 @@ class PouchQuotationJob(models.Model):
     )
     polyester_unit = models.CharField(max_length=200,choices=POLYESTER_UNIT,blank=True, null=True)
     
-    def clean(self):
-        decimal_fields = {
-            "quantity": self.quantity,
-            "purchase_rate_per_kg": self.purchase_rate_per_kg,
-            "no_of_pouch_kg": self.no_of_pouch_kg,
-            "per_pouch_rate_basic": self.per_pouch_rate_basic,
-            "zipper_cost": self.zipper_cost,
-            "pouch_charge": self.pouch_charge,
-            "final_rate": self.final_rate,
-            "minimum_quantity": self.minimum_quantity,
-        }
 
-        errors = {}
-
-        for field, value in decimal_fields.items():
-            try:
-                if value in ("", None):
-                    setattr(self, field, Decimal("0"))
-                else:
-                    setattr(self, field, Decimal(value))
-            except (InvalidOperation, ValueError):
-                errors[field] = "Please enter numbers only (example: 47.25)"
-
-        if errors:
-            raise ValidationError(errors)
-
-    def save(self, *args, **kwargs):
-        self.full_clean()  # 🔥 forces validation
-        super().save(*args, **kwargs)
-    
 class PurchaseOrder(models.Model):
+
+    POUCH_STATUS = [
+        ('Pending' , 'Pending'),
+        ('Approved' , 'Approved'),
+        ('Rejected' , 'Rejected'),
+        ('Cancelled' , 'Cancelled'),
+        ('Delivered' , 'Delivered'),
+      
+    ]
     pouch_purchase_number = models.CharField(max_length=200 ,default="234KG@$S",blank=True, null=True)
     delivery_date  = models.DateField()
     party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.SET_NULL, null=True, blank=True,related_name='pouch_purchase_party_email')
@@ -438,6 +432,7 @@ class PurchaseOrder(models.Model):
     freight = models.CharField(max_length=200)
     gst = models.CharField(max_length=200)
     note = models.TextField(max_length=200)
+    pouch_status = models.CharField(max_length=200,choices=POUCH_STATUS,blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True,blank=True, null=True)
     
     
@@ -445,9 +440,6 @@ class PurchaseOrder(models.Model):
         return f"PO #{self.id} - {self.party_details}"
 
 
-
-
-    
 class PurchaseOrderJob(models.Model):
     POUCH_TYPE = [
         ('Center Seal Pouch' , 'Center Seal Pouch'),
@@ -469,18 +461,38 @@ class PurchaseOrderJob(models.Model):
     ]
     purchase_order = models.ForeignKey(PurchaseOrder,on_delete=models.CASCADE,related_name="purchase_order_jobs")
     job_name = models.CharField(max_length=200)
-    quantity = models.CharField(max_length=200)
-    purchase_rate_per_kg = models.CharField(max_length=200)
-    no_of_pouch_kg = models.CharField(max_length=200)
+    quantity = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )
+    purchase_rate_per_kg = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )
+    no_of_pouch_kg = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )
     pouch_open_size = models.CharField(max_length=200)
     polyester_unit = models.CharField(max_length=200,choices=POLYESTER_UNIT,blank=True, null=True)
 
     delivery_address = models.TextField()
-    minimum_quantity = models.CharField(max_length=200)
-    final_rate = models.CharField(max_length=200)
-    per_pouch_rate_basic = models.CharField(max_length=200)
-    zipper_cost = models.CharField(max_length=200)
+    minimum_quantity = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0,
+        blank=True,
+        null=True
+    ) 
+    final_rate = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0 , blank=True, null=True
+    )
+    per_pouch_rate_basic = models.DecimalField(
+        max_digits=12, decimal_places=4, default=0 , blank=True, null=True
+    )
+    zipper_cost = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )
     pouch_combination = models.CharField(max_length=200)
     pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE,blank=True, null=True)
     special_instruction = models.TextField()
-    pouch_charge = models.CharField(max_length=200)
+    pouch_charge = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+    )

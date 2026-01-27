@@ -3,7 +3,7 @@ import re
 from .common_imports import *
 
 
-# @custom_login_required
+@custom_login_required
 def ProformaInvoiceCreate(request):
     if request.method == "POST":
         invoice_no = request.POST.get("invoice_no", "").strip()
@@ -171,7 +171,7 @@ def DeleteProformaInvoice(request, proforma_id):
         return redirect("view_proforma_invoice")
     return redirect("view_proforma_invoice")
 
-
+@custom_login_required
 def ProformaInvoicePageAJAX(request):
     def safe_int(value, default=0):
         try:
@@ -240,7 +240,7 @@ def ProformaInvoicePageAJAX(request):
         return redirect("dashboard_page") 
     return JsonResponse(context)
 
-# @custom_login_required
+@custom_login_required
 def ProformaInvoicePage(request):
     party_name_list = Party.objects.values("party_name").distinct()
     job_name = list(Job_detail.objects.values("job_name").distinct())
@@ -262,7 +262,6 @@ def ProformaInvoicePage(request):
 
 
 def ViewProformaInvoice(request):
-    
     proformaInvoice = (
         ProformaInvoice.objects.prefetch_related("bank_details", "job_details")
         .all()
@@ -296,7 +295,7 @@ def ViewProformaInvoice(request):
         proformaInvoice = proformaInvoice.order_by("invoice_date")
     elif date_sorting == "desc":
         proformaInvoice = proformaInvoice.order_by("-invoice_date")
-    print(party_id) 
+    
     if party_id:
         proformaInvoice = proformaInvoice.filter(party_details__party_name__iexact=party_id)
     if select_company and start_date and end_date:
@@ -336,16 +335,16 @@ def ViewProformaInvoice(request):
     proformaInvoice = P.get_page(page)
     nums = "a" * proformaInvoice.paginator.num_pages
 
-    try:
-        for proforma in proformaInvoice:
-            gst_value = str(proforma.gst).strip()
-            gst_value = re.sub(r"\s+", "", gst_value)
-            gst_value = gst_value.replace("'", '"')
+    # try:
+    #     for proforma in proformaInvoice:
+    #         gst_value = str(proforma.gst).strip()
+    #         gst_value = re.sub(r"\s+", "", gst_value)
+    #         gst_value = gst_value.replace("'", '"')
 
-            proforma.gst = json.loads(gst_value)
-    except (json.JSONDecodeError, TypeError):
-        cleaned = gst_value.replace("[", "").replace("]", "").replace('"', "")
-        proforma.gst = [x for x in cleaned.split(",") if x]
+    #         proforma.gst = json.loads(gst_value)
+    # except (json.JSONDecodeError, TypeError):
+    #     cleaned = gst_value.replace("[", "").replace("]", "").replace('"', "")
+    #     proforma.gst = [x for x in cleaned.split(",") if x]
 
     
     if not proformaInvoice:
