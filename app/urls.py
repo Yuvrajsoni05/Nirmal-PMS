@@ -7,6 +7,7 @@ from .Views.cdr import *
 from .Views.quotation import *
 from .Views.proforma import *
 from .Views.job_data import *
+from .Views.master_data import *
 from .Views.purchase_order import *
 
 
@@ -70,5 +71,6 @@ urlpatterns = [
     path('purchase_order',purchase_order,name='purchase_order'),
     path('view_purchase_order',view_purchase_order,name='view_purchase_order'),
     path('purchase_order_ajax',purchase_order_ajax,name='purchase_order_ajax'),
+    path('master_page',master_page,name='master_page'),
     
 ]

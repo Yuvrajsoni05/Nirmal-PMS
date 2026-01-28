@@ -102,6 +102,32 @@
                             </div>  
                         </div>
 
+                        <!-- Party Contact -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">
+                                Party Contact <span class="text-danger">*</span>
+                            </label>
+                            <select
+                                class="form-select"
+                                name="party_contact"
+                                id="party_contact"
+                                required
+                            >
+                                <option value="">Select Party Contact</option>
+                                <option value="others">Others</option>
+                            </select>
+                            <input
+                                type="text"
+                                class="form-control mt-2 d-none"
+                                placeholder="Enter New Party Contact"
+                                name="new_party_contact"
+                                id="new_party_contact"
+                            />
+                            <div class="invalid-feedback">
+                                Party contact is required
+                            </div>  
+                        </div>
+
                         <!-- Job Blocks Container -->
                         <div class="col-12">
                             <div id="jobs-container">
@@ -173,7 +199,7 @@
                                                 required
                                             >
                                                 <option value="">Select Pouch Type</option>
-                                                {% for value,label in pouch_types %}
+                                                {% for value, label in pouch_types %}
                                                 <option value="{{ value }}">{{ label }}</option>
                                                 {% endfor %}
                                             </select>

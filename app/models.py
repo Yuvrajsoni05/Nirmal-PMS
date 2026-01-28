@@ -315,6 +315,14 @@ class PouchPartyContact(models.Model):
         return f"{self.party} - {self.party_number}"
 
 
+
+class PouchDeliveryAddress(models.Model):
+    party = models.ForeignKey(PouchParty, on_delete=models.CASCADE, related_name='pouch_party_delivery_addresses')
+    delivery_address = models.CharField(max_length=200)
+    def __str__(self):
+        return f"{self.party} - {self.delivery_address}"
+
+
 class PouchQuotation(models.Model):
 
     POUCH_STATUS = [
@@ -336,6 +344,7 @@ class PouchQuotation(models.Model):
         related_name="quotations_party_name"
     )
     party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.SET_NULL, null=True, blank=True,related_name='pouch_quotation_party_email')
+    party_contact = models.ForeignKey(PouchPartyContact, on_delete=models.SET_NULL, null=True, blank=True,related_name='pouch_quotation_party_contact')
     pouch_status = models.CharField(max_length=200,choices=POUCH_STATUS,blank=True, null=True)
     quantity_variate = models.CharField(max_length=200)
     freight = models.CharField(max_length=200)

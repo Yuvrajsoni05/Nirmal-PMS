@@ -94,10 +94,8 @@ def all_job_name_list(party_name):
 
 def email_attachment_size(total_attachment_size):
     MAX_SIZE_MB =  25
-    
     if total_attachment_size > MAX_SIZE_MB * 1024 * 1024:
         return f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files."
-
     return None
     
     

@@ -14,8 +14,8 @@ def quotation_page(request):
     if request.method == 'POST':
         try:
             with transaction.atomic():
-                if 'save_quotation' not in request.POST:
-                    raise ValidationError("Invalid request")
+                if 'save_quotation' in request.POST:
+                    
                     pouch_quotation_number = request.POST.get('pouch_quotation_number')
                     delivery_date = request.POST.get('delivery_date')
                     party_name = request.POST.get('party_name')
@@ -44,6 +44,8 @@ def quotation_page(request):
                     party_email = request.POST.get('party_email')
                     new_party_email = request.POST.get('new_party_email') 
                     polyester_units = request.POST.getlist('purchase_rate_unit[]')
+                    party_contact = request.POST.get('party_contact')
+                    new_party_contact = request.POST.get('new_party_contact')
                     
                     
                     if new_party_name:
@@ -57,8 +59,14 @@ def quotation_page(request):
                             return redirect("quotation_page")
                         party_email = new_party_email.strip()
 
+                    if party_contact == "others":
+                        if not new_party_contact:
+                            messages.error(request, "Party contact is required")
+                            return redirect("quotation_page")
+                        party_contact = new_party_contact.strip()
 
-            
+                    print(party_contact)
+
                     email_error = utils.email_validator(party_email)
                     if email_error:
                         messages.error(request, email_error, extra_tags="custom-danger-style")
@@ -97,6 +105,8 @@ def quotation_page(request):
                     party_email_obj, _ = PouchPartyEmail.objects.get_or_create(
                             party=party_details ,email=party_email  )
                     
+                    party_contact_obj, _ = PouchPartyContact.objects.get_or_create(
+                            party=party_details ,party_number=party_contact  )
                     
                     quotation = PouchQuotation.objects.create(
                         pouch_quotation_number=pouch_quotation_number,
@@ -108,7 +118,10 @@ def quotation_page(request):
                         gst=gst,
                         note=note,
                         pouch_status=pouch_status,
+                        party_contact=party_contact_obj,
                     )
+
+             
                     for i in range(len(job_names)):
                         PouchQuotationJob.objects.create(
                             quotation=quotation,
@@ -128,6 +141,7 @@ def quotation_page(request):
                             delivery_address=delivery_addresses[i],
                             polyester_unit=polyester_units[i],
                         )
+                    quotation.save()
                     
                 messages.success(request,"Quotation created successfully ")
                 return redirect('quotation_page')
@@ -143,7 +157,7 @@ def quotation_page(request):
             logging.error("Error creating quotation: %s", e)
     
     context = {
-            'pouch_types':pouch_types,
+            'pouch_types':PouchQuotationJob.POUCH_TYPE,
             'party_names':party_names,
             'polyester_units':PouchQuotationJob.POLYESTER_UNIT,
             'pouch_status':PouchQuotation.POUCH_STATUS,
@@ -428,6 +442,7 @@ def quotation_page_ajax(request):
             
             jobs  = list(PouchQuotationJob.objects.filter(quotation__party_details__party_name=party_name).values('job_name').distinct())
             party_emails = list(PouchPartyEmail.objects.filter(party__party_name=party_name).values('email'))
+            party_contacts = list(PouchPartyContact.objects.filter(party__party_name=party_name).values('party_number'))
             total_ppb = 0
             
             if purchase_rate_per_kg:   
@@ -450,7 +465,8 @@ def quotation_page_ajax(request):
                 "final_rate": final_rate,
                 "jobs":jobs,
                 "minimum_quantity":minimum_quantity,
-                "party_emails":party_emails
+                "party_emails":party_emails,
+                "party_contacts":party_contacts
             })
     except Exception as e:
         # messages.error(request,"Something went wrong ")
