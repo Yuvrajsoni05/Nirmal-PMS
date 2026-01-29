@@ -428,7 +428,9 @@ class PurchaseOrder(models.Model):
     ]
     pouch_purchase_number = models.CharField(max_length=200 ,default="234KG@$S",blank=True, null=True)
     delivery_date  = models.DateField()
+    
     party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.SET_NULL, null=True, blank=True,related_name='pouch_purchase_party_email')
+    party_contact = models.ForeignKey(PouchPartyContact, on_delete=models.SET_NULL, null=True, blank=True,related_name='pouch_purchase_party_contact')
     party_details = models.ForeignKey(
         PouchParty,
         on_delete=models.SET_NULL,

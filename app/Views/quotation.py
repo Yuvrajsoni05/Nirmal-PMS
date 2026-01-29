@@ -65,12 +65,17 @@ def quotation_page(request):
                             return redirect("quotation_page")
                         party_contact = new_party_contact.strip()
 
-                    print(party_contact)
+                    party_number_check = utils.phone_number_check(party_contact)
+                    if party_number_check:
+                        messages.error(
+                            request, party_number_check, extra_tags="custom-danger-style"
+                        )
+                        return redirect("quotation_page")
 
                     email_error = utils.email_validator(party_email)
                     if email_error:
                         messages.error(request, email_error, extra_tags="custom-danger-style")
-                        return redirect("view_quotations")
+                        return redirect("quotation_page")
                         
                     required_fields = {
                         "pouch_quotation_number":pouch_quotation_number,

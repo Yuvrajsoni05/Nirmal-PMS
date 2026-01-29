@@ -57,6 +57,35 @@
                             <div class="invalid-feedback">Party email is required</div>  
                         </div>
 
+
+                          <!-- Party Contact -->
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">
+                                Party Contact <span class="text-danger">*</span>
+                            </label>
+                            <select
+                                class="form-select"
+                                name="party_contact"
+                                id="party_contact"
+                                required
+                            >
+                                <option value="">Select Party Contact</option>
+                                <option value="others">Others</option>
+                            </select>
+                            <input
+                                type="number"
+                                class="form-control mt-2 d-none"
+                                placeholder="Enter New Party Contact"
+                                name="new_party_contact"
+                                
+                                minlength="10"
+                                id="new_party_contact"
+                            />
+                            <div class="invalid-feedback">
+                                Party contact is required
+                            </div>  
+                        </div>
+
                         <!-- JOB DATA - When jobs exist -->
                         {% if jobs %}
                         <div class="col-12">
