@@ -144,82 +144,118 @@
                                 {% if proformaInvoices %}
                                 <tbody>
                                     {% for proforma in proformaInvoices %}
+                                    <tr class="text-nowrap text-center">
 
-                                        <tr class="text-nowrap text-center ">
-                                            <td
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#viewModal{{ proforma.id }}" class="sticky-left">
-                                                {{ forloop.counter}}
-                                            </td>
-                                            <td>{{ proforma.invoice_no }}</td>
-                                            <td>{{ proforma.invoice_date }}</td>
-                                            <td>{{ proforma.mode_payment }}</td>
+                                        <td data-bs-toggle="modal"
+                                            data-bs-target="#viewModal{{ proforma.id }}"
+                                            class="sticky-left">
+                                            {{ forloop.counter }}
+                                        </td>
 
-                                            <td>{{ proforma.party_details.party_name }}</td>
-                                            <td>{{ proforma.party_contact_used.party_number  }}</td>
-                                            <td>{{ proforma.party_email_used.email }}</td>
-                                            <td data-bs-toggle="modal" data-bs-target="#billing_addressModel{{proforma.id}}" title="{{proforma.id}}"  class="text-truncate">{{  proforma.party_billing_address_used.billing_address |truncatechars:30 }}</td>
-                                            <td>{{ proforma.billing_gstin_no }}</td>
-                                
-                                            <td>{{ proforma.billing_state_name }}</td>
-                                            <td>
-                                                {% for job in proforma.job_details.all %}
-                                                    <div>{{ job.title }}</div>
-                                                {% endfor %}
-                                            </td>
+                                        <td>{{ proforma.invoice_no|default:"-" }}</td>
+                                        <td>{{ proforma.invoice_date|default:"-" }}</td>
+                                        <td>{{ proforma.mode_payment|default:"-" }}</td>
+
+                                        <td>{{ proforma.party_details.party_name|default:"-" }}</td>
+                                        <td>{{ proforma.party_contact_used.party_number|default:"-" }}</td>
+                                        <td>{{ proforma.party_email_used.email|default:"-" }}</td>
+
+                                        <td data-bs-toggle="modal"
+                                            data-bs-target="#billing_addressModel{{ proforma.id }}"
+                                            title="{{ proforma.id }}"
+                                            class="text-truncate">
+                                            {{ proforma.party_billing_address_used.billing_address|default:"-"|truncatechars:30 }}
+                                        </td>
+
+                                        <td>{{ proforma.billing_gstin_no|default:"-" }}</td>
+                                        <td>{{ proforma.billing_state_name|default:"-" }}</td>
+
+                                        <td>
+                                            {% for job in proforma.job_details.all %}
+                                                <div>{{ job.title|default:"-" }}</div>
+                                            {% empty %}
+                                                <div>-</div>
+                                            {% endfor %}
+                                        </td>
+
+                                        <td>
+                                            {% for job in proforma.job_details.all %}
+                                                <div>{{ job.job_name|default:"-" }}</div>
+                                            {% empty %}
+                                                <div>-</div>
+                                            {% endfor %}
+                                        </td>
+
+                                        <td>
+                                            {% for job in proforma.job_details.all %}
+                                                <div>{{ job.pouch_open_size|default:"-" }}</div>
+                                            {% empty %}
+                                                <div>-</div>
+                                            {% endfor %}
+                                        </td>
+
+                                        <td>
+                                            {% for job in proforma.job_details.all %}
+                                                <div>{{ job.cylinder_size|default:"-" }}</div>
+                                            {% empty %}
+                                                <div>-</div>
+                                            {% endfor %}
+                                        </td>
+
+                                        <td>
+                                            {% for job in proforma.job_details.all %}
+                                                <div>{{ job.quantity|default:"-" }}</div>
+                                            {% empty %}
+                                                <div>-</div>
+                                            {% endfor %}
+                                        </td>
+
+                                        <td>
+                                            {% for job in proforma.job_details.all %}
+                                                <div>{{ job.prpc_rate|default:0|indian_currency_format }}</div>
+                                            {% empty %}
+                                                <div>-</div>
+                                            {% endfor %}
+                                        </td>
+
+                                        <td>
+                                            {% for job in proforma.job_details.all %}
+                                                <div>{{ job.taxable_value|default:0|indian_currency_format }}</div>
+                                            {% empty %}
+                                                <div>-</div>
+                                            {% endfor %}
+                                        </td>
+
+                                        <td>
+                                            {% for gst in proforma.gst|default:""|gst_value %}
+                                                <span>{{ gst }}&nbsp;</span>
+                                            {% empty %}
+                                                <span>-</span>
+                                            {% endfor %}
+                                        </td>
+
+                                        <td>{{ proforma.total_taxable_value|default:0|indian_currency_format }}</td>
+                                        <td>{{ proforma.gst_value|default:0|indian_currency_format }}</td>
+                                        <td>{{ proforma.total|default:0|indian_currency_format }}</td>
+
+                                        <td>{{ proforma.terms_note|default:"-" }}</td>
+
+                                        <td>
+                                            {% if proforma.invoice_status == "Pending" %}
+                                                <span class="badge bg-danger text-white">Pending</span>
+                                            {% elif proforma.invoice_status == "Confirmed" %}
+                                                <span class="badge bg-success">Confirmed</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">
+                                                    {{ proforma.invoice_status|default:"-" }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
 
 
-                                            <td>
-                                                {% for job in proforma.job_details.all %}
-                                                    <div>{{ job.job_name }}</div>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for job in proforma.job_details.all %}
-                                                    <div>{{ job.pouch_open_size }}</div>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for job in proforma.job_details.all %}
-                                                    <div>{{ job.cylinder_size }}</div>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for job in proforma.job_details.all %}
-                                                    <div>{{ job.quantity }}</div>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for job in proforma.job_details.all %}
-                                                    <div>{{ job.prpc_rate|indian_currency_format }}</div>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for job in proforma.job_details.all %}
-                                                    <div>{{ job.taxable_value|indian_currency_format }}</div>
-                                                {% endfor %}
-                                            </td>
-                                            <td>
-                                                {% for gst in proforma.gst %}
-                                                    <span>{{ gst }}  &nbsp; </span>
-                                                {% endfor %}
-                                            </td>
 
-                                            <td> {{proforma.total_taxable_value|indian_currency_format }} </td>
-                                            <td> {{proforma.gst_value|indian_currency_format }} </td>
-                                            <td>{{ proforma.total|indian_currency_format }}</td>
-                                             <td>{{ proforma.terms_note }}</td>
 
-                                            <td>
-                                                {% if proforma.invoice_status == "Pending" %}
-                                                    <span class="badge bg-danger text-white">Pending</span>
-                                                {% elif proforma.invoice_status == "Confirmed" %}
-                                                    <span class="badge bg-success">Confirmed</span>
 
-                                                {% else %}
-                                                    <span class="badge bg-secondary">{{ proforma.invoice_status }}</span>
-                                                {% endif %}
-                                            </td>
                                             <td class="text-truncate sticky-right" colspan="3">
                                                 <form action="{% url 'delete_proforma_invoice' proforma_id=proforma.id %}" method="POST" class="d-inline" id="delete-form-{{ proforma.id }}">
                                                     {% csrf_token %}

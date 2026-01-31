@@ -202,16 +202,16 @@
 
             <table>
                 <tr>
-                    <td style="width: 50%">
+                    {% comment %} <td style="width: 50%">
                         <b>Consignee (Ship to)</b><br />
                         <b>{{ data.party_name }}</b><br />
                         {{ data.billing_address }}<br />
 
                         GSTIN/UIN : {{ data.billing_gstin_no }}<br />
                         State Name : {{ data.billing_state_name }},
-                    </td>
+                    </td> {% endcomment %}
                     <td style="width: 50%">
-                        <b>Buyer (Bill to)</b><br />
+                        <b>Billing Address</b><br />
                         <b>{{ data.party_name }}</b><br />
                         {{ data.billing_address }},<br />
 

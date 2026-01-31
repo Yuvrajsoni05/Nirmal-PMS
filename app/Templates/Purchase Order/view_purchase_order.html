@@ -1,6 +1,48 @@
 {% extends "Base/base.html" %} 
 {% load custom_tags %} 
-{% load static %} 
+{% load static %}
+
+{% block styles %}
+<style>
+.sr-hover-wrapper {
+  position: relative;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.sr-hover-card {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 120%;
+  width: 350px;
+  background: #ffffffff;
+  color: #130000ff;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  z-index: 9999;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+}
+
+.sr-hover-wrapper:hover .sr-hover-card {
+  display: block;
+}
+
+.job-block hr {
+  border-color: rgba(255,255,255,0.2);
+  margin: 8px 0;
+}
+.table-responsive {
+  overflow-x: auto;
+  overflow-y: visible !important;
+}
+</style>
+
+{% endblock styles %}
+
+
+
 {% block main_block %}
 
 <div class="page-inner">
@@ -97,6 +139,7 @@
                             <th>Delivery Address</th>
                             <th>Special Instruction</th>
                             <th>Note</th>
+                            <th>Pouch Status</th>
                             <th class="sticky-right">Actions</th>
                         </tr>
                     </thead>
@@ -106,7 +149,28 @@
                             {% for purchase_order in purchase_orders %}
 
                         <tr class="text-center">
-                            <td>{{ forloop.counter }}</td>
+                           <td class="text-center">
+                                <div class="sr-hover-wrapper">
+                                    {{ forloop.counter }}
+
+                                    <div class="sr-hover-card">
+                                    {% for job in purchase_order.purchase_order_jobs.all %}
+                                        <div class="job-block">
+                                        <strong>Job:</strong> {{ job.job_name }}<br>
+                                        <strong>Open Size:</strong> {{ job.pouch_open_size }}<br>
+                                        <strong>Combination:</strong> {{ job.pouch_combination }}<br>
+                                        <strong>Quantity:</strong> {{ job.quantity }}<br>
+                                        <strong>Rate/KG:</strong> {{ job.purchase_rate_per_kg }}<br>
+                                        <strong>Final Rate:</strong> {{ job.final_rate }}<br>
+                                        <strong>Pouch Type:</strong> {{ job.get_pouch_type_display }}<br>
+                                        <strong>Min Qty:</strong> {{ job.minimum_quantity }}<br>
+                                      
+                                        <hr>
+                                        </div>
+                                    {% endfor %}
+                                    </div>
+                                </div>
+                            </td>
                             <td>
                                 {{ purchase_order.pouch_purchase_number }}
                             </td>
@@ -235,6 +299,22 @@
                                 {{ purchase_order.note|default:"—" }}
                             </td>
 
+                          <td class="text-start">
+                                <span class="
+                                    badge
+                                    {% if purchase_order.pouch_status == 'Pending' %} bg-warning text-dark
+                                    {% elif purchase_order.pouch_status == 'Approved' %} bg-success
+                                    {% elif purchase_order.pouch_status == 'Rejected' %} bg-danger
+                                    {% elif purchase_order.pouch_status == 'Cancelled' %} bg-secondary
+                                    {% elif purchase_order.pouch_status == 'Delivered' %} bg-primary
+                                    {% else %} bg-light text-dark
+                                    {% endif %}
+                                ">
+                                    {{ purchase_order.pouch_status|default:"—" }}
+                                </span>
+                            </td>
+
+
                             <td class="sticky-right text-center">
                                 <!-- Edit -->
                                 <button
@@ -333,11 +413,11 @@
                         {% else %}
 
                         <tr>
-                                            <td colspan="22" class="text-left py-5">
-                                                <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
-                                                <p class="text-muted">No data available</p>
-                                            </td>
-                                        </tr>
+                            <td colspan="22" class="text-left py-5">
+                                <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
+                                <p class="text-muted">No data available</p>
+                            </td>
+                        </tr>
 
                         {% endif %}
                     </tbody>

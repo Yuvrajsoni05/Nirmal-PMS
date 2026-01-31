@@ -32,6 +32,28 @@ $(document).on(
                 if (prevEmailValue && $partyEmail.find(`option[value="${prevEmailValue}"]`).length) {
                     $partyEmail.val(prevEmailValue);
                 }
+
+                const $partyContact = $("#party_contact");
+                const prevContactValue = $partyContact.val();
+
+                $partyContact.empty().append('<option value="">Select Party Contact</option>');
+
+                if (response.party_contacts?.length) {
+                    response.party_contacts.forEach(contact => {
+                        $partyContact.append(
+                            $('<option></option>').val(contact.party_number).text(contact.party_number)
+                        );
+                    });
+                }
+
+                $partyContact.append('<option value="others">Others</option>');
+
+                if (prevContactValue && $partyContact.find(`option[value="${prevContactValue}"]`).length) {
+                    $partyContact.val(prevContactValue);
+                }
+
+
+
             }
         });
 

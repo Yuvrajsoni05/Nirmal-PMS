@@ -102,7 +102,7 @@ def login_page(request):
                 else:
                     request.session.set_expiry(0)
                 login(request, user)
-                messages.success(request, f"You are logged in {user.username} ")
+                messages.success(request, f"You are signed in {user.username} ")
                 logger.info("user Login")
                 return redirect("dashboard_page")
             else:

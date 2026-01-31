@@ -45,41 +45,39 @@ $(document).on(
 );
 
 // ---------- PARTY NAME → OTHERS ----------
-    document.addEventListener("DOMContentLoaded", function () {
-        const partySelect = document.getElementById("party_name");
-        const newParty = document.getElementById("new_party_name");
-        const newPartyError = document.getElementById("new_party_error");
+document.addEventListener("DOMContentLoaded", function () {
+    const partySelect = document.getElementById("party_name");
+    const newParty = document.getElementById("new_party_name");
+    const newPartyError = document.getElementById("new_party_error");
 
-        // 🚑 Safety check
-        if (!partySelect || !newParty) return;
+    if (!partySelect || !newParty) return;
 
-        partySelect.addEventListener("change", function () {
-            if (this.value === "others") {
-                newParty.classList.remove("d-none");
-                newParty.required = true;
-            } else {
-                newParty.classList.add("d-none");
-                newParty.required = false;
-                newParty.value = "";
+    partySelect.addEventListener("change", function () {
+        if (this.value === "others") {
+            newParty.classList.remove("d-none");
+            newParty.required = true;
+        } else {
+            newParty.classList.add("d-none");
+            newParty.required = false;
+            newParty.value = "";
 
-                if (newPartyError) {
-                    newPartyError.classList.add("d-none");
-                }
+            if (newPartyError) {
+                newPartyError.classList.add("d-none");
             }
-        });
+        }
     });
-    
 
     newParty.addEventListener("input", function () {
         if (partySelect.value === "others" && newParty.value.trim() === "") {
             newParty.classList.add("is-invalid");
-            newPartyError.classList.remove("d-none");
+            if (newPartyError) newPartyError.classList.remove("d-none");
         } else {
             newParty.classList.remove("is-invalid");
-            newPartyError.classList.add("d-none");
+            if (newPartyError) newPartyError.classList.add("d-none");
         }
     });
 });
+
 
 // ---------- PARTY EMAIL → OTHERS ----------
 $(document).on("change", "#party_email", function () {
@@ -104,3 +102,27 @@ $(document).on("input", "#new_party_email", function () {
     }
 });
 
+
+
+// ---------- PARTY CONTACT → OTHERS ----------
+$(document).on("change", "#party_contact", function () {
+    const newPartyContact = $("#new_party_contact");
+
+    if ($(this).val() === "others") {
+        newPartyContact.removeClass("d-none").prop("required", true).focus();
+    } else {
+        newPartyContact
+            .addClass("d-none")
+            .prop("required", false)
+            .val("")
+            .removeClass("is-invalid");
+    }
+});
+
+$(document).on("input", "#new_party_contact", function () {
+    if ($("#party_contact").val() === "others" && $(this).val().trim() === "") {
+        $(this).addClass("is-invalid");
+    } else {
+        $(this).removeClass("is-invalid");
+    }
+});

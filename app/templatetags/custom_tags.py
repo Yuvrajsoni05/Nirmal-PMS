@@ -3,24 +3,6 @@ from django import template
 from datetime import datetime
 
 register  = template.Library()
-@register.simple_tag
-
-def render_curreny(value):
-    try:
-        # Convert the value to a float before formatting
-        numeric_value = float(value)
-        return "R {:,.2f}".format(numeric_value)
-    except (ValueError, TypeError):
-        # Handle cases where the input is not a valid number
-        return value
-
-@register.simple_tag
-def get_data_time():
-    return datetime.now().strftime("%m/%d/%Y ,%H:%M:%S")
-
-
-
-
 
 
 @register.filter
@@ -66,12 +48,23 @@ def split_text(value):
 def split_text_with_multiplications(value):
     return [int(p) for p in value.split('x')]
 
-@register.filter
-def remove_white(value):
-    return value.split(' ')
+
 
 
 
 @register.filter
 def filename(value):
     return os.path.basename(value)
+
+
+
+@register.filter
+def gst_value(value):
+    if not value:
+        return []
+
+    gst_list = [g.strip() for g in value.strip("[]").replace("'", "").split(",")]
+
+
+
+    return gst_list

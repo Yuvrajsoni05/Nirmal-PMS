@@ -56,20 +56,6 @@ def file_validation(files):
             return "Invalid file. Only .jpg, .jpeg, .png, and .ai are allowed"
         
 
-# def file_name_convert(files):
-#     date = datetime.now()
-#     date_s = date.strftime("%Y-%m-%d %H:%M:%S")
-#     file_dic = {}
-#     for i, file in enumerate(files):
-#             _, file_extension = os.path.splitext(file.name)
-#             random_number = random.randint(1, 1000)
-#             new_file_name = f"{date_s}_{random_number}{file_extension}"
-#             file.name = new_file_name
-#             file_key = f"{new_file_name}"
-#             file_dic[file_key] = (file.name, file, file.content_type)
-#     return file_dic
-        
-
 
 def file_name_convert(files):
     converted_files = []
@@ -83,7 +69,7 @@ def file_name_convert(files):
         
         file.name = new_name
         converted_files.append(file)
-        print(converted_files)
+
     return converted_files
     
 def all_job_name_list(party_name):
@@ -108,10 +94,8 @@ def all_job_name_list(party_name):
 
 def email_attachment_size(total_attachment_size):
     MAX_SIZE_MB =  25
-    
     if total_attachment_size > MAX_SIZE_MB * 1024 * 1024:
         return f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files."
-
     return None
     
     

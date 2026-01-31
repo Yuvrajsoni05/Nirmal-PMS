@@ -14610,4 +14610,3 @@ NameError: name 'authenticate' is not defined
 ERROR 2026-01-08 13:45:59,485 myapp login_page Invalid Username or Password views.py
 ERROR 2026-01-22 10:58:18,685 myapp login_page Invalid Username or Password views.py
 ERROR 2026-01-22 17:53:47,788 myapp login_page Invalid Username or Password views.py
-ERROR 2026-01-25 23:29:24,849 myapp login_page Invalid Username or Password views.py

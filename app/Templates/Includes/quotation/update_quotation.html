@@ -23,24 +23,26 @@
             <div class="row g-3">
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Quotation Number</label>
-                <input type="text" class="form-control" name="pouch_quotation_number" value="{{ quotation.pouch_quotation_number }}">
+                <input type="text" class="form-control" name="pouch_quotation_number"
+                       value="{{ quotation.pouch_quotation_number }}" required>
               </div>
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Delivery Date</label>
                 <input type="date" class="form-control" name="delivery_date"
-                  value="{{ quotation.delivery_date|date:'Y-m-d' }}">
+                       value="{{ quotation.delivery_date|date:'Y-m-d' }}" required>
               </div>
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Party Email</label>
-                <input type="text" class="form-control" name="party_email" value="{{ quotation.party_email.email }}">
+                <input type="text" class="form-control" name="party_email"
+                       value="{{ quotation.party_email.email }}" required>
                 <input type="hidden" name="party_email_id" value="{{ quotation.party_email.id }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Party</label>
-                <input type="text" class="form-control bg-secondary-subtle" value="{{ quotation.party_details.party_name }}" disabled>
+                <input type="text" class="form-control bg-secondary-subtle"
+                       value="{{ quotation.party_details.party_name }}" disabled>
                 <input type="hidden" name="party_details" value="{{ quotation.party_details.id }}">
               </div>
-
             </div>
           </div>
 
@@ -50,9 +52,7 @@
           {% for job in quotation.pouch_quotation_jobs.all %}
           <div class="border rounded-3 p-3 mb-4">
 
-            <div class="d-flex justify-content-between align-items-center mb-2">
-              <h6 class="fw-bold text-secondary mb-0">Job {{ forloop.counter }}</h6>
-            </div>
+            <h6 class="fw-bold text-secondary mb-2">Job {{ forloop.counter }}</h6>
 
             <input type="hidden" name="job_id" value="{{ job.id }}">
 
@@ -60,66 +60,80 @@
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Job Name</label>
-                <input type="text" class="form-control" name="job_name" value="{{ job.job_name }}" readonly>
+                <input type="text" class="form-control" name="job_name"
+                       value="{{ job.job_name }}" readonly required>
               </div>
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Pouch Open Size</label>
-                <input type="text" class="form-control" name="pouch_open_size" value="{{ job.pouch_open_size }}">
+                <input type="text" class="form-control" name="pouch_open_size"
+                       value="{{ job.pouch_open_size }}" required>
               </div>
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Pouch Combination</label>
-                
-                <input type="text" class="form-control" name="pouch_combination" value="{{ job.pouch_combination }}">
+                <input type="text" class="form-control" name="pouch_combination"
+                       value="{{ job.pouch_combination }}" required>
               </div>
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Quantity</label>
-                <input type="text" step="0.01" class="form-control" name="quantity" value="{{ job.quantity }}">
+                <input type="text" class="form-control" name="quantity"
+                       value="{{ job.quantity }}" required>
+              </div>
+
+              <div class="col-md-6">
+                <label class="form-label fw-semibold">Purchase Rate Per KG</label>
+                <div class="input-group col-md-4">
+                  <input type="text" class="form-control" name="purchase_rate_per_kg"
+                         value="{{ job.purchase_rate_per_kg }}" required>
+                  <span class="input-group-text">{{ job.polyester_unit }}</span>
+               
+                </div>
               </div>
 
               <div class="col-md-4">
-                <label class="form-label fw-semibold">Purchase Rate Per KG </label>
-                <input type="text" step="0.01" class="form-control" name="purchase_rate_per_kg" value="{{ job.purchase_rate_per_kg }}">
-              </div>
-
-              <div class="col-md-4">
-                <label class="form-label fw-semibold">No Of Pouch Per KG </label>
-                <input type="text" step="0.01" class="form-control" name="no_of_pouch_kg" value="{{ job.no_of_pouch_kg }}">
+                <label class="form-label fw-semibold">No Of Pouch Per KG</label>
+                <input type="text" class="form-control" name="no_of_pouch_kg"
+                       value="{{ job.no_of_pouch_kg }}" required>
               </div>
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Per Pouch Rate Basic</label>
-                <input type="text" step="0.01" class="form-control" name="per_pouch_rate_basic" value="{{ job.per_pouch_rate_basic }}">
+                <input type="text" class="form-control" name="per_pouch_rate_basic"
+                       value="{{ job.per_pouch_rate_basic }}" required>
               </div>
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Zipper Cost</label>
-                <input type="text" step="0.01" class="form-control" name="zipper_cost" value="{{ job.zipper_cost }}">
+                <input type="text" class="form-control" name="zipper_cost"
+                       value="{{ job.zipper_cost }}" required>
               </div>
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Pouch Charge</label>
-                <input type="text" step="0.01" class="form-control" name="pouch_charge" value="{{ job.pouch_charge }}">
+                <input type="text" class="form-control" name="pouch_charge"
+                       value="{{ job.pouch_charge }}" required>
               </div>
-              
+
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Final Rate</label>
-                <input type="text" step="0.01" class="form-control" name="final_rate" value="{{ job.final_rate }}">
+                <input type="text" class="form-control" name="final_rate"
+                       value="{{ job.final_rate }}" required>
               </div>
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Minimum Quantity</label>
-                <input type="text" step="0.01" class="form-control" name="minimum_quantity" value="{{ job.minimum_quantity }}">
+                <input type="text" class="form-control" name="minimum_quantity"
+                       value="{{ job.minimum_quantity }}" required>
               </div>
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Pouch Type</label>
-                <select class="form-select" name="pouch_type">
+                <select class="form-select" name="pouch_type" required>
                   <option disabled>Select Pouch Type</option>
                   {% for value,label in pouch_types %}
-                  <option value="{{ value }}" {% if job.pouch_type == value %} selected {% endif %}>
+                  <option value="{{ value }}" {% if job.pouch_type == value %}selected{% endif %}>
                     {{ label }}
                   </option>
                   {% endfor %}
@@ -128,12 +142,14 @@
 
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Delivery Address</label>
-                <textarea class="form-control" rows="4" name="delivery_address">{{ job.delivery_address }}</textarea>
+                <textarea class="form-control" rows="4"
+                          name="delivery_address" required>{{ job.delivery_address }}</textarea>
               </div>
 
               <div class="col-md-6">
                 <label class="form-label fw-semibold">Special Instruction</label>
-                <textarea class="form-control" rows="4" name="special_instruction">{{ job.special_instruction }}</textarea>
+                <textarea class="form-control" rows="4"
+                          name="special_instruction">{{ job.special_instruction }}</textarea>
               </div>
 
             </div>
@@ -144,27 +160,42 @@
           <h6 class="fw-bold text-primary mb-2">Other Terms</h6>
 
           <div class="border rounded-3 p-3 bg-light">
-
             <div class="row g-3">
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Quantity Variation</label>
-                <input type="text" step="0.01" class="form-control" name="quantity_variate" value="{{ quotation.quantity_variate }}">
+                <input type="text" class="form-control" name="quantity_variate"
+                       value="{{ quotation.quantity_variate }}" >
               </div>
 
               <div class="col-md-4">
-                <label class="form-label fw-semibold">Freight </label>
-                <input type="text" step="0.01" class="form-control" name="freight" value="{{ quotation.freight }}">
+                <label class="form-label fw-semibold">Freight</label>
+                <input type="text" class="form-control" name="freight"
+                       value="{{ quotation.freight }}" >
               </div>
 
               <div class="col-md-4">
                 <label class="form-label fw-semibold">GST (%)</label>
-                <input type="text" class="form-control" name="gst" value="{{ quotation.gst }}">
+                <input type="text" class="form-control" name="gst"
+                       value="{{ quotation.gst }}" >
               </div>
 
               <div class="col-12">
                 <label class="form-label fw-semibold">Note</label>
-                <textarea class="form-control" rows="3" name="note">{{ quotation.note }}</textarea>
+                <textarea class="form-control" rows="3"
+                          name="note">{{ quotation.note }}</textarea>
+              </div>
+
+              <div class="col-md-4">
+                <label class="form-label fw-semibold">Pouch Status</label>
+                <select class="form-select" name="pouch_status" required>
+                  <option>Select Status</option>
+                  {% for value,label in pouch_status %}
+                  <option value="{{ value }}" {% if quotation.pouch_status == value %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                  {% endfor %}
+                </select>
               </div>
 
             </div>

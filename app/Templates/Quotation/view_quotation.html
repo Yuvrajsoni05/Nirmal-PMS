@@ -83,7 +83,7 @@
                             <th>Delivery Date</th>
                             <th>Party Name</th>
                             <th>Job Name</th>
-                            <th>Pouch Size</th>
+                            <th>Pouch Open Size</th>
                             <th>Pouch Combination</th>
                             <th>Qty</th>
                             <th>Purchase Rate Per/Kg</th>
@@ -101,6 +101,7 @@
                             <th>Delivery Address</th>
                             <th>Special Instruction</th>
                             <th>Note</th>
+                            <th>Pouch Status</th>
                             <th class="sticky-right">Actions</th>
                         </tr>
                     </thead>
@@ -229,7 +230,20 @@
 
                                 <!-- Note -->
                                 <td class="text-start">{{ quotation.note|default:"—" }}</td>
-
+                                <td class="text-start">
+                                    <span class="
+                                        badge
+                                        {% if quotation.pouch_status == 'Pending' %} bg-warning text-dark
+                                        {% elif quotation.pouch_status == 'Approved' %} bg-success
+                                        {% elif quotation.pouch_status == 'Rejected' %} bg-danger
+                                        {% elif quotation.pouch_status == 'Cancelled' %} bg-secondary
+                                        {% elif quotation.pouch_status == 'Delivered' %} bg-primary
+                                        {% else %} bg-light text-dark
+                                        {% endif %}
+                                    ">
+                                        {{ quotation.pouch_status|default:"—" }}
+                                    </span>
+                                </td>
                                 <!-- Actions -->
                                 <td class="sticky-right text-center">
                                     <!-- Edit Button -->
@@ -251,6 +265,7 @@
                                         <i class="fa fa-plus-square" aria-hidden="true"></i>
                                     </button>
                                 </td>
+                                
                             </tr>
 
                             <!-- Update Modal -->
@@ -296,7 +311,7 @@
                             {% endfor %}
                         {% else %}
                             <tr>
-                                <td colspan="22" class="text-center py-4">No quotations found</td>
+                                <td colspan="25" class="text-center py-4">No quotations found</td>
                             </tr>
                         {% endif %}
                     </tbody>
