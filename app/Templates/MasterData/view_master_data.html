@@ -1,0 +1,266 @@
+{% extends "Base/base.html" %} {% load custom_tags %}
+{% load humanize %}{% load static %}
+{% block styles %}
+    <style>
+        .input-wrapper {
+            position: relative;
+
+        }
+        .input-wrapper label {
+            position: absolute;
+            top: -0.6rem; /* push above border */
+            left: 1.75rem;
+            background: #FFFFFF; /* same as background to cover border */
+            padding: 0 4px;
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .nexticon {
+            position: absolute;
+            right: -20px;
+
+            width: 20px;
+            border-radius: 20px;
+            color: #000000ff;
+        }
+        .previcon {
+            position: absolute;
+            left: -20px;
+
+            width: 20px;
+            border-radius: 20px;
+            color: #000000ff;
+        }
+
+    </style>
+{% endblock styles %}
+
+{% block main_block %}
+    <div class="container-fluid py-4">
+        <div class="row justify-content-center">
+            <div class="d-flex justify-content-between align-items-center mb-6">
+                <h3 class="fw-bold mb-0">View Master Data</h3>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-round">
+                    <div class="card-header">
+                        <div class="card-head-row card-tools-still-right">
+                            <div class="card-title mb-6 mb-md-0">
+                                View Master Data
+                            </div>
+
+                            <div class="card-body border-bottom">
+                                <form method="GET" action="{% url 'view_master_data' %}">
+                                    <div class="row g-3 align-items-end">
+
+                                        <!-- Party Name -->
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold">Party Name</label>
+                                            <select name="search_party_name" class="form-select form-control">
+                                                <option value="">All Parties</option>
+                                                {% for party in party_name %}
+                                                    <option value="{{ party.party_name }}">
+                                                        {{ party.party_name }}
+                                                    </option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <!-- Job Name -->
+                                        <div class="col-md-4">
+                                            <label class="form-label fw-semibold">Job Name</label>
+                                            <select name="search_job_name" class="form-select form-control">
+                                                <option value="">All Jobs</option>
+                                                {% for job in job_name %}
+                                                    <option value="{{ job }}">{{ job }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <!-- Buttons -->
+                                        <div class="col-md-4 d-flex gap-2 ">
+                                            <button type="submit" name="search_pouch_master" class="btn btn-primary">
+                                                <i class="fa fa-search me-1"></i>
+                                            </button>
+                                            <button type="submit" name="download_data" value="1" class="btn btn-success">
+                                                <i class="fa fa-download me-1"></i> Download
+                                            </button>
+                                            <a href="{{ request.path }}" class="btn btn-outline-secondary">
+                                                Reset
+                                            </a>
+                                            
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        
+
+                        <div class="table-responsive">
+
+    <!-- CREATE QUOTATION FORM (GET) -->
+    <form method="GET" action="{% url 'view_master_data' %}">
+
+        <button type="submit"
+                name="create_quotation"
+                class="btn btn-warning mb-2">
+            <i class="fa fa-file-text me-1"></i> Create Quotation
+        </button>
+
+        <table class="table table-striped">
+            <thead class="thead-light">
+                <tr class="text-nowrap text-center">
+                    <th>
+                        <input type="checkbox" id="selectAll">
+                    </th>
+
+                    <th class="sticky-left">Sr No</th>
+                    <th>Party Name</th>
+                    <th>Party Contact</th>
+                    <th>Party Email</th>
+                    <th>Job Name</th>
+                    <th>Pouch Open Size</th>
+                    <th>Pouch Combination</th>
+                    <th>No of Pouch per KG</th>
+                    <th>Minimum Order Quantity</th>
+                    <th class="sticky-right">Actions</th>
+                </tr>
+            </thead>
+
+            {% if pouch_master_data %}
+            <tbody>
+                {% for pouch_master in pouch_master_data %}
+                <tr class="text-nowrap text-center">
+
+                    <!-- CHECKBOX -->
+                    <td>
+                        <input type="checkbox"
+                               name="create_quotation_id"
+                               class="job-checkbox"
+                               value="{{ pouch_master.id }}">
+                    </td>
+
+                    <td class="sticky-left">
+                        {{ forloop.counter }}
+                    </td>
+
+                    <td>{{ pouch_master.party_details.party_name }}</td>
+                    <td>{{ pouch_master.party_contact.party_number }}</td>
+                    <td>{{ pouch_master.party_email.email }}</td>
+                    <td>{{ pouch_master.job_name }}</td>
+                    <td>{{ pouch_master.pouch_open_size }}</td>
+                    <td>{{ pouch_master.pouch_combination }}</td>
+                    <td>{{ pouch_master.no_of_pouch_per_kg }}</td>
+                    <td>{{ pouch_master.minimum_quantity }}</td>
+
+                    <!-- ACTIONS -->
+                    <td class="sticky-right">
+
+                        <!-- DELETE FORM (POST – SEPARATE, VALID HTML) -->
+                        <form method="POST"
+                              id="delete-form-{{ pouch_master.id }}"
+                              class="d-inline">
+                            {% csrf_token %}
+                            <input type="hidden"
+                                   name="delete_pouch_master"
+                                   value="{{ pouch_master.id }}">
+
+                            <button type="button"
+                                    class="btn btn-outline-danger delete-btn"
+                                    data-id="{{ pouch_master.id }}"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#confirmationModal">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </form>
+
+                        <!-- EDIT BUTTON -->
+                        <button type="button"
+                                class="btn btn-outline-primary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editModal{{ pouch_master.id }}">
+                            <i class="fa fa-edit"></i>
+                        </button>
+
+                    </td>
+                </tr>
+
+                <!-- EDIT MODAL -->
+                {% include 'Includes/master_data/edit.html' %}
+
+                {% endfor %}
+            </tbody>
+
+            {% else %}
+            <tbody>
+                <tr>
+                    <td colspan="11" class="text-center py-5">
+                        <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">No data available</p>
+                    </td>
+                </tr>
+            </tbody>
+            {% endif %}
+
+        </table>
+
+    </form>
+</div>
+
+                        
+                    </div>
+                </div>
+            </div>
+            {% include 'Includes/master_data/navbar.html' %}
+        </div>
+    </div>
+{% endblock main_block %}
+
+
+
+{% block script %}
+
+
+
+    <script>
+        let formIdToSubmit;
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+                const deleteButtons =
+                    document.querySelectorAll(
+                        ".btn-outline-danger"
+                    );
+                deleteButtons.forEach(
+                    (button) => {
+                        button.addEventListener(
+                            "click",
+                            function () {
+                                formIdToSubmit =
+                                    this
+                                    .dataset
+                                    .id;
+                            }
+                        );
+                    }
+                );
+            }
+        );
+        function submitForm() {
+            document
+                .getElementById(
+                    "delete-form-" +
+                    formIdToSubmit
+                )
+                .submit();
+        }
+    </script>
+
+{% endblock script %}

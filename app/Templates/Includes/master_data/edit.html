@@ -1,0 +1,77 @@
+<div class="modal fade" id="editModal{{ pouch_master.id }}" data-bs-backdrop="static" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content border-0 shadow">
+      
+      <form method="POST" action="">
+        {% csrf_token %}
+
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Job Details</h5>
+          <button type="reset" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+                
+          <input type="hidden" name="edit_pouch_master" id="edit_pouch_master" value="{{ pouch_master.id }}">
+
+          <div class="row g-3">
+
+            <div class="col-md-4">
+              <label class="form-label">Party Name</label>
+              <input type="text" class="form-control" name="party_name" id="edit_party_name" value="{{ pouch_master.party_details.party_name }}" readonly>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Party Contact</label>
+              <input type="number" class="form-control" name="party_contact" id="edit_party_contact" value="{{ pouch_master.party_contact.party_number }}" readonly>
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label">Party Email</label>
+              <input type="email" class="form-control" name="party_email" id="edit_party_email" value="{{ pouch_master.party_email.email }}" readonly>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Job Name</label>
+              <input type="text" class="form-control" name="job_name" id="edit_job_name" value="{{ pouch_master.job_name }}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Pouch Open Size</label>
+              <input type="text" class="form-control" name="pouch_open_size" id="edit_pouch_open_size" value="{{ pouch_master.pouch_open_size }}" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Pouch Combination</label>
+              <input type="text" class="form-control" name="pouch_combination" id="edit_pouch_combination" value="{{ pouch_master.pouch_combination }}">
+            </div>
+
+            
+            <div class="col-md-3">
+              <label class="form-label">Purchase rate per KG</label>
+              <input type="number" class="form-control" name="purchase_rate_per_kg" id="edit_purchase_rate_per_kg" value="{{ pouch_master.purchase_rate_per_kg }}">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">No of Pouch / KG</label>
+              <input type="number" class="form-control" name="no_of_pouch_per_kg" id="edit_no_of_pouch_per_kg" value="{{ pouch_master.no_of_pouch_per_kg }}">
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">MOQ</label>
+              <input type="number" class="form-control" name="moq" id="edit_moq" value="{{ pouch_master.minimum_quantity }}" readonly>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" name="edit_master_data" class="btn btn-primary">Update</button>
+          <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

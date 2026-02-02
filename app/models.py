@@ -330,15 +330,18 @@ class PouchMaster(models.Model):
     party_details = models.ForeignKey(PouchParty, on_delete=models.CASCADE, related_name='pouch_master_party_details')
     party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.CASCADE, related_name='pouch_master_party_email')
     party_contact = models.ForeignKey(PouchPartyContact, on_delete=models.CASCADE, related_name='pouch_master_party_contact')
-    job_name = models.CharField(max_length=200)
+    job_name = models.CharField(max_length=500,blank=True, null=True)
     pouch_open_size = models.CharField(max_length=200)
     pouch_combination = models.CharField(max_length=200)
     purchase_rate_per_kg = models.CharField(max_length=200)
-    minimum_quantity = models.CharField(max_length=200,blank=True, null=True)
+  
     no_of_pouch_per_kg = models.CharField(max_length=200,blank=True, null=True)
+    minimum_quantity = models.CharField(max_length=200,blank=True, null=True)
+
+        
 
 
-class PouchQuotation(models.Model):
+class PouchQuotation(models.Model): 
 
     POUCH_STATUS = [
         ('Pending' , 'Pending'),

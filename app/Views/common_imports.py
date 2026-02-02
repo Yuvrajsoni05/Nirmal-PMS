@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib import messages
 from django.core.mail import EmailMultiAlternatives
+from openpyxl import Workbook
 from datetime import datetime
 from ..models import (
     Job_detail,
