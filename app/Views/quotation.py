@@ -445,10 +445,10 @@ def quotation_page_ajax(request):
             zipper_cost =float(request.GET.get("zipper_cost") or 0)
             pouch_charge = float(request.GET.get("pouch_charge") or 0)
             
-            jobs  = list(PouchQuotationJob.objects.filter(quotation__party_details__party_name=party_name).values('job_name').distinct())
+            jobs  = list(PouchQuotationJob.objects.filter(quotation__party_details__party_name=party_name).values('job_name').union(PouchMaster.objects.filter(party_details__party_name=party_name).values('job_name').distinct()))
             party_emails = list(PouchPartyEmail.objects.filter(party__party_name=party_name).values('email'))
             party_contacts = list(PouchPartyContact.objects.filter(party__party_name=party_name).values('party_number'))
-            total_ppb = 0
+            total_ppb = 0   
             
             if purchase_rate_per_kg:   
                 if unit == "polyester_printed_bag":

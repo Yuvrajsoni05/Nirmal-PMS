@@ -27,7 +27,7 @@ from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
 
 
-
+from openpyxl import Workbook
 
 from .decorators import *
 from .models import *
@@ -300,14 +300,72 @@ def update_user(request, user_id):
 @custom_login_required
 def dashboard_page(request):
     try:
-
-
         if request.method == "POST":
             if "job_print" in request.POST:
                 job_id = request.POST.get("job_id","").strip()
                 if job_id:
                     job_data = Job_detail.objects.get(id=job_id)
                 return render(request,"includes/dashboard_page/print.html",context={"job_data":job_data})
+        if request.method == "GET":
+            if "download_job" in request.GET:
+                job_details = Job_detail.objects.select_related("party_details")
+
+                wb = Workbook()
+                ws = wb.active
+                ws.title = "Job Details"
+
+                ws.append([
+                    "Party Name",
+                    "Bill No",
+                    "Job Date",
+                    "Job Name",
+                    "Job Type",
+                    "Job Status",
+                    "NOC",
+                    "Cylinder Size",
+                    "Cylinder Made In",
+                    "Cylinder Date",
+                    "Cylinder Bill No",
+                    "Pouch Size",
+                    "Pouch Open Size",
+                    "Pouch Combination",
+                    "Purchase Rate / KG",
+                    "Sell Rate / KG",
+                    "Correction",
+                    "Created At",
+                ])
+
+                
+                for obj in job_details:
+                    ws.append([
+                        obj.party_details.party_name if obj.party_details else "",
+                        obj.bill_no,
+                        obj.date.strftime("%d-%m-%Y") if obj.date else "",
+                        obj.job_name,
+                        obj.job_type,
+                        obj.job_status or "",
+                        obj.noc or "",
+                        obj.cylinder_size,
+                        obj.cylinder_made_in,
+                        obj.cylinder_date.strftime("%d-%m-%Y") if obj.cylinder_date else "",
+                        obj.cylinder_bill_no or "",
+                        obj.pouch_size,
+                        obj.pouch_open_size,
+                        obj.pouch_combination or "",
+                        obj.prpc_purchase,
+                        obj.prpc_sell or "",
+                        obj.correction or "",
+                        obj.created_at.strftime("%d-%m-%Y %H:%M") if obj.created_at else "",
+                    ])
+
+                response = HttpResponse(
+                    content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+                response["Content-Disposition"] = 'attachment; filename="job_details.xlsx"'
+                wb.save(response)
+                return response
+
+                
         
         party_name_search = request.GET.get("party_name", "").strip()
         job_name_search = request.GET.get("job_name_search", "").strip()
@@ -371,8 +429,7 @@ def dashboard_page(request):
         page_obj = paginator.get_page(page_number)
         
         total_job = job_details.count()
-        # for i in job_details:
-        #     print(i)
+
         party_names = Party.objects.values("party_name").distinct()
         job_names = Job_detail.objects.values("job_name").distinct()
         count_of_company = Party.objects.all().order_by("party_name").count()

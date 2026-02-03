@@ -44,7 +44,7 @@
                                 Delivery date is required
                             </div>
                         </div>
-
+                        
                         <!-- Party Name -->
                         <div class="col-md-4">
                             <label class="form-label fw-semibold">
@@ -129,8 +129,10 @@
                                 Party contact is required
                             </div>  
                         </div>
-                     
-                        <!-- Job Blocks Container -->
+                        {% if master_data %}
+                            {% include 'includes/quotation/master_job.html' %}
+                        {% else %}
+                             <!-- Job Blocks Container -->
                         <div class="col-12">
                             <div id="jobs-container">
                                 <div class="job-block card p-3 mb-3 border">
@@ -435,6 +437,8 @@
                                 </button>
                             </div>
                         </div>
+                        {% endif %}
+                   
                                 
                         <!-- Other Terms -->
                         <div class="col-12">

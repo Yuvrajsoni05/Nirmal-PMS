@@ -113,12 +113,16 @@
                 class="btn btn-warning mb-2">
             <i class="fa fa-file-text me-1"></i> Create Quotation
         </button>
-
+        <button type="submit"
+                name="create_purchase_order"
+                class="btn btn-primary mb-2">
+            <i class="fa fa-file-text me-1"></i> Create Purchase Order
+        </button>
         <table class="table table-striped">
             <thead class="thead-light">
                 <tr class="text-nowrap text-center">
                     <th>
-                        <input type="checkbox" id="selectAll">
+                        select
                     </th>
 
                     <th class="sticky-left">Sr No</th>
@@ -163,16 +167,18 @@
                     <!-- ACTIONS -->
                     <td class="sticky-right">
 
-                        <!-- DELETE FORM (POST – SEPARATE, VALID HTML) -->
+                       
                         <form method="POST"
-                              id="delete-form-{{ pouch_master.id }}"
+                            action="{% url 'view_master_data' %}"
                               class="d-inline">
                             {% csrf_token %}
                             <input type="hidden"
                                    name="delete_pouch_master"
                                    value="{{ pouch_master.id }}">
 
-                            <button type="button"
+                            <button type="submit"
+                                    name="delete_pouch_master"
+                                    value="{{ pouch_master.id }}"
                                     class="btn btn-outline-danger delete-btn"
                                     data-id="{{ pouch_master.id }}"
                                     data-bs-toggle="modal"
@@ -191,7 +197,9 @@
 
                     </td>
                 </tr>
-
+                <!-- Confirmation modal -->
+                 
+                
                 <!-- EDIT MODAL -->
                 {% include 'Includes/master_data/edit.html' %}
 
@@ -229,38 +237,5 @@
 
 
 
-    <script>
-        let formIdToSubmit;
-        document.addEventListener(
-            "DOMContentLoaded",
-            function () {
-                const deleteButtons =
-                    document.querySelectorAll(
-                        ".btn-outline-danger"
-                    );
-                deleteButtons.forEach(
-                    (button) => {
-                        button.addEventListener(
-                            "click",
-                            function () {
-                                formIdToSubmit =
-                                    this
-                                    .dataset
-                                    .id;
-                            }
-                        );
-                    }
-                );
-            }
-        );
-        function submitForm() {
-            document
-                .getElementById(
-                    "delete-form-" +
-                    formIdToSubmit
-                )
-                .submit();
-        }
-    </script>
 
 {% endblock script %}

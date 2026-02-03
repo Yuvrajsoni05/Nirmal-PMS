@@ -216,9 +216,16 @@
 
                             <!-- Reset Button -->
                             <div class="col-12 col-md-auto">
-                                <a href="{% url 'dashboard_page' %}" class="btn btn-secondary w-100">
-                                    <i class="fa fa-sync me-1"></i> Reset
+                                <a href="{{ request.path }}" class="btn btn-primary w-100">
+                                    Reset
                                 </a>
+                            </div>
+
+
+                              <div class="col-12 col-md-auto">
+                                <button name="download_job" class="btn btn-success w-100">
+                                    <i class="fa fa-download me-1"></i> Download
+                                </button>
                             </div>
 
                         </form>

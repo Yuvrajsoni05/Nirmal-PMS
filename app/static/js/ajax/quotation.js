@@ -4,6 +4,7 @@ $(document).on(
     function () {
 
         const party = $("#party_name").val();
+        
 
         // ---------- UPDATE PARTY EMAIL ONLY ONCE ----------
         $.ajax({
@@ -81,11 +82,14 @@ $(document).on(
                     block.find(".minimum_quantity").val(response.minimum_quantity || 0);
 
                     // ---- JOB SELECT ----
+                    // ---- JOB SELECT ----
                     if (response.jobs?.length) {
-                        const jobSelect = block.find(".job_name");
-                        const prevJobValue = jobSelect.val();
 
-                        jobSelect.empty().append('<option value="">Select Job Name</option>');
+                        const jobSelect = block.find(".job_name");
+                        const prevJobValue = jobSelect.val(); // keep this
+
+                        jobSelect.empty();
+                        jobSelect.append('<option value="">Select Job Name</option>');
 
                         response.jobs.forEach(job => {
                             jobSelect.append(
@@ -95,6 +99,7 @@ $(document).on(
 
                         jobSelect.append('<option value="others">Others</option>');
 
+                        // ✅ If job exists (quotation or master), it will be reselected
                         if (prevJobValue && jobSelect.find(`option[value="${prevJobValue}"]`).length) {
                             jobSelect.val(prevJobValue);
                         }

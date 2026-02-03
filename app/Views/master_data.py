@@ -37,7 +37,7 @@ def master_page(request):
                             party=party_details ,email=party_email  )
             party_contact_obj, _ = PouchPartyContact.objects.get_or_create(
                             party=party_details ,party_number=party_contact)
-            print("job_name",job_name)
+         
             for i in range(len(job_name)):
                 minimum_quantity = int(no_of_pouch_per_kg[i])*500
                 print("minimum_quantity",minimum_quantity)
@@ -59,6 +59,7 @@ def master_page(request):
 
     context = {
         'pouch_party': pouch_party,
+        
 
     }
     return render(request, "MasterData/master_page.html", context)
@@ -69,14 +70,7 @@ def master_page(request):
 
 
 def view_master_data(request):    
-    if request.method == "POST":
-        if "create_quotation" in request.POST:
-            print("create_quotation")
-            return redirect('view_master_data')
-
-
-
-
+  
     pouch_master_data = PouchMaster.objects.all().order_by('-id')
     party_name = PouchParty.objects.all()
     job_name = PouchMaster.objects.values_list('job_name', flat=True).distinct()
@@ -84,6 +78,7 @@ def view_master_data(request):
 
         if "create_quotation" in request.GET:
             create_quotation_id = request.GET.getlist('create_quotation_id')
+            party_names = PouchParty.objects.all()
             jobs = PouchMaster.objects.filter(
                 id__in=create_quotation_id
             ).values(
@@ -95,9 +90,22 @@ def view_master_data(request):
                 'no_of_pouch_per_kg',
                
                 )
-            print("jobs",jobs)
-
-            return render(request, "Quotation/quotation.html", {'master_data': jobs})
+            party_ids = jobs.values_list('party_details_id', flat=True).distinct()
+            if party_ids.count() > 1:
+                messages.warning(
+                    request,
+                    "You have selected jobs from different parties. "
+                    "Please select jobs from only one party to create a quotation."
+                )
+                return redirect('view_master_data')
+            context={
+                "party_names": party_names,
+                "pouch_types": PouchQuotationJob.POUCH_TYPE,
+                "polyester_units": PouchQuotationJob.POLYESTER_UNIT,
+                'pouch_status':PouchQuotation.POUCH_STATUS,
+                'master_data': jobs,
+            }
+            return render(request, "Quotation/quotation.html", context)
 
 
         if "search_pouch_master" in request.GET:
@@ -117,7 +125,7 @@ def view_master_data(request):
             ws.title = "Pouch Master"
 
             ws.append([
-                "Party Name",
+            "Party Name",
                 "Party Email",
                 "Party Contact",
                 "Job Name",
@@ -126,7 +134,8 @@ def view_master_data(request):
                 "Purchase Rate / KG",
                 "No. of Pouch / KG",
                 "Minimum Quantity",
-            ])
+        ])
+
 
             for obj in pouch_master_data:
                 ws.append([
@@ -158,8 +167,10 @@ def view_master_data(request):
                     pouch_master_id = request.POST.get('delete_pouch_master')
                     PouchMaster.objects.filter(id=pouch_master_id).delete()
                     messages.success(request, 'Master Data Deleted Successfully')
+                    return redirect('view_master_data')
             except Exception as e:
                 messages.error(request, str(e))
+                return redirect('view_master_data')
 
         if 'edit_master_data' in request.POST:
             try:
@@ -183,12 +194,13 @@ def view_master_data(request):
             except Exception as e:
                 messages.error(request, str(e))
                 print("Exception",e)
+                return redirect('view_master_data')
 
     
     paginator = Paginator(pouch_master_data, 10)
     page = request.GET.get('page')
     pouch_master_data = paginator.get_page(page)
-    print(job_name)
+   
     context = {
         'pouch_master_data': pouch_master_data,
         'party_name': party_name,

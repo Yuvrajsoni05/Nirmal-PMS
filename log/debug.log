@@ -14610,3 +14610,2565 @@ NameError: name 'authenticate' is not defined
 ERROR 2026-01-08 13:45:59,485 myapp login_page Invalid Username or Password views.py
 ERROR 2026-01-22 10:58:18,685 myapp login_page Invalid Username or Password views.py
 ERROR 2026-01-22 17:53:47,788 myapp login_page Invalid Username or Password views.py
+ERROR 2026-02-03 11:36:15,279 myapp dashboard_page Something went wrong: name 'Workbook' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 314, in dashboard_page
+    wb = Workbook()
+         ^^^^^^^^
+NameError: name 'Workbook' is not defined
+ERROR 2026-02-03 11:36:20,122 myapp dashboard_page Something went wrong: name 'Workbook' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 314, in dashboard_page
+    wb = Workbook()
+         ^^^^^^^^
+NameError: name 'Workbook' is not defined
+ERROR 2026-02-03 11:36:48,763 myapp dashboard_page Something went wrong: name 'Workbook' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 314, in dashboard_page
+    wb = Workbook()
+         ^^^^^^^^
+NameError: name 'Workbook' is not defined
+ERROR 2026-02-03 11:37:53,090 myapp dashboard_page Something went wrong: name 'Workbook' is not defined views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 314, in dashboard_page
+    wb = Workbook()
+         ^^^^^^^^
+NameError: name 'Workbook' is not defined
+ERROR 2026-02-03 11:38:23,373 myapp dashboard_page Something went wrong: 'Job_detail' object has no attribute 'party_email' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 333, in dashboard_page
+    obj.party_email.email if obj.party_email else "",
+                             ^^^^^^^^^^^^^^^
+AttributeError: 'Job_detail' object has no attribute 'party_email'. Did you mean: 'party_details'?
+ERROR 2026-02-03 11:38:24,399 myapp dashboard_page Something went wrong: 'Job_detail' object has no attribute 'party_email' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 333, in dashboard_page
+    obj.party_email.email if obj.party_email else "",
+                             ^^^^^^^^^^^^^^^
+AttributeError: 'Job_detail' object has no attribute 'party_email'. Did you mean: 'party_details'?
+ERROR 2026-02-03 11:38:25,148 myapp dashboard_page Something went wrong: 'Job_detail' object has no attribute 'party_email' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 333, in dashboard_page
+    obj.party_email.email if obj.party_email else "",
+                             ^^^^^^^^^^^^^^^
+AttributeError: 'Job_detail' object has no attribute 'party_email'. Did you mean: 'party_details'?
+ERROR 2026-02-03 11:38:25,477 myapp dashboard_page Something went wrong: 'Job_detail' object has no attribute 'party_email' views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 333, in dashboard_page
+    obj.party_email.email if obj.party_email else "",
+                             ^^^^^^^^^^^^^^^
+AttributeError: 'Job_detail' object has no attribute 'party_email'. Did you mean: 'party_details'?
+ERROR 2026-02-03 11:39:41,433 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,462 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,491 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,512 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,536 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,567 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,598 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,629 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,652 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,674 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,696 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,718 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,742 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,765 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,787 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,807 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,828 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,850 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,871 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:41,896 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:42,951 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:42,976 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,000 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,024 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,048 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,070 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,091 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,113 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,141 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,162 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,186 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,210 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,234 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,256 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,277 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,298 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,319 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,340 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,363 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:43,388 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:47,902 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:47,927 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:47,952 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:47,977 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,002 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,024 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,045 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,067 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,089 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,111 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,136 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,159 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,182 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,204 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,225 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,246 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,273 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,305 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,326 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:48,348 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,725 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,754 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,775 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,796 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,818 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,840 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,861 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,882 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,904 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,925 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,946 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,968 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:55,990 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:56,012 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:56,035 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:56,058 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:56,085 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:56,111 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:56,137 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:56,164 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,584 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,609 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,632 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,656 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,679 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,701 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,723 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,745 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,767 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,791 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,815 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,839 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,860 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,881 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,905 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,927 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,948 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,970 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:57,992 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:39:58,014 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,324 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,354 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,381 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,412 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,436 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,460 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,490 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,514 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,538 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,561 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,586 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,611 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,635 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,660 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,684 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,709 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,735 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,759 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,782 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:09,805 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,088 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,113 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,138 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,162 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,188 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,213 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,238 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,263 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,290 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,314 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,337 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,360 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,388 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,417 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,442 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,469 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,496 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,524 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,550 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:11,575 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,618 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,649 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,674 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,699 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,726 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,752 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,777 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,803 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,827 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,851 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,877 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,904 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,931 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,957 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:12,981 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:13,008 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:13,035 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:13,060 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:13,086 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:13,113 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,724 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,746 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,768 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,792 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,816 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,841 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,863 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,886 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,910 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,934 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,958 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:23,981 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:24,003 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:24,025 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:24,055 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:24,077 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:24,100 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:24,123 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:24,145 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,204 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,228 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,253 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,278 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,303 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,327 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,352 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,375 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,398 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,419 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,440 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,462 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,483 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,505 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,525 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,547 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,569 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,591 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,613 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:25,636 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,678 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,702 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,728 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,753 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,774 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,795 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,817 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,841 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,865 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,897 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,922 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,947 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:30,976 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:31,000 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:31,027 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:31,053 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:31,078 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:31,102 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:31,124 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:40:31,146 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,198 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,223 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,248 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,272 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,297 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,321 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,344 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,368 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,392 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,414 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,441 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,466 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,506 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,532 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,556 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,581 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,603 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,624 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,645 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:01,667 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,558 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,588 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,610 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,631 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,653 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,676 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,697 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,719 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,741 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,763 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,785 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,808 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,834 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,858 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,882 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,906 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,931 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,956 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:58,981 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:59,007 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:59,955 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:41:59,980 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,005 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,031 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,057 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,082 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,105 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,127 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,150 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,172 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,197 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,221 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,244 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,265 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,287 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,309 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,330 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,352 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,376 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,402 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,472 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,498 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,529 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,555 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,581 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,605 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,628 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,651 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,672 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,700 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,721 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,743 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,764 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,786 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,809 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,832 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,854 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,877 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,900 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:00,924 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,047 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,072 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,097 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,121 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,145 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,170 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,195 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,219 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,241 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,266 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,290 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,316 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,342 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,373 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,397 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,420 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,445 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,469 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,497 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,521 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,611 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,638 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,664 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,689 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,713 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,743 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,768 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,792 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,814 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,838 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,860 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,886 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,911 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,936 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,962 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:01,986 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:02,011 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:02,037 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:02,062 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:02,087 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,319 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,351 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,373 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,396 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,424 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,445 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,468 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,492 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,519 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,542 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,568 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,593 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,619 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,644 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,670 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,696 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,722 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,745 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,770 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:42:37,793 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:37,857 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:37,888 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:37,912 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:37,934 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:37,958 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:37,989 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,012 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,035 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,058 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,083 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,106 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,127 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,149 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,171 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,193 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,216 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,238 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,259 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,288 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:43:38,310 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 339, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,565 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,596 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,622 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,645 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,668 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,690 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,713 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,736 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,758 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,780 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,806 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,828 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,857 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,878 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,900 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,925 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,949 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:58,974 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:59,000 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:44:59,026 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,093 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,121 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,150 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,188 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,220 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,248 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,274 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,299 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,329 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,355 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,379 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,406 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,437 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,463 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,488 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,516 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,548 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,571 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,594 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-03 11:45:00,617 myapp dashboard_page Something went wrong: cannot access local variable 'job_details' where it is not associated with a value views.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\views.py", line 337, in dashboard_page
+    for obj in job_details:
+               ^^^^^^^^^^^
+UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value

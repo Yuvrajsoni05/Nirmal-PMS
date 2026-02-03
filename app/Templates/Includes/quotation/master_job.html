@@ -1,0 +1,303 @@
+{% load custom_tags %}
+{% load humanize %}
+<div class="col-12">
+    <div id="jobs-container">
+
+        {% for job in master_data %}
+        <div class="job-block card p-3 mb-3 border">
+            <div class="row g-3">
+
+                <!-- Job Name -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">
+                        Job Name <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select job_name" name="job_name[]" required>
+                        <option value="">Select Job Name</option>
+                        <option value="{{ job.job_name }}" selected>{{ job.job_name }}</option>
+                        {% for j in job_names %}
+                        <option value="{{ j }}"
+                            {% if job.job_name == j %}selected{% endif %}>
+                            {{ j }}
+                        </option>
+                        {% endfor %}
+
+                        <option value="others">Others</option>
+                    </select>
+
+                    <input
+                        type="text"
+                        name="new_job_name[]"
+                        class="form-control mt-2 new_job_name d-none"
+                        placeholder="Enter New Job Name"
+                    />
+                </div>
+
+                <!-- Pouch Open Size (USER / JS WILL HANDLE) -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">
+                        Pouch Open Size <span class="text-danger">*</span>
+                    </label>
+                    {% with ac=job.pouch_open_size|split_text_with_multiplications %}
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            class="form-control pouch_height"
+                            name="pouch_height[]"
+                            placeholder="Height"
+                            step="0.01"
+                            value="{{ ac.0 }}"
+                            required
+                        />
+                        <span class="input-group-text">×</span>
+                        <input
+                            type="number"
+                            class="form-control pouch_diameter"
+                            name="pouch_diameter[]"
+                            placeholder="Diameter"
+                            step="0.01"
+                            value="{{ ac.1 }}"
+                            required
+                        />
+                    </div>
+                    {% endwith %}
+                    <input type="hidden" class="pouch_size" value="{{ job.pouch_open_size }}" name="pouch_size[]">
+                </div>
+
+                <!-- Pouch Type -->
+                <div class="col-md-4">
+                    <label class="form-label fw-semibold">
+                        Pouch Type <span class="text-danger">*</span>
+                    </label>
+                    <select class="form-select" name="pouch_type[]" required>
+                        <option value="">Select Pouch Type</option>
+                        {% for value, label in pouch_types %}
+                        <option value="{{ value }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Pouch Combination (USER / JS WILL HANDLE) -->
+                <div class="col-12">
+                    <label class="form-label fw-semibold">
+                        Pouch Combination <span class="text-danger">*</span>
+                    </label>
+                        {% with pc=job.pouch_combination|split_text %}
+                          <div class="input-group">
+                                <input
+                                    type="text"
+                                    class="form-control pc1"
+                                    name="pouch_combination1[]"
+                                    placeholder="Layer 1"
+                                    value="{{ pc.0 }}"
+                                    required
+                                />
+                                <span class="input-group-text">+</span>
+                                <input
+                                    type="text"
+                                    class="form-control pc2"
+                                    name="pouch_combination2[]"
+                                    placeholder="Layer 2"
+                                    value="{{ pc.1 }}"
+                                    required
+                                />
+                                <span class="input-group-text">+</span>
+                                <input
+                                    type="text"
+                                    class="form-control pc3"
+                                    name="pouch_combination3[]"
+                                    placeholder="Layer 3"
+                                    value="{{ pc.2 }}"
+                                
+                                />
+                                <span class="input-group-text">+</span>
+                                <input
+                                    type="text"
+                                    class="form-control pc4"
+                                    name="pouch_combination4[]"
+                                    placeholder="Layer 4"
+                                    value="{{ pc.3 }}"
+                                
+                                />
+                            </div>
+                        {% endwith %}
+                    <input type="hidden" class="form-control pouch_combination" value="{{ job.pouch_combination }}" name="pouch_combination[]">
+                </div>
+
+                <!-- Quantity -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        Quantity <span class="text-danger">*</span>
+                    </label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="quantity[]"
+                        required
+                    />
+                </div>
+                
+                <!-- Purchase Rate -->
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">
+                        Purchase Rate per Kg <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            class="form-control purchase_rate_per_kg"
+                            name="purchase_rate_per_kg[]"
+                            value="{{ job.purchase_rate_per_kg|default:'0.0' }}"
+                            step="0.01"
+                            required
+                        />
+                        <select
+                            class="form-select purchase_rate_unit"
+                            name="purchase_rate_unit[]"
+                            style="max-width:200px;"
+                            required
+                        >
+                            <option value="">Select Unit</option>
+                            {% for v,l in polyester_units %}
+                            <option value="{{ v }}">{{ l }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- No of pouch / kg -->
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">
+                        No. of Pouch / Kg
+                    </label>
+                    <input
+                        type="number"
+                        class="form-control no_of_pouch_kg"
+                        name="no_of_pouch_kg[]"
+                        value="{{ job.no_of_pouch_per_kg|default:'0.0' }}"
+                        step="0.01"
+                    />
+                </div>
+
+
+                <!-- Per pouch basic -->
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-semibold">
+                                                Per Pouch Rate Basic
+                                            </label>
+                                            <input
+                                                type="number"
+                                                class="form-control per_pouch_rate_basic"
+                                                name="per_pouch_rate_basic[]"
+                                                value="0.0"
+                                                step="0.01"
+                                            />
+                                        </div>
+
+                                        <!-- Pouch charge -->
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-semibold">
+                                                Pouch Charge <span class="text-danger">*</span>
+                                            </label>
+                                            <input
+                                                type="number"
+                                                class="form-control pouch_charge"
+                                                name="pouch_charge[]"
+                                                value="0.0"
+                                                step="0.01"
+                                                required
+                                            />
+                                        </div>
+
+                                        <!-- Zipper -->
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-semibold">
+                                                Zipper Cost <span class="text-danger">*</span>
+                                            </label>
+                                            <input
+                                                type="number"
+                                                class="form-control zipper_cost"
+                                                name="zipper_cost[]"
+                                                value="0.0"
+                                                step="0.01"
+                                                required
+                                            />
+                                        </div>
+
+                                        <!-- Final Rate -->
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-semibold">
+                                                Final Rate <span class="text-danger">*</span>
+                                            </label>
+                                            <input
+                                                type="number"
+                                                class="form-control final_rate"
+                                                name="final_rate[]"
+                                                step="0.01"
+                                                value="0.0"
+                                                required
+                                            />
+                                        </div>
+
+
+                                        <!-- Minimum Qty -->
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-semibold">
+                                                Minimum Qty <span class="text-danger">*</span>
+                                            </label>
+                                            <input
+                                                type="number"
+                                                class="form-control minimum_quantity"
+                                                name="minimum_quantity[]"
+                                                placeholder="0"
+                                                required
+                                            />
+                                        </div>
+
+                                        <!-- Special -->
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold">
+                                                Special Instruction
+                                            </label>
+                                            <textarea
+                                                class="form-control"
+                                                name="special_instruction[]"
+                                                rows="2"
+                                                
+                                                placeholder="Enter any special instructions"
+                                            ></textarea>
+                                        </div>
+
+                                        <!-- Delivery -->
+                                        <div class="col-12">
+                                            <label class="form-label fw-semibold">
+                                                Delivery Address <span class="text-danger">*</span>
+                                            </label>
+                                            <textarea
+                                                class="form-control"
+                                                name="delivery_address[]"
+                                                rows="2"
+                                                placeholder="Enter delivery address"
+                                                required
+                                            ></textarea>
+                                        </div>
+
+                <!-- Remove -->
+                <div class="col-12 text-end">
+                    <button type="button" class="btn btn-danger btn-sm remove-job">
+                        Remove Job
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <div class="d-flex justify-content-start mb-3">
+        <button type="button" id="add-job" class="btn btn-primary">
+            + Add Job
+        </button>
+    </div>
+</div>
