@@ -1,64 +1,55 @@
-$(document).on(
-    "input change",
-    "#party_name, .party_email, .purchase_rate_per_kg, .no_of_pouch_kg, .purchase_rate_unit, .pouch_charge, .zipper_cost",
-    function () {
+// ---------------- GLOBAL CONTROL ----------------
+let ajaxTimer = null;
+let ajaxRunning = false;
+
+// ---------------- MAIN FUNCTION ----------------
+function runPouchAjax() {
+
+    clearTimeout(ajaxTimer);
+
+    ajaxTimer = setTimeout(function () {
 
         const party = $("#party_name").val();
-        
+        if (!party || ajaxRunning) return;
 
-        // ---------- UPDATE PARTY EMAIL ONLY ONCE ----------
+        ajaxRunning = true;
+        console.log("🔥 AJAX RUNNING FOR:", party);
+
+        // ---------- PARTY EMAIL & CONTACT ----------
         $.ajax({
             url: pouchRateAjaxUrl,
             type: "GET",
-            data: {
-                party_name: party,
-            },
+            data: { party_name: party },
             success: function (response) {
 
+                // PARTY EMAIL
                 const $partyEmail = $("#party_email");
-                const prevEmailValue = $partyEmail.val();
+                const prevEmail = $partyEmail.val();
 
                 $partyEmail.empty().append('<option value="">Select Party Email</option>');
-
-                if (response.party_emails?.length) {
-                    response.party_emails.forEach(email => {
-                        $partyEmail.append(
-                            $('<option></option>').val(email.email).text(email.email)
-                        );
-                    });
-                }
-
+                response.party_emails?.forEach(e => {
+                    $partyEmail.append(`<option value="${e.email}">${e.email}</option>`);
+                });
                 $partyEmail.append('<option value="others">Others</option>');
+                if (prevEmail) $partyEmail.val(prevEmail);
 
-                if (prevEmailValue && $partyEmail.find(`option[value="${prevEmailValue}"]`).length) {
-                    $partyEmail.val(prevEmailValue);
-                }
-
+                // PARTY CONTACT
                 const $partyContact = $("#party_contact");
-                const prevContactValue = $partyContact.val();
+                const prevContact = $partyContact.val();
 
                 $partyContact.empty().append('<option value="">Select Party Contact</option>');
-
-                if (response.party_contacts?.length) {
-                    response.party_contacts.forEach(contact => {
-                        $partyContact.append(
-                            $('<option></option>').val(contact.party_number).text(contact.party_number)
-                        );
-                    });
-                }
-
+                response.party_contacts?.forEach(c => {
+                    $partyContact.append(`<option value="${c.party_number}">${c.party_number}</option>`);
+                });
                 $partyContact.append('<option value="others">Others</option>');
-
-                if (prevContactValue && $partyContact.find(`option[value="${prevContactValue}"]`).length) {
-                    $partyContact.val(prevContactValue);
-                }
-
-
-
+                if (prevContact) $partyContact.val(prevContact);
+            },
+            complete: function () {
+                ajaxRunning = false;
             }
         });
 
-        // ---------- PER JOB BLOCK AJAX ----------
+        // ---------- PER JOB BLOCK ----------
         $(".job-block").each(function () {
             const block = $(this);
 
@@ -74,38 +65,44 @@ $(document).on(
                     pouch_charge: block.find(".pouch_charge").val(),
                     zipper_cost: block.find(".zipper_cost").val(),
                 },
-
                 success: function (response) {
 
                     block.find(".per_pouch_rate_basic").val(response.per_pouch_rate_basic || 0);
                     block.find(".final_rate").val(response.final_rate || 0);
                     block.find(".minimum_quantity").val(response.minimum_quantity || 0);
 
-                    // ---- JOB SELECT ----
-                    // ---- JOB SELECT ----
+                    // JOB SELECT
                     if (response.jobs?.length) {
-
                         const jobSelect = block.find(".job_name");
-                        const prevJobValue = jobSelect.val(); // keep this
+                        const prevJob = jobSelect.val();
 
-                        jobSelect.empty();
-                        jobSelect.append('<option value="">Select Job Name</option>');
-
-                        response.jobs.forEach(job => {
-                            jobSelect.append(
-                                $('<option></option>').val(job.job_name).text(job.job_name)
-                            );
+                        jobSelect.empty().append('<option value="">Select Job Name</option>');
+                        response.jobs.forEach(j => {
+                            jobSelect.append(`<option value="${j.job_name}">${j.job_name}</option>`);
                         });
-
                         jobSelect.append('<option value="others">Others</option>');
-
-                        // ✅ If job exists (quotation or master), it will be reselected
-                        if (prevJobValue && jobSelect.find(`option[value="${prevJobValue}"]`).length) {
-                            jobSelect.val(prevJobValue);
-                        }
+                        if (prevJob) jobSelect.val(prevJob);
                     }
                 }
             });
         });
-    }
+
+    }, 200); // debounce
+}
+
+// ---------------- EVENT BINDINGS ----------------
+
+// Party select
+$(document).on("change", "#party_name", runPouchAjax);
+
+// Input fields
+$(document).on(
+    "input",
+    ".purchase_rate_per_kg, .no_of_pouch_kg, .purchase_rate_unit, .pouch_charge, .zipper_cost",
+    runPouchAjax
 );
+
+// ---------------- PAGE LOAD TRIGGER ----------------
+$(document).ready(function () {
+    runPouchAjax(); // 🔥 fires on page load
+});

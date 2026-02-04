@@ -71,25 +71,38 @@ def master_page(request):
 
 def view_master_data(request):    
   
-    pouch_master_data = PouchMaster.objects.all().order_by('-id')
+    pouch_master_data = PouchMaster.objects.all().order_by('id')
     party_name = PouchParty.objects.all()
-    job_name = PouchMaster.objects.values_list('job_name', flat=True).distinct()
+    job_name = pouch_master_data.values_list('job_name', flat=True).distinct()
     if request.method == "GET":
+        if "search_pouch_master" in request.GET:
+            search_party_name = request.GET.get('search_party_name')
+            search_job_name = request.GET.get('search_job_name')
+            
+            
+            if search_job_name:
+                pouch_master_data = pouch_master_data.filter(job_name__icontains=search_job_name)
+            if search_party_name:
+                pouch_master_data = pouch_master_data.filter(party_details__party_name__icontains=search_party_name)
+        
+    if request.method == "POST":
 
-        if "create_quotation" in request.GET:
-            create_quotation_id = request.GET.getlist('create_quotation_id')
+        if "create_quotation" in request.POST:
+            create_quotation_id = request.POST.getlist('create_quotation_id')
             party_names = PouchParty.objects.all()
             jobs = PouchMaster.objects.filter(
                 id__in=create_quotation_id
             ).values(
-          
+                
                 'job_name',
                 'pouch_open_size',
                 'pouch_combination',
                 'purchase_rate_per_kg',
                 'no_of_pouch_per_kg',
-               
+                'party_details__party_name',
+    
                 )
+            
             party_ids = jobs.values_list('party_details_id', flat=True).distinct()
             if party_ids.count() > 1:
                 messages.warning(
@@ -108,18 +121,43 @@ def view_master_data(request):
             return render(request, "Quotation/quotation.html", context)
 
 
-        if "search_pouch_master" in request.GET:
-            search_party_name = request.GET.get('search_party_name')
-            search_job_name = request.GET.get('search_job_name')
-            
-            
-            if search_job_name:
-                pouch_master_data = PouchMaster.objects.filter(job_name__icontains=search_job_name)
-            if search_party_name:
-                pouch_master_data = PouchMaster.objects.filter(party_details__party_name__icontains=search_party_name)
-        
+        if 'create_purchase_order' in request.POST:
+            create_quotation_id = request.POST.getlist('create_quotation_id')
+            party_names = PouchParty.objects.all()
+            jobs = PouchMaster.objects.filter(
+                id__in=create_quotation_id
+            ).values(
+          
+                'job_name',
+                'pouch_open_size',
+                'pouch_combination',
+                'purchase_rate_per_kg',
+                'no_of_pouch_per_kg',
 
-        if "download_data" in request.GET:
+               
+                )
+            party_ids = jobs.values_list('party_details_id', flat=True).distinct()
+            if party_ids.count() > 1:
+                messages.warning(
+                    request,
+                    "You have selected jobs from different parties. "
+                    "Please select jobs from only one party to create a quotation."
+                )
+                return redirect('view_master_data')
+            context={
+                "party_names": party_names,
+                "pouch_types": PurchaseOrderJob.POUCH_TYPE,
+                "polyester_units": PurchaseOrderJob.POLYESTER_UNIT,
+                'pouch_status':PurchaseOrder.POUCH_STATUS,
+                'master_data': jobs,
+            }
+            return render(request, "Purchase Order/purchase_order.html", context)
+            
+
+
+
+
+        if "download_data" in request.POST:
             wb = Workbook()
             ws = wb.active
             ws.title = "Pouch Master"

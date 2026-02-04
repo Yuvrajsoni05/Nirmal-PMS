@@ -58,7 +58,11 @@
                             >
                                 <option value="">Select Party Name</option>
                                 {% for party in party_names %}
-                                <option value="{{ party.party_name }}">
+                                 <option value="{{ party.party_name }}"
+                                    {% if master_data and party.party_name == master_data.0.party_details__party_name %}
+                                        selected
+                                    {% endif %}
+                                >
                                     {{ party.party_name }}
                                 </option>
                                 {% endfor %}
