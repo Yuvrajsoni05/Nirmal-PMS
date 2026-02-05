@@ -70,7 +70,7 @@
                         <button type="submit" name="download_data" value="1" class="btn btn-success">
                             <i class="fa fa-download"></i> Download
                         </button>
-                        <a href="{% url 'view_master_data' %}" class="btn btn-outline-secondary">
+                        <a href="{{ request.path }}" class="btn btn-outline-secondary">
                             Reset
                         </a>
                     </div>
@@ -114,6 +114,7 @@
                                 <th>Party Contact</th>
                                 <th>Party Email</th>
                                 <th>Job Name</th>
+                                <th>Purchase Rate Per KG</th>
                                 <th>Pouch Open Size</th>
                                 <th>Pouch Combination</th>
                                 <th>No of Pouch / KG</th>
@@ -139,6 +140,7 @@
                                 <td>{{ pouch_master.party_contact.party_number }}</td>
                                 <td>{{ pouch_master.party_email.email }}</td>
                                 <td>{{ pouch_master.job_name }}</td>
+                                <td>{{ pouch_master.purchase_rate_per_kg }}</td>
                                 <td>{{ pouch_master.pouch_open_size }}</td>
                                 <td>{{ pouch_master.pouch_combination }}</td>
                                 <td>{{ pouch_master.no_of_pouch_per_kg }}</td>

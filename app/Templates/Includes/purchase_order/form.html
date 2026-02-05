@@ -1,4 +1,4 @@
-{% load custom_tags %}
+.{% load custom_tags %}
 {% load humanize %}
 <div class="row">
     <div class="col-xl-12 col-lg-12">
@@ -36,7 +36,13 @@
                             <select class="form-select" id="party_name" name="party_name" required>
                                 <option value="">Select Party Name</option>
                                 {% for party in party_names %}
-                                <option value="{{ party.party_name }}">{{ party.party_name }}</option>
+                                                                 <option value="{{ party.party_name }}"
+                                    {% if master_data and party.party_name == master_data.0.party_details__party_name %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ party.party_name }}
+                                </option>
                                 {% endfor %}
                                 <option value="others">Others</option>
                             </select>
@@ -212,6 +218,8 @@
                             </div>
                         </div>
 
+                        {% elif master_data %}
+                            {% include 'includes/purchase_order/master_job.html' %}
                         {% else %}
 
                         <!-- JOB CONTAINER - When no jobs exist -->

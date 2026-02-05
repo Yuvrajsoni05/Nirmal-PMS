@@ -6,12 +6,7 @@ from .common_imports import *
 
 def master_page(request):
     pouch_party = PouchParty.objects.all()
-  
-
-
-
-            
-        
+     
     if "create_master_data" in request.POST:
         if request.method == "POST":
             party_name = request.POST.get('party_name')
@@ -55,12 +50,8 @@ def master_page(request):
                 )
             messages.success(request, 'Master Data Created Successfully')
             return redirect('master_page')
-
-
     context = {
         'pouch_party': pouch_party,
-        
-
     }
     return render(request, "MasterData/master_page.html", context)
 
@@ -133,8 +124,8 @@ def view_master_data(request):
                 'pouch_combination',
                 'purchase_rate_per_kg',
                 'no_of_pouch_per_kg',
+                'party_details__party_name',
 
-               
                 )
             party_ids = jobs.values_list('party_details_id', flat=True).distinct()
             if party_ids.count() > 1:

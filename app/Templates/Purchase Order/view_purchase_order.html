@@ -102,7 +102,10 @@
             </div>
 
             <button type="submit" class="btn btn-primary btn">Search</button>
-            <a href="{{ request.path }}" class="btn btn-secondary btn">Reset</a>
+              <button type="submit" name="download_purchase_order" value="1" class="btn btn-success">
+                          Download
+                </button>
+            <a href="{{ request.path }}" class="btn btn-outline-secondary">Reset</a>
         </form>
 
     </div>
@@ -412,12 +415,12 @@
                         {% endfor %} 
                         {% else %}
 
-                        <tr>
-                            <td colspan="22" class="text-left py-5">
-                                <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
-                                <p class="text-muted">No data available</p>
-                            </td>
-                        </tr>
+                            <tr>
+                                <td colspan="22" class="text-left py-5">
+                                    <i class="fa fa-inbox fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">No data available</p>
+                                </td>
+                            </tr>
 
                         {% endif %}
                     </tbody>

@@ -1,3 +1,10 @@
+$(document).ready(function() {
+    // Run AJAX for all job blocks on page load
+    $(".job-block, .job-block_data").each(function () {
+        runAjax($(this), true);   
+    });
+});
+
 $(document).on(
     "input change",
     "#party_name, .party_email, .purchase_rate_per_kg, .no_of_pouch_kg, .purchase_rate_unit, .pouch_charge, .zipper_cost",
@@ -84,6 +91,7 @@ function runAjax(block, isPartyChange = false) {
                 $partyContact.val(prevContactValue);
             }
 
+         
             /* ---------- JOB NAME ---------- */
             let jobSelect = block.find(".job_name");
 
@@ -98,8 +106,15 @@ function runAjax(block, isPartyChange = false) {
 
                 jobSelect.append('<option value="others">Others</option>');
 
-                if (jobSelect.find(`option[value="${prev}"]`).length) {
-                    jobSelect.val(prev);
+                // If previous value exists, try to restore it
+                if (prev) {
+                    // Check if prev exists in the new options
+                    if (jobSelect.find(`option[value="${prev}"]`).length) {
+                        jobSelect.val(prev);
+                    } else {
+                        // If not found, add it as a custom option (for edited data)
+                        jobSelect.prepend(`<option value="${prev}" selected>${prev}</option>`);
+                    }
                 }
             }
         },

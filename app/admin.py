@@ -7,13 +7,6 @@ from app.models import ProformaInvoice
 
 
 admin.site.register(CylinderMadeIn)
-
-
-
-
-
-
-
 admin.site.register(ProformaInvoice)
 
 
@@ -31,10 +24,6 @@ admin.site.register(Registration,AdminDetail)
 class AdminJobDetails(admin.ModelAdmin):
     list_display = ("id","date", "bill_no", "job_name" , "prpc_purchase" , "prpc_sell",)
 admin.site.register(Job_detail,AdminJobDetails)
-
-
-
-
 
 
 class AdminCDRDetail(admin.ModelAdmin):
@@ -58,9 +47,6 @@ class PartyBillingAdmin(admin.ModelAdmin):
 admin.site.register(PartyBillingAddress , PartyBillingAdmin)
 
 
-
-
-
 class BankDetailsAdmin(admin.ModelAdmin):
     list_display = ['id', 'account_name' , 'bank_name' , 'bank_account_number']
 admin.site.register(BankDetails,BankDetailsAdmin)
@@ -70,14 +56,12 @@ class ProformaJobAdmin(admin.ModelAdmin):
 admin.site.register(ProformaJob , ProformaJobAdmin)
 
 
-
-
-
 admin.site.register(CDRImage)
-
-
 
 class PouchQuotationAdmin(admin.ModelAdmin):
     list_display = ["id" ,"delivery_date" ,"quantity_variate"]
 admin.site.register(PouchQuotation,PouchQuotationAdmin)
 
+class PouchPartyAdmin(admin.ModelAdmin):
+    list_display = ["id" ,"party_name"]
+admin.site.register(PouchParty,PouchPartyAdmin)

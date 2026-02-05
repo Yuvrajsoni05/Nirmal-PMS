@@ -179,6 +179,85 @@ def view_purchase_order(request):
     elif start_date:
         purchase_orders = purchase_orders.filter(delivery_date=start_date)
  
+    
+    if request.method == "GET":
+        if 'download_purchase_order' in request.GET:
+          
+            purchase_order = PurchaseOrder.objects.all()
+            wb = Workbook()
+            ws = wb.active
+            ws.title = "Pouch Master"
+
+            ws.append([
+            "Pouch Purchase Number",
+            "Delivery Date",
+            "Party Name",
+            "Party Email",
+            "Party Contact",
+            "Job Name",
+            "Pouch Open Size",
+            "Pouch Combination",
+            "Quantity",
+            "Purchase Rate / KG",
+            "No. of Pouch / KG",
+            "Per Pouch Rate Basic",
+            "Zipper Cost",
+            "Pouch Charge",
+            "Final Rate",
+            "Minimum Quantity",
+            "Pouch Type",
+            "Special Instruction",
+            "Delivery Address",
+            "Polyester Unit",
+            "Freight",
+            "GST",
+            "Note",
+            "Pouch Status",
+        ])
+
+
+            for obj in purchase_order:
+                jobs = obj.purchase_order_jobs.all()
+
+                for job in jobs:
+                    ws.append([
+                        obj.pouch_purchase_number,
+                        obj.delivery_date,
+                obj.party_details.party_name if obj.party_details else "",
+                obj.party_email.email if obj.party_email else "",
+                obj.party_contact.party_number if obj.party_contact else "",
+
+                job.job_name,
+                job.pouch_open_size,
+                job.pouch_combination,
+                job.quantity,
+                job.purchase_rate_per_kg,
+                job.no_of_pouch_kg,
+                job.per_pouch_rate_basic,
+                job.zipper_cost,
+                job.pouch_charge,
+                job.final_rate,
+                job.minimum_quantity,
+                job.pouch_type,
+                job.special_instruction,
+                job.delivery_address,
+                job.polyester_unit,
+
+                obj.freight,
+                obj.gst,
+                obj.note,
+                obj.pouch_status,
+                ])
+
+            response = HttpResponse(
+                content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+            response["Content-Disposition"] = 'attachment; filename="pouch_master.xlsx"'
+            wb.save(response)
+            return response
+
+            
+
 
     if request.method == "POST":
         if 'delete_purchase_order' in request.POST:
@@ -189,9 +268,7 @@ def view_purchase_order(request):
                 purchase_order = get_object_or_404(
                     PurchaseOrder,
                     id=po_id,
-        
                 )
-
                 purchase_order.delete()
                 messages.success(request, "Purchase Order deleted successfully")
                 return redirect("view_purchase_order")

@@ -180,12 +180,7 @@ class BankDetails(models.Model):
     def __str__(self):
         return f"{self.bank_name}"
 
-
-
-
-    
-    
-    
+ 
 class ProformaInvoice(models.Model):
     
     Invoice_Status = [
@@ -264,9 +259,6 @@ class ProformaInvoice(models.Model):
         return f"Proforma Invoice:  {self.invoice_no}" 
 
 
-
-
-
 class ProformaJob(models.Model):
     proforma_invoice = models.ForeignKey(ProformaInvoice,on_delete=models.CASCADE,related_name="job_details")
     title = models.CharField(max_length=200)
@@ -288,9 +280,6 @@ class ProformaJob(models.Model):
     def __str__(self):
         return f"{self.title} {self.taxable_value}"
     
-
-
-
 
 
 # Pouch Party Details Models 
@@ -323,8 +312,6 @@ class PouchDeliveryAddress(models.Model):
         return f"{self.party} - {self.delivery_address}"
 
 
-
-
 class PouchMaster(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     party_details = models.ForeignKey(PouchParty, on_delete=models.CASCADE, related_name='pouch_master_party_details')
@@ -339,8 +326,6 @@ class PouchMaster(models.Model):
     minimum_quantity = models.CharField(max_length=200,blank=True, null=True)
 
         
-
-
 class PouchQuotation(models.Model): 
 
     POUCH_STATUS = [
@@ -392,9 +377,6 @@ class PouchQuotationJob(models.Model):
         ('polyester_printed_roll' , 'Polyester Printed Roll'),
         ('polyester_printed_bag' ,'Polyester Printed Bag')
     ]
-
-
-
 
     quotation = models.ForeignKey(PouchQuotation,on_delete=models.CASCADE,related_name="pouch_quotation_jobs")
     job_name = models.CharField(max_length=200)
