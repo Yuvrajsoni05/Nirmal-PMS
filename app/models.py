@@ -48,7 +48,7 @@ class PartyEmail(models.Model):
 class PartyContact(models.Model):
     party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_contacts')
     party_number = models.CharField(max_length=20)
-
+    
     def __str__(self):
         return f"{self.party.party_name} - {self.party_number}"
 
@@ -379,7 +379,7 @@ class PouchQuotationJob(models.Model):
     ]
 
     quotation = models.ForeignKey(PouchQuotation,on_delete=models.CASCADE,related_name="pouch_quotation_jobs")
-    job_name = models.CharField(max_length=200)
+    job_name = models.CharField(max_length=200,db_index=True)
     quantity = models.DecimalField(
         max_digits=10, decimal_places=2, default=0 , blank=True, null=True
     )

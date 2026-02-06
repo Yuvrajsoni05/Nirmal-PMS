@@ -17172,3 +17172,4 @@ Traceback (most recent call last):
     for obj in job_details:
                ^^^^^^^^^^^
 UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
+ERROR 2026-02-06 10:31:51,371 myapp login_page Invalid Username or Password views.py

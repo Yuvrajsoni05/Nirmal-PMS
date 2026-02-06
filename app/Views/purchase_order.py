@@ -242,7 +242,6 @@ def view_purchase_order(request):
                 job.special_instruction,
                 job.delivery_address,
                 job.polyester_unit,
-
                 obj.freight,
                 obj.gst,
                 obj.note,
@@ -252,7 +251,7 @@ def view_purchase_order(request):
             response = HttpResponse(
                 content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             )
-            response["Content-Disposition"] = 'attachment; filename="pouch_master.xlsx"'
+            response["Content-Disposition"] = 'attachment; filename="purchase_order.xlsx"'
             wb.save(response)
             return response
 
