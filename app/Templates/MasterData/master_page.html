@@ -12,13 +12,13 @@
                 <form method="POST">
                     {% csrf_token %}
 
-                    <!-- PARTY DETAILS SECTION -->
+                    <!-- PARTY DETAILS -->
                     <div class="mb-4">
                         <h5 class="fw-bold mb-3">Party Details</h5>
                         
                         <div class="row g-3">
-                            <div class="col-12 col-md-4">
-                                <label class="form-label">Party Name <span class="text-danger">*</span></label>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Party Name <span class="text-danger">*</span></label>
                                 <select class="form-select" name="party_name" id="party_name" required>
                                     <option value="">Select Party</option>
                                     {% for party in pouch_party %}
@@ -29,8 +29,8 @@
                                 <input type="text" class="form-control mt-2" name="new_party_name" id="new_party_name" placeholder="Enter new party name" style="display: none;">
                             </div>
 
-                            <div class="col-12 col-md-4">
-                                <label class="form-label">Party Email <span class="text-danger">*</span></label>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Party Email <span class="text-danger">*</span></label>
                                 <select class="form-select" id="party_email" name="party_email" required>
                                     <option value="">Select Email</option>
                                     <option value="other">Other</option>
@@ -38,8 +38,8 @@
                                 <input type="email" class="form-control mt-2" name="new_party_email" id="new_party_email" placeholder="Enter email address" style="display: none;">
                             </div>
 
-                            <div class="col-12 col-md-4">
-                                <label class="form-label">Party Contact <span class="text-danger">*</span></label>
+                            <div class="col-md-4">
+                                <label class="form-label fw-bold">Party Contact <span class="text-danger">*</span></label>
                                 <select class="form-select" id="party_contact" name="party_contact" required>
                                     <option value="">Select Contact</option>
                                     <option value="other">Other</option>
@@ -51,41 +51,35 @@
 
                     <hr class="my-4">
 
-                    <!-- JOB DETAILS SECTION -->
+                    <!-- JOB DETAILS -->
                     <div class="mb-4">
                         <h5 class="fw-bold mb-3">Job Details</h5>
                     </div>
 
-                    <!-- JOB CONTAINER -->
                     <div id="job-container">
                         <div class="job-block border rounded p-3 mb-3">
-                           
-                            
                             <div class="row g-3">
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label">Job Name <span class="text-danger">*</span></label>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Job Name <span class="text-danger">*</span></label>
                                     <select class="job_name form-select" name="job_name">
                                         <option value="">Select Job</option>
                                         <option value="other">Other</option>
                                     </select>
-                                    <input type="text"
-                                        class="new_job_name form-control mt-2"
-                                        placeholder="Enter job name"
-                                        style="display:none;">
+                                    <input type="text" class="new_job_name form-control mt-2" placeholder="Enter job name" style="display:none;">
                                 </div>
 
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label">Purchase Rate / KG <span class="text-danger">*</span></label>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Purchase Rate Per KG <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="purchase_rate_per_kg" placeholder="0.00" step="0.01" required>
                                 </div>
 
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label">No of Pouch per KG <span class="text-danger">*</span></label>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">No of Pouch per KG <span class="text-danger">*</span></label>
                                     <input type="number" class="form-control" name="no_of_pouch_per_kg" placeholder="0" step="1" required>
                                 </div>
 
-                                <div class="col-12 col-md-6">
-                                    <label class="form-label">Pouch Open Size <span class="text-danger">*</span></label>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Pouch Open Size <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <input type="number" class="form-control" name="pouch_height" placeholder="Height" step="0.01" required>
                                         <span class="input-group-text">×</span>
@@ -95,20 +89,27 @@
                                 </div>
 
                                 <div class="col-12">
-                                    <label class="form-label">Pouch Combination <span class="text-danger">*</span></label>
-                                    <div class="row g-2">
-                                        <div class="col-6 col-md-3">
+                                    <label class="form-label fw-bold">Pouch Combination <span class="text-danger">*</span></label>
+                                    <div class="row g-2 align-items-center">
+                                        <div class="col-md-2">
                                             <input type="text" class="form-control" name="pc1" placeholder="Layer 1" required>
-                                            
                                         </div>
-                                        
-                                        <div class="col-6 col-md-3">
+                                        <div class="col-auto">
+                                            <span>+</span>
+                                        </div>
+                                        <div class="col-md-2">
                                             <input type="text" class="form-control" name="pc2" placeholder="Layer 2" required>
                                         </div>
-                                        <div class="col-6 col-md-3">
+                                        <div class="col-auto">
+                                            <span>+</span>
+                                        </div>
+                                        <div class="col-md-2">
                                             <input type="text" class="form-control" name="pc3" placeholder="Layer 3">
                                         </div>
-                                        <div class="col-6 col-md-3">
+                                        <div class="col-auto">
+                                            <span>+</span>
+                                        </div>
+                                        <div class="col-md-2">
                                             <input type="text" class="form-control" name="pc4" placeholder="Layer 4">
                                         </div>
                                     </div>
@@ -117,43 +118,29 @@
                             </div>
 
                             <div class="text-end mt-3 remove-job-btn" style="display: none;">
-                                <button type="button" class="btn btn-sm btn-danger" onclick="removeJob(this)">
-                                    Remove Job
-                                </button>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="removeJob(this)">Remove Job</button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- ADD JOB BUTTON -->
                     <div class="mb-4">
-                        <button type="button" class="btn btn-primary" onclick="addJob()">
-                            Add New Job
-                        </button>
+                        <button type="button" class="btn btn-primary" onclick="addJob()">Add New Job</button>
                     </div>
 
-                    <!-- SUBMIT BUTTON -->
                     <div class="d-flex justify-content-end gap-2">
-                        <button type="button" class="btn btn-secondary">
-                            Cancel
-                        </button>
-                        <button type="submit" name="create_master_data" class="btn btn-primary">
-                            Save Master Data
-                        </button>
+                        <button type="button" class="btn btn-secondary">Cancel</button>
+                        <button type="submit" name="create_master_data" class="btn btn-primary">Save Master Data</button>
                     </div>
-
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
 
 {% block script %}
 <script>
 $(document).ready(function () {
-
-    // PARTY NAME
     $("#party_name").on("change", function () {
         if ($(this).val() === "other") {
             $("#new_party_name").show().prop("required", true);
@@ -162,7 +149,6 @@ $(document).ready(function () {
         }
     });
 
-    // PARTY EMAIL
     $("#party_email").on("change", function () {
         if ($(this).val() === "other") {
             $("#new_party_email").show().prop("required", true);
@@ -171,7 +157,6 @@ $(document).ready(function () {
         }
     });
 
-    // PARTY CONTACT
     $("#party_contact").on("change", function () {
         if ($(this).val() === "other") {
             $("#new_party_contact").show().prop("required", true);
@@ -179,26 +164,17 @@ $(document).ready(function () {
             $("#new_party_contact").hide().val("").prop("required", false);
         }
     });
-
 });
-</script>
-
-<script>
-let jobCounter = 1;
 
 function addJob() {
     const container = document.getElementById('job-container');
     const firstJob = container.querySelector('.job-block');
     const clone = firstJob.cloneNode(true);
 
-    // Clear all input values
     clone.querySelectorAll('input').forEach(input => {
         input.value = '';
     });
 
-   
-   
-    // Show remove button for cloned jobs
     const removeBtn = clone.querySelector('.remove-job-btn');
     if (removeBtn) {
         removeBtn.style.display = 'block';
@@ -211,73 +187,50 @@ function removeJob(button) {
     const allJobs = document.querySelectorAll('.job-block');
     if (allJobs.length > 1) {
         button.closest('.job-block').remove();
-        jobCounter--;
     } else {
         alert('At least one job is required!');
     }
 }
-</script>
 
-<script>
 $(document).on("change", ".job_name", function () {
     const jobBlock = $(this).closest(".job-block");
     const newJobInput = jobBlock.find(".new_job_name");
     
     if ($(this).val() === "other") {
-        newJobInput
-            .show()
-            .prop("required", true)
-            .val("")
-            .attr("name", "job_name");
+        newJobInput.show().prop("required", true).val("").attr("name", "job_name");
         $(this).prop("disabled", true).val("");
     } else {
-        newJobInput
-            .hide()
-            .removeAttr("name")
-            .prop("required", false)
-            .val("");
+        newJobInput.hide().removeAttr("name").prop("required", false).val("");
         $(this).prop("disabled", false).val($(this).val());
     }
 });
 
-$(document).on(
-    "input",
-    "[name='pouch_height'], [name='pouch_diameter']",
-    function () {
-        const block = $(this).closest(".job-block");
-        const h = block.find("[name='pouch_height']").val();
-        const d = block.find("[name='pouch_diameter']").val();
+$(document).on("input", "[name='pouch_height'], [name='pouch_diameter']", function () {
+    const block = $(this).closest(".job-block");
+    const h = block.find("[name='pouch_height']").val();
+    const d = block.find("[name='pouch_diameter']").val();
 
-        if (h && d) {
-            block.find("[name='pouch_open_size']").val(`${h} x ${d}`);
-            console.log(block.find("[name='pouch_open_size']").val());
-        } else {
-            block.find("[name='pouch_open_size']").val("");
-        }
+    if (h && d) {
+        block.find("[name='pouch_open_size']").val(`${h} x ${d}`);
+    } else {
+        block.find("[name='pouch_open_size']").val("");
     }
-);
+});
 
-$(document).on(
-    "input",
-    "[name='pc1'], [name='pc2'], [name='pc3'], [name='pc4']",
-    function () {
-        const block = $(this).closest(".job-block");
-        const a = block.find("[name='pc1']").val().trim() || "0";
-        const b = block.find("[name='pc2']").val().trim() || "0";
-        const c = block.find("[name='pc3']").val().trim() || "0";
-        const d = block.find("[name='pc4']").val().trim() || "0";
+$(document).on("input", "[name='pc1'], [name='pc2'], [name='pc3'], [name='pc4']", function () {
+    const block = $(this).closest(".job-block");
+    const a = block.find("[name='pc1']").val().trim() || "0";
+    const b = block.find("[name='pc2']").val().trim() || "0";
+    const c = block.find("[name='pc3']").val().trim() || "0";
+    const d = block.find("[name='pc4']").val().trim() || "0";
 
-        if (a && b && c && d) {
-            block.find("[name='pouch_combination']").val(`${a} + ${b} + ${c} + ${d}`);
-            console.log(block.find("[name='pouch_combination']").val());
-        } else {
-            block.find("[name='pouch_combination']").val("");
-        }
+    if (a && b && c && d) {
+        block.find("[name='pouch_combination']").val(`${a} + ${b} + ${c} + ${d}`);
+    } else {
+        block.find("[name='pouch_combination']").val("");
     }
-);
-</script>
+});
 
-<script>    
 const master_dataAjaxUrl = "{% url 'master_data_ajax_url' %}";
 </script>
 <script src="{% static 'js/ajax/master_data.js' %}"></script>

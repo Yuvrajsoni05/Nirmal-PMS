@@ -88,7 +88,7 @@
                             <th>Qty</th>
                             <th>Purchase Rate Per/Kg</th>
                             <th>No of Pouch Kg</th>
-                            <th>Per Pouch Rate Basic</th>
+                            <th>Rate Basic</th>
                             <th>Zipper</th>
                             <th>Pouch Charge</th>
                             <th>Final Rate</th>
@@ -157,10 +157,10 @@
                                     {% endfor %}
                                 </td>
 
-                                <!-- Per Pouch Rate Basic -->
+                                <!--  Rate Basic -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div> {{ prpk.per_pouch_rate_basic }}</div>
+                                    <div> {{ prpk.rate_basic }}</div>
                                     {% endfor %}
                                 </td>
 

@@ -129,7 +129,7 @@
                             <th>Qty</th>
                             <th>Purchase Rate/Kg</th>
                             <th>No of Pouch Kg</th>
-                            <th>Per Pouch Rate Basic</th>
+                            <th>Rate Basic</th>
                             <th>Zipper </th>
                             <th>Pouch Charge</th>
                             <th>Final Rate</th>
@@ -224,7 +224,7 @@
 
                             <td>
                                 {% for job in purchase_order.purchase_order_jobs.all %}
-                                <div>{{ job.per_pouch_rate_basic }}</div>
+                                <div>{{ job.rate_basic }}</div>
                                 {% endfor %}
                             </td>
 

@@ -6,206 +6,100 @@
             </div>
 
             <div class="card-body p-4">
-                <form
-                    action="{% url 'quotation_page' %}"
-                    method="POST"
-                    autocomplete="off"
-                >
+                <form action="{% url 'quotation_page' %}" method="POST" autocomplete="off">
                     {% csrf_token %}
 
                     <div class="row g-4">
                         <!-- Quotation Number -->
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Quotation Number <span class="text-danger">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                name="pouch_quotation_number"
-                                placeholder="Enter Quotation Number"
-                                required
-                            />
+                            <label class="form-label fw-bold">Quotation Number <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="pouch_quotation_number" placeholder="Enter Quotation Number" required />
                         </div>
 
                         <!-- Delivery Date -->
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Delivery Date <span class="text-danger">*</span>
-                            </label>
-                            <input
-                                type="date"
-                                class="form-control"
-                                id="delivery_date"
-                                name="delivery_date"
-                                required
-                            />
-                            <div class="invalid-feedback">
-                                Delivery date is required
-                            </div>
+                            <label class="form-label fw-bold">Delivery Date <span class="text-danger">*</span></label>
+                            <input type="date" class="form-control" id="delivery_date" name="delivery_date" required />
+                            <div class="invalid-feedback">Delivery date is required</div>
                         </div>
                         
                         <!-- Party Name -->
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Party Name <span class="text-danger">*</span>
-                            </label>
-                            <select
-                                class="form-select"
-                                id="party_name"
-                                name="party_name"
-                                required
-                            >
+                            <label class="form-label fw-bold">Party Name <span class="text-danger">*</span></label>
+                            <select class="form-select" id="party_name" name="party_name" required>
                                 <option value="">Select Party Name</option>
                                 {% for party in party_names %}
-                                 <option value="{{ party.party_name }}"
+                                <option value="{{ party.party_name }}"
                                     {% if master_data and party.party_name == master_data.0.party_details__party_name %}
-                                        selected
-                                    {% endif %}
-                                >
+                                    selected
+                                    {% endif %}>
                                     {{ party.party_name }}
                                 </option>
                                 {% endfor %}
                                 <option value="others">Others</option>
                             </select>
-                            <input
-                                type="text"
-                                class="form-control mt-2 d-none"
-                                placeholder="Enter New Party Name"
-                                name="new_party_name"
-                                id="new_party_name"
-                            />
-                            <div class="invalid-feedback">
-                                Party name is required
-                            </div>
+                            <input type="text" class="form-control mt-2 d-none" placeholder="Enter New Party Name" name="new_party_name" id="new_party_name" />
+                            <div class="invalid-feedback">Party name is required</div>
                         </div>
                         
                         <!-- Party Email -->
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Party Email <span class="text-danger">*</span>
-                            </label>
-                            <select
-                                class="form-select"
-                                name="party_email"
-                                id="party_email"
-                                required
-                            >
+                            <label class="form-label fw-bold">Party Email <span class="text-danger">*</span></label>
+                            <select class="form-select" name="party_email" id="party_email" required>
                                 <option value="">Select Party Email</option>
                                 <option value="others">Others</option>
                             </select>
-                            <input
-                                type="email"
-                                class="form-control mt-2 d-none"
-                                placeholder="Enter New Party Email"
-                                name="new_party_email"
-                                id="new_party_email"
-                            />
-                            <div class="invalid-feedback">
-                                Party email is required
-                            </div>  
+                            <input type="email" class="form-control mt-2 d-none" placeholder="Enter New Party Email" name="new_party_email" id="new_party_email" />
+                            <div class="invalid-feedback">Party email is required</div>  
                         </div>
 
                         <!-- Party Contact -->
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">
-                                Party Contact <span class="text-danger">*</span>
-                            </label>
-                            <select
-                                class="form-select"
-                                name="party_contact"
-                                id="party_contact"
-                                required
-                            >
+                            <label class="form-label fw-bold">Party Contact <span class="text-danger">*</span></label>
+                            <select class="form-select" name="party_contact" id="party_contact" required>
                                 <option value="">Select Party Contact</option>
                                 <option value="others">Others</option>
                             </select>
-                            <input
-                                type="text"
-                                class="form-control mt-2 d-none"
-                                placeholder="Enter New Party Contact"
-                                name="new_party_contact"
-                                
-                                minlength="10"
-                                id="new_party_contact"
-                            />
-                            <div class="invalid-feedback">
-                                Party contact is required
-                            </div>  
+                            <input type="text" class="form-control mt-2 d-none" placeholder="Enter New Party Contact" name="new_party_contact" minlength="10" id="new_party_contact" />
+                            <div class="invalid-feedback">Party contact is required</div>  
                         </div>
+
                         {% if master_data %}
                             {% include 'includes/quotation/master_job.html' %}
                         {% else %}
-                             <!-- Job Blocks Container -->
+                        <!-- Job Blocks Container -->
                         <div class="col-12">
                             <div id="jobs-container">
                                 <div class="job-block card p-3 mb-3 border">
                                     <div class="row g-3">
                                         <!-- Job Name -->
                                         <div class="col-md-4">
-                                            <label class="form-label fw-semibold">
-                                                Job Name <span class="text-danger">*</span>
-                                            </label>
-                                            <select
-                                                class="form-select job_name"
-                                                name="job_name[]"
-                                                required
-                                            >
+                                            <label class="form-label fw-bold">Job Name <span class="text-danger">*</span></label>
+                                            <select class="form-select job_name" name="job_name[]" required>
                                                 <option value="">Select Job Name</option>
                                                 {% for job in job_names %}
                                                 <option value="{{ job }}">{{ job }}</option>
                                                 {% endfor %}
                                                 <option value="others">Others</option>
                                             </select>
-                                            <input
-                                                type="text"
-                                                name="new_job_name[]"
-                                                class="form-control mt-2 new_job_name d-none"
-                                                placeholder="Enter New Job Name"
-                                            />
+                                            <input type="text" name="new_job_name[]" class="form-control mt-2 new_job_name d-none" placeholder="Enter New Job Name" />
                                         </div>
                                         
                                         <!-- Pouch Size -->
                                         <div class="col-md-4">
-                                            <label class="form-label fw-semibold">
-                                                Pouch Open Size <span class="text-danger">*</span>
-                                            </label>
+                                            <label class="form-label fw-bold">Pouch Open Size <span class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <input
-                                                    type="number"
-                                                    class="form-control pouch_height"
-                                                    name="pouch_height[]"
-                                                    placeholder="Height"
-                                                    step="0.01"
-                                                    required
-                                                />
+                                                <input type="number" class="form-control pouch_height" name="pouch_height[]" placeholder="Height" step="0.01" required />
                                                 <span class="input-group-text">×</span>
-                                                <input
-                                                    type="number"
-                                                    class="form-control pouch_diameter"
-                                                    name="pouch_diameter[]"
-                                                    placeholder="Diameter"
-                                                    step="0.01"
-                                                    required
-                                                />
+                                                <input type="number" class="form-control pouch_diameter" name="pouch_diameter[]" placeholder="Diameter" step="0.01" required />
                                             </div>
-                                            <input
-                                                type="hidden"
-                                                class="pouch_size"
-                                                name="pouch_size[]"
-                                            />
+                                            <input type="hidden" class="pouch_size" name="pouch_size[]" />
                                         </div>
 
                                         <!-- Pouch Type -->
                                         <div class="col-md-4">
-                                            <label class="form-label fw-semibold">
-                                                Pouch Type <span class="text-danger">*</span>
-                                            </label>
-                                            <select
-                                                class="form-select"
-                                                name="pouch_type[]"
-                                                required
-                                            >
+                                            <label class="form-label fw-bold">Pouch Type <span class="text-danger">*</span></label>
+                                            <select class="form-select" name="pouch_type[]" required>
                                                 <option value="">Select Pouch Type</option>
                                                 {% for value, label in pouch_types %}
                                                 <option value="{{ value }}">{{ label }}</option>
@@ -215,85 +109,31 @@
 
                                         <!-- Pouch Combination -->
                                         <div class="col-12">
-                                            <label class="form-label fw-semibold">
-                                                Pouch Combination <span class="text-danger">*</span>
-                                            </label>
+                                            <label class="form-label fw-bold">Pouch Combination <span class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <input
-                                                    type="text"
-                                                    class="form-control pc1"
-                                                    name="pouch_combination1[]"
-                                                    placeholder="Layer 1"
-                                                    required
-                                                />
+                                                <input type="text" class="form-control pc1" name="pouch_combination1[]" placeholder="Layer 1" required />
                                                 <span class="input-group-text">+</span>
-                                                <input
-                                                    type="text"
-                                                    class="form-control pc2"
-                                                    name="pouch_combination2[]"
-                                                    placeholder="Layer 2"
-                                                    required
-                                                />
+                                                <input type="text" class="form-control pc2" name="pouch_combination2[]" placeholder="Layer 2" required />
                                                 <span class="input-group-text">+</span>
-                                                <input
-                                                    type="text"
-                                                    class="form-control pc3"
-                                                    name="pouch_combination3[]"
-                                                    placeholder="Layer 3"
-                                                
-                                                />
+                                                <input type="text" class="form-control pc3" name="pouch_combination3[]" placeholder="Layer 3" />
                                                 <span class="input-group-text">+</span>
-                                                <input
-                                                    type="text"
-                                                    class="form-control pc4"
-                                                    name="pouch_combination4[]"
-                                                    placeholder="Layer 4"
-                                              
-                                                />
+                                                <input type="text" class="form-control pc4" name="pouch_combination4[]" placeholder="Layer 4" />
                                             </div>
-                                            <input
-                                                type="hidden"
-                                                class="pouch_combination"
-                                                name="pouch_combination[]"
-                                            />
+                                            <input type="hidden" class="pouch_combination" name="pouch_combination[]" />
                                         </div>
 
                                         <!-- Quantity -->
                                         <div class="col-md-3">
-                                            <label class="form-label fw-semibold">
-                                                Quantity <span class="text-danger">*</span>
-                                            </label>
-                                            <input
-                                                type="number"
-                                                class="form-control"
-                                                name="quantity[]"
-                                                placeholder="0"
-                                                required
-                                            />
+                                            <label class="form-label fw-bold">Quantity <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control" name="quantity[]" placeholder="0" required />
                                         </div>
-
-                                
 
                                         <!-- Purchase Rate -->
                                         <div class="col-md-6">
-                                            <label class="form-label fw-semibold">
-                                                Purchase Rate per Kg <span class="text-danger">*</span>
-                                            </label>
+                                            <label class="form-label fw-bold">Purchase Rate per Kg <span class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <input
-                                                    type="number"
-                                                    class="form-control purchase_rate_per_kg"
-                                                    name="purchase_rate_per_kg[]"
-                                                    placeholder="0.00"
-                                                    step="0.01"
-                                                    required
-                                                />
-                                                <select
-                                                    class="form-select purchase_rate_unit"
-                                                    name="purchase_rate_unit[]"
-                                                    style="max-width: 200px;"
-                                                    required
-                                                >
+                                                <input type="number" class="form-control purchase_rate_per_kg" name="purchase_rate_per_kg[]" placeholder="0.00" step="0.01" required />
+                                                <select class="form-select purchase_rate_unit" name="purchase_rate_unit[]" style="max-width: 200px;" required>
                                                     <option value="">Select Unit</option>
                                                     {% for v,l in polyester_units %}
                                                     <option value="{{ v }}">{{ l }}</option>
@@ -304,199 +144,93 @@
 
                                         <!-- No of pouch -->
                                         <div class="col-md-3">
-                                            <label class="form-label fw-semibold">
-                                                No. of Pouch / Kg
-                                            </label>
-                                            <input
-                                                type="number"
-                                                class="form-control no_of_pouch_kg"
-                                                name="no_of_pouch_kg[]"
-                                                value="0.0"
-                                                step="0.01"
-                                            />
+                                            <label class="form-label fw-bold">No. of Pouch / Kg</label>
+                                            <input type="number" class="form-control no_of_pouch_kg" name="no_of_pouch_kg[]" value="0.0" step="0.01" />
                                         </div>
 
                                         <!-- Per pouch basic -->
                                         <div class="col-md-3">
-                                            <label class="form-label fw-semibold">
-                                                Per Pouch Rate Basic
-                                            </label>
-                                            <input
-                                                type="number"
-                                                class="form-control per_pouch_rate_basic"
-                                                name="per_pouch_rate_basic[]"
-                                                value="0.0"
-                                                step="0.01"
-                                            />
+                                            <label class="form-label fw-bold">Rate Basic</label>
+                                            <input type="number" class="form-control per_pouch_rate_basic" name="per_pouch_rate_basic[]" value="0.0" step="0.01" />
                                         </div>
 
                                         <!-- Pouch charge -->
                                         <div class="col-md-3">
-                                            <label class="form-label fw-semibold">
-                                                Pouch Charge <span class="text-danger">*</span>
-                                            </label>
-                                            <input
-                                                type="number"
-                                                class="form-control pouch_charge"
-                                                name="pouch_charge[]"
-                                                value="0.0"
-                                                step="0.01"
-                                                required
-                                            />
+                                            <label class="form-label fw-bold">Pouch Charge <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control pouch_charge" name="pouch_charge[]" value="0.0" step="0.01" required />
                                         </div>
 
                                         <!-- Zipper -->
                                         <div class="col-md-3">
-                                            <label class="form-label fw-semibold">
-                                                Zipper Cost <span class="text-danger">*</span>
-                                            </label>
-                                            <input
-                                                type="number"
-                                                class="form-control zipper_cost"
-                                                name="zipper_cost[]"
-                                                value="0.0"
-                                                step="0.01"
-                                                required
-                                            />
+                                            <label class="form-label fw-bold">Zipper Cost <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control zipper_cost" name="zipper_cost[]" value="0.0" step="0.01" required />
                                         </div>
 
                                         <!-- Final Rate -->
                                         <div class="col-md-3">
-                                            <label class="form-label fw-semibold">
-                                                Final Rate <span class="text-danger">*</span>
-                                            </label>
-                                            <input
-                                                type="number"
-                                                class="form-control final_rate"
-                                                name="final_rate[]"
-                                                step="0.01"
-                                                value="0.0"
-                                                required
-                                            />
+                                            <label class="form-label fw-bold">Final Rate <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control final_rate" name="final_rate[]" step="0.01" value="0.0" required />
                                         </div>
-
 
                                         <!-- Minimum Qty -->
                                         <div class="col-md-3">
-                                            <label class="form-label fw-semibold">
-                                                Minimum Qty <span class="text-danger">*</span>
-                                            </label>
-                                            <input
-                                                type="number"
-                                                class="form-control minimum_quantity"
-                                                name="minimum_quantity[]"
-                                                placeholder="0"
-                                                required
-                                            />
+                                            <label class="form-label fw-bold">Minimum Qty <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control minimum_quantity" name="minimum_quantity[]" placeholder="0" required />
                                         </div>
 
                                         <!-- Special -->
                                         <div class="col-12">
-                                            <label class="form-label fw-semibold">
-                                                Special Instruction
-                                            </label>
-                                            <textarea
-                                                class="form-control"
-                                                name="special_instruction[]"
-                                                rows="2"
-                                                
-                                                placeholder="Enter any special instructions"
-                                            ></textarea>
+                                            <label class="form-label fw-bold">Special Instruction</label>
+                                            <textarea class="form-control" name="special_instruction[]" rows="2" placeholder="Enter any special instructions"></textarea>
                                         </div>
 
                                         <!-- Delivery -->
                                         <div class="col-12">
-                                            <label class="form-label fw-semibold">
-                                                Delivery Address <span class="text-danger">*</span>
-                                            </label>
-                                            <textarea
-                                                class="form-control"
-                                                name="delivery_address[]"
-                                                rows="2"
-                                                placeholder="Enter delivery address"
-                                                required
-                                            ></textarea>
+                                            <label class="form-label fw-bold">Delivery Address <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" name="delivery_address[]" rows="2" placeholder="Enter delivery address" required></textarea>
                                         </div>
 
                                         <!-- Remove Button -->
                                         <div class="col-12 text-end">
-                                            <button
-                                                type="button"
-                                                class="btn btn-danger btn-sm remove-job"
-                                            >
-                                                Remove Job
-                                            </button>
+                                            <button type="button" class="btn btn-danger btn-sm remove-job">Remove Job</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="d-flex justify-content-start mb-3">
-                                <button
-                                    type="button"
-                                    id="add-job"
-                                    class="btn btn-primary"
-                                >
-                                    + Add Job
-                                </button>
+                                <button type="button" id="add-job" class="btn btn-primary">+ Add Job</button>
                             </div>
                         </div>
                         {% endif %}
                    
-                                
                         <!-- Other Terms -->
                         <div class="col-12">
-                            <label class="form-label fw-semibold">Other Terms</label>
+                            <label class="form-label fw-bold">Other Terms</label>
                             <div class="p-3 bg-light rounded border">
                                 <div class="row g-3">
                                     <div class="col-md-6">
-                                        <label class="form-label fw-semibold">Quantity Variation</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="quantity_variation"
-                                            name="quantity_variation"
-                                            placeholder="0.0"
-                                     
-                                        />
+                                        <label class="form-label fw-bold">Quantity Variation</label>
+                                        <input type="text" class="form-control" id="quantity_variation" name="quantity_variation" placeholder="0.0" />
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label fw-semibold">Freight</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="freight"
-                                            name="freight"
-                                            placeholder="0.0"
-                                            value ="0.0"
-                                        />
+                                        <label class="form-label fw-bold">Freight</label>
+                                        <input type="text" class="form-control" id="freight" name="freight" placeholder="0.0" value="0.0" />
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label fw-semibold">GST</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="gst"
-                                            name="gst"
-                                            placeholder="Enter GST details"
-                                        />
+                                        <label class="form-label fw-bold">GST</label>
+                                        <input type="text" class="form-control" id="gst" name="gst" placeholder="Enter GST details" />
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label fw-semibold">Note</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            id="note"
-                                            name="note"
-                                            placeholder="Enter additional notes"
-                                        />
+                                        <label class="form-label fw-bold">Note</label>
+                                        <input type="text" class="form-control" id="note" name="note" placeholder="Enter additional notes" />
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label fw-semibold">Pouch Status</label><span class="text-danger"> *</span>
+                                        <label class="form-label fw-bold">Pouch Status <span class="text-danger">*</span></label>
                                         <select class="form-select" name="pouch_status" required>
                                             <option value="">Select Status</option>
                                             {% for l,v in pouch_status %}
-                                                <option value="{{v}}">{{ l }}</option>
+                                            <option value="{{v}}">{{ l }}</option>
                                             {% endfor %}
                                         </select>
                                     </div>
@@ -506,19 +240,8 @@
 
                         <!-- Button -->
                         <div class="col-12 text-end pt-3">
-                            <button
-                                type="submit"
-                                name="save_quotation"
-                                class="btn btn-primary px-4"
-                            >
-                                Save Quotation
-                            </button>
-                            <button
-                                type="reset"
-                                class="btn btn-secondary px-4 ms-2"
-                            >
-                                Reset
-                            </button>
+                            <button type="submit" name="save_quotation" class="btn btn-primary px-4">Save Quotation</button>
+                            <button type="reset" class="btn btn-secondary px-4 ms-2">Reset</button>
                         </div>
                     </div>
                 </form>

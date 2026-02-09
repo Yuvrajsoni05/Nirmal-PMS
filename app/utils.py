@@ -104,4 +104,19 @@ def email_attachment_size(total_attachment_size):
     
     
     
-    
+def get_or_create_party(party_name, party_email, party_contact):
+    party_details, _ = PouchParty.objects.get_or_create(
+        party_name=party_name.strip()
+    )
+
+    party_email_obj, _ = PouchPartyEmail.objects.get_or_create(
+        party=party_details,
+        email=party_email
+    )
+
+    party_contact_obj, _ = PouchPartyContact.objects.get_or_create(
+        party=party_details,
+        party_number=party_contact
+    )
+
+    return party_details, party_email_obj, party_contact_obj

@@ -325,6 +325,18 @@ class PouchMaster(models.Model):
     no_of_pouch_per_kg = models.CharField(max_length=200,blank=True, null=True)
     minimum_quantity = models.CharField(max_length=200,blank=True, null=True)
 
+
+    def save(self, *args, **kwargs):
+        if self.job_name:
+            self.job_name = self.job_name.strip()
+
+        if self.pouch_open_size:
+            self.pouch_open_size = self.pouch_open_size.strip()
+
+        if self.pouch_combination:
+            self.pouch_combination = self.pouch_combination.strip()
+
+        super().save(*args, **kwargs)
         
 class PouchQuotation(models.Model): 
 
@@ -401,8 +413,8 @@ class PouchQuotationJob(models.Model):
     final_rate = models.DecimalField(
         max_digits=12, decimal_places=2, default=0 , blank=True, null=True
     )
-    per_pouch_rate_basic = models.DecimalField(
-        max_digits=12, decimal_places=4, default=0 , blank=True, null=True
+    rate_basic = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0 , blank=True, null=True
     )
     zipper_cost = models.DecimalField(
         max_digits=10, decimal_places=2, default=0 , blank=True, null=True
@@ -414,7 +426,12 @@ class PouchQuotationJob(models.Model):
         max_digits=10, decimal_places=2, default=0 , blank=True, null=True
     )
     polyester_unit = models.CharField(max_length=200,choices=POLYESTER_UNIT,blank=True, null=True)
-    
+
+    def save(self, *args, **kwargs):
+        if self.job_name:
+            self.job_name = self.job_name.strip()
+
+        super().save(*args, **kwargs)
 
 class PurchaseOrder(models.Model):
 
@@ -495,8 +512,8 @@ class PurchaseOrderJob(models.Model):
     final_rate = models.DecimalField(
         max_digits=12, decimal_places=2, default=0 , blank=True, null=True
     )
-    per_pouch_rate_basic = models.DecimalField(
-        max_digits=12, decimal_places=4, default=0 , blank=True, null=True
+    rate_basic = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0 , blank=True, null=True
     )
     zipper_cost = models.DecimalField(
         max_digits=10, decimal_places=2, default=0 , blank=True, null=True
@@ -507,3 +524,15 @@ class PurchaseOrderJob(models.Model):
     pouch_charge = models.DecimalField(
         max_digits=10, decimal_places=2, default=0 , blank=True, null=True
     )
+
+    def save(self, *args, **kwargs ):
+        if self.job_name:
+            self.job_name = self.job_name.strip()
+        if self.pouch_open_size:
+            self.pouch_open_size = self.pouch_open_size.strip()
+        if self.pouch_combination:
+            self.pouch_combination = self.pouch_combination.strip()
+
+        super().save(*args, **kwargs)
+
+

@@ -1,9 +1,5 @@
 from .common_imports import *
 
-
-
-
-
 def master_page(request):
     pouch_party = PouchParty.objects.all()
      

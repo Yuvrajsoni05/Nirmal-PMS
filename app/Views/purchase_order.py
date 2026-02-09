@@ -19,7 +19,7 @@ def purchase_order(request):
             quantity = request.POST.getlist('quantity')
             purchase_rate_per_kg = request.POST.getlist('purchase_rate_per_kg')
             no_of_pouch_kg = request.POST.getlist('no_of_pouch_kg')
-            per_pouch_rate_basic = request.POST.getlist('per_pouch_rate_basic')
+            rate_basic = request.POST.getlist('per_pouch_rate_basic')
             pouch_charge = request.POST.getlist('pouch_charge')
             zipper_cost = request.POST.getlist('zipper_cost')
             final_rate = request.POST.getlist('final_rate')
@@ -78,7 +78,7 @@ def purchase_order(request):
                     "quantity":quantity,
                     "purchase_rate_per_kg":purchase_rate_per_kg,
                     "no_of_pouch_kg":no_of_pouch_kg,
-                    "per_pouch_rate_basic":per_pouch_rate_basic,
+                    "per_pouch_rate_basic":rate_basic,
                     "zipper_cost":zipper_cost,
                     "final_rate":final_rate,
                     "minimum_quantity":minimum_quantity,
@@ -95,11 +95,6 @@ def purchase_order(request):
                         request, f"{field} is Required", extra_tags="custom-danger-style"
                     )
                     return redirect("purchase_order")
-                
-
-
-
-            
 
 
             party_details, _ = PouchParty.objects.get_or_create(
@@ -133,7 +128,7 @@ def purchase_order(request):
                     quantity=quantity[i],
                     purchase_rate_per_kg=purchase_rate_per_kg[i],
                     no_of_pouch_kg=no_of_pouch_kg[i],
-                    per_pouch_rate_basic=per_pouch_rate_basic[i],
+                    rate_basic=rate_basic[i],
                     zipper_cost=zipper_cost[i],
                     pouch_charge=pouch_charge[i],
                     final_rate=final_rate[i],
@@ -142,8 +137,8 @@ def purchase_order(request):
                     special_instruction=special_instruction[i],
                     delivery_address=delivery_address[i],
                     polyester_unit=polyester_unit[i],
-                    
                     )
+
             purchase_order.save()
             messages.success(request,"Purchase Order created successfully ")
             return redirect('purchase_order')
@@ -200,7 +195,7 @@ def view_purchase_order(request):
             "Quantity",
             "Purchase Rate / KG",
             "No. of Pouch / KG",
-            "Per Pouch Rate Basic",
+            "Rate Basic",
             "Zipper Cost",
             "Pouch Charge",
             "Final Rate",
@@ -233,7 +228,7 @@ def view_purchase_order(request):
                 job.quantity,
                 job.purchase_rate_per_kg,
                 job.no_of_pouch_kg,
-                job.per_pouch_rate_basic,
+                job.rate_basic,
                 job.zipper_cost,
                 job.pouch_charge,
                 job.final_rate,
@@ -319,7 +314,7 @@ def view_purchase_order(request):
                 job.quantity = quantities[i]
                 job.purchase_rate_per_kg = purchase_rates[i]
                 job.no_of_pouch_kg = no_of_pouch_kgs[i]
-                job.per_pouch_rate_basic = per_pouch_rates[i]
+                job.rate_basic = per_pouch_rates[i]
                 job.zipper_cost = zipper_costs[i]
                 job.pouch_charge = pouch_charges[i]
                 job.final_rate = final_rates[i]
@@ -488,15 +483,7 @@ def purchase_order_ajax(request):
             final_rate = round(total_ppb + zipper_cost + pouch_charge,3) 
             minimum_quantity  = no_of_pouch_kg * 500
 
-
-            print("purchase_rate_per_kg",purchase_rate_per_kg)
-            print("no_of_pouch_kg",no_of_pouch_kg)
-            print("unit",unit)
-            print("per_pouch_rate_basic",per_pouch_rate_basic)
-            print("zipper_cost",zipper_cost)
-            print("pouch_charge",pouch_charge)
-            print("minimum_quantity",minimum_quantity)
-            print("final_rate",final_rate)
+         
             
             return JsonResponse({
                 "per_pouch_rate_basic": total_ppb,

@@ -33,7 +33,7 @@ def quotation_page(request):
                     quantities = request.POST.getlist('quantity[]')
                     purchase_rate_per_kg = request.POST.getlist('purchase_rate_per_kg[]')
                     no_of_pouch_kg = request.POST.getlist('no_of_pouch_kg[]')
-                    per_pouch_rate_basic = request.POST.getlist('per_pouch_rate_basic[]')
+                    rate_basic = request.POST.getlist('per_pouch_rate_basic[]')
                     zipper_costs = request.POST.getlist('zipper_cost[]')
                     final_rates = request.POST.getlist('final_rate[]')
                     min_quantities = request.POST.getlist('minimum_quantity[]')
@@ -88,7 +88,7 @@ def quotation_page(request):
                             "quantity":quantities,
                             "purchase_rate_per_kg":purchase_rate_per_kg,
                             "no_of_pouch_kg":no_of_pouch_kg,
-                            "per_pouch_rate_basic":per_pouch_rate_basic,
+                            "rate_basic":rate_basic,
                             "zipper_cost":zipper_costs,
                             "final_rate":final_rates,
                             "pouch_type":pouch_types,
@@ -103,15 +103,14 @@ def quotation_page(request):
                             )
                             return redirect("quotation_page")
 
-                    party_details, _ = PouchParty.objects.get_or_create(
-                            party_name=party_name.strip() if party_name else None
-                        )
-                    
-                    party_email_obj, _ = PouchPartyEmail.objects.get_or_create(
-                            party=party_details ,email=party_email  )
-                    
-                    party_contact_obj, _ = PouchPartyContact.objects.get_or_create(
-                            party=party_details ,party_number=party_contact  )
+
+                    # Party Block
+                    party_details, party_email_obj, party_contact_obj = utils.get_or_create_party(
+                        party_name,
+                        party_email,
+                        party_contact
+                    )
+
                     
                     quotation = PouchQuotation.objects.create(
                         pouch_quotation_number=pouch_quotation_number,
@@ -136,7 +135,7 @@ def quotation_page(request):
                             quantity=quantities[i],
                             purchase_rate_per_kg=purchase_rate_per_kg[i],
                             no_of_pouch_kg=no_of_pouch_kg[i],
-                            per_pouch_rate_basic=per_pouch_rate_basic[i],
+                            rate_basic=rate_basic[i],
                             zipper_cost=zipper_costs[i],
                             pouch_charge=pouch_charges[i],
                             final_rate=final_rates[i],
@@ -235,18 +234,32 @@ def view_quotations(request):
                     quantities = request.POST.getlist("quantity")
                     purchase_rates = request.POST.getlist("purchase_rate_per_kg")
                     no_of_pouch_kgs = request.POST.getlist("no_of_pouch_kg")
-                    per_pouch_rates = request.POST.getlist("per_pouch_rate_basic")
+                    rates = request.POST.getlist("per_pouch_rate_basic")
                     zipper_costs = request.POST.getlist("zipper_cost")
                     pouch_charges = request.POST.getlist("pouch_charge")
                     final_rates = request.POST.getlist("final_rate")
                     minimum_quantities = request.POST.getlist("minimum_quantity")
                     pouch_types = request.POST.getlist("pouch_type")
+                    polyester_units = request.POST.getlist("polyester_units")
                     special_instructions = request.POST.getlist("special_instruction")
                     delivery_addresses = request.POST.getlist("delivery_address")
 
-            
+                    
                     for i in range(len(job_ids)):
+                        total_ppb = 0
+                       
+                        if polyester_units[i]:
+                            if polyester_units[i] == "polyester_printed_bag":
+                                total_ppb = float(purchase_rates[i]) / float(no_of_pouch_kgs[i])
+                            else:
+                                total_ppb = float(purchase_rates[i])
 
+                        zipper_cost = float(zipper_costs[i] or 0)
+                        pouch_charge = float(pouch_charges[i] or 0)
+
+                        final_rate = round(total_ppb + zipper_cost + pouch_charge, 3)
+
+                        
                         job = get_object_or_404(
                             PouchQuotationJob,
                             id=job_ids[i],
@@ -257,10 +270,10 @@ def view_quotations(request):
                         job.quantity = quantities[i]
                         job.purchase_rate_per_kg = purchase_rates[i]
                         job.no_of_pouch_kg = no_of_pouch_kgs[i]
-                        job.per_pouch_rate_basic = per_pouch_rates[i]
+                        job.rate_basic = total_ppb
                         job.zipper_cost = zipper_costs[i]
                         job.pouch_charge = pouch_charges[i]
-                        job.final_rate = final_rates[i]
+                        job.final_rate = final_rate
                         job.minimum_quantity = minimum_quantities[i]
                         job.pouch_type = pouch_types[i]
                         job.special_instruction = special_instructions[i]
@@ -446,6 +459,8 @@ def quotation_page_ajax(request):
             pouch_charge = float(request.GET.get("pouch_charge") or 0)
             
             jobs  = list(PouchQuotationJob.objects.filter(quotation__party_details__party_name=party_name).values('job_name').union(PouchMaster.objects.filter(party_details__party_name=party_name).values('job_name').distinct()))
+            
+            
             party_emails = list(PouchPartyEmail.objects.filter(party__party_name=party_name).values('email'))
             party_contacts = list(PouchPartyContact.objects.filter(party__party_name=party_name).values('party_number'))
             total_ppb = 0   
@@ -474,7 +489,6 @@ def quotation_page_ajax(request):
                 "party_contacts":party_contacts
             })
     except Exception as e:
-        # messages.error(request,"Something went wrong ")
         print(e)
         
 

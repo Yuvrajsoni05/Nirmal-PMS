@@ -87,7 +87,7 @@
                 <div class="input-group col-md-4">
                   <input type="text" class="form-control" name="purchase_rate_per_kg"
                          value="{{ job.purchase_rate_per_kg }}" required>
-                  <span class="input-group-text">{{ job.polyester_unit }}</span>
+                  <input type="text" name="polyester_units" class="input-group-text" value="{{ job.polyester_unit }}" >
                
                 </div>
               </div>
@@ -99,9 +99,9 @@
               </div>
 
               <div class="col-md-4">
-                <label class="form-label fw-semibold">Per Pouch Rate Basic</label>
+                <label class="form-label fw-semibold">Rate Basic</label>
                 <input type="text" class="form-control" name="per_pouch_rate_basic"
-                       value="{{ job.per_pouch_rate_basic }}" required>
+                       value="{{ job.rate_basic }}" required>
               </div>
 
               <div class="col-md-4">
