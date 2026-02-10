@@ -314,9 +314,9 @@ class PouchDeliveryAddress(models.Model):
 
 class PouchMaster(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    party_details = models.ForeignKey(PouchParty, on_delete=models.CASCADE, related_name='pouch_master_party_details')
-    party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.CASCADE, related_name='pouch_master_party_email')
-    party_contact = models.ForeignKey(PouchPartyContact, on_delete=models.CASCADE, related_name='pouch_master_party_contact')
+    party_details = models.ForeignKey(PouchParty, on_delete=models.PROTECT, related_name='pouch_master_party_details')
+    party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.PROTECT, related_name='pouch_master_party_email')
+    party_contact = models.ForeignKey(PouchPartyContact, on_delete=models.PROTECT, related_name='pouch_master_party_contact')
     job_name = models.CharField(max_length=500,blank=True, null=True)
     pouch_open_size = models.CharField(max_length=200)
     pouch_combination = models.CharField(max_length=200)

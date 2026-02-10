@@ -17173,3 +17173,5 @@ Traceback (most recent call last):
                ^^^^^^^^^^^
 UnboundLocalError: cannot access local variable 'job_details' where it is not associated with a value
 ERROR 2026-02-06 10:31:51,371 myapp login_page Invalid Username or Password views.py
+ERROR 2026-02-10 19:22:24,496 myapp login_page Invalid Username or Password views.py
+ERROR 2026-02-10 19:22:51,317 myapp login_page Invalid Username or Password views.py

@@ -97,15 +97,13 @@ def purchase_order(request):
                     return redirect("purchase_order")
 
 
-            party_details, _ = PouchParty.objects.get_or_create(
-                    party_name=party_name.strip() if party_name else None
-                )
-            party_email_obj,_ = PouchPartyEmail.objects.get_or_create(
-                    party=party_details ,email=party_email  )
-
-            party_contact_obj, _ = PouchPartyContact.objects.get_or_create(
-                    party=party_details ,party_number=party_contact  )
-                    
+             # Party Block
+            party_details, party_email_obj, party_contact_obj = utils.get_or_create_party(
+                party_name,
+                party_email,
+                party_contact
+            )
+            
             purchase_order   = PurchaseOrder.objects.create(
                 pouch_purchase_number=pouch_purchase_number ,
                 delivery_date=delivery_date,
@@ -496,5 +494,4 @@ def purchase_order_ajax(request):
     except Exception as e:
         print(e)
         
-
     return HttpResponse("")

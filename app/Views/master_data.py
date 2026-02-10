@@ -58,7 +58,10 @@ def master_page(request):
 
 def view_master_data(request):    
   
-    pouch_master_data = PouchMaster.objects.all().order_by('id')
+    pouch_master_data = PouchMaster.objects.select_related(
+    "party_details",
+    "party_email",
+    "party_contact").all().order_by('id')
     party_name = PouchParty.objects.all()
     job_name = pouch_master_data.values_list('job_name', flat=True).distinct()
     if request.method == "GET":
