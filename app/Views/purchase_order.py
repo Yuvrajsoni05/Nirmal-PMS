@@ -300,8 +300,26 @@ def view_purchase_order(request):
             pouch_types = request.POST.getlist("pouch_type")
             special_instructions = request.POST.getlist("special_instruction")
             delivery_addresses = request.POST.getlist("delivery_address")
-
+            polyester_units = request.POST.getlist("polyester_units")
             for i in range(len(job_ids)):
+                total_ppb = 0
+
+                if polyester_units[i]:
+                    if polyester_units[i]:
+                        if polyester_units[i] == 'polyester_printed_bag':
+
+                            total_ppb = float(purchase_rates[i]) /  float(no_of_pouch_kgs[i])
+                        else:
+                            total_ppb = float(purchase_rates[i])
+                            print(purchase_rates)
+
+                print(total_ppb)
+                mq = float(no_of_pouch_kgs[i]) * 500
+                zipper_cost = float(zipper_costs[i] or 0)
+                pouch_charge = float(pouch_charges[i] or 0)
+               
+
+                final_rate = round(total_ppb + zipper_cost + pouch_charge, 3)
                 job = get_object_or_404(
                     PurchaseOrderJob,
                     id=job_ids[i],
@@ -312,11 +330,11 @@ def view_purchase_order(request):
                 job.quantity = quantities[i]
                 job.purchase_rate_per_kg = purchase_rates[i]
                 job.no_of_pouch_kg = no_of_pouch_kgs[i]
-                job.rate_basic = per_pouch_rates[i]
+                job.rate_basic = total_ppb
                 job.zipper_cost = zipper_costs[i]
                 job.pouch_charge = pouch_charges[i]
-                job.final_rate = final_rates[i]
-                job.minimum_quantity = minimum_quantities[i]
+                job.final_rate = final_rate
+                job.minimum_quantity = mq
                 job.pouch_type = pouch_types[i]
                 job.special_instruction = special_instructions[i]
                 job.delivery_address = delivery_addresses[i]

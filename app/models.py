@@ -393,37 +393,37 @@ class PouchQuotationJob(models.Model):
     quotation = models.ForeignKey(PouchQuotation,on_delete=models.CASCADE,related_name="pouch_quotation_jobs")
     job_name = models.CharField(max_length=200,db_index=True)
     quantity = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     purchase_rate_per_kg = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     no_of_pouch_kg = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     pouch_open_size = models.CharField(max_length=200)
     delivery_address = models.TextField()
     minimum_quantity = models.DecimalField(
-        max_digits=10,
+        max_digits=20,
         decimal_places=2,
         default=0,
         blank=True,
         null=True
     )    
     final_rate = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     rate_basic = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     zipper_cost = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     pouch_combination = models.CharField(max_length=200)
     pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE)
     special_instruction = models.TextField()
     pouch_charge = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     polyester_unit = models.CharField(max_length=200,choices=POLYESTER_UNIT,blank=True, null=True)
 
@@ -490,39 +490,39 @@ class PurchaseOrderJob(models.Model):
     purchase_order = models.ForeignKey(PurchaseOrder,on_delete=models.CASCADE,related_name="purchase_order_jobs")
     job_name = models.CharField(max_length=200)
     quantity = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     purchase_rate_per_kg = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     no_of_pouch_kg = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     pouch_open_size = models.CharField(max_length=200)
     polyester_unit = models.CharField(max_length=200,choices=POLYESTER_UNIT,blank=True, null=True)
 
     delivery_address = models.TextField()
     minimum_quantity = models.DecimalField(
-        max_digits=10,
+        max_digits=20,
         decimal_places=2,
         default=0,
         blank=True,
         null=True
     ) 
     final_rate = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     rate_basic = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     zipper_cost = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
     pouch_combination = models.CharField(max_length=200)
     pouch_type = models.CharField(max_length=200,choices=POUCH_TYPE,blank=True, null=True)
     special_instruction = models.TextField()
     pouch_charge = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0 , blank=True, null=True
+        max_digits=20, decimal_places=2, default=0 , blank=True, null=True
     )
 
     def save(self, *args, **kwargs ):

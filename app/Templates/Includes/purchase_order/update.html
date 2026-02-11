@@ -83,9 +83,14 @@
               <!-- Purchase Rate -->
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Purchase Rate Per Kg</label>
+                <div class="input-group col-md-4">
                 <input type="text"  class="form-control" name="purchase_rate_per_kg"
                        value="{{ job.purchase_rate_per_kg }}">
+                       <input type="text" name="polyester_units" class="input-group-text" value="{{ job.polyester_unit }}" >
+                </div>
+
               </div>
+                                
 
               <!-- Pouch per KG -->
               <div class="col-md-4">
@@ -97,8 +102,8 @@
               <!-- Per pouch -->
               <div class="col-md-4">
                 <label class="form-label fw-semibold">Rate Basic</label>
-                <input type="text"  class="form-control" name="per_pouch_rate_basic"
-                       value="{{ job.per_pouch_rate_basic }}">
+                <input type="numbers"  class="form-control" name="per_pouch_rate_basic"
+                   readonly    value="{{ job.rate_basic }}">
               </div>
 
               <!-- Zipper -->

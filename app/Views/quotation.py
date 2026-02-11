@@ -258,7 +258,7 @@ def view_quotations(request):
                         pouch_charge = float(pouch_charges[i] or 0)
 
                         final_rate = round(total_ppb + zipper_cost + pouch_charge, 3)
-
+                        mq = float(no_of_pouch_kgs[i]) * 500
                         
                         job = get_object_or_404(
                             PouchQuotationJob,
@@ -274,7 +274,7 @@ def view_quotations(request):
                         job.zipper_cost = zipper_costs[i]
                         job.pouch_charge = pouch_charges[i]
                         job.final_rate = final_rate
-                        job.minimum_quantity = minimum_quantities[i]
+                        job.minimum_quantity = mq
                         job.pouch_type = pouch_types[i]
                         job.special_instruction = special_instructions[i]
                         job.delivery_address = delivery_addresses[i]

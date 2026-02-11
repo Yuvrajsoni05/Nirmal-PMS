@@ -1,5 +1,9 @@
 from .common_imports import *
 
+
+
+
+@custom_login_required
 def master_page(request):
     pouch_party = PouchParty.objects.all()
      
@@ -55,7 +59,7 @@ def master_page(request):
 
 
 
-
+@custom_login_required
 def view_master_data(request):    
   
     pouch_master_data = PouchMaster.objects.select_related(
@@ -236,7 +240,7 @@ def view_master_data(request):
     }
     return render(request, "MasterData/view_master_data.html", context)
 
-
+@custom_login_required
 def master_data_ajax(request):
     party_name = request.GET.get('party_name')
     
