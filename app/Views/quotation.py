@@ -258,8 +258,8 @@ def view_quotations(request):
                         pouch_charge = float(pouch_charges[i] or 0)
 
                         final_rate = round(total_ppb + zipper_cost + pouch_charge, 3)
-                        mq = float(no_of_pouch_kgs[i]) * 500
-                        
+                        # mq = float(no_of_pouch_kgs[i]) * 500
+                        print(no_of_pouch_kgs)
                         job = get_object_or_404(
                             PouchQuotationJob,
                             id=job_ids[i],
@@ -274,11 +274,11 @@ def view_quotations(request):
                         job.zipper_cost = zipper_costs[i]
                         job.pouch_charge = pouch_charges[i]
                         job.final_rate = final_rate
-                        job.minimum_quantity = mq
+                        job.minimum_quantity = minimum_quantities[i]
                         job.pouch_type = pouch_types[i]
                         job.special_instruction = special_instructions[i]
                         job.delivery_address = delivery_addresses[i]
-                    
+                        job.polyester_unit = polyester_units[i]
                         job.save()
 
                     messages.success(request, 'Quotation Updated Successfully')
@@ -413,6 +413,7 @@ def view_quotations(request):
                             "polyester_unit": PouchQuotationJob.POLYESTER_UNIT,
                             'pouch_status':PouchQuotation.POUCH_STATUS,
                             
+                            
                         }
                         return render(request, "Purchase Order/purchase_order.html", context)
                     
@@ -430,6 +431,7 @@ def view_quotations(request):
                 "party_names":party_names,
                 "job_names":job_names,
                 "pouch_status": PouchQuotation.POUCH_STATUS,
+                'polyester_units':PouchQuotationJob.POLYESTER_UNIT,
             }
             return render(request,"Quotation/view_quotation.html",context)
         
@@ -476,7 +478,7 @@ def quotation_page_ajax(request):
        
             final_rate = round(total_ppb + zipper_cost + pouch_charge,3) 
             
-            minimum_quantity  = no_of_pouch_kg * 500
+            # minimum_quantity  = no_of_pouch_kg * 500
             # print("This No of KG ",no_of_pouch_kg)
         
         
@@ -484,7 +486,7 @@ def quotation_page_ajax(request):
                 "per_pouch_rate_basic": total_ppb,
                 "final_rate": final_rate,
                 "jobs":jobs,
-                "minimum_quantity":minimum_quantity,
+                # "minimum_quantity":minimum_quantity,
                 "party_emails":party_emails,
                 "party_contacts":party_contacts
             })

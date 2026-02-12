@@ -186,7 +186,6 @@ def register_page(request):
 
 
 @custom_login_required
-
 def edit_user_page(request):
     user_details = (
         Registration.objects.exclude(is_superuser=True)

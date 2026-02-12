@@ -301,6 +301,8 @@ def view_purchase_order(request):
             special_instructions = request.POST.getlist("special_instruction")
             delivery_addresses = request.POST.getlist("delivery_address")
             polyester_units = request.POST.getlist("polyester_units")
+
+   
             for i in range(len(job_ids)):
                 total_ppb = 0
 
@@ -313,8 +315,8 @@ def view_purchase_order(request):
                             total_ppb = float(purchase_rates[i])
                             print(purchase_rates)
 
-                print(total_ppb)
-                mq = float(no_of_pouch_kgs[i]) * 500
+               
+                # mq = float(no_of_pouch_kgs[i]) * 500
                 zipper_cost = float(zipper_costs[i] or 0)
                 pouch_charge = float(pouch_charges[i] or 0)
                
@@ -334,7 +336,8 @@ def view_purchase_order(request):
                 job.zipper_cost = zipper_costs[i]
                 job.pouch_charge = pouch_charges[i]
                 job.final_rate = final_rate
-                job.minimum_quantity = mq
+                job.minimum_quantity = minimum_quantities[i]
+                job.polyester_unit =polyester_units[i]
                 job.pouch_type = pouch_types[i]
                 job.special_instruction = special_instructions[i]
                 job.delivery_address = delivery_addresses[i]
@@ -465,6 +468,7 @@ def view_purchase_order(request):
         "purchase_orders" : page_obj,
         "party_names":party_names,
         "pouch_status":PurchaseOrder.POUCH_STATUS,
+        
     "job_names":job_names,  }
     return render(request,"Purchase Order/view_purchase_order.html",context)
           
@@ -497,7 +501,7 @@ def purchase_order_ajax(request):
             party_emails = list(PouchPartyEmail.objects.filter(party__party_name=party_name).values('email'))
        
             final_rate = round(total_ppb + zipper_cost + pouch_charge,3) 
-            minimum_quantity  = no_of_pouch_kg * 500
+            # minimum_quantity  = no_of_pouch_kg * 500
 
          
             
@@ -507,7 +511,7 @@ def purchase_order_ajax(request):
                 "jobs":jobs,
                 "party_contacts":party_contacts,
                 "party_emails":party_emails,
-                "minimum_quantity":round(minimum_quantity or 0, 2),
+                # "minimum_quantity":round(minimum_quantity or 0, 2),
             })
     except Exception as e:
         print(e)
