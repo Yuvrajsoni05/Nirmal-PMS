@@ -20,6 +20,8 @@ def job_entry(request):
     return render(request, "job_entry.html", context)
 
 
+
+
 @custom_login_required
 def create_job(request):
     try:

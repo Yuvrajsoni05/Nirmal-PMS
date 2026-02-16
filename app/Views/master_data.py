@@ -1,5 +1,5 @@
 from .common_imports import *
-
+import pandas as pd
 
 
 
@@ -91,13 +91,52 @@ def master_page(request):
         messages.error(request, f"Error: {str(e)}")
         return redirect('master_page')
 
-    
+def  master_data_upload(request):
+    if request.method == 'POST':
+        file = request.FILES.get('file')
+        df = pd.read_excel(file)
+        for _, row in df.iterrows():
+            email = row.get('Party Email')
+            if  
 
+    messages.success(request,"File Uploaded")
+    return redirect('master_page')
+
+
+# import pandas as pd
+# from myapp.models import Employee
+
+# def run():
+
+#     df = pd.read_excel('employees.xlsx')
+
+#     for _, row in df.iterrows():
+
+#         # basic validation
+#         if pd.isna(row['name']) or pd.isna(row['email']):
+#             print("Skipped row because missing required field")
+#             continue
+
+#         employee, created = Employee.objects.get_or_create(
+#             email=row['email'],   # unique check
+#             defaults={
+#                 'name': row['name'],
+#                 'salary': row['salary'] if not pd.isna(row['salary']) else 0
+#             }
+#         )
+
+#         if created:
+#             print(f"Inserted: {employee.name}")
+#         else:
+#             print(f"Already exists: {employee.email}")
+
+#     print("Import Completed")
 
 
 
 @custom_login_required
 def view_master_data(request):
+
     try:
         pouch_master_data = PouchMaster.objects.select_related(
             "party_details",
@@ -121,10 +160,49 @@ def view_master_data(request):
                 pouch_master_data = pouch_master_data.filter(
                     party_details__party_name__icontains=search_party_name
                 )
+        # ---------- DOWNLOAD DATA ----------
+        if request.method == "GET" and "download_data" in request.GET:
+            try:
+                wb = Workbook()
+                ws = wb.active
+                ws.title = "Pouch Master"
 
-    
+                ws.append([
+                    "Party Name",
+                    "Party Email",
+                    "Party Contact",
+                    "Job Name",
+                    "Pouch Open Size",
+                    "Pouch Combination",
+                    "Purchase Rate / KG",
+                    "No. of Pouch / KG",
+                    "Minimum Quantity",
+                ])
+
+                for obj in pouch_master_data:
+                    ws.append([
+                        obj.party_details.party_name if obj.party_details else "",
+                        obj.party_email.email if obj.party_email else "",
+                        obj.party_contact.party_number if obj.party_contact else "",
+                        obj.job_name,
+                        obj.pouch_open_size,
+                        obj.pouch_combination,
+                        obj.purchase_rate_per_kg,
+                        obj.no_of_pouch_per_kg,
+                        obj.minimum_quantity,
+                    ])
+
+                response = HttpResponse(
+                    content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+                response["Content-Disposition"] = 'attachment; filename="Master Data.xlsx"'
+                wb.save(response)
+                return response
+
+            except Exception as e:
+                messages.error(request, str(e))
+                return redirect('view_master_data')
         if request.method == "POST":
-
             # ---------- CREATE QUOTATION ----------
             if "create_quotation" in request.POST:
                 try:
@@ -205,48 +283,7 @@ def view_master_data(request):
                     messages.error(request, str(e))
                     return redirect('view_master_data')
 
-            # ---------- DOWNLOAD DATA ----------
-            if "download_data" in request.POST:
-                try:
-                    wb = Workbook()
-                    ws = wb.active
-                    ws.title = "Pouch Master"
-
-                    ws.append([
-                        "Party Name",
-                        "Party Email",
-                        "Party Contact",
-                        "Job Name",
-                        "Pouch Open Size",
-                        "Pouch Combination",
-                        "Purchase Rate / KG",
-                        "No. of Pouch / KG",
-                        "Minimum Quantity",
-                    ])
-
-                    for obj in pouch_master_data:
-                        ws.append([
-                            obj.party_details.party_name if obj.party_details else "",
-                            obj.party_email.email if obj.party_email else "",
-                            obj.party_contact.party_number if obj.party_contact else "",
-                            obj.job_name,
-                            obj.pouch_open_size,
-                            obj.pouch_combination,
-                            obj.purchase_rate_per_kg,
-                            obj.no_of_pouch_per_kg,
-                            obj.minimum_quantity,
-                        ])
-
-                    response = HttpResponse(
-                        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                    )
-                    response["Content-Disposition"] = 'attachment; filename="pouch_master.xlsx"'
-                    wb.save(response)
-                    return response
-
-                except Exception as e:
-                    messages.error(request, str(e))
-                    return redirect('view_master_data')
+            
 
             # ---------- DELETE ----------
             if 'delete_pouch_master' in request.POST:

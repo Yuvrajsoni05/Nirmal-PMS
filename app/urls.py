@@ -73,6 +73,7 @@ urlpatterns = [
     path('purchase_order_ajax',purchase_order_ajax,name='purchase_order_ajax'),
     path('master_page',master_page,name='master_page'),
     path('view_master_data',view_master_data,name='view_master_data'),
+    path('master_data_upload',master_data_upload,name='master_data_upload'),
     path('master_data_ajax_url',master_data_ajax,name='master_data_ajax_url'),
     
 ]
