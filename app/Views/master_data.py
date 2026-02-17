@@ -97,7 +97,7 @@ def  master_data_upload(request):
         df = pd.read_excel(file)
         for _, row in df.iterrows():
             email = row.get('Party Email')
-            if  
+             
 
     messages.success(request,"File Uploaded")
     return redirect('master_page')
