@@ -154,7 +154,6 @@ def ProformaInvoiceCreate(request):
             return redirect("proforma_invoice_page")
         except Exception as e:
             messages.warning(request, "Something went Wrong")
-            print(e)
             return redirect("proforma_invoice_page")
 
     return redirect("proforma_invoice_page")

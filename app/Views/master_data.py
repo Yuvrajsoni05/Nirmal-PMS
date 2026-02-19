@@ -92,45 +92,118 @@ def master_page(request):
         return redirect('master_page')
 
 def  master_data_upload(request):
-    if request.method == 'POST':
-        file = request.FILES.get('file')
-        df = pd.read_excel(file)
-        for _, row in df.iterrows():
-            email = row.get('Party Email')
-             
+    try:
+        if request.method == 'POST':
 
-    messages.success(request,"File Uploaded")
-    return redirect('master_page')
+            file = request.FILES.get('file')
+            if not file:
+                messages.error(request, "Please upload a file.", extra_tags="custom-danger-style")
+                return redirect("master_page")
 
+            df = pd.read_excel(file)
+            df.columns = df.columns.str.strip()
+            required_columns = [
+                'Party Email',
+                'Party Name',
+                'Party Contact',
+                'Job Name',
+                'Pouch Open Size',
+                'Pouch Combination',
+                'Purchase Rate / KG',
+                'No. of Pouch / KG'
+            ]
+            missing_columns = [col for col in required_columns if col not in df.columns]
+            if missing_columns:
+                messages.error(
+                    request,
+                    f"Missing columns: {', '.join(missing_columns)}",
+                    extra_tags="custom-danger-style"
+                )
+                return redirect("master_page")
+            for index, row in df.iterrows():
+                row_number = index + 2  # Excel row number
 
-# import pandas as pd
-# from myapp.models import Employee
+                # Check empty fields
+                for column in required_columns:
+                    value = row.get(column)
+                    if pd.isna(value) or str(value).strip() == "":
+                        messages.error(
+                            request,
+                            f"{column} is required at row {row_number}.",
+                            extra_tags="custom-danger-style"
+                        )
+                        return redirect("master_page")
 
-# def run():
+                # Get cleaned values
+                email = str(row.get('Party Email')).strip()
+                party_name = str(row.get('Party Name')).strip()
+                party_contact = str(row.get('Party Contact')).strip()
+                job_name = str(row.get('Job Name')).strip()
+                pouch_open_size = row.get('Pouch Open Size')
+                pouch_combination = row.get('Pouch Combination')
+                purchase_rate_per_kg = row.get('Purchase Rate / KG')
+                no_of_pouch_per_kg = row.get('No. of Pouch / KG')
 
-#     df = pd.read_excel('employees.xlsx')
+                # Email validation
+                email_error = utils.email_validator(email)
+                if email_error:
+                    messages.error(
+                        request,
+                        f"{email_error} at row {row_number}",
+                        extra_tags="custom-danger-style"
+                    )
+                    return redirect("master_page")
 
-#     for _, row in df.iterrows():
+        
+                try:
+                    purchase_rate_per_kg = float(purchase_rate_per_kg)
+                    no_of_pouch_per_kg = int(no_of_pouch_per_kg)
+                except ValueError:
+                    messages.error(
+                        request,
+                        f"Invalid numeric value at row {row_number}.",
+                        extra_tags="custom-danger-style"
+                    )
+                    return redirect("master_page")
+                party_details, _ = PouchParty.objects.get_or_create(
+                    party_name=party_name
+                )
 
-#         # basic validation
-#         if pd.isna(row['name']) or pd.isna(row['email']):
-#             print("Skipped row because missing required field")
-#             continue
+                party_email_obj, _ = PouchPartyEmail.objects.get_or_create(
+                    party=party_details,
+                    email=email
+                )
 
-#         employee, created = Employee.objects.get_or_create(
-#             email=row['email'],   # unique check
-#             defaults={
-#                 'name': row['name'],
-#                 'salary': row['salary'] if not pd.isna(row['salary']) else 0
-#             }
-#         )
+                party_contact_obj, _ = PouchPartyContact.objects.get_or_create(
+                    party=party_details,
+                    party_number=party_contact
+                )
 
-#         if created:
-#             print(f"Inserted: {employee.name}")
-#         else:
-#             print(f"Already exists: {employee.email}")
+                PouchMaster.objects.create(
+                    job_name=job_name,
+                    pouch_open_size=pouch_open_size,
+                    pouch_combination=pouch_combination,
+                    purchase_rate_per_kg=purchase_rate_per_kg,
+                    no_of_pouch_per_kg=no_of_pouch_per_kg,
+                    party_details=party_details,
+                    party_contact=party_contact_obj,
+                    party_email=party_email_obj,
+                    minimum_quantity=no_of_pouch_per_kg * 500
+                )
 
-#     print("Import Completed")
+            messages.success(request, "File Uploaded Successfully")
+            return redirect("master_page")
+    except Exception as e:
+        messages.error(
+            request,
+            f"Error: {str(e)}",
+            extra_tags="custom-danger-style"
+        )
+        logger.error(f"Something went wrong: {str(e)}", exc_info=True)
+        return redirect("master_page")
+
+    return redirect("master_page")
+
 
 
 
@@ -201,6 +274,7 @@ def view_master_data(request):
 
             except Exception as e:
                 messages.error(request, str(e))
+                logger.error(f"Something went wrong: {str(e)}", exc_info=True)
                 return redirect('view_master_data')
         if request.method == "POST":
             # ---------- CREATE QUOTATION ----------
@@ -241,6 +315,7 @@ def view_master_data(request):
 
                 except Exception as e:
                     messages.error(request, str(e))
+                    logger.error(f"Something went wrong: {str(e)}", exc_info=True)
                     return redirect('view_master_data')
 
             # ---------- CREATE PURCHASE ORDER ----------
@@ -281,6 +356,7 @@ def view_master_data(request):
 
                 except Exception as e:
                     messages.error(request, str(e))
+                    logger.error(f"Something went wrong: {str(e)}", exc_info=True)
                     return redirect('view_master_data')
 
             
@@ -366,6 +442,8 @@ def master_data_ajax(request):
         })
 
     except Exception as e:
+        logger.error(f"Something went wrong: {str(e)}", exc_info=True)
+        print(e)
         return JsonResponse({'error': str(e)}, status=500)
 
     

@@ -1,12 +1,10 @@
 
-from pyexpat import model
-from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 import uuid
 from django.core.validators import validate_email
-from django.forms import CharField
-from rest_framework.fields import DateField
+
+
 from decimal import Decimal, InvalidOperation
 from django.core.exceptions import ValidationError
 
@@ -23,10 +21,9 @@ class Registration(AbstractUser):
     first_name = models.CharField(max_length=200, blank=True,null=True,)
     last_name = models.CharField(max_length=200,blank=True, null=True)
     email = models.EmailField(max_length=200, unique=True,validators=[validate_email])
-    
-    
-    
 
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
 class Party(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -434,7 +431,6 @@ class PouchQuotationJob(models.Model):
         super().save(*args, **kwargs)
 
 class PurchaseOrder(models.Model):
-
     POUCH_STATUS = [
         ('Pending' , 'Pending'),
         ('Approved' , 'Approved'),
@@ -481,7 +477,6 @@ class PurchaseOrderJob(models.Model):
         ('Printed Roll' , 'Printed Roll'),
         ('Flat Bottom Pouch With Zipper' ,'Flat Bottom Pouch With Zipper'),
     ]
-    
     
     POLYESTER_UNIT =[
         ('polyester_printed_roll' , 'Polyester Printed Roll'),

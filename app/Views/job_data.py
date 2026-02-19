@@ -44,7 +44,6 @@ def create_job(request):
             pouch_combination = request.POST.getlist('pouch_combination[]')
             correction = request.POST.get("correction")
             job_status = request.POST.get("job_status")
-        
             job_name = [name.strip() for name in job_name_list]
 
             required_filed = {
@@ -84,9 +83,7 @@ def create_job(request):
                     else:
                         CylinderMadeIn.objects.create(
                             cylinder_made_in=value
-                        )
-          
-                    
+                        )          
             party_details, _ = Party.objects.get_or_create(
                 party_name=party_name.strip() if party_name.strip() else "None"
             )
@@ -126,7 +123,6 @@ def create_job(request):
         messages.error(request, f"Something went wrong {e}")
         logger.error(f"Something went wrong: {str(e)}", exc_info=True)
         return redirect("job_entry")
-    
     
 @custom_login_required
 def update_job(request, update_id):
