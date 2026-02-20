@@ -22,8 +22,7 @@ class Registration(AbstractUser):
     last_name = models.CharField(max_length=200,blank=True, null=True)
     email = models.EmailField(max_length=200, unique=True,validators=[validate_email])
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+
 
 class Party(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -317,8 +316,8 @@ class PouchMaster(models.Model):
     job_name = models.CharField(max_length=500,blank=True, null=True)
     pouch_open_size = models.CharField(max_length=200)
     pouch_combination = models.CharField(max_length=200)
-    purchase_rate_per_kg = models.CharField(max_length=200)
-  
+    purchase_rate_per_kg = models.CharField(max_length=200,default=0.0)
+
     no_of_pouch_per_kg = models.CharField(max_length=200,blank=True, null=True)
     minimum_quantity = models.CharField(max_length=200,blank=True, null=True)
 

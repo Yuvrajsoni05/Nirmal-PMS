@@ -14,6 +14,7 @@
             </a>
         </li>
         {% endif %} {% for i in quotations.paginator.page_range %}
+        {% if i >= quotations.number|add:-5 and i <= quotations.number|add:1 %}   
         <li
             class="page-item {% if quotations.number == i %}active{% endif %}"
         >

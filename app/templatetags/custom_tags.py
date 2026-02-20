@@ -46,7 +46,7 @@ def split_text(value):
 
 @register.filter
 def split_text_with_multiplications(value):
-    return [int(p) for p in value.split('x')]
+    return [int(p) for p in value.split('X')]
 
 
 

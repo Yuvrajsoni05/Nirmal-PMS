@@ -12,6 +12,7 @@
             >
         </li>
         {% endif %} {% for i in jobrecoreds.paginator.page_range %}
+        {% if i >= jobrecoreds.number|add:-5 and i <= jobrecoreds.number|add:1 %}
         <li class="page-item {% if jobrecoreds.number == i %}active{% endif %}">
             <a
                 class="page-link"

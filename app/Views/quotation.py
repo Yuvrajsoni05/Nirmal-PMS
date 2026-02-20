@@ -312,7 +312,7 @@ def view_quotations(request):
                         "check_quantity": "quantity",
                         "check_purchase_rate_per_kg": "purchase_rate_per_kg",
                         "check_no_of_pouch_kg": "no_of_pouch_kg",
-                        "check_per_pouch_rate_basic": "per_pouch_rate_basic",
+                        "check_per_pouch_rate_basic": "rate_basic",
                         "check_zipper_cost": "zipper_cost",
                         "check_pouch_charge": "pouch_charge",
                         "check_final_rate": "final_rate",

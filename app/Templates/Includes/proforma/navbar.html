@@ -14,6 +14,8 @@
                         {% endif %}
 
                         {% for i in proformaInvoices.paginator.page_range %}
+                        {% if i >= proformaInvoices.number|add:-5 and i <= proformaInvoices.number|add:1 %}
+
                             <li class="page-item {% if proformaInvoices.number == i %}active{% endif %}">
                                 <a class="page-link"
                                    href="?page={{ i }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}">

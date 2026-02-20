@@ -99,7 +99,7 @@ def  master_data_upload(request):
             if not file:
                 messages.error(request, "Please upload a file.", extra_tags="custom-danger-style")
                 return redirect("master_page")
-
+            print(file)
             df = pd.read_excel(file)
             df.columns = df.columns.str.strip()
             required_columns = [
@@ -109,7 +109,7 @@ def  master_data_upload(request):
                 'Job Name',
                 'Pouch Open Size',
                 'Pouch Combination',
-                'Purchase Rate / KG',
+
                 'No. of Pouch / KG'
             ]
             missing_columns = [col for col in required_columns if col not in df.columns]
