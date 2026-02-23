@@ -46,7 +46,16 @@ def split_text(value):
 
 @register.filter
 def split_text_with_multiplications(value):
-    return [int(p) for p in value.split('X')]
+    if not value:
+        return []
+
+    # Convert everything to lowercase and remove spaces
+    value = value.lower().replace(' ', '')
+
+    try:
+        return [int(p) for p in value.split('x')]
+    except ValueError:
+        return []
 
 
 

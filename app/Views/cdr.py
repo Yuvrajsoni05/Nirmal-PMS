@@ -59,7 +59,7 @@ def cdr_page(request):
     else:
         cdr_data = cdr_data.order_by("date","id")
 
-    paginator = Paginator(cdr_data, 10)
+    paginator = Paginator(cdr_data, 1)
     page_number = request.GET.get("page")
 
     party_names = Party.objects.values("party_name").distinct()

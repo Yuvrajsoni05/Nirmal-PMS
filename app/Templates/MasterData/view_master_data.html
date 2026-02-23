@@ -140,7 +140,7 @@
                                 <td>{{ pouch_master.party_contact.party_number }}</td>
                                 <td>{{ pouch_master.party_email.email }}</td>
                                 <td>{{ pouch_master.job_name }}</td>
-                                <td>{{ pouch_master.purchase_rate_per_kg }}</td>
+                                <td>{{ pouch_master.purchase_rate_per_kg|default:"0" }}</td>
                                 <td>{{ pouch_master.pouch_open_size }}</td>
                                 <td>{{ pouch_master.pouch_combination }}</td>
                                 <td>{{ pouch_master.no_of_pouch_per_kg }}</td>

@@ -2,32 +2,40 @@
     <div class="pagination-info">
         Page {{ jobrecoreds.number }} of {{ jobrecoreds.paginator.num_pages }}
     </div>
-    <ul class="pagination justify-content-end">
+
+    <ul class="pagination justify-content-end flex-wrap">
+
+        <!-- Previous Button -->
         {% if jobrecoreds.has_previous %}
         <li class="page-item">
-            <a
-                class="page-link"
-                href="?page={{ jobrecoreds.previous_page_number }}&q={{ request.GET.q }}&date={{ request.GET.date }}&job_name_sorting={{ request.GET.job_name_sorting }}&sorting={{ request.GET.sorting }}&company_name_sorting={{ request.GET.company_name_sorting }}&date_sorting={{ request.GET.date_sorting }}&cylinder_date_sorting={{ request.GET.cylinder_date_sorting }}&cylinder_made_in_sorting={{ request.GET.cylinder_made_in_sorting }}&end_date={{ request.GET.end_date }}"
-                >Previous</a
-            >
-        </li>
-        {% endif %} {% for i in jobrecoreds.paginator.page_range %}
-        {% if i >= jobrecoreds.number|add:-5 and i <= jobrecoreds.number|add:1 %}
-        <li class="page-item {% if jobrecoreds.number == i %}active{% endif %}">
-            <a
-                class="page-link"
-                href="?page={{ i }}&q={{ request.GET.q }}&date={{ request.GET.date }}&job_name_sorting={{ request.GET.job_name_sorting }}&sorting={{ request.GET.sorting }}&company_name_sorting={{ request.GET.company_name_sorting }}&date_sorting={{ request.GET.date_sorting }}&cylinder_date_sorting={{ request.GET.cylinder_date_sorting }}&cylinder_made_in_sorting={{ request.GET.cylinder_made_in_sorting }}&end_date={{ request.GET.end_date }}"
-                >{{ i }}</a
-            >
-        </li>
-        {% endfor %} {% if jobrecoreds.has_next %}
-        <li class="page-item">
-            <a
-                class="page-link"
-                href="?page={{ jobrecoreds.next_page_number }}&q={{ request.GET.q }}&date={{ request.GET.date }}&job_name_sorting={{ request.GET.job_name_sorting }}&sorting={{ request.GET.sorting }}&company_name_sorting={{ request.GET.company_name_sorting }}&date_sorting={{ request.GET.date_sorting }}&cylinder_date_sorting={{ request.GET.cylinder_date_sorting }}&cylinder_made_in_sorting={{ request.GET.cylinder_made_in_sorting }}&end_date={{ request.GET.end_date }}"
-                >Next</a
-            >
+            <a class="page-link"
+               href="?page={{ jobrecoreds.previous_page_number }}&{{ request.GET.urlencode }}">
+               Previous
+            </a>
         </li>
         {% endif %}
+
+        <!-- Page Numbers -->
+        {% for i in jobrecoreds.paginator.page_range %}
+            {% if i >= jobrecoreds.number|add:-5 and i <= jobrecoreds.number|add:5 %}
+                <li class="page-item {% if jobrecoreds.number == i %}active{% endif %}">
+                    <a class="page-link"
+                       href="?page={{ i }}&{{ request.GET.urlencode }}">
+                       {{ i }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Next Button -->
+        {% if jobrecoreds.has_next %}
+        <li class="page-item">
+            <a class="page-link"
+               href="?page={{ jobrecoreds.next_page_number }}&{{ request.GET.urlencode }}">
+               Next
+            </a>
+        </li>
+        {% endif %}
+
     </ul>
 </nav>

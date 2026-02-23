@@ -3,38 +3,41 @@
     <div class="pagination-info">
         Page {{ purchase_orders.number }} of {{ purchase_orders.paginator.num_pages }}
     </div>
-    <ul class="pagination justify-content-end">
+
+    <ul class="pagination justify-content-end flex-wrap">
+
+        <!-- Previous Button -->
         {% if purchase_orders.has_previous %}
         <li class="page-item">
-            <a
-                class="page-link"
-                href="?page={{ purchase_orders.previous_page_number }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}"
-            >
+            <a class="page-link"
+               href="?page={{ purchase_orders.previous_page_number }}&{{ request.GET.urlencode }}">
                 Previous
             </a>
         </li>
-        {% endif %} {% for i in purchase_orders.paginator.page_range %}
-        {% if i >= purchase_orders.number|add:-5 and i <= purchase_orders.number|add:1 %}
-        <li
-            class="page-item {% if purchase_orders.number == i %}active{% endif %}"
-        >
-            <a
-                class="page-link"
-                href="?page={{ i }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}"
-            >
-                {{ i }}
-            </a>
-        </li>
-        {% endfor %} {% if purchase_orders.has_next %}
+        {% endif %}
+
+        <!-- Page Numbers -->
+        {% for i in purchase_orders.paginator.page_range %}
+            {% if i >= purchase_orders.number|add:-5 and i <= purchase_orders.number|add:5 %}
+                <li class="page-item {% if purchase_orders.number == i %}active{% endif %}">
+                    <a class="page-link"
+                       href="?page={{ i }}&{{ request.GET.urlencode }}">
+                        {{ i }}
+                    </a>
+                </li>
+            {% endif %}
+        {% endfor %}
+
+        <!-- Next Button -->
+        {% if purchase_orders.has_next %}
         <li class="page-item">
-            <a
-                class="page-link"
-                href="?page={{ purchase_orders.next_page_number }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}"
-            >
+            <a class="page-link"
+               href="?page={{ purchase_orders.next_page_number }}&{{ request.GET.urlencode }}">
                 Next
             </a>
         </li>
         {% endif %}
+
     </ul>
 </nav>
 {% endif %}

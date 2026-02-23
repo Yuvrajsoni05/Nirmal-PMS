@@ -16,31 +16,38 @@ def master_page(request):
                 job_name = request.POST.getlist('job_name')
                 pouch_open_size = request.POST.getlist('pouch_open_size')
                 pouch_combination = request.POST.getlist('pouch_combination')
-                purchase_rate_per_kg = request.POST.getlist('purchase_rate_per_kg')
+                purchase_rate_per_kg = request.POST.getlist('purchase_rate_per_kg') or 0
                 no_of_pouch_per_kg = request.POST.getlist('no_of_pouch_per_kg')
+                
+             
+      
+
 
                 # remove empty values from list fields
                 job_name = [x for x in job_name if x]
                 pouch_open_size = [x for x in pouch_open_size if x]
                 pouch_combination = [x for x in pouch_combination if x]
-                purchase_rate_per_kg = [x for x in purchase_rate_per_kg if x]
                 no_of_pouch_per_kg = [x for x in no_of_pouch_per_kg if x]
 
-            
-                    
+
+               
+
+
+              
                 required_fields = {
                     'Party Name':party_name,
+                
                     'Party Contact':party_contact,
                     'Party Email':party_email,
                     'Job Name':job_name,
                     'Pouch Open Size':pouch_open_size,
                     'Pouch Combination':pouch_combination,
-                    'Purchase Rate Per KG':purchase_rate_per_kg,
+           
                     'No of Pouch KG':no_of_pouch_per_kg
                 }
-                print(required_fields)
+           
                 for filed, required in required_fields.items():
-                    print(required)
+ 
                     if not required:
                         messages.error(
                             request,f"{filed} is required",extra_tags="custom-danger-style"
@@ -103,6 +110,7 @@ def  master_data_upload(request):
             df = pd.read_excel(file)
             df.columns = df.columns.str.strip()
             required_columns = [
+                'NO',
                 'Party Email',
                 'Party Name',
                 'Party Contact',
@@ -154,7 +162,18 @@ def  master_data_upload(request):
                     )
                     return redirect("master_page")
 
-        
+                phone_error = utils.phone_number_check(party_contact)
+                if phone_error:
+                    messages.error(
+                        request,
+                        f"{phone_error} at row {row_number}",
+                        extra_tags="custom-danger-style"
+                    )
+                    return redirect("master_page")
+
+
+
+
                 try:
                     purchase_rate_per_kg = float(purchase_rate_per_kg)
                     no_of_pouch_per_kg = int(no_of_pouch_per_kg)
@@ -218,21 +237,22 @@ def view_master_data(request):
         ).all().order_by('id')
 
         party_name = PouchParty.objects.all()
-        job_name = pouch_master_data.values_list('job_name', flat=True).distinct()
+        job_name = PouchMaster.objects.values_list('job_name',flat=True).distinct()
+    
+      
 
-        if request.method == "GET" and "search_pouch_master" in request.GET:
-            search_party_name = request.GET.get('search_party_name')
-            search_job_name = request.GET.get('search_job_name')
+        search_party_name = request.GET.get('search_party_name')
+        search_job_name = request.GET.get('search_job_name')
 
-            if search_job_name:
-                pouch_master_data = pouch_master_data.filter(
-                    job_name__icontains=search_job_name
-                )
+        if search_job_name:
+            pouch_master_data = pouch_master_data.filter(
+                job_name__icontains=search_job_name
+            )
 
-            if search_party_name:
-                pouch_master_data = pouch_master_data.filter(
-                    party_details__party_name__icontains=search_party_name
-                )
+        if search_party_name:
+            pouch_master_data = pouch_master_data.filter(
+                party_details__party_name__exact=search_party_name
+            )
         # ---------- DOWNLOAD DATA ----------
         if request.method == "GET" and "download_data" in request.GET:
             try:
@@ -377,6 +397,7 @@ def view_master_data(request):
             if 'edit_master_data' in request.POST:
                 try:
                     pouch_master_id = request.POST.get('edit_pouch_master')
+                    
                     pouch = get_object_or_404(PouchMaster, id=pouch_master_id)
 
                     minimum_quantity = int(request.POST.get('no_of_pouch_per_kg')) * 500
@@ -397,7 +418,7 @@ def view_master_data(request):
                     return redirect('view_master_data')
 
 
-        paginator = Paginator(pouch_master_data, 10)
+        paginator = Paginator(pouch_master_data,10)
         page = request.GET.get('page')
         pouch_master_data = paginator.get_page(page)
 
@@ -411,7 +432,7 @@ def view_master_data(request):
 
     except Exception as e:
         messages.error(request, f"Unexpected error: {str(e)}")
-        log.e
+      
         return redirect('view_master_data')
 
 @custom_login_required
@@ -421,7 +442,7 @@ def master_data_ajax(request):
 
         jobs = list(PouchMaster.objects.filter(
             party_details__party_name=party_name
-        ).values_list('job_name', flat=True))
+        ).values_list('job_name', flat=True).distinct())
 
         party_email = list(
             PouchPartyEmail.objects.filter(

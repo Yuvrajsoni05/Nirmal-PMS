@@ -1,5 +1,5 @@
 {% if pouch_master_data %}
-<nav aria-label="Page navigation example">
+<nav aria-label="Page navigation">
     <div class="pagination-info">
         Page {{ pouch_master_data.number }} of {{ pouch_master_data.paginator.num_pages }}
     </div>
@@ -9,27 +9,27 @@
         {% if pouch_master_data.has_previous %}
         <li class="page-item">
             <a class="page-link"
-               href="?page={{ pouch_master_data.previous_page_number }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}">
+               href="?page={{ pouch_master_data.previous_page_number }}&search_party_name={{ request.GET.search_party_name|urlencode }}&search_job_name={{ request.GET.search_job_name|urlencode }}">
                 Previous
             </a>
         </li>
         {% endif %}
 
         {% for i in pouch_master_data.paginator.page_range %}
-            {% if i >= pouch_master_data.number|add:-5 and i <= pouch_master_data.number|add:1 %}
-                <li class="page-item {% if pouch_master_data.number == i %}active{% endif %}">
-                    <a class="page-link"
-                       href="?page={{ i }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}">
-                        {{ i }}
-                    </a>
-                </li>
-            {% endif %}
+        {% if i >= pouch_master_data.number|add:-5 and i <= pouch_master_data.number|add:5 %}
+        <li class="page-item {% if pouch_master_data.number == i %}active{% endif %}">
+            <a class="page-link"
+               href="?page={{ i }}&search_party_name={{ request.GET.search_party_name|urlencode }}&search_job_name={{ request.GET.search_job_name|urlencode }}">
+                {{ i }}
+            </a>
+        </li>
+        {% endif %}
         {% endfor %}
 
         {% if pouch_master_data.has_next %}
         <li class="page-item">
             <a class="page-link"
-               href="?page={{ pouch_master_data.next_page_number }}&select_company={{ request.GET.select_company }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}">
+               href="?page={{ pouch_master_data.next_page_number }}&search_party_name={{ request.GET.search_party_name|urlencode }}&search_job_name={{ request.GET.search_job_name|urlencode }}">
                 Next
             </a>
         </li>
