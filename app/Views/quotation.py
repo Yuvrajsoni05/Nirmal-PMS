@@ -51,7 +51,6 @@ def quotation_page(request):
                     if new_party_name:
                         party_name = new_party_name
                         
-                    
                     if party_email == "others":
 
                         if not new_party_email:
@@ -92,7 +91,7 @@ def quotation_page(request):
                             "zipper_cost":zipper_costs,
                             "final_rate":final_rates,
                             "pouch_type":pouch_types,
-                            "delivery_address":delivery_addresses,
+                         
         
                     }
 
@@ -148,7 +147,7 @@ def quotation_page(request):
                     quotation.save()
                     
                 messages.success(request,"Quotation created successfully ")
-                return redirect('quotation_page')
+                return redirect('view_quotations')
         except ValidationError as e:
             messages.error(request, str(e))
             logging.error("Error creating quotation: %s", e)
@@ -187,7 +186,12 @@ def view_quotations(request):
                 job_id = request.GET.get('job_id')
                 start_date = request.GET.get('start_date')
                 end_date = request.GET.get('end_date')
-            
+
+
+
+                if party_id:
+                    job_names = PouchQuotationJob.objects.filter(quotation__party_details=party_id).values('job_name').distinct()
+
                 if party_id:
                     quotations = quotations.filter(party_details_id=party_id)
                 if job_id:
@@ -419,7 +423,7 @@ def view_quotations(request):
                     
                         
                     
-            paginator =  Paginator(quotations,5)
+            paginator =  Paginator(quotations,3)
             page_number = request.GET.get("page")
             page_obj = paginator.get_page(page_number)
             page_range_placeholder = "x" * page_obj.paginator.num_pages
@@ -462,7 +466,8 @@ def quotation_page_ajax(request):
             
             jobs  = list(PouchQuotationJob.objects.filter(quotation__party_details__party_name=party_name).values('job_name').union(PouchMaster.objects.filter(party_details__party_name=party_name).values('job_name').distinct()))
             
-            
+
+           
             party_emails = list(PouchPartyEmail.objects.filter(party__party_name=party_name).values('email'))
             party_contacts = list(PouchPartyContact.objects.filter(party__party_name=party_name).values('party_number'))
             total_ppb = 0   

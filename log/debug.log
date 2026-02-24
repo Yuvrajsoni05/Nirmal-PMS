@@ -17181,3 +17181,6 @@ ERROR 2026-02-20 10:15:49,031 myapp login_page Invalid Username or Password view
 ERROR 2026-02-20 10:15:57,410 myapp login_page Invalid Username or Password views.py
 ERROR 2026-02-20 10:17:43,694 myapp login_page Invalid Username or Password views.py
 ERROR 2026-02-20 10:18:00,920 myapp login_page Invalid Username or Password views.py
+ERROR 2026-02-24 16:02:22,238 myapp login_page Invalid Username or Password views.py
+ERROR 2026-02-24 18:00:40,980 myapp login_page Invalid Username or Password views.py
+ERROR 2026-02-24 19:12:01,875 myapp login_page Invalid Username or Password views.py

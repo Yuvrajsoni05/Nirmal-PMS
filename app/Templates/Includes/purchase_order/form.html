@@ -74,8 +74,15 @@
                                     <div class="row g-3">
                                         <div class="col-md-4">
                                             <label class="form-label fw-bold">Job Name</label>
-                                            <input type="text" value="{{ i.job_name }}" class="form-control job_name" name="job_name" {% if i.job_name %}readonly{% endif %}/>
-                                        </div>
+                                            <select class="form-select job_name" name="job_name" required>
+                                                <option value="">Select Job Name</option>
+                                                <option value="{{ i.job_name }}" selected>{{ i.job_name }}</option>
+                                                {% for job in job_names %}
+                                                
+                                                <option value="{{ job }}">{{ job }}</option>
+                                                {% endfor %}
+                                                <option value="others">Others</option>
+                                            </select>                                        </div>
 
                                         <div class="col-md-4">
                                             <label class="form-label fw-bold">Pouch Open Size</label>
@@ -120,10 +127,7 @@
                                             <input type="number" class="form-control" name="quantity" value="{{ i.quantity }}" placeholder="0" required/>
                                         </div>
 
-                                        <div class="col-md-3">
-                                            <label class="form-label fw-bold">Minimum Quantity <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control minimum_quantity" value="0" name="minimum_quantity" placeholder="0" required/>
-                                        </div>
+                                       
 
                                         <div class="col-md-6">
                                             <label class="form-label fw-bold">Purchase Rate Per Kg <span class="text-danger">*</span></label>
@@ -162,7 +166,10 @@
                                             <label class="form-label fw-bold">Final Rate <span class="text-danger">*</span></label>
                                             <input type="number" class="form-control final_rate" name="final_rate" step="0.01" value="0.0" required/>
                                         </div>
-
+                                        <div class="col-md-3">
+                                            <label class="form-label fw-bold">Minimum Quantity <span class="text-danger">*</span></label>
+                                            <input type="number" class="form-control minimum_quantity" value="0" name="minimum_quantity" placeholder="0" required/>
+                                        </div>
                                         <div class="col-12">
                                             <label class="form-label fw-bold">Special Instruction</label>
                                             <textarea class="form-control" name="special_instruction" rows="2" placeholder="Enter any special instructions">{{ i.special_instruction }}</textarea>

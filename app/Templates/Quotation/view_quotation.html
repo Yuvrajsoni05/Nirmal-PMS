@@ -111,104 +111,104 @@
                             {% for quotation in quotations %}
                             <tr class="text-center">
                                 <td>{{ forloop.counter }}</td>
-                                <td>{{ quotation.pouch_quotation_number }}</td>
+                                <td>{{ quotation.pouch_quotation_number|default:"-" }}</td>
                                 <td>{{ quotation.delivery_date|date:"d-m-Y" }}</td>
-                                <td>{{ quotation.party_details.party_name }}</td>
+                                <td>{{ quotation.party_details.party_name|default:"-" }}</td>
                                 
                                 <!-- Job Name -->
                                 <td>
                                     {% for job in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ job.job_name }}</div>
+                                    <div>{{ job.job_name|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Pouch Size -->
                                 <td>
                                     {% for pouch_size in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ pouch_size.pouch_open_size }}</div>
+                                    <div>{{ pouch_size.pouch_open_size|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Pouch Combination -->
                                 <td>
                                     {% for pouch_comb in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ pouch_comb.pouch_combination }}</div>
+                                    <div>{{ pouch_comb.pouch_combination|default:"-"     }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Quantity -->
                                 <td>
                                     {% for pouch_qty in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ pouch_qty.quantity }}</div>
+                                    <div>{{ pouch_qty.quantity|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Purchase Rate Per Kg -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ prpk.purchase_rate_per_kg }}</div>
+                                    <div>{{ prpk.purchase_rate_per_kg|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- No of Pouch Kg -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ prpk.no_of_pouch_kg }}</div>
+                                    <div>{{ prpk.no_of_pouch_kg|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!--  Rate Basic -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div> {{ prpk.rate_basic }}</div>
+                                    <div> {{ prpk.rate_basic|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Zipper Cost -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div> {{ prpk.zipper_cost }}</div>
+                                    <div> {{ prpk.zipper_cost|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Pouch Charge -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ prpk.pouch_charge }}</div>
+                                    <div>{{ prpk.pouch_charge|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Final Rate -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ prpk.final_rate }}</div>
+                                    <div>{{ prpk.final_rate|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Minimum Quantity -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ prpk.minimum_quantity }}</div>
+                                    <div>{{ prpk.minimum_quantity|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Pouch Type -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ prpk.pouch_type }}</div>
+                                    <div>{{ prpk.pouch_type|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
                                 <!-- Purchase Rate Unit -->
                                 <td>
                                     {% for prpk in quotation.pouch_quotation_jobs.all %}
-                                    <div>{{ prpk.polyester_unit }}</div>
+                                    <div>{{ prpk.polyester_unit|default:"-" }}</div>
                                     {% endfor %}
                                 </td>
 
-                                <td>{{ quotation.quantity_variate }}</td>
-                                <td>{{ quotation.freight }}</td>
-                                <td>{{ quotation.gst }}%</td>
+                                <td>{{ quotation.quantity_variate|default:"-" }}</td>
+                                <td>{{ quotation.freight|default:"-" }}</td>
+                                <td>{{ quotation.gst|default:"-" }}%</td>
 
                                 <!-- Delivery Address -->
                                 <td class="text-start">
