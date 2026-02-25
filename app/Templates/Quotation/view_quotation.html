@@ -11,64 +11,66 @@
     <!-- Main Card -->
     <div class="card card-round">
         <!-- Card Header with Filters -->
-        <div class="card-header">
-            <div class="d-flex align-items-center justify-content-between flex-wrap">
-                <h5 class="card-title mb-0">Quotation </br> List</h5>
-                
+       <div class="card-header py-2">
+            <div class="d-flex align-items-center justify-content-between">
+
+                <!-- Title -->
+                <h3 class="fw-bold mb-3">Quotation List</h3>
+
                 <!-- Filter Form -->
-                <form method="GET" class="row g-2 align-items-center">
-                    <!-- Party Filter -->
-                    <div class="col-auto">
-                        <div class="input-group">
+                <form method="GET" class="d-flex align-items-center gap-2 mb-0">
+
+                    <!-- Party -->
+                    <div class="input-group input-group">
                         <span class="input-group-text">Party Name</span>
-                        <select name="party_id" id="party_filter" class="form-select">
-                            <option value="">Select Parties</option>
+                        <select name="party_id" class="form-select form-control" >
+                            <option value="">Select Party Name</option>
                             {% for party in party_names %}
-                            <option value="{{ party.id }}" {% if request.GET.party_id == party.id|slugify %}selected{% endif %}>
+                            <option value="{{ party.id }}"
+                                {% if request.GET.party_id == party.id|stringformat:"s" %}selected{% endif %}>
                                 {{ party.party_name }}
                             </option>
                             {% endfor %}
                         </select>
                     </div>
-                    </div>
 
-                    <!-- Job Filter -->
-                    <div class="col-auto ">
-                        <div class="input-group">
-                            <span class="input-group-text">Job Name</span>
-                            <select name="job_id" id="job_filter" class="form-select">
-                                <option value="">Select Job Name</option>
-                                {% for job in job_names %}
-                                <option value="{{ job.job_name }}" {% if request.GET.job_id == job.job_name|slugify %}selected{% endif %}>
-                                    {{ job.job_name }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                    <!-- Job -->
+                    <div class="input-group input-group">
+                        <span class="input-group-text">Job Name</span>
+                        <select name="job_id" class="form-select form-control">
+                            <option value="">Select Job Name</option>
+                            {% for job in job_names %}
+                            <option value="{{ job.job_name }}"
+                                {% if request.GET.job_id == job.job_name|stringformat:"s" %}selected{% endif %}>
+                                {{ job.job_name }}
+                            </option>
+                            {% endfor %}
+                        </select>
                     </div>
 
                     <!-- Start Date -->
-                    <div class="col-auto">
-                        <div class="input-group">
-                            <span class="input-group-text">Start Date</span>
-                            <input type="date" name="start_date" id="start_date" class="form-control" value="{{ request.GET.start_date }}">
-                        </div>
-                    </div>
+                    <input type="date"
+                        name="start_date"
+                        class="form-control"
+                       
+                        value="{{ request.GET.start_date }}">
 
                     <!-- End Date -->
-                    <div class="col-auto">
-                        <div class="input-group">
-                            <span class="input-group-text">End Date</span>
-                            <input type="date" name="end_date" id="end_date" class="form-control" value="{{ request.GET.end_date }}">
-                        </div>
-                    </div>
+                    <input type="date"
+                        name="end_date"
+                        class="form-control"
+                    
+                        value="{{ request.GET.end_date }}">
 
-                    <!-- Action Buttons -->
-                    <div class="col-auto">
-                        <button type="submit" class="btn btn-primary btn">Search</button>
-                        <a href="{{ request.path }}" class="btn btn-secondary btn">Reset</a>
-                    </div>
-                </form>
+                    <!-- Buttons -->
+                    <button type="submit" class="btn btn-primary ">Search</button>
+                     <button type="submit" name="download_purchase_order" value="1" class="btn btn-success">
+                          Download
+                    </button>
+                    <a href="{{ request.path }}" class="btn btn-outline-secondary ">Reset</a>
+
+                    </form>
+
             </div>
         </div>
 
@@ -95,7 +97,7 @@
                             <th>Min Qty</th>
                             <th>Pouch Type</th>
                             <th>Purchase Rate Unit</th>
-                            <th>Quantity Variate</th>
+                            <th>Quantity Variation</th>
                             <th>Freight </th>
                             <th>GST</th>
                             <th>Delivery Address</th>

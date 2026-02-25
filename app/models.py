@@ -309,6 +309,7 @@ class PouchDeliveryAddress(models.Model):
 
 
 class PouchMaster(models.Model):
+    sr_no = models.IntegerField(unique=True, auto_created=True,blank=True, null=True)
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     party_details = models.ForeignKey(PouchParty, on_delete=models.PROTECT, related_name='pouch_master_party_details')
     party_email = models.ForeignKey(PouchPartyEmail, on_delete=models.PROTECT, related_name='pouch_master_party_email')

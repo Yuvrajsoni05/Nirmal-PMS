@@ -23,8 +23,8 @@ def master_page(request):
                 job_name = [x for x in job_name if x]
                 pouch_open_size = [x for x in pouch_open_size if x]
                 pouch_combination = [x for x in pouch_combination if x]
-                no_of_pouch_per_kg = [x for x in no_of_pouch_per_kg if x]
-                purchase_rate_per_kg = [x for x in purchase_rate_per_kg if x]
+                
+                
                
                 required_fields = {
                     'Party Name':party_name,
@@ -66,7 +66,7 @@ def master_page(request):
 
                 for i in range(len(job_name)):
                     minimum_quantity = int(no_of_pouch_per_kg[i]) * 500
-                    if purchase_rate_per_kg[i] == "nan":
+                    if purchase_rate_per_kg[i] == "":
                         purchase_rate_per_kg[i] = 0
 
                     PouchMaster.objects.create(
@@ -74,7 +74,7 @@ def master_page(request):
                         pouch_open_size=pouch_open_size[i],
                         pouch_combination=pouch_combination[i],
                         purchase_rate_per_kg=purchase_rate_per_kg[i],
-                        no_of_pouch_per_kg=no_of_pouch_per_kg,
+                        no_of_pouch_per_kg=no_of_pouch_per_kg[i],
                         party_details=party_details,
                         party_contact=party_contact_obj,
                         party_email=party_email_obj,
@@ -121,9 +121,8 @@ def  master_data_upload(request):
                 )
                 return redirect("master_page")
             for index, row in df.iterrows():
-                row_number = index + 2  # Excel row number
+                row_number = index + 2  
 
-                # Check empty fields
                 for column in required_columns:
                     value = row.get(column)
                     if pd.isna(value) or str(value).strip() == "":
@@ -135,13 +134,14 @@ def  master_data_upload(request):
                         return redirect("master_page")
 
                 # Get cleaned values
+                excel_no = int(row.get('NO'))
                 email = str(row.get('Party Email')).strip()
                 party_name = str(row.get('Party Name')).strip()
                 party_contact = str(row.get('Party Contact')).strip()
                 job_name = str(row.get('Job Name')).strip()
                 pouch_open_size = row.get('Pouch Open Size')
                 pouch_combination = row.get('Pouch Combination')
-                purchase_rate_per_kg = row.get('Purchase Rate / KG')
+                purchase_rate_per_kg = row.get('Purchase Rate / KG') or 0
                 no_of_pouch_per_kg = row.get('No. of Pouch / KG')
 
                 # Email validation
@@ -177,16 +177,20 @@ def  master_data_upload(request):
 
                 party_details,party_email_obj,party_contact_obj = utils.get_or_create_party(party_name,email,party_contact)
                 
-                PouchMaster.objects.create(
-                    job_name=job_name,
-                    pouch_open_size=pouch_open_size,
-                    pouch_combination=pouch_combination,
-                    purchase_rate_per_kg=purchase_rate_per_kg,
-                    no_of_pouch_per_kg=no_of_pouch_per_kg,
-                    party_details=party_details,
-                    party_contact=party_contact_obj,
-                    party_email=party_email_obj,
-                    minimum_quantity=no_of_pouch_per_kg * 500
+                PouchMaster.objects.update_or_create(
+                    sr_no=excel_no,
+                    defaults={
+                    'job_name':job_name,
+                    'pouch_open_size':pouch_open_size,
+                    'pouch_combination':pouch_combination,
+                    'purchase_rate_per_kg':purchase_rate_per_kg,
+                    'no_of_pouch_per_kg':no_of_pouch_per_kg,
+                    'party_details':party_details,
+                    'party_contact':party_contact_obj,
+                    'party_email':party_email_obj,
+                    'minimum_quantity':no_of_pouch_per_kg * 500
+                    }
+
                 )
             messages.success(request, "File Uploaded Successfully")
             return redirect("master_page")
@@ -208,7 +212,7 @@ def view_master_data(request):
         "party_details",
         "party_email",
         "party_contact"
-    ).all().order_by('id')
+    ).all().order_by('party_details__party_name')
 
     party_name = PouchParty.objects.all()
     job_name = PouchMaster.objects.values_list('job_name',flat=True).distinct()

@@ -24,9 +24,9 @@ html, body {
 /* ================= BODY ================= */
 body {
     font-family: "Arial", "Helvetica", sans-serif;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 400;
-    line-height: 1.4;
+    line-height: 1.5;
     color: #000;
     background: #fff;
 }
@@ -101,18 +101,20 @@ body {
 .header-bottom {
     display: flex;
     justify-content: space-between;
-    font-size: 10px;
+    font-size: 11px;
     gap: 15px;
 }
 
 .header-info-col {
     flex: 1;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .header-info-col strong {
     display: block;
     margin-bottom: 3px;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: #000;
 }
@@ -130,10 +132,11 @@ body {
     flex: 1;
     border: 1px solid #000;
     padding: 8px;
+    min-width: 0;
 }
 
 .client-box-title {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: #000;
     text-transform: uppercase;
@@ -143,9 +146,12 @@ body {
 }
 
 .client-box-content {
-    font-size: 10px;
-    line-height: 1.5;
+    font-size: 11px;
+    line-height: 1.6;
     color: #000;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 /* ================= PRODUCTS SECTION ================= */
@@ -154,7 +160,7 @@ body {
 }
 
 .section-header {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
     margin-bottom: 10px;
@@ -176,9 +182,11 @@ body {
 }
 
 .product-name {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     color: #000;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 .product-body {
@@ -195,26 +203,33 @@ body {
     font-weight: 700;
     color: #000;
     margin-bottom: 4px;
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
 }
 
 .special-note-text {
     color: #000;
-    font-size: 10px;
-    line-height: 1.4;
+    font-size: 11px;
+    line-height: 1.5;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
 }
 
 .specs-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 5px;
+    table-layout: fixed;
 }
 
 .specs-table td {
-    padding: 4px 6px;
+    padding: 5px 7px;
     border: 1px solid #000;
-    font-size: 10px;
+    font-size: 11px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    vertical-align: top;
 }
 
 .specs-table td:first-child {
@@ -227,6 +242,7 @@ body {
 .specs-table td:last-child {
     width: 60%;
     color: #000;
+    white-space: pre-wrap;
 }
 
 /* ================= TERMS SECTION ================= */
@@ -237,7 +253,7 @@ body {
 }
 
 .terms-title {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
     margin-bottom: 8px;
@@ -249,13 +265,18 @@ body {
 .terms-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 .terms-table td {
-    padding: 4px 6px;
+    padding: 5px 7px;
     border: 1px solid #000;
-    font-size: 10px;
+    font-size: 11px;
     color: #000;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    vertical-align: top;
+    white-space: pre-wrap;
 }
 
 .terms-table td:first-child {
@@ -289,7 +310,7 @@ body {
 }
 
 .footer-company {
-    font-size: 10px;
+    font-size: 11px;
     color: #000;
     line-height: 1.5;
 }
@@ -318,7 +339,7 @@ body {
 }
 
 .signature-title {
-    font-size: 9px;
+    font-size: 10px;
     color: #000;
     margin-top: 2px;
 }
@@ -441,7 +462,7 @@ body {
                 
                 {% if job.per_pouch_rate_basic %}
                 <tr>
-                    <td>Per Pouch Rate (Basic)</td>
+                    <td>Rate Basic</td>
                     <td>{{ job.per_pouch_rate_basic }}</td>
                 </tr>
                 {% endif %}
@@ -492,7 +513,7 @@ body {
             {% if job.delivery_address %}
             <div class="special-note" style="margin-top: 10px;">
                 <div class="special-note-title">Delivery Address</div>
-                <div class="special-note-text" style="white-space: pre-line;">{{ job.delivery_address }}</div>
+                <div class="special-note-text" style="white-space: pre-wrap;">{{ job.delivery_address }}</div>
             </div>
             {% endif %}
         </div>
@@ -505,7 +526,7 @@ body {
     <div class="terms-title">Other Terms</div>
     <table class="terms-table">
         <tr>
-            <td>Quantity Variate</td>
+            <td>Quantity Variation</td>
             <td>{{ common_values.quantity_variate }}</td>
         </tr>
         <tr>
@@ -515,6 +536,10 @@ body {
         <tr>
             <td>G.S.T.</td>
             <td>{{ common_values.gst }}</td>
+        </tr>
+        <tr>
+            <td>Term And Note</td>
+            <td>{{ common_values.note }}</td>
         </tr>
     </table>
 </div>

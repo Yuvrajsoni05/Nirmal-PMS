@@ -174,7 +174,7 @@ def quotation_page(request):
 def view_quotations(request):
     party_names = PouchParty.objects.all().distinct()
     job_names = PouchQuotationJob.objects.values('job_name').distinct()
-    quotations = PouchQuotation.objects.all().order_by('-id')
+    quotations = PouchQuotation.objects.all().order_by('party_details__party_name')
     
     pouch_types =  PouchQuotationJob.POUCH_TYPE
 
@@ -187,8 +187,6 @@ def view_quotations(request):
                 start_date = request.GET.get('start_date')
                 end_date = request.GET.get('end_date')
 
-
-
                 if party_id:
                     job_names = PouchQuotationJob.objects.filter(quotation__party_details=party_id).values('job_name').distinct()
 
@@ -197,9 +195,6 @@ def view_quotations(request):
                 if job_id:
                     quotations = quotations.filter(pouch_quotation_jobs__job_name=job_id)
 
-
-                
-                
                 if start_date and end_date:
                     quotations = quotations.filter(delivery_date__range=[start_date, end_date])
 
@@ -215,15 +210,15 @@ def view_quotations(request):
                 elif 'edit_quotation' in request.POST:
 
                     q_id = request.POST.get('quotation_id')
-                    party_email_id = request.POST.get('party_email_id')
-                    party_email = request.POST.get('party_email')
-                    if party_email:
-                        email_error = utils.email_validator(party_email)
-                        if email_error:
-                            messages.error(request, email_error, extra_tags="custom-danger-style")
-                            return redirect("view_quotations")
-                        if party_email_id:
-                            PouchPartyEmail.objects.filter(id=party_email_id).update(email=party_email)
+                    # party_email_id = request.POST.get('party_email_id')
+                    # party_email = request.POST.get('party_email')
+                    # if party_email:
+                    #     email_error = utils.email_validator(party_email)
+                    #     if email_error:
+                    #         messages.error(request, email_error, extra_tags="custom-danger-style")
+                    #         return redirect("view_quotations")
+                    #     if party_email_id:
+                    #         PouchPartyEmail.objects.filter(id=party_email_id).update(email=party_email)
 
                     edit_quotation = get_object_or_404(PouchQuotation, id=q_id)
                     edit_quotation.pouch_quotation_number = request.POST.get("pouch_quotation_number")
@@ -316,7 +311,7 @@ def view_quotations(request):
                         "check_quantity": "quantity",
                         "check_purchase_rate_per_kg": "purchase_rate_per_kg",
                         "check_no_of_pouch_kg": "no_of_pouch_kg",
-                        "check_per_pouch_rate_basic": "rate_basic",
+                        "check_per_pouch_rate_basic": "per_pouch_rate_basic",
                         "check_zipper_cost": "zipper_cost",
                         "check_pouch_charge": "pouch_charge",
                         "check_final_rate": "final_rate",
@@ -363,7 +358,7 @@ def view_quotations(request):
                             selected_values[field] = value
 
                         if selected_values:
-                            PouchQuotationJob.objects.filter(id=job_id).update(**selected_values)
+                            # PouchQuotationJob.objects.filter(id=job_id).update(**selected_values)
                             selected_values["job_id"] = job_id
                             all_selected_jobs.append(selected_values)
                     
@@ -393,35 +388,26 @@ def view_quotations(request):
                     
                     
                     elif "print_quotation" in request.POST:
-                
+                        print(all_selected_jobs)
                         context={"jobs": all_selected_jobs , "common_values": common_values}  
                         return render(request, "Includes/quotation/print.html", context)
 
                     
                     elif "create_purchase_order" in request.POST:
+
                         quotation_id = request.POST.get("quotation_id")
-                        job_ids = request.POST.getlist("job_id[]")
-                        
                         quotation = PouchQuotation.objects.get(id=quotation_id)
-                        jobs = PouchQuotationJob.objects.filter(id__in=job_ids, quotation=quotation).all()
-            
-                                        
-                        party_names = PouchParty.objects.all()
-                
-                    
+
                         context = {
-                            "jobs": jobs,
+                            "jobs": all_selected_jobs,   # 👈 IMPORTANT CHANGE
                             "quotation": quotation,
-                            "party_names": party_names,
+                            "party_names": PouchParty.objects.all(),
                             "pouch_types": PouchQuotationJob.POUCH_TYPE,
                             "polyester_unit": PouchQuotationJob.POLYESTER_UNIT,
-                            'pouch_status':PouchQuotation.POUCH_STATUS,
-                            
-                            
+                            "pouch_status": PouchQuotation.POUCH_STATUS,
                         }
+
                         return render(request, "Purchase Order/purchase_order.html", context)
-                    
-                        
                     
             paginator =  Paginator(quotations,3)
             page_number = request.GET.get("page")

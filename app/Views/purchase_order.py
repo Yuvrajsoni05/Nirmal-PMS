@@ -152,7 +152,7 @@ def purchase_order(request):
 
 @custom_login_required
 def view_purchase_order(request):
-    purchase_orders = PurchaseOrder.objects.all().order_by('-id')
+    purchase_orders = PurchaseOrder.objects.all().order_by('party_details__party_name')
     party_names = PouchParty.objects.all()
     job_names = PurchaseOrderJob.objects.all().distinct('job_name')
 
@@ -267,15 +267,15 @@ def view_purchase_order(request):
 
         elif 'update_purchase_order' in request.POST:
             purchase_order_id = request.POST.get('edit_purchase_order')
-            party_email_id = request.POST.get('party_email_id')
-            party_email = request.POST.get('party_email')
-            if party_email:
-                email_error = utils.email_validator(party_email)
-                if email_error:
-                    messages.error(request, email_error, extra_tags="custom-danger-style")
-                    return redirect("view_purchase_order")
-                if party_email_id:
-                    PouchPartyEmail.objects.filter(id=party_email_id).update(email=party_email)
+            # party_email_id = request.POST.get('party_email_id')
+            # party_email = request.POST.get('party_email')
+            # if party_email:
+            #     email_error = utils.email_validator(party_email)
+            #     if email_error:
+            #         messages.error(request, email_error, extra_tags="custom-danger-style")
+            #         return redirect("view_purchase_order")
+            #     if party_email_id:
+            #         PouchPartyEmail.objects.filter(id=party_email_id).update(email=party_email)
             edit_purchase_order = get_object_or_404(PurchaseOrder,id=purchase_order_id)
             edit_purchase_order.pouch_purchase_number = request.POST.get("pouch_purchase_number") 
             edit_purchase_order.delivery_date = request.POST.get("delivery_date")
@@ -375,7 +375,7 @@ def view_purchase_order(request):
                 "check_quantity": "quantity",
                 "check_purchase_rate_per_kg": "purchase_rate_per_kg",
                 "check_no_of_pouch_kg": "no_of_pouch_kg",
-                "check_per_pouch_rate_basic": "rate_basic",
+                "check_per_pouch_rate_basic": "per_pouch_rate_basic",
                 "check_zipper_cost": "zipper_cost",
                 "check_pouch_charge": "pouch_charge",
                 "check_final_rate": "final_rate",
@@ -421,8 +421,9 @@ def view_purchase_order(request):
                     selected_values[field] = value
 
                 if selected_values:
-                    PouchQuotationJob.objects.filter(id=job_id).update(**selected_values)
+                    # PouchQuotationJob.objects.filter(id=job_id).update(**selected_values)
                     selected_values["job_id"] = job_id
+                    print(selected_values)
                     all_selected_jobs.append(selected_values)
                 
             if 'send_purchase_order_mail' in request.POST:
