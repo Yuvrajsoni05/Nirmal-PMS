@@ -24,9 +24,7 @@ def cdr_page(request):
             
         
 
-    
     filters = Q()
-
     if search:
         filters &= Q(job_name__icontains=search) | Q(party_details__party_name__icontains=search)
 
@@ -36,8 +34,7 @@ def cdr_page(request):
         filters &= Q(date__icontains=date)
 
     cdr_data = CDRDetail.objects.filter(filters)
-
-
+    
     order_by = ""
     if party_name_sorting == "asc":
         order_by = "party_details"
@@ -68,7 +65,6 @@ def cdr_page(request):
     page_obj = paginator.get_page(page_number)
     page_range_placeholder = "a" * page_obj.paginator.num_pages
     context = {
-        
         "cdr_details": page_obj,
         "page_range": page_range_placeholder,
         "search": search,
@@ -95,15 +91,12 @@ def cdr_add(request):
         party_contact_used = request.POST.get("party_contact_used","").strip()
         new_party_contact = request.POST.get("new_party_contact","").strip()
         
-        
         required_fields = {
             "Party Name": party_name,
             "Party Email": party_email,
             "Upload Date": cdr_upload_date,
             "Job Name": job_name,
         }
-
-        
 
         for field, required in required_fields.items():
             if not required:
@@ -174,8 +167,7 @@ def cdr_add(request):
                 party=party_details,
                 party_number=party_contact_used
             )
-            
-            
+                        
             cdr_data = CDRDetail.objects.create(
                 date=cdr_upload_date,
                 party_email_used = email_obj,
@@ -184,8 +176,7 @@ def cdr_add(request):
                 job_name=job_name,
                 party_contact_used= contact_obj )
 
-            for file in file_dic:
-                
+            for file in file_dic:    
                 CDRImage.objects.create(cdr=cdr_data, image=file)
 
             cdr_data.save()
@@ -195,7 +186,7 @@ def cdr_add(request):
             logger.error(f"Something went wrong: {str(e)}", exc_info=True)
             messages.error(request, f"Something went wrong {e}")
             return redirect("cdr_page")
-        
+                    
         
 @custom_login_required
 def cdr_update(request, update_id):

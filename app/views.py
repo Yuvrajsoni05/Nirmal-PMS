@@ -1,13 +1,9 @@
 from calendar import c
-import json
 import logging
-
 import os
 import re
 from datetime import datetime
 
-
-import requests
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import (PasswordResetConfirmView,PasswordResetDoneView,PasswordResetView)
@@ -29,8 +25,31 @@ from django.views.decorators.http import require_GET
 
 from openpyxl import Workbook
 
-from .decorators import *
-from .models import *
+from .decorators import custom_login_required 
+from .models import (
+    Registration,
+    Job_detail,
+    Party,
+    ProformaJob,
+    CDRDetail,
+    PouchParty,
+    PouchPartyEmail,
+    PouchPartyContact,
+    CylinderMadeIn,
+    PouchMaster,
+    ProformaInvoice,
+    BankDetails,
+    PartyBillingAddress,
+    PouchQuotation,
+    JobHistory,
+    PartyEmail,
+    PartyContact,
+    PartyBillingAddress,
+    PouchPartyEmail,
+    PouchPartyContact,
+    CDRImage,
+    
+)
 
 from . import utils 
 # Password
@@ -107,7 +126,7 @@ def login_page(request):
                 return redirect("dashboard_page")
             else:
                 messages.error(request, "Invalid Username or Password")
-                logger.error(f"Invalid Username or Password")
+                logger.error("Invalid Username or Password")
 
                 return redirect("login_page")
     except Exception as e:
@@ -552,7 +571,7 @@ def user_password(request):
             new_password = request.POST.get("new_password", "").strip()
             confirm_password = request.POST.get("confirm_password", "").strip()
 
-            if old_password == "" or old_password == None:
+            if old_password is None:
                 error = "Please provide old Password."
                 return render(request, "profile.html", context={"error": error})
 

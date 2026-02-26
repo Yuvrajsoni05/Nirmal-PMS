@@ -130,8 +130,8 @@
               </div>
 
               <div class="col-md-4">
-                <label class="form-label fw-bold">Zipper Cost</label>
-                <input type="number" step="0.01"
+                <label class="form-label fw-bold">Zipper Cost {{ job.zipper_cost }}</label>
+                <input type="number" step="0.00"
                        class="form-control"
                        name="zipper_cost"
                        value="{{ job.zipper_cost }}" required>
@@ -179,7 +179,7 @@
                 <textarea class="form-control"
                           rows="3"
                           name="delivery_address"
-                          required>{{ job.delivery_address }}</textarea>
+                          >{{ job.delivery_address }}</textarea>
               </div>
 
               <div class="col-md-6">

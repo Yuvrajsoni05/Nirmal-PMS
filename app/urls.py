@@ -40,7 +40,6 @@ urlpatterns = [
     path('delete_proforma_invoice/<uuid:proforma_id>/',DeleteProformaInvoice, name='delete_proforma_invoice'),
     path('proforma_invoice_ajax',ProformaInvoicePageAJAX, name='proforma_invoice_ajax'),
     
-    # path('update_proforma_invoice/<uuid:proforma_id>/',UpdateProformaInvoice,name='update_proforma_invoice'),
     path('proforma_sendmail',ProformaSendMail,name='proforma_sendmail'),
     path(
         "job_page_ajax",

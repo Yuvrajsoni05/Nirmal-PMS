@@ -39,4 +39,5 @@ from ..decorators import custom_login_required
 from .. import utils
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
-logger = logging.getLogger(__name__)
+
+logger = logging.getLogger("myapp")

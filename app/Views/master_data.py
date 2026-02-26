@@ -18,7 +18,7 @@ def master_page(request):
                 pouch_combination = request.POST.getlist('pouch_combination')
                 purchase_rate_per_kg = request.POST.getlist('purchase_rate_per_kg') 
                 no_of_pouch_per_kg = request.POST.getlist('no_of_pouch_per_kg')
-                
+
                 # remove empty values from list fields
                 job_name = [x for x in job_name if x]
                 pouch_open_size = [x for x in pouch_open_size if x]
@@ -81,7 +81,7 @@ def master_page(request):
                         minimum_quantity=minimum_quantity
                     )
                 messages.success(request, 'Master Data Created Successfully')
-                return redirect('master_page')
+                return redirect('view_master_data')
 
         context = {'pouch_party': pouch_party}
         return render(request, "MasterData/master_page.html", context)
@@ -212,7 +212,7 @@ def view_master_data(request):
         "party_details",
         "party_email",
         "party_contact"
-    ).all().order_by('party_details__party_name')
+    ).all().order_by('party_details__party_name','sr_no')
 
     party_name = PouchParty.objects.all()
     job_name = PouchMaster.objects.values_list('job_name',flat=True).distinct()

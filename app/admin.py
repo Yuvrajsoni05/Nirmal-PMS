@@ -1,6 +1,29 @@
 from django.contrib import admin
-from .models import * 
-from app.models import ProformaInvoice
+from .models import (
+    Registration,
+    Job_detail,
+    Party,
+    ProformaJob,
+    CDRDetail,
+    PouchParty,
+    PouchPartyEmail,
+    PouchPartyContact,
+    CylinderMadeIn,
+    PouchMaster,
+    ProformaInvoice,
+    BankDetails,
+    PartyBillingAddress,
+    PouchQuotation,
+    JobHistory,
+    PartyEmail,
+    PartyContact,
+    PartyBillingAddress,
+    PouchPartyEmail,
+    PouchPartyContact,
+    CDRImage,
+
+)
+
 
 # Register your models here.
 

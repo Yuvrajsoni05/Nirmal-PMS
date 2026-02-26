@@ -1,10 +1,33 @@
 from datetime import datetime
-import random
-import requests
+import uuid
 import re
 import os
-from .models import *
-from app.models import Registration
+
+from .models import (
+    Registration,
+    Job_detail,
+    Party,
+    ProformaJob,
+    CDRDetail,
+    PouchParty,
+    PouchPartyEmail,
+    PouchPartyContact,
+    CylinderMadeIn,
+    PouchMaster,
+    ProformaInvoice,
+    BankDetails,
+    PartyBillingAddress,
+    PouchQuotation,
+    JobHistory,
+    PartyEmail,
+    PartyContact,
+    PartyBillingAddress,
+    PouchPartyEmail,
+    PouchPartyContact,
+    CDRImage,
+    
+)
+
 
 
 
