@@ -110,11 +110,19 @@
 
 
                             <div class="col-md-4">
-                                <label for="billing_gstin_no" class="form-label fw-semibold">Billing GSTIN/UN.</label>
-                                <input type="text" class="form-control" id="billing_gstin_no" name="billing_gstin_no" placeholder="Billing GSTIN No." required>
-                                <span class="invalid-feedback" id="billing_gstin_no_error">This field is required</span>
-                            </div>
+                                <label class="form-label fw-semibold">Billing GSTIN/UN.</label>
 
+                                <select class="form-select" id="billing_gstin_select" name="billing_gstin_no">
+                                    <option value="" selected disabled>Select GSTIN</option>
+                                </select>
+
+                                <input type="text"
+                                    class="form-control mt-2"
+                                    id="new_billing_gstin"
+                                    placeholder="Enter New GSTIN"
+                                    name="new_billing_gstin"
+                                    style="display:none;">
+                            </div>
 
                             <div id="job-container">
                                 <div class="row job-section border rounded p-3 mb-3">

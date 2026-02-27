@@ -167,7 +167,7 @@
                                             {{ proforma.party_billing_address_used.billing_address|default:"-"|truncatechars:30 }}
                                         </td>
 
-                                        <td>{{ proforma.billing_gstin_no|default:"-" }}</td>
+                                        <td>{{ proforma.billing_gstin_no.billing_gstin|default:"-" }}</td>
                                         <td>{{ proforma.billing_state_name|default:"-" }}</td>
 
                                         <td>

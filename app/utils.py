@@ -21,9 +21,6 @@ from .models import (
     JobHistory,
     PartyEmail,
     PartyContact,
-    PartyBillingAddress,
-    PouchPartyEmail,
-    PouchPartyContact,
     CDRImage,
     
 )
@@ -34,11 +31,11 @@ from .models import (
 
 
 def email_validator(email):
- 
     email_regex = r"(?!.*([.-])\1)(?!.*([.-])$)(?!.*[.-]$)(?!.*[.-]{2})[a-zA-Z0-9_%+-][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-    if not re.match(email_regex,email):       
-        return "Enter a Valid email Address"
 
+    if not re.match(email_regex, email):
+        return "Enter a Valid Email Address"
+    return None
 
 
 def phone_number_check(number):
@@ -65,7 +62,7 @@ def validator_password(password):
     
     if not any(char in "!@#$%^&*()_+-={}[]\\:;\"'<>,.?/~`" for char in password):
         return "Password must contain at least one special character."
-    
+    return None
     
 valid_extension = [".jpeg", ".jpg", ".png", ".ai",".cdr" ,".JPEG", ".JPG", ".PNG", ".AI", ".CDR"]  
 def file_validation(files):
@@ -102,7 +99,9 @@ def all_job_name_list(party_name):
         return []
     
     if party:
-        job_qs = Job_detail.objects.filter(party_details__party_name = party).values("job_name").distinct()
+        job_qs = Job_detail.objects.filter(
+            party_details=party
+        ).values("job_name").distinct()
         job_qs = job_qs.union(
             ProformaJob.objects.filter(proforma_invoice__party_details__party_name=party)
             .values("job_name").distinct().union(CDRDetail.objects.filter(
@@ -111,8 +110,8 @@ def all_job_name_list(party_name):
         )
     else :
         job_qs = ''
-        
-    return job_qs
+   
+    return job_qs   
 
 
 def email_attachment_size(total_attachment_size):
@@ -121,12 +120,7 @@ def email_attachment_size(total_attachment_size):
         return f"Total file size exceeds {MAX_SIZE_MB}MB. Please upload smaller files."
     return None
     
-    
-    
-    
-    
-    
-    
+
 def get_or_create_party(party_name, party_email, party_contact):
     party_details, _ = PouchParty.objects.get_or_create(
         party_name=party_name.strip()

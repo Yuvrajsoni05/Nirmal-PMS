@@ -215,7 +215,7 @@
                         <b>{{ data.party_name }}</b><br />
                         {{ data.billing_address }},<br />
 
-                        GSTIN/UIN : {{ data.billing_gstin_no }}<br />
+                        GSTIN/UIN : {{ data.billing_gstin_no.billing_gstin }}<br />
                         State Name : {{ data.billing_state_name }}, <br />
                         Place of Supply : {{ data.billing_state_name }}
                     </td>
@@ -383,7 +383,7 @@
                     <td style="width: 52%; padding: 5px; vertical-align: top">
                         <b>Tax Amount (in words) :</b><br />
                         INR {{ data.total_in_words }} Only<br /><br />
-                        <b>Company's PAN : </b> AABCN6372N<br /><br />
+            
                         <b>Declaration:</b><br />
                         We declare that this proforma invoice shows the actual
                         price of the goods described and that all particulars

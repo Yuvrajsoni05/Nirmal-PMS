@@ -5,3 +5,14 @@ ERROR 2026-02-26 18:48:54,849 myapp view_purchase_order could not convert string
 ERROR 2026-02-26 18:53:59,184 myapp view_quotations Error creating quotation: could not convert string to float: '2222.222222e' quotation.py
 ERROR 2026-02-26 19:14:10,902 myapp view_purchase_order (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-3591356a58fsm2958397a91.3 - gsmtp') purchase_order.py
 ERROR 2026-02-26 19:14:36,639 myapp view_purchase_order (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2adfb6f3688sm27422065ad.87 - gsmtp') purchase_order.py
+ERROR 2026-02-27 12:14:37,337 myapp master_data_upload Something went wrong: name 'email_regex' is not defined master_data.py
+Traceback (most recent call last):
+  File "D:\nirmal_pms\Nirmal-PMS\app\Views\master_data.py", line 148, in master_data_upload
+    email_error = utils.email_validator(email)
+  File "D:\nirmal_pms\Nirmal-PMS\app\utils.py", line 34, in email_validator
+    if not re.match(email_regex, email):
+                    ^^^^^^^^^^^
+NameError: name 'email_regex' is not defined
+ERROR 2026-02-27 12:27:27,016 myapp purchase_order_ajax float division by zero purchase_order.py
+ERROR 2026-02-27 12:27:27,043 myapp purchase_order_ajax float division by zero purchase_order.py
+ERROR 2026-02-27 13:11:27,466 myapp send_mail_data (535, b'5.7.8 Username and Password not accepted. For more information, go to\n5.7.8  https://support.google.com/mail/?p=BadCredentials d9443c01a7336-2adfb69f277sm66005475ad.55 - gsmtp') job_data.py

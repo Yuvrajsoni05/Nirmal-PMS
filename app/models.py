@@ -28,6 +28,11 @@ class Party(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     party_name = models.CharField(max_length=200, blank=True, null=True,db_index=True)
 
+    def save(self, *args, **kwargs):
+        if self.party_name:
+            self.party_name = self.party_name.strip()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.party_name}"
 
@@ -37,6 +42,12 @@ class PartyEmail(models.Model):
     party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_emails')
     email = models.EmailField(max_length=200)
 
+    def save(self, *args, **kwargs):
+        if self.email:
+            self.email = self.email.strip()
+        super().save(*args, **kwargs)
+
+
     def __str__(self):
         return f"{self.party.party_name} - {self.email}"
 
@@ -44,19 +55,38 @@ class PartyEmail(models.Model):
 class PartyContact(models.Model):
     party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_contacts')
     party_number = models.CharField(max_length=20)
-    
+
+    def save(self, *args, **kwargs):
+        if self.party_number:
+            self.party_number = self.party_number.strip()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.party.party_name} - {self.party_number}"
 
 class PartyBillingAddress(models.Model):
     party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_billing_addresses')
     billing_address = models.TextField(blank=True, null=True)
+    def save(self, *args, **kwargs):
+        if self.billing_address:
+            self.billing_address = self.billing_address.strip()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.party.party_name} - {self.billing_address}"
- 
 
 
+class PartyBillingGSTIN(models.Model):
+    party = models.ForeignKey(Party, on_delete=models.CASCADE, related_name='party_billing_gstin')
+    billing_gstin =  models.CharField(max_length=200,blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+            if self.billing_gstin:
+                self.billing_gstin = self.billing_gstin.strip()
+            super().save(*args, **kwargs)
+
+
+            
 class Job_detail(models.Model):
     JOB_STATUS_CHOICES = [
         ("In Progress","In Progress"),
@@ -220,7 +250,7 @@ class ProformaInvoice(models.Model):
     invoice_date = models.DateField()
     mode_payment = models.CharField(max_length=300,default="100%")
     
-    billing_gstin_no = models.CharField(max_length=100)
+    billing_gstin_no = models.ForeignKey(PartyBillingGSTIN,on_delete=models.SET_NULL,null=True, blank=True)
     billing_state_name = models.CharField(max_length=200, choices=INDIAN_STATES)
     bank_details = models.ForeignKey(BankDetails,on_delete=models.SET_NULL,blank=True,null=True,related_name='bank_details')
     gst = models.CharField(max_length=200,blank=True, null=True)
