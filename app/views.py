@@ -137,7 +137,7 @@ def login_page(request):
     return render(request, "Registration/login_page.html")
 
 
-@custom_login_required
+# @custom_login_required
 def register_page(request): 
     if request.method == "POST":
         username = request.POST.get("username", "").strip()
@@ -204,7 +204,7 @@ def register_page(request):
     return render(request, "Registration/register.html")
 
 
-@custom_login_required
+# @custom_login_required
 def edit_user_page(request):
     user_details = (
         Registration.objects.exclude(is_superuser=True)
