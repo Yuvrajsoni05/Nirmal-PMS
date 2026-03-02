@@ -186,7 +186,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 
-
+if os.environ.get("CREATE_SUPERUSER") == "true":
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("admin", "admin@gmail.com", "admin123")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
