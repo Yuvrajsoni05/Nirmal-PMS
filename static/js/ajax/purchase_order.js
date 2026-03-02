@@ -1,3 +1,10 @@
+$(document).ready(function() {
+    // Run AJAX for all job blocks on page load
+    $(".job-block, .job-block_data").each(function () {
+        runAjax($(this), true);   
+    });
+});
+
 $(document).on(
     "input change",
     "#party_name, .party_email, .purchase_rate_per_kg, .no_of_pouch_kg, .purchase_rate_unit, .pouch_charge, .zipper_cost",
@@ -37,7 +44,7 @@ function runAjax(block, isPartyChange = false) {
             /* ---------- RATE FIELDS ---------- */
             block.find(".per_pouch_rate_basic").val(response.per_pouch_rate_basic || 0);
             block.find(".final_rate").val(response.final_rate || 0);
-            block.find(".minimum_quantity").val(response.minimum_quantity || 0);
+            // block.find(".minimum_quantity").val(response.minimum_quantity || 0);
 
             /* ---------- PARTY EMAIL (ONLY ON PARTY CHANGE) ---------- */
             if (isPartyChange) {
@@ -64,6 +71,27 @@ function runAjax(block, isPartyChange = false) {
                 }
             }
 
+
+            const $partyContact = $("#party_contact");
+            const prevContactValue = $partyContact.val();
+
+            $partyContact.empty().append('<option value="">Select Party Contact</option>');
+
+            if (response.party_contacts?.length) {
+                response.party_contacts.forEach(contact => {
+                    $partyContact.append(
+                        $('<option></option>').val(contact.party_number).text(contact.party_number)
+                    );
+                });
+            }
+
+            $partyContact.append('<option value="others">Others</option>');
+
+            if (prevContactValue && $partyContact.find(`option[value="${prevContactValue}"]`).length) {
+                $partyContact.val(prevContactValue);
+            }
+
+         
             /* ---------- JOB NAME ---------- */
             let jobSelect = block.find(".job_name");
 
@@ -78,8 +106,15 @@ function runAjax(block, isPartyChange = false) {
 
                 jobSelect.append('<option value="others">Others</option>');
 
-                if (jobSelect.find(`option[value="${prev}"]`).length) {
-                    jobSelect.val(prev);
+                // If previous value exists, try to restore it
+                if (prev) {
+                    // Check if prev exists in the new options
+                    if (jobSelect.find(`option[value="${prev}"]`).length) {
+                        jobSelect.val(prev);
+                    } else {
+                        // If not found, add it as a custom option (for edited data)
+                        jobSelect.prepend(`<option value="${prev}" selected>${prev}</option>`);
+                    }
                 }
             }
         },

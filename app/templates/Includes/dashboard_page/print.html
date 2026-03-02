@@ -238,12 +238,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        window.onload = function () {
+        {% comment %} window.onload = function () {
             window.print();
             window.onafterprint = function () {
                 window.close();
             };
-        };
+        }; {% endcomment %}
+        window.open("/print-url/", "_blank");
 </script>
 </body>
 </html>

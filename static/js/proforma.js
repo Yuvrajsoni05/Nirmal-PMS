@@ -87,6 +87,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const proformaForm = document.getElementById("proformaInvoiceForm");
 
+
+    $(document).on("change", "#billing_gstin_select", function () {
+    const val = $(this).val();
+
+    if (val === "others") {
+        $("#new_billing_gstin").show().focus();
+    } else {
+        $("#new_billing_gstin").hide().val("");
+    }
+    });
+
     // Validation Functions
     function validateInvoiceNo() {
         if (invoiceNoInput.value.trim() === "") {
