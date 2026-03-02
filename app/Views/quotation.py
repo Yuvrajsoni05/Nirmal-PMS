@@ -175,6 +175,10 @@ def quotation_page(request):
     return render(request, "Quotation/quotation.html", context)
 
 
+
+
+
+
 @custom_login_required
 def view_quotations(request):
     party_names = PouchParty.objects.all().distinct()
@@ -215,6 +219,83 @@ def view_quotations(request):
 
                 elif start_date:
                     quotations = quotations.filter(delivery_date=start_date)
+            if request.method == "GET":
+                if "download_quotation" in request.GET:
+                    print("download_quotation")
+                    quotation = PouchQuotation.objects.all()
+                    wb = Workbook()
+                    ws = wb.active
+                    ws.append([
+                            "Quotation Number",
+                            "Delivery Date",
+                            "Party Name",
+                            "Party Email",
+                            "Party Contact",
+                            "Job Name",
+                            "Pouch Open Size",
+                            "Pouch Combination",
+                            "Quantity",
+                            "Purchase Rate / KG",
+                            "No. of Pouch / KG",
+                            "Rate Basic",
+                            "Zipper Cost",
+                            "Pouch Charge",
+                            "Final Rate",
+                            "Minimum Quantity",
+                            "Pouch Type",
+                            "Special Instruction",
+                            "Delivery Address",
+                            "Polyester Unit",
+                            "Freight",
+                            "GST",
+                            "Note",
+                            "Pouch Status",
+                        ])
+                    for q in quotation:
+                        jobs = q.pouch_quotation_jobs.all()
+                        for job in jobs:
+                            ws.append([
+                                    q.pouch_quotation_number,
+                                    q.delivery_date,
+                            (   
+                                q.party_details.party_name if q.party_details else ""
+                            ),
+                            (
+                                q.party_email.email if q.party_email else ""
+                            ),
+                            (
+                                q.party_contact.party_number if q.party_contact else ""
+                            ),
+                            job.job_name,
+                            job.pouch_open_size,
+                            job.pouch_combination,
+                            job.quantity,
+                            job.purchase_rate_per_kg,
+                            job.no_of_pouch_kg,
+                            job.rate_basic,
+                            job.zipper_cost,
+                            job.pouch_charge,
+                            job.final_rate,
+                            job.minimum_quantity,
+                            job.pouch_type,
+                            job.special_instruction,
+                            job.delivery_address,
+                            job.polyester_unit,
+                            q.freight,
+                            q.gst,
+                            q.note,
+                            q.pouch_status,
+                        ])
+                    response = HttpResponse(
+                        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+                    response["Content-Disposition"] = (
+                        'attachment; filename="Quotations.xlsx"'
+                    )
+                    wb.save(response)
+                    return response
+                    
+
             if request.method == "POST":
                 if "delete_quotation" in request.POST:
                     q_id = request.POST.get("delete_quotation")
@@ -453,6 +534,10 @@ def view_quotations(request):
             messages.warning(request, f"Something went wrong - {e}")
             logger.error("Error creating quotation: %s", e)
             return redirect("view_quotations")
+
+
+
+            
 
 
 @custom_login_required
