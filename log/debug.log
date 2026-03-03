@@ -172,3 +172,4 @@ ERROR 2026-03-02 11:12:01,550 myapp view_quotations Error creating quotation: ca
 ERROR 2026-03-02 11:12:01,677 myapp view_quotations Error creating quotation: cannot access local variable 'wb' where it is not associated with a value quotation.py
 ERROR 2026-03-02 11:17:47,856 myapp view_quotations Error creating quotation: 'PouchQuotation' object has no attribute 'purchase_order_jobs' quotation.py
 ERROR 2026-03-02 11:18:40,835 myapp view_quotations Error creating quotation: 'PouchPartyContact' object has no attribute 'contact' quotation.py
+ERROR 2026-03-03 15:51:00,412 myapp login_page Invalid Username or Password views.py

@@ -333,7 +333,7 @@ def dashboard_page(request):
                 job_id = request.POST.get("job_id","").strip()
                 if job_id:
                     job_data = Job_detail.objects.get(id=job_id)
-                return render(request,"includes/dashboard_page/print.html",context={"job_data":job_data})
+                return render(request,"Includes/dashboard_page/print.html",context={"job_data":job_data})
         if request.method == "GET":
             if "download_job" in request.GET:
                 job_details = Job_detail.objects.select_related("party_details")
