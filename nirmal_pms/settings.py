@@ -42,12 +42,10 @@ MESSAGE_TAGS = {
     messages.DEBUG: 'alert-info',
  
 } 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-  
 
 CSRF_TRUSTED_ORIGINS = [
-      "https://nirmal-pms.onrender.com",
+      "https://nirmal-pms.onrender.com"
     # "https://*.ngrok-free.app"
     # "http://localhost:8000",
     # "http://127.0.0.1:8000",
@@ -55,13 +53,14 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://f3d7edaa203c.ngrok-free.app",
-]
 
-CSRF_COOKIE_SECURE = False  
+
+CSRF_COOKIE_SECURE = True 
 CSRF_COOKIE_HTTPONLY = True
 CSRF_USE_SESSIONS = False
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_SECURE = True
+
 
 INSTALLED_APPS = [
   
@@ -76,10 +75,7 @@ INSTALLED_APPS = [
    
     
 ]
-# INTERNAL_IPS = [
-#     "127.0.0.1",
-#     "192.168.29.94"
-# ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -118,18 +114,6 @@ WSGI_APPLICATION = 'nirmal_pms.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': '123456',
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT')
-    }
-}
-
 
 # DATABASES = {
 #     'default': {

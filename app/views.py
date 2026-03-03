@@ -139,50 +139,54 @@ def login_page(request):
 
 # @custom_login_required
 def register_page(request): 
-    if request.method == "POST":
-        username = request.POST.get("username", "").strip()
-        first_name = request.POST.get("firstName", "").strip()
-        last_name = request.POST.get("lastName", "").strip()
-        email = request.POST.get("emailAddress", "").strip()
-        password = request.POST.get("password", "").strip()
-        confirm_password = request.POST.get("confirm_password", "").strip()
-        required_filed = {
-            "First Name": first_name,
-            "Last Name": last_name,
-            "Username": username,
-            "Password": password,
-        }
+    try:
+    
+        if request.method == "POST":
+            username = request.POST.get("username", "").strip()
+            first_name = request.POST.get("firstName", "").strip()
+            last_name = request.POST.get("lastName", "").strip()
+            email = request.POST.get("emailAddress", "").strip()
+            password = request.POST.get("password", "").strip()
+            confirm_password = request.POST.get("confirm_password", "").strip()
+            required_filed = {
+                "First Name": first_name,
+                "Last Name": last_name,
+                "Username": username,
+                "Password": password,
+            }
 
-        for i, required in required_filed.items():
-            if not required:
+            for i, required in required_filed.items():
+                if not required:
+                    messages.error(
+                        request,
+                        f" {i} field is Required",
+                        extra_tags="custom-danger-style",
+                    )
+                    return redirect("register_page")
+
+            if Registration.objects.filter(username=username).exists():
                 messages.error(
-                    request,
-                    f" {i} field is Required",
-                    extra_tags="custom-danger-style",
+                    request, "Username Already Exist", extra_tags="custom-danger-style"
                 )
                 return redirect("register_page")
 
-        if Registration.objects.filter(username=username).exists():
-            messages.error(
-                request, "Username Already Exist", extra_tags="custom-danger-style"
-            )
-            return redirect("register_page")
+            email_error = utils.email_validator(email)
+            if email_error:
+                messages.error(request, email_error, extra_tags="custom-danger-style")
+                return redirect("register_page")
 
-        email_error = utils.email_validator(email)
-        if email_error:
-            messages.error(request, email_error, extra_tags="custom-danger-style")
-            return redirect("register_page")
+            email_check_error = utils.email_check(email)
+            if email_check_error:
+                messages.error(
+                    request, email_check_error, extra_tags="custom-danger-style"
+                )
+                return redirect("register_page")
 
-        email_check_error = utils.email_check(email)
-        if email_check_error:
-            messages.error(
-                request, email_check_error, extra_tags="custom-danger-style"
-            )
-            return redirect("register_page")
-
-        password_error = utils.validator_password(password)
-        if password_error:
-            messages.error(request, password_error, extra_tags="custom-danger-style")
+            password_error = utils.validator_password(password)
+            if password_error:
+                messages.error(request, password_error, extra_tags="custom-danger-style")
+                return redirect("register_page")
+                
             if password != confirm_password:
                 messages.error(
                     request,
@@ -190,18 +194,24 @@ def register_page(request):
                     extra_tags="custom-danger-style",
                 )
                 return redirect("register_page")
+            print(password_error)
 
-        create_user = Registration.objects.create_user(
-            first_name=first_name,
-            last_name=last_name,
-            username=username,
-            password=password,
-            email=email,
-        )
-        create_user.save()
-        messages.success(request, "New User Will Created")
-        return redirect("edit_user_page")
-    return render(request, "Registration/register.html")
+            create_user = Registration.objects.create_user(
+                first_name=first_name,
+                last_name=last_name,
+                username=username,
+                password=password,
+                email=email,
+            )
+            create_user.save()
+            messages.success(request, "New User Will Created")
+            return redirect("edit_user_page")
+        return render(request, "Registration/register.html")
+
+    except Exception as e:
+        messages.error(request,"something went wrong")
+        logger.error(e)
+        return redirect('register_page')
 
 
 # @custom_login_required
