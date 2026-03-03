@@ -51,12 +51,10 @@ def email_check(email):
 def validator_password(password):
     if len(password) < 8:
         return "Password Must be at least 8 characters long"
-    
     if not any(char.isupper() for char in password):
         return "Password must contain at least one uppercase "
     if not any(char.islower() for char in password):
-         return "Password must contain at least one lowercase"
-     
+        return "Password must contain at least one lowercase"
     if not any(char.isdigit() for char in password):
         return "Password must contain at least one number"
     
