@@ -296,7 +296,7 @@ def ViewProformaInvoice(request):
             print(prforma_detail.terms_note)
             return render(
                 request,
-                "includes/proforma/print.html",
+                "Includes/proforma/print.html",
                 context={"data": prforma_detail, "jobs": jobs},
             )
         

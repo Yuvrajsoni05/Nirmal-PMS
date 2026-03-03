@@ -405,6 +405,7 @@ def dashboard_page(request):
         job_name_sorting = request.GET.get("job_name_sorting", "").strip()
         cylinder_date_sorting = request.GET.get("cylinder_date_sorting", "").strip()
         cylinder_made_in_sorting = request.GET.get("cylinder_made_in_sorting", "").strip()
+        
         filters = Q()
         if party_name_search:
             filters &= Q(party_details__party_name__icontains=party_name_search)

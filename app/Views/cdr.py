@@ -20,7 +20,7 @@ def cdr_page(request):
             if cdr_id:
                 cdr_data = CDRDetail.objects.get(id=cdr_id)
             
-            return render(request, "includes/cdr_page/print.html", context={"cdr_details": cdr_data})
+            return render(request, "Includes/cdr_page/print.html", context={"cdr_details": cdr_data})
             
         
 
@@ -56,7 +56,7 @@ def cdr_page(request):
     else:
         cdr_data = cdr_data.order_by("date","id")
 
-    paginator = Paginator(cdr_data, 1)
+    paginator = Paginator(cdr_data, 10)
     page_number = request.GET.get("page")
 
     party_names = Party.objects.values("party_name").distinct()
@@ -193,22 +193,24 @@ def cdr_update(request, update_id):
     id = update_id
     if request.method == "POST":
         date = request.POST.get("cdr_upload_date")
-
         party_email = request.POST.get("party_email", "").strip()
         party_number = request.POST.get("party_number", "").strip()
         cdr_files = request.FILES.getlist("files")
         job_names = request.POST.get("job_name", "").strip()
-        
         cdr_corrections = request.POST.get("cdr_corrections")
 
-        
-      
         email_error = utils.email_validator(party_email)
         if email_error:
             messages.error(request, email_error, extra_tags="custom-danger-style")
             return redirect("cdr_page")
-        
 
+        party_number_check = utils.phone_number_check(party_number)
+        if party_number_check:
+            messages.error(
+                request, party_number_check, extra_tags="custom-danger-style"
+            )
+            return redirect("cdr_page")
+            
         file_error = utils.file_validation(cdr_files)
         if file_error:
             messages.error(request, file_error, extra_tags="custom-danger-style")
@@ -216,7 +218,6 @@ def cdr_update(request, update_id):
         file_dic = utils.file_name_convert(cdr_files)
         party_email = str(party_email).strip()
         update_details = get_object_or_404(CDRDetail, id=id)
-        
         
         party_id = update_details.party_details.id
         email_exists = PartyEmail.objects.filter(
@@ -230,7 +231,6 @@ def cdr_update(request, update_id):
             )
             return redirect("cdr_page")
         
-      
         contact_exists = PartyContact.objects.filter(
             party=party_id, party_number=party_number
         ).exclude(id=update_details.party_contact_used.id).exists()
@@ -356,7 +356,5 @@ def cdr_page_ajax(request):
             .distinct()
         )
         
-        
-       
         return JsonResponse({"email": email, "jobs": jobs, "contact":contacts})
     return JsonResponse({"error": "Invalid request"}, status=400)

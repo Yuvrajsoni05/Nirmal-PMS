@@ -40,6 +40,7 @@ def email_validator(email):
 
 def phone_number_check(number):
     number_regex = r"^((091|\+91)?|(\(091\)|\(+91\))|(91)?|\(91\)|0)?[ ]?[6-9]\d{9}$"
+    print(number)
     if not re.match(number_regex,number):
         return "Enter a Valid Mobile Number"
 
